@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/phill.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backup_RS_Companion_Window_Class.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Companion_View.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RS_Companion_Window_Class.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RS_Companion_Window_Class_Old.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WidgetMakers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nWidgets.ui" beforeDir="false" afterPath="$PROJECT_DIR$/nWidgets.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Companion_View.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Companion_View.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RS_Companion_Window_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,52 +13,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DockManager">
-    <window id="4">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state>
-                    <folding>
-                      <element signature="e#169#32262#0" />
-                      <element signature="e#24920#25783#1" />
-                      <element signature="e#28467#28984#1" />
-                      <element signature="e#32315#39736#0" />
-                      <element signature="e#32771#33515#1" />
-                      <element signature="e#38772#39016#1" />
-                      <element signature="e#39781#40112#0" />
-                      <element signature="e#40151#40214#0" />
-                      <element signature="e#40256#40325#0" />
-                      <element signature="e#40368#40618#0" />
-                      <element signature="e#40642#40849#0" />
-                      <element signature="e#41019#41503#0" />
-                      <element signature="e#41556#41892#0" />
-                      <element signature="e#41980#42801#0" />
-                      <element signature="e#41478#41643#1" />
-                      <element signature="e#41276#41521#0" />
-                      <element signature="e#43177#47588#0" />
-                      <element signature="e#42685#42795#1" />
-                      <element signature="e#47671#48429#0" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Companion_View.py">
+        <entry file="file://$PROJECT_DIR$/UI/Companion_View.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="176">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
               <folding>
                 <element signature="e#97#107#0" expanded="true" />
               </folding>
@@ -70,13 +28,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Backup_RS_Companion_Window_Class.py">
+        <entry file="file://$PROJECT_DIR$/UI/RS_Companion_Window_Class.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="460" column="44" selection-start-line="460" selection-start-column="44" selection-end-line="460" selection-end-column="44" />
+            <state relative-caret-position="198">
+              <caret line="570" lean-forward="true" selection-start-line="570" selection-end-line="570" />
               <folding>
-                <element signature="e#120#31871#0" />
-                <element signature="e#32147#37941#0" />
+                <element signature="e#408#32499#0" />
+                <element signature="e#32554#39811#0" />
               </folding>
             </state>
           </provider>
@@ -137,14 +95,16 @@
         <option value="$PROJECT_DIR$/RS_View.py" />
         <option value="$PROJECT_DIR$/TestEventHandling.py" />
         <option value="$PROJECT_DIR$/JUSTMDI.py" />
-        <option value="$PROJECT_DIR$/RS_Companion_Window_Class.py" />
         <option value="$PROJECT_DIR$/Companion_View_2.py" />
         <option value="$PROJECT_DIR$/nWidgets.py" />
         <option value="$PROJECT_DIR$/Companion_nWidgets.py" />
         <option value="$PROJECT_DIR$/WidgetMakers.py" />
-        <option value="$PROJECT_DIR$/Companion_View.py" />
         <option value="$PROJECT_DIR$/Backup_RS_Companion_Window_Class_2.py" />
         <option value="$PROJECT_DIR$/RS_Companion_Window_Class_2.py" />
+        <option value="$PROJECT_DIR$/UI/Companion_View.py" />
+        <option value="$PROJECT_DIR$/Companion_View.py" />
+        <option value="$PROJECT_DIR$/RS_Companion_Window_Class.py" />
+        <option value="$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" />
       </list>
     </option>
   </component>
@@ -159,7 +119,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -172,15 +131,27 @@
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
               <item name="Serial" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="UI" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -207,7 +178,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Companion_View.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI\Companion_View.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -270,7 +241,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Companion_View.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI\Companion_View.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -355,9 +326,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1381" height="925" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.10764662" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.10764662" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3526245" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
@@ -370,7 +342,7 @@
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39949748" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" weight="0.32914573" />
+      <window_info active="true" anchor="bottom" id="TODO" order="11" visible="true" weight="0.32914573" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -449,27 +421,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TestEventHandling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="2" column="58" selection-start-line="2" selection-start-column="58" selection-end-line="2" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/JUSTMDI.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="21" column="49" lean-forward="true" selection-start-line="21" selection-start-column="49" selection-end-line="21" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="42" selection-start-column="42" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/TestEventHandling.py" />
+    <entry file="file://$PROJECT_DIR$/JUSTMDI.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PyQt5/QtWidgets/QFrame.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="291">
@@ -477,74 +430,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Companion_nWidgets.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2442">
-          <caret line="117" selection-start-line="117" selection-end-line="117" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/Companion_nWidgets.py" />
+    <entry file="file://$PROJECT_DIR$/WidgetMakers.py" />
+    <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class_Old.py" />
+    <entry file="file://$PROJECT_DIR$/Backup_RS_Companion_Window_Class.py" />
+    <entry file="file://$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" />
+    <entry file="file://$PROJECT_DIR$/UI/Companion_View.py" />
+    <entry file="file://$PROJECT_DIR$/UI/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/WidgetMakers.py">
+    <entry file="file://$PROJECT_DIR$/UI/Companion_View.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#169#32262#0" />
-            <element signature="e#24920#25783#1" />
-            <element signature="e#28467#28984#1" />
-            <element signature="e#32315#39736#0" />
-            <element signature="e#32771#33515#1" />
-            <element signature="e#38772#39016#1" />
-            <element signature="e#39781#40112#0" />
-            <element signature="e#40151#40214#0" />
-            <element signature="e#40256#40325#0" />
-            <element signature="e#40368#40618#0" />
-            <element signature="e#40642#40849#0" />
-            <element signature="e#41019#41503#0" />
-            <element signature="e#41556#41892#0" />
-            <element signature="e#41980#42801#0" />
-            <element signature="e#41478#41643#1" />
-            <element signature="e#41276#41521#0" />
-            <element signature="e#43177#47588#0" />
-            <element signature="e#42685#42795#1" />
-            <element signature="e#47671#48429#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Companion_View.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="176">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
           <folding>
             <element signature="e#97#107#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class_Old.py">
+    <entry file="file://$PROJECT_DIR$/UI/RS_Companion_Window_Class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="237" column="25" lean-forward="true" selection-start-line="237" selection-start-column="25" selection-end-line="237" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Backup_RS_Companion_Window_Class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="460" column="44" selection-start-line="460" selection-start-column="44" selection-end-line="460" selection-end-column="44" />
+        <state relative-caret-position="198">
+          <caret line="570" lean-forward="true" selection-start-line="570" selection-end-line="570" />
           <folding>
-            <element signature="e#120#31871#0" />
-            <element signature="e#32147#37941#0" />
+            <element signature="e#408#32499#0" />
+            <element signature="e#32554#39811#0" />
           </folding>
         </state>
       </provider>

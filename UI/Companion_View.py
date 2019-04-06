@@ -4,7 +4,7 @@
 # Company: Red Scientific
 
 import sys
-from RS_Companion_Window_Class import *
+from UI.RS_Companion_Window_Class import *
 
 
 def main():

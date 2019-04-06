@@ -568,11 +568,8 @@ class Companion_Window(object):
         self.MDI_View_Vertical_RadioButton.setText(_translate("MainWindow", "Vertical"))
         self.MDI_View_Horizontal_RadioButton.setText(_translate("MainWindow", "Horizontal"))
         # End Configure Widget SetTitle code
-        ################################################################################################################
-        # Begin ButtonPress event handlers
 
-
-
+    # TODO: Get buttons working (need to know what they should each do)
     def SetupButtonHandlers(self):
         #self.Post_PushButton.clicked.connect()
         #self.Clear_PushButton.clicked.connect()
@@ -603,6 +600,7 @@ class Companion_Window(object):
             self.ListOfDevices[name] = None
 
     def Add_RS_Device_SubWindow(self):
+        # TODO: Remove this when done debugging
         print("SubWindow Add called")
         name = self.Block_Note_TextBox.toPlainText()
         if name:
@@ -610,13 +608,16 @@ class Companion_Window(object):
             sub.setWidget(QtWidgets.QTextEdit())
             sub.setWindowTitle("subwindow" + name)
             self.MDI_Dock_Area.addSubWindow(sub)
+            self.ListOfSubWindows[name] = sub
             sub.show()
+            # TODO: Get SubWindow class to work here instead
             '''
             self.ListOfSubWindows[name] = SubWindow(name, None)
             self.MDI_Dock_Area.addSubWindow(self.ListOfSubWindows[name])
             '''
 
     def Remove_RS_Device_SubWindow(self):
+        # TODO: Remove this when done debugging
         print("SubWindow Remove called")
         name = self.Block_Note_TextBox.toPlainText()
         if name in self.ListOfSubWindows and self.ListOfSubWindows[name]:
@@ -629,10 +630,6 @@ class Device_Box(QtWidgets.QGroupBox):
     def __init__(self, name, parent):
         super().__init__(parent)
         self.setObjectName(name)
-        '''
-        self.Device_GroupBox = QtWidgets.QGroupBox(self.RS_Devices_ScrollArea_Contents)
-        self.Device_GroupBox.setObjectName("Device_GroupBox")
-        '''
         self.Device_GroupBox_Horiz_Layout = QtWidgets.QHBoxLayout(self)
         self.Device_GroupBox_Horiz_Layout.setObjectName("Device_GroupBox_Horiz_Layout")
         self.Setup_PushButton = QtWidgets.QPushButton(self)
@@ -650,6 +647,7 @@ class Device_Box(QtWidgets.QGroupBox):
         self.Device_ToolButton.setText(_translate("MainWindow", "..."))
 
 
+# TODO: Rename objects in subwindow class
 class SubWindow(QtWidgets.QMdiSubWindow):
     def __init__(self, name, parent):
         super().__init__(parent)
