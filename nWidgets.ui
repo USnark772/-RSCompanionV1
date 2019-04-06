@@ -24,17 +24,17 @@
   <property name="windowTitle">
    <string>RS Device Companion</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="Central_Widget">
    <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
-     <widget class="Line" name="line">
+     <widget class="Line" name="Seperator_Line">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frame_3">
+     <widget class="QFrame" name="MDI_Dock_Frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -55,7 +55,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QMdiArea" name="mdiArea">
+        <widget class="QMdiArea" name="MDI_Dock_Area">
          <widget class="QWidget" name="subwindow">
           <property name="windowTitle">
            <string>Subwindow</string>
@@ -116,8 +116,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>131</width>
-                <height>295</height>
+                <width>148</width>
+                <height>296</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -241,45 +241,45 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="MenuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>840</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="File_Menu">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionBegin"/>
-    <addaction name="actionExit"/>
+    <addaction name="Begin_Experiment_Action"/>
+    <addaction name="End_Experiment_Action"/>
     <addaction name="separator"/>
-    <addaction name="actionAppend_Experiment"/>
+    <addaction name="Append_Experiment_Action"/>
     <addaction name="separator"/>
-    <addaction name="actionOpen_File_Explorer"/>
+    <addaction name="Open_Action"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="Window_Menu">
     <property name="title">
      <string>Window</string>
     </property>
-    <addaction name="actionRaw_Serial"/>
-    <addaction name="actionExperiment"/>
-    <addaction name="actionConfigure"/>
+    <addaction name="Trial_Controls_Action"/>
+    <addaction name="COM_Messages_Action"/>
+    <addaction name="Configure_Action"/>
     <addaction name="separator"/>
-    <addaction name="actionDisplay_Tooltips"/>
+    <addaction name="Display_Tooltips_Action"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="QMenu" name="Help_Menu">
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionAbout_RS_Companion"/>
-    <addaction name="actionAbout_Red_Scientific"/>
+    <addaction name="About_RS_Companion_Action"/>
+    <addaction name="About_Red_Scientific_Action"/>
    </widget>
-   <widget class="QMenu" name="menuSettings">
+   <widget class="QMenu" name="Settings_Menu">
     <property name="title">
      <string>Settings</string>
     </property>
@@ -287,19 +287,19 @@
      <property name="title">
       <string>UDP Controls</string>
      </property>
-     <addaction name="actionOutput"/>
-     <addaction name="actionInput"/>
+     <addaction name="Output_Action"/>
+     <addaction name="Input_Aciton"/>
     </widget>
-    <addaction name="actionCOM_Port"/>
+    <addaction name="COM_Port_Action"/>
     <addaction name="menuUDP_Controls"/>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuSettings"/>
-   <addaction name="menuView"/>
-   <addaction name="menuHelp"/>
+   <addaction name="File_Menu"/>
+   <addaction name="Settings_Menu"/>
+   <addaction name="Window_Menu"/>
+   <addaction name="Help_Menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="dockWidget_6">
+  <widget class="QDockWidget" name="Control_Window_Dock">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -330,16 +330,16 @@
    <attribute name="dockWidgetArea">
     <number>4</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_7">
+   <widget class="QWidget" name="Control_Window_Dock_Contents">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QGroupBox" name="groupBox_7">
+      <widget class="QGroupBox" name="Run_New_GroupBox">
        <property name="title">
-        <string>GroupBox</string>
+        <string/>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPushButton" name="pushButton_7">
+         <widget class="QPushButton" name="Run_Trial_PushButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -359,7 +359,7 @@ Trial</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_4">
+         <widget class="QPushButton" name="New_Block_PushButton">
           <property name="text">
            <string>New Block</string>
           </property>
@@ -369,13 +369,13 @@ Trial</string>
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="Key_Flag_GroupBox">
        <property name="title">
         <string>Key Flag</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item alignment="Qt::AlignHCenter">
-         <widget class="QLabel" name="label_13">
+         <widget class="QLabel" name="Key_Flag_Label">
           <property name="font">
            <font>
             <pointsize>16</pointsize>
@@ -390,16 +390,16 @@ Trial</string>
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="Block_Note_GroupBox">
        <property name="title">
         <string>Block Note</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="1">
-         <widget class="QTextEdit" name="textEdit"/>
+         <widget class="QTextEdit" name="Block_Note_TextBox"/>
         </item>
         <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="Post_PushButton">
           <property name="text">
            <string>Post</string>
           </property>
@@ -409,7 +409,7 @@ Trial</string>
       </widget>
      </item>
      <item>
-      <widget class="QFrame" name="frame">
+      <widget class="QFrame" name="Trial_Block_Frame">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -436,7 +436,7 @@ Trial</string>
          <number>2</number>
         </property>
         <item row="0" column="0">
-         <widget class="QFrame" name="frame">
+         <widget class="QFrame" name="Trial_Block_Labels_Frame">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -460,42 +460,42 @@ Trial</string>
             <number>2</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="Trial_Label">
              <property name="text">
               <string>Trial</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_2">
+            <widget class="QLabel" name="Trial_Num_Label">
              <property name="text">
               <string>    Number:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_3">
+            <widget class="QLabel" name="Trial_Time_Label">
              <property name="text">
               <string>    Time:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_8">
+            <widget class="QLabel" name="Block_Label">
              <property name="text">
               <string>Block</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="Block_Num_Label">
              <property name="text">
               <string>    Number:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_4">
+            <widget class="QLabel" name="Block_Time_Label">
              <property name="text">
               <string>    Time:</string>
              </property>
@@ -505,7 +505,7 @@ Trial</string>
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignRight">
-         <widget class="QFrame" name="frame_2">
+         <widget class="QFrame" name="Trial_Block_Values_Frame">
           <property name="minimumSize">
            <size>
             <width>50</width>
@@ -532,7 +532,7 @@ Trial</string>
             <number>2</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_11">
+            <widget class="QLabel" name="Trial_Block_Spacer_1">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
@@ -544,14 +544,14 @@ Trial</string>
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="Trial_Num_Val_Label">
              <property name="text">
               <string>NA</string>
              </property>
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_10">
+            <widget class="QLabel" name="Trial_Time_Val_Label">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
@@ -563,21 +563,21 @@ Trial</string>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_12">
+            <widget class="QLabel" name="Trial_Block_Spacer_2">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="Block_Num_Val_Label">
              <property name="text">
               <string>NA</string>
              </property>
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_6">
+            <widget class="QLabel" name="Block_Time_Val_Label">
              <property name="text">
               <string>NA</string>
              </property>
@@ -592,7 +592,7 @@ Trial</string>
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_8">
+  <widget class="QDockWidget" name="COM_Widget_Dock">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
      <horstretch>0</horstretch>
@@ -632,10 +632,10 @@ Trial</string>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_9">
+   <widget class="QWidget" name="COM_Wdget_Contents">
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="0">
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="Record_PushButton">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Saves all raw COM messages to your data folder.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -645,7 +645,7 @@ Trial</string>
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="Freeze_PushButton">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Freezes the auto scrolling of COM messages.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -655,7 +655,7 @@ Trial</string>
       </widget>
      </item>
      <item row="1" column="4">
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="Clear_PushButton">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clears all COM messages in the pane above.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -665,7 +665,7 @@ Trial</string>
       </widget>
      </item>
      <item row="1" column="1">
-      <spacer name="horizontalSpacer">
+      <spacer name="COM_Widget_HorizSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -678,14 +678,14 @@ Trial</string>
       </spacer>
      </item>
      <item row="1" column="5">
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="CHANGEME_CheckBox">
        <property name="text">
         <string>CheckBox</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0" colspan="6">
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QPlainTextEdit" name="COM_TextBox">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -709,7 +709,7 @@ Trial</string>
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_2">
+  <widget class="QDockWidget" name="Configure_Widget_Dock">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -740,143 +740,44 @@ Trial</string>
    <attribute name="dockWidgetArea">
     <number>4</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
+   <widget class="QWidget" name="Configure_Widget_Contents">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="RS_Devices_GroupBox">
        <property name="title">
         <string>Red Scientific Devices</string>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
-         <widget class="QScrollArea" name="scrollArea">
+         <widget class="QScrollArea" name="RS_Devices_ScrollArea">
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
+          <widget class="QWidget" name="RS_Devices_ScrollArea_Contents">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>163</width>
-             <height>276</height>
+             <width>179</width>
+             <height>94</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QGroupBox" name="groupBox_8">
-              <property name="title">
-               <string>PVT</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_6">
-               <item>
-                <widget class="QPushButton" name="pushButton_12">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>500</width>
-                   <height>500</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Setup</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_10">
+             <widget class="QGroupBox" name="Device_GroupBox">
               <property name="title">
                <string>DRT - Wireless 1</string>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_8">
                <item>
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="Setup_PushButton">
                  <property name="text">
                   <string>PushButton</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="toolButton_3">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_11">
-              <property name="title">
-               <string>DRT - Wireless 2</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_9">
-               <item>
-                <widget class="QPushButton" name="pushButton_8">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_4">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_9">
-              <property name="title">
-               <string>VOG</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_7">
-               <item>
-                <widget class="QPushButton" name="pushButton_13">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>500</width>
-                   <height>500</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Setup</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_2">
+                <widget class="QToolButton" name="Device_ToolButton">
                  <property name="text">
                   <string>...</string>
                  </property>
@@ -893,41 +794,41 @@ Trial</string>
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_4">
+      <widget class="QGroupBox" name="MDI_View_GroupBox">
        <property name="title">
         <string>MDI View</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="QRadioButton" name="radioButton">
+         <widget class="QRadioButton" name="MDI_View_Main_RadioButton">
           <property name="text">
            <string>Main</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_3">
+         <widget class="QRadioButton" name="MDI_View_Tiled_RadioButton">
           <property name="text">
            <string>Tiled</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_4">
+         <widget class="QRadioButton" name="MDI_View_Cascade_RadioButton">
           <property name="text">
            <string>Cascade</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_5">
+         <widget class="QRadioButton" name="MDI_View_Vertical_RadioButton">
           <property name="text">
            <string>Vertical</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_2">
+         <widget class="QRadioButton" name="MDI_View_Horizontal_RadioButton">
           <property name="text">
            <string>Horizontal</string>
           </property>
@@ -939,7 +840,7 @@ Trial</string>
     </layout>
    </widget>
   </widget>
-  <action name="actionBegin">
+  <action name="Begin_Experiment_Action">
    <property name="text">
     <string>Begin Experiment</string>
    </property>
@@ -947,7 +848,7 @@ Trial</string>
     <string>Begin Experiment</string>
    </property>
   </action>
-  <action name="actionExperiment">
+  <action name="COM_Messages_Action">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -976,22 +877,22 @@ Trial</string>
     <string>Configure Data Buddy</string>
    </property>
   </action>
-  <action name="actionAbout_RS_Companion">
+  <action name="About_RS_Companion_Action">
    <property name="text">
     <string>About RS Companion</string>
    </property>
   </action>
-  <action name="actionAbout_Red_Scientific">
+  <action name="About_Red_Scientific_Action">
    <property name="text">
     <string>About Red Scientific</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="End_Experiment_Action">
    <property name="text">
     <string>End Experiment</string>
    </property>
   </action>
-  <action name="actionRaw_Serial">
+  <action name="Trial_Controls_Action">
    <property name="text">
     <string>Trial Controls</string>
    </property>
@@ -1001,37 +902,37 @@ Trial</string>
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionDisplay_Tooltips">
+  <action name="Display_Tooltips_Action">
    <property name="text">
     <string>Display Tooltips</string>
    </property>
   </action>
-  <action name="actionConfigure">
+  <action name="Configure_Action">
    <property name="text">
     <string>Configure</string>
    </property>
   </action>
-  <action name="actionCOM_Port">
+  <action name="COM_Port_Action">
    <property name="text">
     <string>COM Port</string>
    </property>
   </action>
-  <action name="actionOutput">
+  <action name="Output_Action">
    <property name="text">
     <string>Output</string>
    </property>
   </action>
-  <action name="actionInput">
+  <action name="Input_Aciton">
    <property name="text">
     <string>Input</string>
    </property>
   </action>
-  <action name="actionAppend_Experiment">
+  <action name="Append_Experiment_Action">
    <property name="text">
     <string>Append Experiment</string>
    </property>
   </action>
-  <action name="actionOpen_File_Explorer">
+  <action name="Open_Action">
    <property name="text">
     <string>Open File  Folder</string>
    </property>
@@ -1040,9 +941,9 @@ Trial</string>
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton_6</sender>
+   <sender>Clear_PushButton</sender>
    <signal>clicked()</signal>
-   <receiver>plainTextEdit</receiver>
+   <receiver>COM_TextBox</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
