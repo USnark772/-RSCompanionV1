@@ -9,6 +9,7 @@ class Companion_Window(object):
     # To keep track of the different devices for Device Box and SubWindow purposes
     ListOfDevices = {}
     ListOfSubWindows = {}
+    NumSubWindows = 0
     # Auto generated code slightly altered for readability
     def __init__(self, MainWindow):
         # Begin MainWindow generation code
@@ -570,40 +571,120 @@ class Companion_Window(object):
         # End Configure Widget SetTitle code
 
     # TODO: Get buttons working (need to know what they should each do)
+    # TODO: Make handlers for menu items
     def SetupButtonHandlers(self):
-        #self.Post_PushButton.clicked.connect()
-        #self.Clear_PushButton.clicked.connect()
-        #self.New_Block_PushButton.clicked.connect()
-        #self.Run_Trial_PushButton.clicked.connect()
+        self.MDI_View_Main_RadioButton.clicked.connect(self.MDI_Main_Handler)
+        self.MDI_View_Tiled_RadioButton.clicked.connect(self.MDI_Tile_Handler)
+        self.MDI_View_Cascade_RadioButton.clicked.connect(self.MDI_Cascade_Handler)
+        self.MDI_View_Vertical_RadioButton.clicked.connect(self.MDI_Vert_Handler)
+        self.MDI_View_Horizontal_RadioButton.clicked.connect(self.MDI_Horiz_Handler)
+        self.Run_Trial_PushButton.clicked.connect(self.Run_Trial_Button_Handler)
+        self.New_Block_PushButton.clicked.connect(self.New_Block_Button_Handler)
+        self.Post_PushButton.clicked.connect(self.Post_Button_Handler)
         self.Record_PushButton.clicked.connect(self.Add_RS_Device)
         self.Freeze_PushButton.clicked.connect(self.Remove_RS_Device)
+        self.Clear_PushButton.clicked.connect(self.Clear_Button_Handler)
+        self.CHANGEME_CheckBox.toggled.connect(self.CHANGEME_CheckBox_Handler)
 
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def CHANGEME_CheckBox_Handler(self):
+        print("CHANGEME CheckBox toggled")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Run_Trial_Button_Handler(self):
+        print("Run Trial Button Pressed")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Record_Button_Handler(self):
+        print("Record Button Pressed")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Freeze_Button_Handler(self):
+        print("Freeze Button Pressed")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def New_Block_Button_Handler(self):
+        print("New Block Button Pressed")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Clear_Button_Handler(self):
+        print("Clear Button Pressed")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Post_Button_Handler(self):
+        print("Post Button Pressed")
+
+    # Cascades the SubWindows in te MDI Dock
+    def MDI_Cascade_Handler(self):
+        self.MDI_Dock_Area.cascadeSubWindows()
+
+    # Tiles the SubWindows in the MDI Dock
+    def MDI_Tile_Handler(self):
+        self.MDI_Dock_Area.tileSubWindows()
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Need to design own vert option, MDI widget doesn't natively have it
+    # Vertically lays out the SubWindows in the MDI Dock
+    def MDI_Vert_Handler(self):
+        print("MDI_Vert_Handler called")
+        if self.NumSubWindows < 2:
+            print("MDI_Vert_Handler called MDI_Tile_Handler")
+            self.MDI_Tile_Handler()
+        else:
+            print("MDI_Vert_Handler passed")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Need to design own horiz option, MDI widget doesn't natively have it
+    # Horizontally lays out the SubWindows in the MDI Dock
+    def MDI_Horiz_Handler(self):
+        print("MDI_Horiz_Handler called")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Need to know what to put here
+    # Sets SubWindows to a default layout in the MDI Dock?
+    def MDI_Main_Handler(self):
+        print("MDI_Main_Handler called")
+
+    # Adds a new unique pair of RS Device box and RS SubWindow to the UI
     def Add_RS_Device(self):
         self.Add_RS_Device_Box()
         self.Add_RS_Device_SubWindow()
 
+    # Removes an existing specific pair of RS Device box and RS Subwindow from the UI
     def Remove_RS_Device(self):
         self.Remove_RS_Device_Box()
         self.Remove_RS_Device_SubWindow()
 
+    # Generates a new RS Device box, adds it to a collection and then displays it.
     def Add_RS_Device_Box(self):
         name = self.Block_Note_TextBox.toPlainText()
         if name:
             self.ListOfDevices[name] = Device_Box(name, self.RS_Devices_ScrollArea_Contents)
             self.RS_Devices_ScrollArea_Contents_Vert_Layout.addWidget(self.ListOfDevices[name])
 
+    # Removes a specific RS Device box from the UI
     def Remove_RS_Device_Box(self):
         name = self.Block_Note_TextBox.toPlainText()
         if name in self.ListOfDevices and self.ListOfDevices[name]:
             self.RS_Devices_ScrollArea_Contents_Vert_Layout.removeWidget(self.ListOfDevices[name])
             self.ListOfDevices[name].deleteLater()
-            self.ListOfDevices[name] = None
+            del self.ListOfDevices[name]
 
+    # Generates a new RS SubWindow, adds it to a collection and then displays it.
     def Add_RS_Device_SubWindow(self):
-        # TODO: Remove this when done debugging
+        # TODO: Remove prints in this function after debugging
         print("SubWindow Add called")
         name = self.Block_Note_TextBox.toPlainText()
         if name:
+            self.NumSubWindows += 1
+            print("Num subs =", self.NumSubWindows)
             sub = QtWidgets.QMdiSubWindow()
             sub.setWidget(QtWidgets.QTextEdit())
             sub.setWindowTitle("subwindow" + name)
@@ -616,14 +697,16 @@ class Companion_Window(object):
             self.MDI_Dock_Area.addSubWindow(self.ListOfSubWindows[name])
             '''
 
+    # TODO: Remove prints in this function after debugging
     def Remove_RS_Device_SubWindow(self):
-        # TODO: Remove this when done debugging
         print("SubWindow Remove called")
         name = self.Block_Note_TextBox.toPlainText()
         if name in self.ListOfSubWindows and self.ListOfSubWindows[name]:
+            self.NumSubWindows -= 1
+            print("Num subs =", self.NumSubWindows)
             self.MDI_Dock_Area.removeSubWindow(self.ListOfSubWindows[name])
             self.ListOfSubWindows[name].deleteLater()
-            self.ListOfSubWindows[name] = None
+            del self.ListOfSubWindows[name]
 
 
 class Device_Box(QtWidgets.QGroupBox):
