@@ -10,6 +10,11 @@ class Companion_Window(object):
     ListOfDevices = {}
     ListOfSubWindows = {}
     NumSubWindows = 0
+
+    ################################################################################################################
+    # Begin auto-generated code
+    ################################################################################################################
+
     # Auto generated code slightly altered for readability
     def __init__(self, MainWindow):
         # Begin MainWindow generation code
@@ -468,12 +473,13 @@ class Companion_Window(object):
         # End MenuBar item generation code
         ################################################################################################################
         # Begin final initialization
-        self.SetAllObjectTexts(MainWindow)
+        self.SetTexts(MainWindow)
         self.SetupButtonHandlers()
         self.Clear_PushButton.clicked.connect(self.COM_TextBox.clear)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def SetAllObjectTexts(self, MainWindow):
+    # Auto generated code slightly altered for readability
+    def SetTexts(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         ################################################################################################################
         # Main Window SetTitle code
@@ -570,9 +576,27 @@ class Companion_Window(object):
         self.MDI_View_Horizontal_RadioButton.setText(_translate("MainWindow", "Horizontal"))
         # End Configure Widget SetTitle code
 
+    ################################################################################################################
+    # End auto-generated code
+    ################################################################################################################
+
     # TODO: Get buttons working (need to know what they should each do)
     # TODO: Make handlers for menu items
+    # Assign buttons to functions
     def SetupButtonHandlers(self):
+        self.Trial_Controls_Action.triggered.connect(self.Trial_Controls_Action_Handler)
+        self.Input_Aciton.triggered.connect(self.Input_Action_Handler)
+        self.Output_Action.triggered.connect(self.Output_Action_Handler)
+        self.Open_Action.triggered.connect(self.Open_Action_Handler)
+        self.End_Experiment_Action.triggered.connect(self.End_Experiment_Action_Handler)
+        self.Display_Tooltips_Action.triggered.connect(self.Display_Tooltips_Action_Handler)
+        self.Configure_Action.triggered.connect(self.Configure_Action_Handler)
+        self.COM_Port_Action.triggered.connect(self.COM_Port_Action_Handler)
+        self.COM_Messages_Action.triggered.connect(self.COM_Messages_Action_Handler)
+        self.Begin_Experiment_Action.triggered.connect(self.Begin_Experiment_Action_Handler)
+        self.Append_Experiment_Action.triggered.connect(self.Append_Experiment_Action_Handler)
+        self.About_Red_Scientific_Action.triggered.connect(self.About_RS_Action_Handler)
+        self.About_RS_Companion_Action.triggered.connect(self.About_RS_Companion_Action_Handler)
         self.MDI_View_Main_RadioButton.clicked.connect(self.MDI_Main_Handler)
         self.MDI_View_Tiled_RadioButton.clicked.connect(self.MDI_Tile_Handler)
         self.MDI_View_Cascade_RadioButton.clicked.connect(self.MDI_Cascade_Handler)
@@ -581,10 +605,78 @@ class Companion_Window(object):
         self.Run_Trial_PushButton.clicked.connect(self.Run_Trial_Button_Handler)
         self.New_Block_PushButton.clicked.connect(self.New_Block_Button_Handler)
         self.Post_PushButton.clicked.connect(self.Post_Button_Handler)
-        self.Record_PushButton.clicked.connect(self.Add_RS_Device)
-        self.Freeze_PushButton.clicked.connect(self.Remove_RS_Device)
+        self.Record_PushButton.clicked.connect(self.Record_Button_Handler)
+        self.Freeze_PushButton.clicked.connect(self.Freeze_Button_Handler)
         self.Clear_PushButton.clicked.connect(self.Clear_Button_Handler)
         self.CHANGEME_CheckBox.toggled.connect(self.CHANGEME_CheckBox_Handler)
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Trial_Controls_Action_Handler(self):
+        print("Trial Controls Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Input_Action_Handler(self):
+        print("Input Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Output_Action_Handler(self):
+        print("Output Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    # Allows user to select a file through file explorer and opens it
+    def Open_Action_Handler(self):
+        fname = QtWidgets.QFileDialog.getOpenFileName(None, 'Open file',
+                                            'c:\\')
+        print("Open Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def End_Experiment_Action_Handler(self):
+        print("End Experiment Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Display_Tooltips_Action_Handler(self):
+        print("Display Tooltips Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Configure_Action_Handler(self):
+        print("Configure Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def COM_Port_Action_Handler(self):
+        print("COM Port Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def COM_Messages_Action_Handler(self):
+        print("COM Messages Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Begin_Experiment_Action_Handler(self):
+        print("Begin Experiment Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def Append_Experiment_Action_Handler(self):
+        print("Append Experiment Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def About_RS_Companion_Action_Handler(self):
+        print("About RS Companion Action triggered")
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Make this function useful
+    def About_RS_Action_Handler(self):
+        print("About RS Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
@@ -599,12 +691,14 @@ class Companion_Window(object):
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def Record_Button_Handler(self):
-        print("Record Button Pressed")
+        print("Record Button Pressed, connected to Add_RS_Device handler")
+        self.Add_RS_Device()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def Freeze_Button_Handler(self):
-        print("Freeze Button Pressed")
+        print("Freeze Button Pressed, connected to Remove_RS_Device handler")
+        self.Remove_RS_Device()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
@@ -722,12 +816,25 @@ class Device_Box(QtWidgets.QGroupBox):
         self.Device_ToolButton.setObjectName("Device_ToolButton")
         self.Device_GroupBox_Horiz_Layout.addWidget(self.Device_ToolButton)
         self.SetTexts(name)
+        self.SetupButtonHandlers()
 
     def SetTexts(self, name):
         _translate = QtCore.QCoreApplication.translate
         self.setTitle(_translate("MainWindow", name))
         self.Setup_PushButton.setText(_translate("MainWindow", "Setup"))
         self.Device_ToolButton.setText(_translate("MainWindow", "..."))
+
+    def SetupButtonHandlers(self):
+        self.Device_ToolButton.clicked.connect(self.Device_ToolButton_Handler)
+        self.Setup_PushButton.clicked.connect(self.Setup_PushButton_Handler)
+
+    # TODO: Figure out how to pass useful information from this handler
+    def Device_ToolButton_Handler(self):
+        print("Device Button Handler pressed for ", self.objectName())
+
+    # TODO: Figure out how to pass useful information from this handler
+    def Setup_PushButton_Handler(self):
+        print("Setup Button Handler pressed for ", self.title)
 
 
 # TODO: Rename objects in subwindow class
