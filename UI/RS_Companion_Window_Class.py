@@ -730,16 +730,37 @@ class CompanionWindow(object):
     def post_button_handler(self):
         print("Post Button Pressed")
 
-    # Cascades the SubWindows in te MDI Dock
+    # TODO: Remove prints in this function after debugging
+    # TODO: After finishing this, figure out how to fix resizing a subwindow when moving it after cascading
+    # Cascades the SubWindows in the MDI Dock
     def mdi_cascade_handler(self):
-        self.mdi_dock_area.cascadeSubWindows()
-
-    # Tiles the SubWindows in the MDI Dock
-    def mdi_tile_handler(self):
-        self.mdi_dock_area.tileSubWindows()
+        print("cascade called")
+        position = QtCore.QPoint(0, 0)
+        max_width = self.mdi_dock_area.width()
+        max_height = self.mdi_dock_area.height()
+        for window in self.mdi_dock_area.subWindowList():
+            rect = QtCore.QRect(0, 0, int(max(max_width/self.__num_subwindows__, 250)),
+                                int(max(max_width/self.__num_subwindows__, 250)))
+            window.setGeometry(rect)
+            window.move(position)
+            if self.__num_subwindows__ > 1:
+                temp_x = position.x() + int(max(max_width / window.width(), max_width/20))
+                temp_y = position.y() + int(max(max_height/window.height(), max_height/20))
+                new_x = temp_x % (max_width - window.width()/2)
+                new_y = temp_y % (max_height - window.height()/2)
+                position.setX(new_x)
+                position.setY(new_y)
+        #self.mdi_dock_area.cascadeSubWindows()
 
     # TODO: Remove prints in this function after debugging
-    # TODO: Need to design own vert option, MDI widget doesn't natively have it
+    # TODO: Model this after mdi_cascade_handler
+    # Tiles the SubWindows in the MDI Dock
+    def mdi_tile_handler(self):
+        print("mdi tile handler called")
+        #self.mdi_dock_area.tileSubWindows()
+
+    # TODO: Remove prints in this function after debugging
+    # TODO: Model this after mdi_cascade_handler
     # Vertically lays out the SubWindows in the MDI Dock
     def mdi_vert_handler(self):
         print("MDI_Vert_Handler called")
@@ -750,17 +771,18 @@ class CompanionWindow(object):
             print("MDI_Vert_Handler passed")
 
     # TODO: Remove prints in this function after debugging
-    # TODO: Need to design own horiz option, MDI widget doesn't natively have it
+    # TODO: Model this after mdi_cascade_handler
     # Horizontally lays out the SubWindows in the MDI Dock
     def mdi_horiz_handler(self):
         print("MDI_Horiz_Handler called")
 
     # TODO: Remove prints in this function after debugging
-    # TODO: Need to know what to put here
+    # TODO: Model this after mdi_cascade_handler
     # Sets SubWindows to a default layout in the MDI Dock?
     def mdi_main_handler(self):
         print("MDI_Main_Handler called")
 
+    # TODO: invariant must be unique device names. Figure out how to enforce this constraint
     # Adds a new unique pair of RS Device box and RS SubWindow to the UI
     def add_rs_device_handler(self):
         self.add_rs_device_box()
