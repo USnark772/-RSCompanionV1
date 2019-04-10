@@ -1,5 +1,5 @@
 """The main portal to launch the wireless DRT+ program"""
-import rs_device_com as serial
+import Serial.rs_device_com as serial
 import time
 import tkinter as tk
 
@@ -27,7 +27,7 @@ class controller:
 
         self.com = dict()
 
-        self.com = serial.ControllerSerial(devices, self. com_callback)
+        self.com = serial.ControllerSerial(devices, self.com_callback)
 
         self.root.after(5, self.update_com)
 

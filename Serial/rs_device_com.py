@@ -7,9 +7,9 @@ disconnect_event flags are turned True.
 import serial
 from serial.tools import list_ports
 
+
 class ControllerSerial:
     def __init__(self, devices, callback):
-
         # Global
         self.callback = callback
         self.inc_msg = ""
@@ -40,7 +40,7 @@ class ControllerSerial:
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         msg = self.devices[d]['port'].readline().decode("utf-8")
-                        self.callback(msg)
+                        #self.callback(msg)
                 except:
                     pass
 
@@ -70,10 +70,10 @@ class ControllerSerial:
                     if port.vid == self.profiles[device]['vid'] and port.pid == self.profiles[device]['pid']:
                         self.devices[port.device] = {'port': serial.Serial(port.device), 'id': device}
                         print("attached {} on {}".format(device, port.device))
+                        self.callback(device, 1)
                         break
                     else:
                         self.devices[port.device] = {'id': 'unknown'}
-
 
         self.devices_known = list(self.devices.keys())
 
@@ -83,6 +83,7 @@ class ControllerSerial:
             print("removed device from {}".format(e))
             if not self.devices[e]['id'] == "unknown":
                 self.devices[e]['port'].close()
+                self.callback(self.devices[e]['id'], 0)
             del self.devices[e]
 
         self.devices_known = list(self.devices.keys())

@@ -596,7 +596,6 @@ class CompanionWindow(object):
     ################################################################################################################
 
     # TODO: Get buttons working (need to know what they should each do)
-    # TODO: Make handlers for menu items
     # Assign buttons to functions
     def setup_button_handlers(self):
         self.trial_controls_action.triggered.connect(self.trial_controls_action_handler)
@@ -676,6 +675,9 @@ class CompanionWindow(object):
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def begin_experiment_action_handler(self):
+        # foreach device attached, go to its own dictionary and send it its own version of the command
+        # dictionary[begin_exp] = >begin_exp|<<
+
         print("Begin Experiment Action triggered")
 
     # TODO: Remove prints in this function after debugging
@@ -736,11 +738,13 @@ class CompanionWindow(object):
     def mdi_cascade_handler(self):
         print("cascade called")
         position = QtCore.QPoint(0, 0)
+        min_rect_size = 320
         max_width = self.mdi_dock_area.width()
         max_height = self.mdi_dock_area.height()
         for window in self.mdi_dock_area.subWindowList():
-            rect = QtCore.QRect(0, 0, int(max(max_width/self.__num_subwindows__, 250)),
-                                int(max(max_width/self.__num_subwindows__, 250)))
+            rect_width = int(max(max_width/self.__num_subwindows__, min_rect_size))
+            rect_height = int(max(max_height/self.__num_subwindows__, min_rect_size))
+            rect = QtCore.QRect(0, 0, rect_width, rect_height)
             window.setGeometry(rect)
             window.move(position)
             if self.__num_subwindows__ > 1:
@@ -750,25 +754,33 @@ class CompanionWindow(object):
                 new_y = temp_y % (max_height - window.height()/2)
                 position.setX(new_x)
                 position.setY(new_y)
-        #self.mdi_dock_area.cascadeSubWindows()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
     # Tiles the SubWindows in the MDI Dock
     def mdi_tile_handler(self):
         print("mdi tile handler called")
-        #self.mdi_dock_area.tileSubWindows()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
     # Vertically lays out the SubWindows in the MDI Dock
     def mdi_vert_handler(self):
-        print("MDI_Vert_Handler called")
-        if self.__num_subwindows__ < 2:
-            print("MDI_Vert_Handler called MDI_Tile_Handler")
-            self.mdi_tile_handler()
-        else:
-            print("MDI_Vert_Handler passed")
+        print("mdi vert handler called")
+        position = QtCore.QPoint(0, 0)
+        min_rect_size = 320
+        max_width = self.mdi_dock_area.width()
+        max_height = self.mdi_dock_area.height()
+        for window in self.mdi_dock_area.subWindowList():
+            rect_width = int(max(max_width / self.__num_subwindows__, min_rect_size))
+            rect_height = max_height
+            print("Rect size =", rect_width, rect_height)
+            rect = QtCore.QRect(0, 0, rect_width, rect_height)
+            window.setGeometry(rect)
+            window.move(position)
+            if self.__num_subwindows__ > 1:
+                new_x = position.x() + window.width()
+                position.setX(new_x)
+                print("new position =", new_x)
 
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
@@ -784,35 +796,35 @@ class CompanionWindow(object):
 
     # TODO: invariant must be unique device names. Figure out how to enforce this constraint
     # Adds a new unique pair of RS Device box and RS SubWindow to the UI
-    def add_rs_device_handler(self):
-        self.add_rs_device_box()
-        self.add_rs_device_subwindow()
+    def add_rs_device_handler(self, device):
+        self.add_rs_device_box(device)
+        self.add_rs_device_subwindow(device)
 
     # Removes an existing specific pair of RS Device box and RS Subwindow from the UI
-    def remove_rs_device_handler(self):
-        self.remove_rs_device_box()
-        self.remove_rs_device_subwindow()
+    def remove_rs_device_handler(self, name):
+        self.remove_rs_device_box(name)
+        self.remove_rs_device_subwindow(name)
 
     # Generates a new RS Device box, adds it to a collection and then displays it.
-    def add_rs_device_box(self):
-        name = self.block_note_text_box.toPlainText()
+    def add_rs_device_box(self, name):
+        # name = self.block_note_text_box.toPlainText()
         if name:
             self.__list_of_devices__[name] = DeviceBox(name, self.rs_devices_scroll_area_contents)
             self.rs_devices_scroll_area_contents_vert_layout.addWidget(self.__list_of_devices__[name])
 
     # Removes a specific RS Device box from the UI
-    def remove_rs_device_box(self):
-        name = self.block_note_text_box.toPlainText()
+    def remove_rs_device_box(self, name):
+        # name = self.block_note_text_box.toPlainText()
         if name in self.__list_of_devices__ and self.__list_of_devices__[name]:
             self.rs_devices_scroll_area_contents_vert_layout.removeWidget(self.__list_of_devices__[name])
             self.__list_of_devices__[name].deleteLater()
             del self.__list_of_devices__[name]
 
     # Generates a new RS SubWindow, adds it to a collection and then displays it.
-    def add_rs_device_subwindow(self):
+    def add_rs_device_subwindow(self, name):
         # TODO: Remove prints in this function after debugging
         print("SubWindow Add called")
-        name = self.block_note_text_box.toPlainText()
+        # name = self.block_note_text_box.toPlainText()
         if name:
             self.__num_subwindows__ += 1
             print("Num subs =", self.__num_subwindows__)
@@ -823,9 +835,9 @@ class CompanionWindow(object):
 
 
     # TODO: Remove prints in this function after debugging
-    def remove_rs_device_subwindow(self):
+    def remove_rs_device_subwindow(self, name):
         print("SubWindow Remove called")
-        name = self.block_note_text_box.toPlainText()
+        # name = self.block_note_text_box.toPlainText()
         if name in self.__list_of_subwindows__ and self.__list_of_subwindows__[name]:
             self.__num_subwindows__ -= 1
             print("Num subs =", self.__num_subwindows__)

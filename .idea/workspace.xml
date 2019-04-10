@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Serial/device_defs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/companion_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/rs_device_com.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/rs_device_com.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/Companion_View.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/rs_companion_view.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UI/Companion_View.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/UI/companion_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+            <state relative-caret-position="66">
+              <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
               <folding>
                 <element signature="e#97#107#0" expanded="true" />
               </folding>
@@ -26,36 +31,21 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Serial/main.py">
+        <entry file="file://$PROJECT_DIR$/Serial/device_defs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-              <folding>
-                <element signature="e#58#88#0" expanded="true" />
-              </folding>
+            <state>
+              <caret column="38" selection-start-column="38" selection-end-column="38" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Serial/rs_device_com.py">
+        <entry file="file://$PROJECT_DIR$/UI/rs_companion_view.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="56" column="40" lean-forward="true" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
-              <folding>
-                <element signature="e#250#263#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/UI/RS_Companion_Window_Class.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
-              <caret line="788" column="38" lean-forward="true" selection-start-line="788" selection-start-column="38" selection-end-line="788" selection-end-column="38" />
+            <state>
               <folding>
                 <element signature="n#!!doc" />
+                <element signature="e#224#52892#0" />
                 <element signature="e#423#535#0" />
                 <element signature="e#790#33377#0" />
                 <element signature="e#1071#1103#0" />
@@ -91,63 +81,82 @@
                 <element signature="e#39926#39956#0" />
                 <element signature="e#40317#40561#1" />
                 <element signature="e#41120#41232#0" />
-                <element signature="e#41573#43582#0" />
-                <element signature="e#43588#43642#0" />
-                <element signature="e#43734#43774#0" />
-                <element signature="e#43780#43834#0" />
-                <element signature="e#43917#43948#0" />
-                <element signature="e#43954#44008#0" />
-                <element signature="e#44092#44124#0" />
-                <element signature="e#44130#44184#0" />
-                <element signature="e#44336#44501#0" />
-                <element signature="e#44507#44561#0" />
-                <element signature="e#44653#44693#0" />
-                <element signature="e#44699#44753#0" />
-                <element signature="e#44847#44889#0" />
-                <element signature="e#44895#44949#0" />
-                <element signature="e#45036#45071#0" />
-                <element signature="e#45077#45131#0" />
-                <element signature="e#45217#45251#0" />
-                <element signature="e#45257#45311#0" />
-                <element signature="e#45401#45439#0" />
-                <element signature="e#45445#45499#0" />
-                <element signature="e#45593#45635#0" />
-                <element signature="e#45641#45695#0" />
-                <element signature="e#45790#45833#0" />
-                <element signature="e#45839#45893#0" />
-                <element signature="e#45989#46033#0" />
-                <element signature="e#46039#46093#0" />
-                <element signature="e#46179#46213#0" />
-                <element signature="e#46219#46273#0" />
-                <element signature="e#46361#46395#0" />
-                <element signature="e#46401#46455#0" />
-                <element signature="e#46542#46575#0" />
-                <element signature="e#46581#46635#0" />
-                <element signature="e#46719#46822#0" />
-                <element signature="e#46828#46882#0" />
-                <element signature="e#46966#47075#0" />
-                <element signature="e#47081#47135#0" />
-                <element signature="e#47222#47255#0" />
-                <element signature="e#47261#47315#0" />
-                <element signature="e#47398#47427#0" />
-                <element signature="e#47433#47487#0" />
-                <element signature="e#47569#47597#0" />
-                <element signature="e#48877#48929#0" />
-                <element signature="e#49161#49193#0" />
-                <element signature="e#49161#49390#0" />
-                <element signature="e#49414#49447#0" />
-                <element signature="e#49656#49688#0" />
-                <element signature="e#49808#49871#0" />
-                <element signature="e#50032#50101#0" />
-                <element signature="e#52073#53725#0" />
-                <element signature="e#52115#52813#0" />
-                <element signature="e#52854#53101#0" />
-                <element signature="e#53148#53299#0" />
-                <element signature="e#53452#53513#0" />
-                <element signature="e#53665#53725#0" />
-                <element signature="e#53831#60505#0" />
-                <element signature="e#53873#59488#0" />
-                <element signature="e#59529#60505#0" />
+                <element signature="e#41532#43541#0" />
+                <element signature="e#43547#43601#0" />
+                <element signature="e#43693#43733#0" />
+                <element signature="e#43739#43793#0" />
+                <element signature="e#43876#43907#0" />
+                <element signature="e#43913#43967#0" />
+                <element signature="e#44051#44083#0" />
+                <element signature="e#44089#44143#0" />
+                <element signature="e#44295#44460#0" />
+                <element signature="e#44466#44520#0" />
+                <element signature="e#44612#44652#0" />
+                <element signature="e#44658#44712#0" />
+                <element signature="e#44806#44848#0" />
+                <element signature="e#44854#44908#0" />
+                <element signature="e#44995#45030#0" />
+                <element signature="e#45036#45090#0" />
+                <element signature="e#45176#45210#0" />
+                <element signature="e#45216#45270#0" />
+                <element signature="e#45360#45398#0" />
+                <element signature="e#45404#45458#0" />
+                <element signature="e#45561#45651#0" />
+                <element signature="e#45552#45646#0" />
+                <element signature="e#45600#45654#0" />
+                <element signature="e#45749#45792#0" />
+                <element signature="e#45798#45852#0" />
+                <element signature="e#45948#45992#0" />
+                <element signature="e#45998#46052#0" />
+                <element signature="e#46138#46172#0" />
+                <element signature="e#46178#46232#0" />
+                <element signature="e#46320#46354#0" />
+                <element signature="e#46360#46414#0" />
+                <element signature="e#46501#46534#0" />
+                <element signature="e#46540#46594#0" />
+                <element signature="e#46678#46781#0" />
+                <element signature="e#46787#46841#0" />
+                <element signature="e#46925#47034#0" />
+                <element signature="e#47040#47094#0" />
+                <element signature="e#47181#47214#0" />
+                <element signature="e#47220#47274#0" />
+                <element signature="e#47357#47386#0" />
+                <element signature="e#47392#47446#0" />
+                <element signature="e#47528#47556#0" />
+                <element signature="e#47562#47616#0" />
+                <element signature="e#47814#48793#0" />
+                <element signature="e#48071#48793#0" />
+                <element signature="e#48423#48793#0" />
+                <element signature="e#48799#48853#0" />
+                <element signature="e#48986#49018#0" />
+                <element signature="e#49024#49078#0" />
+                <element signature="e#49225#49975#0" />
+                <element signature="e#49491#49975#0" />
+                <element signature="e#49854#49975#0" />
+                <element signature="e#49981#50035#0" />
+                <element signature="e#50185#50218#0" />
+                <element signature="e#50224#50278#0" />
+                <element signature="e#50427#50459#0" />
+                <element signature="e#50465#50553#0" />
+                <element signature="e#50672#50735#0" />
+                <element signature="e#50871#50940#0" />
+                <element signature="e#51066#51330#0" />
+                <element signature="e#51141#51330#0" />
+                <element signature="e#51427#51762#0" />
+                <element signature="e#51565#51762#0" />
+                <element signature="e#51893#52318#0" />
+                <element signature="e#52069#52318#0" />
+                <element signature="e#52430#52892#0" />
+                <element signature="e#52615#52892#0" />
+                <element signature="e#52937#54589#0" />
+                <element signature="e#52979#53677#0" />
+                <element signature="e#53718#53965#0" />
+                <element signature="e#54012#54163#0" />
+                <element signature="e#54316#54377#0" />
+                <element signature="e#54529#54589#0" />
+                <element signature="e#54695#61369#0" />
+                <element signature="e#54737#60352#0" />
+                <element signature="e#60393#61369#0" />
               </folding>
             </state>
           </provider>
@@ -164,13 +173,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_option</find>
-      <find>.triggered(</find>
-      <find>input</find>
-      <find>Action</find>
-      <find>About_</find>
-      <find>Freeze_</find>
-      <find>Freeze</find>
       <find>Record</find>
       <find>Remove_RS_</find>
       <find>Add_RS_Device_Box</find>
@@ -194,6 +196,13 @@
       <find>print</find>
       <find>print(</find>
       <find>tile_</find>
+      <find>min</find>
+      <find>handler</find>
+      <find>exp_action</find>
+      <find>.write</find>
+      <find>begin_experiment_action_handler</find>
+      <find>add_rs_device_</find>
+      <find>pid</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -202,7 +211,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Serial/main.py" />
         <option value="$PROJECT_DIR$/View_Main.py" />
         <option value="$PROJECT_DIR$/Serial/controller_serial.py" />
         <option value="$PROJECT_DIR$/RS_View.py" />
@@ -216,23 +224,28 @@
         <option value="$PROJECT_DIR$/RS_Companion_Window_Class_2.py" />
         <option value="$PROJECT_DIR$/Companion_View.py" />
         <option value="$PROJECT_DIR$/RS_Companion_Window_Class.py" />
-        <option value="$PROJECT_DIR$/UI/Companion_View.py" />
         <option value="$PROJECT_DIR$/UI/TEMP.py" />
+        <option value="$PROJECT_DIR$/Serial/rs_device_com.py" />
+        <option value="$PROJECT_DIR$/UI/Companion_View.py" />
         <option value="$PROJECT_DIR$/UI/RS_Companion_Window_Class.py" />
+        <option value="$PROJECT_DIR$/Serial/main.py" />
+        <option value="$PROJECT_DIR$/UI/rs_companion_view.py" />
+        <option value="$PROJECT_DIR$/Serial/device_defs.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-14" />
     <option name="y" value="-14" />
-    <option name="width" value="1824" />
-    <option name="height" value="1744" />
+    <option name="width" value="2762" />
+    <option name="height" value="1850" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -254,13 +267,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -279,7 +291,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.Companion_View">
     <configuration name="Companion_View" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -292,7 +304,49 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/UI/Companion_View.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI\companion_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Serial" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Serial/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="rs_device_com" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Serial" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Serial/rs_device_com.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -304,6 +358,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Companion_View" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.rs_device_com" />
       </list>
     </recent_temporary>
   </component>
@@ -330,24 +386,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
+    <frame x="-7" y="-7" width="1381" height="925" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.104928456" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.10467706" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3526245" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="GitLabIntegration" order="2" />
       <window_info anchor="bottom" id="Python Console" order="3" />
       <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" weight="0.32663316" />
+      <window_info anchor="bottom" id="Find" order="5" weight="0.32606438" />
       <window_info anchor="bottom" id="Version Control" order="6" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.29032257" />
+      <window_info anchor="bottom" id="Run" order="7" visible="true" weight="0.35050252" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39949748" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" weight="0.328341" />
+      <window_info anchor="bottom" id="TODO" order="11" weight="0.32788944" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -390,69 +446,32 @@
     <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class_Old.py" />
     <entry file="file://$PROJECT_DIR$/Backup_RS_Companion_Window_Class.py" />
     <entry file="file://$PROJECT_DIR$/UI/__init__.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1384526572/PySide2/QtWidgets/QGridLayout.py">
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1384526572/PySide2/QtWidgets/QGridLayout.py" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1384526572/PySide2/QtCore/QMetaObject.py" />
+    <entry file="file://$PROJECT_DIR$/UI/TEMP.py" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtCore/QObject.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1384526572/PySide2/QtCore/QMetaObject.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="39" column="8" selection-start-line="39" selection-start-column="8" selection-end-line="39" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Serial/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#58#88#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/TEMP.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="744" column="42" lean-forward="true" selection-start-line="744" selection-start-column="42" selection-end-line="744" selection-end-column="42" />
-          <folding>
-            <element signature="e#33484#41114#0" />
-            <element signature="e#41532#43541#0" />
-            <element signature="e#54245#59860#0" />
-            <element signature="e#59901#60877#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/Companion_View.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
-          <folding>
-            <element signature="e#97#107#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="311">
+          <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Serial/rs_device_com.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="56" column="40" lean-forward="true" selection-start-line="56" selection-start-column="40" selection-end-line="56" selection-end-column="40" />
+        <state relative-caret-position="672">
+          <caret line="85" column="50" selection-start-line="85" selection-start-column="50" selection-end-line="85" selection-end-column="50" />
           <folding>
             <element signature="e#250#263#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UI/RS_Companion_Window_Class.py">
+    <entry file="file://$PROJECT_DIR$/UI/rs_companion_view.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="788" column="38" lean-forward="true" selection-start-line="788" selection-start-column="38" selection-end-line="788" selection-end-column="38" />
+        <state>
           <folding>
             <element signature="n#!!doc" />
+            <element signature="e#224#52892#0" />
             <element signature="e#423#535#0" />
             <element signature="e#790#33377#0" />
             <element signature="e#1071#1103#0" />
@@ -488,63 +507,106 @@
             <element signature="e#39926#39956#0" />
             <element signature="e#40317#40561#1" />
             <element signature="e#41120#41232#0" />
-            <element signature="e#41573#43582#0" />
-            <element signature="e#43588#43642#0" />
-            <element signature="e#43734#43774#0" />
-            <element signature="e#43780#43834#0" />
-            <element signature="e#43917#43948#0" />
-            <element signature="e#43954#44008#0" />
-            <element signature="e#44092#44124#0" />
-            <element signature="e#44130#44184#0" />
-            <element signature="e#44336#44501#0" />
-            <element signature="e#44507#44561#0" />
-            <element signature="e#44653#44693#0" />
-            <element signature="e#44699#44753#0" />
-            <element signature="e#44847#44889#0" />
-            <element signature="e#44895#44949#0" />
-            <element signature="e#45036#45071#0" />
-            <element signature="e#45077#45131#0" />
-            <element signature="e#45217#45251#0" />
-            <element signature="e#45257#45311#0" />
-            <element signature="e#45401#45439#0" />
-            <element signature="e#45445#45499#0" />
-            <element signature="e#45593#45635#0" />
-            <element signature="e#45641#45695#0" />
-            <element signature="e#45790#45833#0" />
-            <element signature="e#45839#45893#0" />
-            <element signature="e#45989#46033#0" />
-            <element signature="e#46039#46093#0" />
-            <element signature="e#46179#46213#0" />
-            <element signature="e#46219#46273#0" />
-            <element signature="e#46361#46395#0" />
-            <element signature="e#46401#46455#0" />
-            <element signature="e#46542#46575#0" />
-            <element signature="e#46581#46635#0" />
-            <element signature="e#46719#46822#0" />
-            <element signature="e#46828#46882#0" />
-            <element signature="e#46966#47075#0" />
-            <element signature="e#47081#47135#0" />
-            <element signature="e#47222#47255#0" />
-            <element signature="e#47261#47315#0" />
-            <element signature="e#47398#47427#0" />
-            <element signature="e#47433#47487#0" />
-            <element signature="e#47569#47597#0" />
-            <element signature="e#48877#48929#0" />
-            <element signature="e#49161#49193#0" />
-            <element signature="e#49161#49390#0" />
-            <element signature="e#49414#49447#0" />
-            <element signature="e#49656#49688#0" />
-            <element signature="e#49808#49871#0" />
-            <element signature="e#50032#50101#0" />
-            <element signature="e#52073#53725#0" />
-            <element signature="e#52115#52813#0" />
-            <element signature="e#52854#53101#0" />
-            <element signature="e#53148#53299#0" />
-            <element signature="e#53452#53513#0" />
-            <element signature="e#53665#53725#0" />
-            <element signature="e#53831#60505#0" />
-            <element signature="e#53873#59488#0" />
-            <element signature="e#59529#60505#0" />
+            <element signature="e#41532#43541#0" />
+            <element signature="e#43547#43601#0" />
+            <element signature="e#43693#43733#0" />
+            <element signature="e#43739#43793#0" />
+            <element signature="e#43876#43907#0" />
+            <element signature="e#43913#43967#0" />
+            <element signature="e#44051#44083#0" />
+            <element signature="e#44089#44143#0" />
+            <element signature="e#44295#44460#0" />
+            <element signature="e#44466#44520#0" />
+            <element signature="e#44612#44652#0" />
+            <element signature="e#44658#44712#0" />
+            <element signature="e#44806#44848#0" />
+            <element signature="e#44854#44908#0" />
+            <element signature="e#44995#45030#0" />
+            <element signature="e#45036#45090#0" />
+            <element signature="e#45176#45210#0" />
+            <element signature="e#45216#45270#0" />
+            <element signature="e#45360#45398#0" />
+            <element signature="e#45404#45458#0" />
+            <element signature="e#45561#45651#0" />
+            <element signature="e#45552#45646#0" />
+            <element signature="e#45600#45654#0" />
+            <element signature="e#45749#45792#0" />
+            <element signature="e#45798#45852#0" />
+            <element signature="e#45948#45992#0" />
+            <element signature="e#45998#46052#0" />
+            <element signature="e#46138#46172#0" />
+            <element signature="e#46178#46232#0" />
+            <element signature="e#46320#46354#0" />
+            <element signature="e#46360#46414#0" />
+            <element signature="e#46501#46534#0" />
+            <element signature="e#46540#46594#0" />
+            <element signature="e#46678#46781#0" />
+            <element signature="e#46787#46841#0" />
+            <element signature="e#46925#47034#0" />
+            <element signature="e#47040#47094#0" />
+            <element signature="e#47181#47214#0" />
+            <element signature="e#47220#47274#0" />
+            <element signature="e#47357#47386#0" />
+            <element signature="e#47392#47446#0" />
+            <element signature="e#47528#47556#0" />
+            <element signature="e#47562#47616#0" />
+            <element signature="e#47814#48793#0" />
+            <element signature="e#48071#48793#0" />
+            <element signature="e#48423#48793#0" />
+            <element signature="e#48799#48853#0" />
+            <element signature="e#48986#49018#0" />
+            <element signature="e#49024#49078#0" />
+            <element signature="e#49225#49975#0" />
+            <element signature="e#49491#49975#0" />
+            <element signature="e#49854#49975#0" />
+            <element signature="e#49981#50035#0" />
+            <element signature="e#50185#50218#0" />
+            <element signature="e#50224#50278#0" />
+            <element signature="e#50427#50459#0" />
+            <element signature="e#50465#50553#0" />
+            <element signature="e#50672#50735#0" />
+            <element signature="e#50871#50940#0" />
+            <element signature="e#51066#51330#0" />
+            <element signature="e#51141#51330#0" />
+            <element signature="e#51427#51762#0" />
+            <element signature="e#51565#51762#0" />
+            <element signature="e#51893#52318#0" />
+            <element signature="e#52069#52318#0" />
+            <element signature="e#52430#52892#0" />
+            <element signature="e#52615#52892#0" />
+            <element signature="e#52937#54589#0" />
+            <element signature="e#52979#53677#0" />
+            <element signature="e#53718#53965#0" />
+            <element signature="e#54012#54163#0" />
+            <element signature="e#54316#54377#0" />
+            <element signature="e#54529#54589#0" />
+            <element signature="e#54695#61369#0" />
+            <element signature="e#54737#60352#0" />
+            <element signature="e#60393#61369#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Serial/device_defs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="38" selection-start-column="38" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Serial/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UI/companion_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
+          <folding>
+            <element signature="e#97#107#0" expanded="true" />
           </folding>
         </state>
       </provider>
