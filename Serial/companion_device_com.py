@@ -93,8 +93,21 @@ class ControllerSerial:
     # TODO: Fill out com.handle_msg
     def handle_msg(self, msg):
         # Parse msg and send correct message to correct device then self.msg_callback with any reply
-        # perhaps communication protocol will be keyval pair with key being the type of action to take and val being the
+        # perhaps communication protocol will be dictionary with key being the type of action to take and val being the
         #   msg?
+        if msg['action'] == "send":
+            self.__send_msg_to_device(msg['device'], msg['command'], msg['arg'])
         pass
+
+    def __send_msg_to_device(self, device, cmd, arg):
+        msg = str.encode(cmd + " " + arg)
+        for d in self.devices:
+            if d == device:
+                self.devices[d]['port'].write(msg)
+                ret_msg = self.devices[d]['port'].readline().decode("utf-8")
+                self.msg_callback(ret_msg)
+
+
+
 
 
