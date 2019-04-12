@@ -36,10 +36,10 @@ class CompanionController:
                 self.ui.remove_rs_device_handler(device)
 
     def send_msg_to_manager(self, msg):
-        self.ui.msg_callback(msg)
+        self.device_manager.handle_msg(msg)
 
     def send_msg_to_ui(self, msg):
-        self.device_manager.handle_msg(msg)
+        self.ui.msg_callback(msg)
 
 
 

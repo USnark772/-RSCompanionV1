@@ -56,80 +56,6 @@ class CompanionWindow(object):
         self.central_widget_vert_layout.addWidget(self.mdi_dock_frame)
         # End MDI Dock generation code
         ################################################################################################################
-        # Begin MDI SubWindow Generation Code
-        '''
-        self.subwindow = QtWidgets.QWidget()
-        self.subwindow.setObjectName("subwindow")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.subwindow)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.graphicsView = QtWidgets.QGraphicsView(self.subwindow)
-        self.graphicsView.setObjectName("graphicsView")
-        self.horizontalLayout.addWidget(self.graphicsView)
-        self.frame_4 = QtWidgets.QFrame(self.subwindow)
-        self.frame_4.setMinimumSize(QtCore.QSize(0, 265))
-        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_4.setObjectName("frame_4")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame_4)
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.horizontalLayout.addWidget(self.frame_4)
-        self.scrollArea_2 = QtWidgets.QScrollArea(self.subwindow)
-        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
-        size_policy.setHorizontalStretch(0)
-        size_policy.setVerticalStretch(0)
-        size_policy.setHeightForWidth(self.scrollArea_2.size_policy().hasHeightForWidth())
-        self.scrollArea_2.setSizePolicy(size_policy)
-        self.scrollArea_2.setMinimumSize(QtCore.QSize(150, 0))
-        self.scrollArea_2.setWidgetResizable(True)
-        self.scrollArea_2.setObjectName("scrollArea_2")
-        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 148, 296))
-        self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
-        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
-        self.verticalLayout_11.setObjectName("verticalLayout_11")
-        self.groupBox_5 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_2)
-        self.groupBox_5.setMinimumSize(QtCore.QSize(0, 175))
-        self.groupBox_5.setObjectName("groupBox_5")
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.groupBox_5)
-        self.verticalLayout_8.setContentsMargins(9, 9, 9, 9)
-        self.verticalLayout_8.setSpacing(9)
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.pushButton_16 = QtWidgets.QPushButton(self.groupBox_5)
-        self.pushButton_16.setObjectName("pushButton_16")
-        self.verticalLayout_8.addWidget(self.pushButton_16)
-        self.pushButton_17 = QtWidgets.QPushButton(self.groupBox_5)
-        self.pushButton_17.setObjectName("pushButton_17")
-        self.verticalLayout_8.addWidget(self.pushButton_17)
-        self.checkBox_2 = QtWidgets.QCheckBox(self.groupBox_5)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.verticalLayout_8.addWidget(self.checkBox_2)
-        self.checkBox_3 = QtWidgets.QCheckBox(self.groupBox_5)
-        self.checkBox_3.setObjectName("checkBox_3")
-        self.verticalLayout_8.addWidget(self.checkBox_3)
-        self.checkBox_4 = QtWidgets.QCheckBox(self.groupBox_5)
-        self.checkBox_4.setObjectName("checkBox_4")
-        self.verticalLayout_8.addWidget(self.checkBox_4)
-        self.verticalLayout_11.addWidget(self.groupBox_5)
-        spacerItem = QtWidgets.QSpacerItem(20, 97, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_11.addItem(spacerItem)
-        self.groupBox_6 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_2)
-        self.groupBox_6.setMinimumSize(QtCore.QSize(100, 0))
-        self.groupBox_6.setObjectName("groupBox_6")
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.groupBox_6)
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.pushButton_15 = QtWidgets.QPushButton(self.groupBox_6)
-        self.pushButton_15.setObjectName("pushButton_15")
-        self.verticalLayout_7.addWidget(self.pushButton_15)
-        self.pushButton_14 = QtWidgets.QPushButton(self.groupBox_6)
-        self.pushButton_14.setObjectName("pushButton_14")
-        self.verticalLayout_7.addWidget(self.pushButton_14)
-        self.verticalLayout_11.addWidget(self.groupBox_6)
-        self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
-        self.horizontalLayout.addWidget(self.scrollArea_2)
-        '''
-        # End MDI SubWindow generation Code
-        ################################################################################################################
         # Begin Menu Bar generation code
         self.menu_bar = QtWidgets.QMenuBar(main_window)
         self.menu_bar.setGeometry(QtCore.QRect(0, 0, 840, 22))
@@ -829,7 +755,7 @@ class CompanionWindow(object):
     # Generates a new RS Device box, adds it to a collection and then displays it.
     def add_rs_device_box(self, device, sub):
         device_name = device[0]
-        self.__list_of_devices__[device[1]] = DeviceBox(device_name, sub)
+        self.__list_of_devices__[device[1]] = DeviceBox(device_name, sub, self.msg_callback)
         self.rs_devices_scroll_area_contents_vert_layout.addWidget(self.__list_of_devices__[device[1]])
 
     # Removes a specific RS Device box from the UI
@@ -843,7 +769,7 @@ class CompanionWindow(object):
     def add_rs_device_subwindow(self, device):
         device_name = device[0]
         self.__num_subwindows__ += 1
-        sub = SubWindow(device_name)
+        sub = SubWindow(device_name, self.msg_callback)
         self.mdi_dock_area.addSubWindow(sub)
         self.__list_of_subwindows__[device[1]] = sub
         sub.show()
@@ -857,8 +783,9 @@ class CompanionWindow(object):
 
 
 class DeviceBox(QtWidgets.QGroupBox):
-    def __init__(self, name, sub):
+    def __init__(self, name, sub, msg_handler):
         super().__init__()
+        self.msg_hander = msg_handler
         self.setObjectName(name)
         self.device_group_box_horiz_layout = QtWidgets.QHBoxLayout(self)
         self.device_group_box_horiz_layout.setObjectName("device_group_box_horiz_layout")
@@ -903,18 +830,20 @@ class DeviceBox(QtWidgets.QGroupBox):
     # TODO: Figure out how to pass useful information from this handler and make it do useful things
     def setup_push_button_handler(self):
         print("Setup Button Handler pressed for", self.objectName())
-        self.window = MessageWindow("Setup Button Handler", "CHANGEME This is the setup button handler for today")
-        self.window.show()
+        #self.window = MessageWindow("Setup Button Handler", "CHANGEME This is the setup button handler for today")
+        self.configure_widget = DeviceSettings()
+        self.configure_widget.show()
+        #self.window.show()
 
 
 # TODO: Create other subwindow versions based on device?
 class SubWindow(QtWidgets.QMdiSubWindow):
-    def __init__(self, name, parent=None):
-        super().__init__(parent)
+    def __init__(self, name, msg_handler):
+        super().__init__()
+        self.msg_hander = msg_handler
         self.setObjectName(name)
         # enable custom window hint
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
-
         # disable (but not hide) close button
         self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
         self.close_me_bool = False
@@ -1047,3 +976,21 @@ class MessageWindow(QtWidgets.QMessageBox):
         self.setStandardButtons(QtWidgets.QMessageBox.Close)
         self.setDefaultButton(QtWidgets.QMessageBox.Close)
         self.setEscapeButton(QtWidgets.QMessageBox.Close)
+
+
+class DeviceSettings(QtWidgets.QWidget):
+    def __index__(self, name, msg_handler):
+        super().__init__()
+        self.msg_handler = msg_handler
+        self.setObjectName(name)
+        self.setWindowTitle("Device settings")
+        self.setMaximumHeight(400)
+        self.setMaximumWidth(400)
+        rect = QtCore.QRect(0, 0, 400, 400)
+        self.setGeometry(rect)
+        self.vert_layout = QtWidgets.QVBoxLayout(self)
+        #self.grid_layout = QtWidgets.QGridLayout()
+        self.set_lowerISI = QtWidgets.QPushButton(self.vert_layout)
+        #self.grid_layout.addWidget(self.set_lowerISI, 0, 0, 0, 0)
+        self.setLayout(self.vert_layout)
+
