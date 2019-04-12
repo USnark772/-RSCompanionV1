@@ -1,3 +1,9 @@
+# Author: Phillip Riskin & Joel Cooper
+# Date: Spring 2019
+# Project: Companion App
+# Company: Red Scientific
+# https://redscientific.com/index.html
+
 # Definitions to use to detect devices
 
 devices = {'drt': {'probe': "get_name\n\r",

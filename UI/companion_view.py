@@ -2,6 +2,7 @@
 # Date: Spring 2019
 # Project: Companion App
 # Company: Red Scientific
+# https://redscientific.com/index.html
 
 # from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -18,7 +19,7 @@ class CompanionWindow(object):
     ################################################################################################################
 
     # Auto generated code slightly altered for readability
-    def __init__(self, main_window):
+    def __init__(self, main_window, msg_handler):
         # Begin MainWindow generation code
         main_window.setObjectName("main_window")
         main_window.resize(840, 705)
@@ -483,7 +484,7 @@ class CompanionWindow(object):
         ################################################################################################################
         # Begin final initialization
         self.set_texts(main_window)
-        self.setup_button_handlers()
+        self.setup_handlers(msg_handler)
         self.clear_push_button.clicked.connect(self.com_text_box.clear)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
@@ -597,12 +598,12 @@ class CompanionWindow(object):
 
     # TODO: Get buttons working (need to know what they should each do)
     # Assign buttons to functions
-    def setup_button_handlers(self):
+    def setup_handlers(self, msg_handler):
         self.trial_controls_action.triggered.connect(self.trial_controls_action_handler)
         self.input_action.triggered.connect(self.input_action_handler)
         self.output_action.triggered.connect(self.output_action_handler)
         self.open_file_action.triggered.connect(self.open_action_handler)
-        self.end_exp_action.triggered.connect(self.end_experiment_cction_handler)
+        self.end_exp_action.triggered.connect(self.end_experiment_action_handler)
         self.display_tool_tips_action.triggered.connect(self.display_tooltips_action_handler)
         self.configure_action.triggered.connect(self.configure_action_handler)
         self.com_port_action.triggered.connect(self.com_port_action_handler)
@@ -623,6 +624,13 @@ class CompanionWindow(object):
         self.freeze_push_button.clicked.connect(self.freeze_button_handler)
         self.clear_push_button.clicked.connect(self.clear_button_handler)
         self.CHANGEME_check_box.toggled.connect(self.CHANGEME_checkbox_handler)
+        self.msg_callback = msg_handler
+        # TODO: Use msg_callback for any buttons that send stuff to devices
+
+    # TODO: Fill out ui.handle_msg
+    def handle_msg(self, msg):
+        # parse msg and update ui using new information.
+        pass
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
@@ -649,7 +657,7 @@ class CompanionWindow(object):
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def end_experiment_cction_handler(self):
+    def end_experiment_action_handler(self):
         print("End Experiment Action triggered")
 
     # TODO: Remove prints in this function after debugging
@@ -689,12 +697,25 @@ class CompanionWindow(object):
     # TODO: Make this function useful
     def about_rs_companion_action_handler(self):
         print("About RS Companion Action triggered")
+        self.help_window = MessageWindow("About Red Scientific Companion App", "CHANGEME The RS Companion App was "
+                                                           "designed by "
+                                                           "Joel Cooper and brought to life by Phillip Riskin. "
+                                                           "It has many functionalities that you might not be "
+                                                           "aware of so play around with it and see what's "
+                                                           "going on! Have fun :)")
+        self.help_window.show()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def about_rs_action_handler(self):
         print("About RS Action triggered")
-
+        self.help_window = MessageWindow("About Red Scientific", "CHANGEME Red Scientific is an awesome company that will do "
+                                                              "great things in the years to come and keep Phillip "
+                                                              "really happy by paying him lots of money because "
+                                                              "RS is rich from selling all those awesome devices "
+                                                              "which are made even awesomer by the UI that Phillip "
+                                                              "was instrumental in making work. boom.")
+        self.help_window.show()
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def CHANGEME_checkbox_handler(self):
@@ -709,13 +730,11 @@ class CompanionWindow(object):
     # TODO: Make this function useful
     def record_button_handler(self):
         print("Record Button Pressed, connected to Add_RS_Device handler")
-        self.add_rs_device_handler()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def freeze_button_handler(self):
         print("Freeze Button Pressed, connected to Remove_RS_Device handler")
-        self.remove_rs_device_handler()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
@@ -794,61 +813,52 @@ class CompanionWindow(object):
     def mdi_main_handler(self):
         print("MDI_Main_Handler called")
 
-    # TODO: invariant must be unique device names. Figure out how to enforce this constraint
     # Adds a new unique pair of RS Device box and RS SubWindow to the UI
     def add_rs_device_handler(self, device):
-        self.add_rs_device_box(device)
-        self.add_rs_device_subwindow(device)
+        if device[1] not in self.__list_of_devices__:
+            sub = self.add_rs_device_subwindow(device)
+            self.add_rs_device_box(device, sub)
 
     # Removes an existing specific pair of RS Device box and RS Subwindow from the UI
-    def remove_rs_device_handler(self, name):
-        self.remove_rs_device_box(name)
-        self.remove_rs_device_subwindow(name)
+    def remove_rs_device_handler(self, device):
+        if device[1] in self.__list_of_devices__:
+            self.remove_rs_device_subwindow(device)
+            self.remove_rs_device_box(device)
 
+    # TODO: Figure out how to number each type of device (List of each kind?)
     # Generates a new RS Device box, adds it to a collection and then displays it.
-    def add_rs_device_box(self, name):
-        # name = self.block_note_text_box.toPlainText()
-        if name:
-            self.__list_of_devices__[name] = DeviceBox(name, self.rs_devices_scroll_area_contents)
-            self.rs_devices_scroll_area_contents_vert_layout.addWidget(self.__list_of_devices__[name])
+    def add_rs_device_box(self, device, sub):
+        device_name = device[0]
+        self.__list_of_devices__[device[1]] = DeviceBox(device_name, sub)
+        self.rs_devices_scroll_area_contents_vert_layout.addWidget(self.__list_of_devices__[device[1]])
 
     # Removes a specific RS Device box from the UI
-    def remove_rs_device_box(self, name):
-        # name = self.block_note_text_box.toPlainText()
-        if name in self.__list_of_devices__ and self.__list_of_devices__[name]:
-            self.rs_devices_scroll_area_contents_vert_layout.removeWidget(self.__list_of_devices__[name])
-            self.__list_of_devices__[name].deleteLater()
-            del self.__list_of_devices__[name]
+    def remove_rs_device_box(self, device):
+        self.rs_devices_scroll_area_contents_vert_layout.removeWidget(self.__list_of_devices__[device[1]])
+        self.__list_of_devices__[device[1]].deleteLater()
+        del self.__list_of_devices__[device[1]]
 
+    # TODO: Figure out how to number each type of device (keep count of each kind? Use com port number if possible)
     # Generates a new RS SubWindow, adds it to a collection and then displays it.
-    def add_rs_device_subwindow(self, name):
-        # TODO: Remove prints in this function after debugging
-        print("SubWindow Add called")
-        # name = self.block_note_text_box.toPlainText()
-        if name:
-            self.__num_subwindows__ += 1
-            print("Num subs =", self.__num_subwindows__)
-            sub = SubWindow(name, None)
-            self.mdi_dock_area.addSubWindow(sub)
-            self.__list_of_subwindows__[name] = sub
-            sub.show()
+    def add_rs_device_subwindow(self, device):
+        device_name = device[0]
+        self.__num_subwindows__ += 1
+        sub = SubWindow(device_name)
+        self.mdi_dock_area.addSubWindow(sub)
+        self.__list_of_subwindows__[device[1]] = sub
+        sub.show()
+        return sub
 
-
-    # TODO: Remove prints in this function after debugging
-    def remove_rs_device_subwindow(self, name):
-        print("SubWindow Remove called")
-        # name = self.block_note_text_box.toPlainText()
-        if name in self.__list_of_subwindows__ and self.__list_of_subwindows__[name]:
-            self.__num_subwindows__ -= 1
-            print("Num subs =", self.__num_subwindows__)
-            self.mdi_dock_area.removeSubWindow(self.__list_of_subwindows__[name])
-            self.__list_of_subwindows__[name].deleteLater()
-            del self.__list_of_subwindows__[name]
+    def remove_rs_device_subwindow(self, device):
+        self.__num_subwindows__ -= 1
+        self.mdi_dock_area.removeSubWindow(self.__list_of_subwindows__[device[1]])
+        self.__list_of_subwindows__[device[1]].deleteLater()
+        del self.__list_of_subwindows__[device[1]]
 
 
 class DeviceBox(QtWidgets.QGroupBox):
-    def __init__(self, name, parent):
-        super().__init__(parent)
+    def __init__(self, name, sub):
+        super().__init__()
         self.setObjectName(name)
         self.device_group_box_horiz_layout = QtWidgets.QHBoxLayout(self)
         self.device_group_box_horiz_layout.setObjectName("device_group_box_horiz_layout")
@@ -858,33 +868,56 @@ class DeviceBox(QtWidgets.QGroupBox):
         self.device_tool_button = QtWidgets.QToolButton(self)
         self.device_tool_button.setObjectName("device_tool_button")
         self.device_group_box_horiz_layout.addWidget(self.device_tool_button)
+        self.sub_window_button = QtWidgets.QPushButton(self)
+        self.sub_window_button.setObjectName("sub_window_button")
+        self.device_group_box_horiz_layout.addWidget(self.sub_window_button)
         self.set_texts(name)
         self.setup_button_handlers()
+        self.sub_link = sub
 
     def set_texts(self, name):
         _translate = QtCore.QCoreApplication.translate
         self.setTitle(_translate("MainWindow", name))
         self.setup_push_button.setText(_translate("MainWindow", "Setup"))
         self.device_tool_button.setText(_translate("MainWindow", "..."))
+        self.sub_window_button.setText(_translate("MainWindow", "Show/Hide"))
 
     def setup_button_handlers(self):
         self.device_tool_button.clicked.connect(self.device_tool_button_handler)
         self.setup_push_button.clicked.connect(self.setup_push_button_handler)
+        self.sub_window_button.clicked.connect(self.sub_window_button_handler)
+
+    def sub_window_button_handler(self):
+        if self.sub_link.isVisible():
+            self.sub_link.hide()
+        else:
+            self.sub_link.show()
 
     # TODO: Figure out how to pass useful information from this handler and make it do useful things
     def device_tool_button_handler(self):
         print("Device Button Handler pressed for", self.objectName())
+        self.window = MessageWindow("Device Button Handler", "CHANGEME This is the device tool button handler "
+                                                             "for today")
+        self.window.show()
 
     # TODO: Figure out how to pass useful information from this handler and make it do useful things
     def setup_push_button_handler(self):
         print("Setup Button Handler pressed for", self.objectName())
+        self.window = MessageWindow("Setup Button Handler", "CHANGEME This is the setup button handler for today")
+        self.window.show()
 
 
 # TODO: Create other subwindow versions based on device?
 class SubWindow(QtWidgets.QMdiSubWindow):
-    def __init__(self, name, parent):
+    def __init__(self, name, parent=None):
         super().__init__(parent)
         self.setObjectName(name)
+        # enable custom window hint
+        self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
+
+        # disable (but not hide) close button
+        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
+        self.close_me_bool = False
         self.setWindowTitle(name)
         self.central_widget = QtWidgets.QWidget(self)
         self.central_widget_horiz_layout = QtWidgets.QHBoxLayout(self.central_widget)
@@ -956,6 +989,41 @@ class SubWindow(QtWidgets.QMdiSubWindow):
         self.central_widget_horiz_layout.addWidget(self.central_widget_scroll_area)
         self.setWidget(self.central_widget)
         self.set_texts(name)
+        self.setup_button_handlers()
+
+    def setup_button_handlers(self):
+        #self.device_tool_button.clicked.connect(self.device_tool_button_handler)
+        self.group_box_1_push_button_1.clicked.connect(self.CHANGEMEGB1PB1Handler)
+        self.group_box_1_push_button_2.clicked.connect(self.CHANGEMEGB1PB2Handler)
+        self.group_box_2_push_button_1.clicked.connect(self.CHANGEMEGB2PB1Handler)
+        self.group_box_2_push_button_2.clicked.connect(self.CHANGEMEGB2PB2Handler)
+
+    def closeEvent(self, event):
+        if self.close_me_bool:
+            super().closeEvent(event)
+        else:
+            event.ignore()
+            self.hide()
+
+    def CHANGEMEGB1PB1Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def CHANGEMEGB1PB2Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def CHANGEMEGB2PB1Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def CHANGEMEGB2PB2Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
 
     def set_texts(self, name):
         _translate = QtCore.QCoreApplication.translate
@@ -969,3 +1037,13 @@ class SubWindow(QtWidgets.QMdiSubWindow):
         self.group_box_2.setTitle(_translate("MainWindow", "CHANGEME_group_box_2"))
         self.group_box_2_push_button_1.setText(_translate("MainWindow", "CHANGEME_push_button_1"))
         self.group_box_2_push_button_2.setText(_translate("MainWindow", "CHANGEME_push_button_2"))
+
+
+class MessageWindow(QtWidgets.QMessageBox):
+    def __init__(self, name, text):
+        super().__init__()
+        self.setWindowTitle(name)
+        self.setText(text)
+        self.setStandardButtons(QtWidgets.QMessageBox.Close)
+        self.setDefaultButton(QtWidgets.QMessageBox.Close)
+        self.setEscapeButton(QtWidgets.QMessageBox.Close)
