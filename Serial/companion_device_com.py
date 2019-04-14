@@ -40,8 +40,9 @@ class ControllerSerial:
             if self.devices[d]['id'] != 'unknown':
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
-                        msg = self.devices[d]['port'].readline().decode("utf-8")
-                        #self.callback(msg)
+                        msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
+                        msg_dict['msg'] = self.devices[d]['port'].readline().decode("utf-8")
+                        self.msg_callback(msg_dict)
                 except:
                     pass
 
@@ -72,7 +73,7 @@ class ControllerSerial:
                         # TODO: Figure out the intermittent issue that comes with plugging in a device
                         self.devices[port.device] = {'port': serial.Serial(port.device), 'id': device}
                         print("attached {} on {}".format(device, port.device))
-                        self.callback((self.devices[port.device]['id'], self.devices[port.device]['port']), 1)
+                        self.callback((self.devices[port.device]['id'], self.devices[port.device]['port'].name), 1)
                         break
                     else:
                         self.devices[port.device] = {'id': 'unknown'}
@@ -85,29 +86,27 @@ class ControllerSerial:
             print("removed device from {}".format(e))
             if not self.devices[e]['id'] == "unknown":
                 self.devices[e]['port'].close()
-                self.callback((self.devices[e]['id'], self.devices[e]['port']), 0)
+                self.callback((self.devices[e]['id'], self.devices[e]['port'].name), 0)
             del self.devices[e]
 
         self.devices_known = list(self.devices.keys())
 
-    # TODO: Fill out com.handle_msg
+    # TODO: format based on type of device
     def handle_msg(self, msg):
-        # Parse msg and send correct message to correct device then self.msg_callback with any reply
-        # perhaps communication protocol will be dictionary with key being the type of action to take and val being the
-        #   msg?
         if msg['action'] == "send":
-            self.__send_msg_to_device(msg['device'], msg['command'], msg['arg'])
-        pass
+            port = None
+            for d in self.devices:
+                if msg['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
+                    port = self.devices[d]['port']
+            if not port:
+                print("Device not found")
+                pass
+            else:
+                msg_to_send = msg['cmd'] + " " + msg['arg'] + "\n"
+                print(msg_to_send)
+                self.__send_msg_on_port(port, msg_to_send)
+        else:
+            print("Unknown command")
 
-    def __send_msg_to_device(self, device, cmd, arg):
-        msg = str.encode(cmd + " " + arg)
-        for d in self.devices:
-            if d == device:
-                self.devices[d]['port'].write(msg)
-                ret_msg = self.devices[d]['port'].readline().decode("utf-8")
-                self.msg_callback(ret_msg)
-
-
-
-
-
+    def __send_msg_on_port(self, port, msg_to_send):
+        port.write(str.encode(msg_to_send))

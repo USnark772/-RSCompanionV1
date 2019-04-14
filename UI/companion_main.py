@@ -39,7 +39,7 @@ class CompanionController:
         self.device_manager.handle_msg(msg)
 
     def send_msg_to_ui(self, msg):
-        self.ui.msg_callback(msg)
+        self.ui.handle_msg(msg)
 
 
 

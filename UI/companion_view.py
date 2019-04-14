@@ -4,7 +4,6 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-# from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide2 import QtCore, QtGui, QtWidgets
 
 
@@ -12,7 +11,6 @@ class CompanionWindow(object):
     # Class level globals to keep track of the different devices for Device Box and Device SubWindow purposes
     __list_of_devices__ = {}
     __list_of_subwindows__ = {}
-    __num_subwindows__ = 0
 
     ################################################################################################################
     # Begin auto-generated code
@@ -409,13 +407,13 @@ class CompanionWindow(object):
         # End MenuBar item generation code
         ################################################################################################################
         # Begin final initialization
-        self.set_texts(main_window)
-        self.setup_handlers(msg_handler)
+        self.__set_texts(main_window)
+        self.__setup_handlers(msg_handler)
         self.clear_push_button.clicked.connect(self.com_text_box.clear)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
     # Auto generated code slightly altered for readability
-    def set_texts(self, main_window):
+    def __set_texts(self, main_window):
         _translate = QtCore.QCoreApplication.translate
         ################################################################################################################
         # Main Window SetTitle code
@@ -524,104 +522,98 @@ class CompanionWindow(object):
 
     # TODO: Get buttons working (need to know what they should each do)
     # Assign buttons to functions
-    def setup_handlers(self, msg_handler):
-        self.trial_controls_action.triggered.connect(self.trial_controls_action_handler)
-        self.input_action.triggered.connect(self.input_action_handler)
-        self.output_action.triggered.connect(self.output_action_handler)
-        self.open_file_action.triggered.connect(self.open_action_handler)
-        self.end_exp_action.triggered.connect(self.end_experiment_action_handler)
-        self.display_tool_tips_action.triggered.connect(self.display_tooltips_action_handler)
-        self.configure_action.triggered.connect(self.configure_action_handler)
-        self.com_port_action.triggered.connect(self.com_port_action_handler)
-        self.com_messages_action.triggered.connect(self.com_messages_action_handler)
-        self.begin_exp_action.triggered.connect(self.begin_experiment_action_handler)
-        self.append_exp_action.triggered.connect(self.append_experiment_action_handler)
-        self.about_rs_action.triggered.connect(self.about_rs_action_handler)
-        self.about_rs_companion_action.triggered.connect(self.about_rs_companion_action_handler)
-        self.mdi_view_main_radio_button.clicked.connect(self.mdi_main_handler)
-        self.mdi_view_tiled_radio_button.clicked.connect(self.mdi_tile_handler)
-        self.mdi_view_cascade_radio_button.clicked.connect(self.mdi_cascade_handler)
-        self.mdi_view_vert_radio_button.clicked.connect(self.mdi_vert_handler)
-        self.mdi_view_horiz_radio_button.clicked.connect(self.mdi_horiz_handler)
-        self.run_trial_push_button.clicked.connect(self.run_trial_button_handler)
-        self.new_block_push_button.clicked.connect(self.new_block_button_handler)
-        self.post_push_button.clicked.connect(self.post_button_handler)
-        self.record_push_button.clicked.connect(self.record_button_handler)
-        self.freeze_push_button.clicked.connect(self.freeze_button_handler)
-        self.clear_push_button.clicked.connect(self.clear_button_handler)
-        self.CHANGEME_check_box.toggled.connect(self.CHANGEME_checkbox_handler)
+    def __setup_handlers(self, msg_handler):
+        self.trial_controls_action.triggered.connect(self.__trial_controls_action_handler)
+        self.input_action.triggered.connect(self.__input_action_handler)
+        self.output_action.triggered.connect(self.__output_action_handler)
+        self.open_file_action.triggered.connect(self.__open_action_handler)
+        self.end_exp_action.triggered.connect(self.__end_experiment_action_handler)
+        self.display_tool_tips_action.triggered.connect(self.__display_tooltips_action_handler)
+        self.configure_action.triggered.connect(self.__configure_action_handler)
+        self.com_port_action.triggered.connect(self.__com_port_action_handler)
+        self.com_messages_action.triggered.connect(self.__com_messages_action_handler)
+        self.begin_exp_action.triggered.connect(self.__begin_experiment_action_handler)
+        self.append_exp_action.triggered.connect(self.__append_experiment_action_handler)
+        self.about_rs_action.triggered.connect(self.__about_rs_action_handler)
+        self.about_rs_companion_action.triggered.connect(self.__about_rs_companion_action_handler)
+        self.mdi_view_main_radio_button.clicked.connect(self.__mdi_main_handler)
+        self.mdi_view_tiled_radio_button.clicked.connect(self.__mdi_tile_handler)
+        self.mdi_view_cascade_radio_button.clicked.connect(self.__mdi_cascade_handler)
+        self.mdi_view_vert_radio_button.clicked.connect(self.__mdi_vert_handler)
+        self.mdi_view_horiz_radio_button.clicked.connect(self.__mdi_horiz_handler)
+        self.run_trial_push_button.clicked.connect(self.__run_trial_button_handler)
+        self.new_block_push_button.clicked.connect(self.__new_block_button_handler)
+        self.post_push_button.clicked.connect(self.__post_button_handler)
+        self.record_push_button.clicked.connect(self.__record_button_handler)
+        self.freeze_push_button.clicked.connect(self.__freeze_button_handler)
+        self.clear_push_button.clicked.connect(self.__clear_button_handler)
+        self.CHANGEME_check_box.toggled.connect(self.__CHANGEME_checkbox_handler)
         self.msg_callback = msg_handler
         # TODO: Use msg_callback for any buttons that send stuff to devices
 
-    # TODO: Fill out ui.handle_msg
-    def handle_msg(self, msg):
-        # parse msg and update ui using new information.
-        pass
-
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def trial_controls_action_handler(self):
+    def __trial_controls_action_handler(self):
         print("Trial Controls Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def input_action_handler(self):
+    def __input_action_handler(self):
         print("Input Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def output_action_handler(self):
+    def __output_action_handler(self):
         print("Output Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     # Allows user to select a file through file explorer and opens it
-    def open_action_handler(self):
+    def __open_action_handler(self):
         fname = QtWidgets.QFileDialog.getOpenFileName(None, 'Open file',
                                                       'c:\\')
-        print("Open Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def end_experiment_action_handler(self):
+    def __end_experiment_action_handler(self):
         print("End Experiment Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def display_tooltips_action_handler(self):
+    def __display_tooltips_action_handler(self):
         print("Display Tooltips Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def configure_action_handler(self):
+    def __configure_action_handler(self):
         print("Configure Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def com_port_action_handler(self):
+    def __com_port_action_handler(self):
         print("COM Port Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def com_messages_action_handler(self):
+    def __com_messages_action_handler(self):
         print("COM Messages Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def begin_experiment_action_handler(self):
+    def __begin_experiment_action_handler(self):
         # foreach device attached, go to its own dictionary and send it its own version of the command
         # dictionary[begin_exp] = >begin_exp|<<
-
+        # ControllerSerial will handle the exact message for each kind of device
         print("Begin Experiment Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def append_experiment_action_handler(self):
+    def __append_experiment_action_handler(self):
         print("Append Experiment Action triggered")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def about_rs_companion_action_handler(self):
+    def __about_rs_companion_action_handler(self):
         print("About RS Companion Action triggered")
         self.help_window = MessageWindow("About Red Scientific Companion App", "CHANGEME The RS Companion App was "
                                                            "designed by "
@@ -633,7 +625,7 @@ class CompanionWindow(object):
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def about_rs_action_handler(self):
+    def __about_rs_action_handler(self):
         print("About RS Action triggered")
         self.help_window = MessageWindow("About Red Scientific", "CHANGEME Red Scientific is an awesome company that will do "
                                                               "great things in the years to come and keep Phillip "
@@ -642,59 +634,60 @@ class CompanionWindow(object):
                                                               "which are made even awesomer by the UI that Phillip "
                                                               "was instrumental in making work. boom.")
         self.help_window.show()
+
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def CHANGEME_checkbox_handler(self):
+    def __CHANGEME_checkbox_handler(self):
         print("CHANGEME CheckBox toggled")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def run_trial_button_handler(self):
+    def __run_trial_button_handler(self):
         print("Run Trial Button Pressed")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def record_button_handler(self):
+    def __record_button_handler(self):
         print("Record Button Pressed, connected to Add_RS_Device handler")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def freeze_button_handler(self):
+    def __freeze_button_handler(self):
         print("Freeze Button Pressed, connected to Remove_RS_Device handler")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def new_block_button_handler(self):
+    def __new_block_button_handler(self):
         print("New Block Button Pressed")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def clear_button_handler(self):
+    def __clear_button_handler(self):
         print("Clear Button Pressed")
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def post_button_handler(self):
+    def __post_button_handler(self):
         print("Post Button Pressed")
 
     # TODO: Remove prints in this function after debugging
     # TODO: After finishing this, figure out how to fix resizing a subwindow when moving it after cascading
     # Cascades the SubWindows in the MDI Dock
-    def mdi_cascade_handler(self):
-        print("cascade called")
+    def __mdi_cascade_handler(self):
+        if len(self.mdi_dock_area.subWindowList()) == 0:
+            return
         position = QtCore.QPoint(0, 0)
         min_rect_size = 320
         max_width = self.mdi_dock_area.width()
         max_height = self.mdi_dock_area.height()
+        rect_width = int(max(max_width/len(self.mdi_dock_area.subWindowList()), min_rect_size))
+        rect_height = int(max(max_height/len(self.mdi_dock_area.subWindowList()), min_rect_size))
+        rect = QtCore.QRect(0, 0, rect_width, rect_height)
         for window in self.mdi_dock_area.subWindowList():
-            rect_width = int(max(max_width/self.__num_subwindows__, min_rect_size))
-            rect_height = int(max(max_height/self.__num_subwindows__, min_rect_size))
-            rect = QtCore.QRect(0, 0, rect_width, rect_height)
-            window.setGeometry(rect)
-            window.move(position)
-            if self.__num_subwindows__ > 1:
+            self.__mdi_sub_placement_helper(window, rect, position)
+            if len(self.mdi_dock_area.subWindowList()) > 1:
                 temp_x = position.x() + int(max(max_width / window.width(), max_width/20))
-                temp_y = position.y() + int(max(max_height/window.height(), max_height/20))
+                temp_y = position.y() + int(max(max_height / window.height(), max_height/20))
                 new_x = temp_x % (max_width - window.width()/2)
                 new_y = temp_y % (max_height - window.height()/2)
                 position.setX(new_x)
@@ -703,90 +696,114 @@ class CompanionWindow(object):
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
     # Tiles the SubWindows in the MDI Dock
-    def mdi_tile_handler(self):
+    def __mdi_tile_handler(self):
         print("mdi tile handler called")
+        if len(self.mdi_dock_area.subWindowList()) == 0:
+            return
 
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
     # Vertically lays out the SubWindows in the MDI Dock
-    def mdi_vert_handler(self):
-        print("mdi vert handler called")
+    def __mdi_vert_handler(self):
+        if len(self.mdi_dock_area.subWindowList()) == 0:
+            return
         position = QtCore.QPoint(0, 0)
         min_rect_size = 320
         max_width = self.mdi_dock_area.width()
         max_height = self.mdi_dock_area.height()
+        rect_width = int(max(max_width / len(self.mdi_dock_area.subWindowList()), min_rect_size))
+        rect_height = max(max_height, min_rect_size)
+        rect = QtCore.QRect(0, 0, rect_width, rect_height)
         for window in self.mdi_dock_area.subWindowList():
-            rect_width = int(max(max_width / self.__num_subwindows__, min_rect_size))
-            rect_height = max_height
-            print("Rect size =", rect_width, rect_height)
-            rect = QtCore.QRect(0, 0, rect_width, rect_height)
-            window.setGeometry(rect)
-            window.move(position)
-            if self.__num_subwindows__ > 1:
-                new_x = position.x() + window.width()
-                position.setX(new_x)
-                print("new position =", new_x)
+            self.__mdi_sub_placement_helper(window, rect, position)
+            new_x = position.x() + window.width()
+            position.setX(new_x)
 
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
     # Horizontally lays out the SubWindows in the MDI Dock
-    def mdi_horiz_handler(self):
-        print("MDI_Horiz_Handler called")
+    def __mdi_horiz_handler(self):
+        if len(self.mdi_dock_area.subWindowList()) == 0:
+            return
+        position = QtCore.QPoint(0, 0)
+        min_rect_size = 320
+        max_width = self.mdi_dock_area.width()
+        max_height = self.mdi_dock_area.height()
+        rect_height = int(max(max_height / len(self.mdi_dock_area.subWindowList()), min_rect_size))
+        rect_width = max(max_width, min_rect_size)
+        rect = QtCore.QRect(0, 0, rect_width, rect_height)
+        for window in self.mdi_dock_area.subWindowList():
+            self.__mdi_sub_placement_helper(window, rect, position)
+            new_x = position.x() + window.width()
+            position.setX(new_x)
 
     # TODO: Remove prints in this function after debugging
     # TODO: Model this after mdi_cascade_handler
     # Sets SubWindows to a default layout in the MDI Dock?
-    def mdi_main_handler(self):
+    def __mdi_main_handler(self):
         print("MDI_Main_Handler called")
+        if len(self.mdi_dock_area.subWindowList()) == 0:
+            return
 
-    # Adds a new unique pair of RS Device box and RS SubWindow to the UI
+    def __mdi_sub_placement_helper(self, window, rect, pos):
+        window.setGeometry(rect)
+        window.move(pos)
+
+    # Passes message received to proper device display object
+    def handle_msg(self, msg):
+        for device in self.__list_of_devices__:
+            if device == msg['device']:
+                self.__list_of_devices__[device].handle_msg(msg['msg'])
+
+    # Creates an RSDevice and adds it to the list of devices
     def add_rs_device_handler(self, device):
-        if device[1] not in self.__list_of_devices__:
-            sub = self.add_rs_device_subwindow(device)
-            self.add_rs_device_box(device, sub)
+        if device not in self.__list_of_devices__:
+            self.__list_of_devices__[device] = RSDevice(device, self.msg_callback,
+                                                        self.rs_devices_scroll_area_contents_vert_layout,
+                                                        self.mdi_dock_area)
 
-    # Removes an existing specific pair of RS Device box and RS Subwindow from the UI
+    # Deletes an RSDevice and removes it from the list of devices
     def remove_rs_device_handler(self, device):
-        if device[1] in self.__list_of_devices__:
-            self.remove_rs_device_subwindow(device)
-            self.remove_rs_device_box(device)
+        if device in self.__list_of_devices__:
+            self.__list_of_devices__[device].remove_self()
+            del self.__list_of_devices__[device]
 
-    # TODO: Figure out how to number each type of device (List of each kind?)
-    # Generates a new RS Device box, adds it to a collection and then displays it.
-    def add_rs_device_box(self, device, sub):
-        device_name = device[0]
-        self.__list_of_devices__[device[1]] = DeviceBox(device_name, sub, self.msg_callback)
-        self.rs_devices_scroll_area_contents_vert_layout.addWidget(self.__list_of_devices__[device[1]])
 
-    # Removes a specific RS Device box from the UI
-    def remove_rs_device_box(self, device):
-        self.rs_devices_scroll_area_contents_vert_layout.removeWidget(self.__list_of_devices__[device[1]])
-        self.__list_of_devices__[device[1]].deleteLater()
-        del self.__list_of_devices__[device[1]]
+# TODO: Make different subwindows etc. for each type of device and then build based on device type
+class RSDevice:
+    def __init__(self, device, msg_callback, box_parent, sub_parent):
+        self.device_id = device
 
-    # TODO: Figure out how to number each type of device (keep count of each kind? Use com port number if possible)
-    # Generates a new RS SubWindow, adds it to a collection and then displays it.
-    def add_rs_device_subwindow(self, device):
-        device_name = device[0]
-        self.__num_subwindows__ += 1
-        sub = SubWindow(device_name, self.msg_callback)
-        self.mdi_dock_area.addSubWindow(sub)
-        self.__list_of_subwindows__[device[1]] = sub
-        sub.show()
-        return sub
+        self.box_parent = box_parent
+        self.sub_parent = sub_parent
+        self.msg_callback = msg_callback
+        if self.device_id[0] == "drt":
+            print("Making a drt display")
+            self.device_sub = SubWindow(self.device_id, self.msg_callback)
+        elif self.device_id == "vog":
+            print("Making a vog display NOT IMPLEMENTED YET")
+        self.device_box = DeviceBox(self.device_id, self.device_sub, self.msg_callback)
+        self.box_parent.addWidget(self.device_box)
+        self.sub_parent.addSubWindow(self.device_sub)
+        self.device_sub.show()
 
-    def remove_rs_device_subwindow(self, device):
-        self.__num_subwindows__ -= 1
-        self.mdi_dock_area.removeSubWindow(self.__list_of_subwindows__[device[1]])
-        self.__list_of_subwindows__[device[1]].deleteLater()
-        del self.__list_of_subwindows__[device[1]]
+    def handle_msg(self, msg):
+        print(self.device_id + " just got a message: " + msg)
+
+    def remove_self(self):
+        self.box_parent.removeWidget(self.device_box)
+        self.sub_parent.removeSubWindow(self.device_sub)
+        self.device_sub.deleteLater()
+        self.device_box.deleteLater()
 
 
 class DeviceBox(QtWidgets.QGroupBox):
-    def __init__(self, name, sub, msg_handler):
+    def __init__(self, device_id, sub, msg_handler):
         super().__init__()
         self.msg_hander = msg_handler
-        self.setObjectName(name)
+        self.device_name = device_id[0] + " on " + device_id[1]
+        self.device_id = device_id
+        self.setObjectName(self.device_name)
         self.device_group_box_horiz_layout = QtWidgets.QHBoxLayout(self)
         self.device_group_box_horiz_layout.setObjectName("device_group_box_horiz_layout")
         self.setup_push_button = QtWidgets.QPushButton(self)
@@ -798,56 +815,58 @@ class DeviceBox(QtWidgets.QGroupBox):
         self.sub_window_button = QtWidgets.QPushButton(self)
         self.sub_window_button.setObjectName("sub_window_button")
         self.device_group_box_horiz_layout.addWidget(self.sub_window_button)
-        self.set_texts(name)
-        self.setup_button_handlers()
+        self.configure_widget = DRTSettingsWidget(self.device_id, self.msg_hander)
+        self.__set_texts(self.device_name)
+        self.__setup_button_handlers()
         self.sub_link = sub
 
-    def set_texts(self, name):
+    def __set_texts(self, name):
         _translate = QtCore.QCoreApplication.translate
         self.setTitle(_translate("MainWindow", name))
         self.setup_push_button.setText(_translate("MainWindow", "Setup"))
         self.device_tool_button.setText(_translate("MainWindow", "..."))
         self.sub_window_button.setText(_translate("MainWindow", "Show/Hide"))
 
-    def setup_button_handlers(self):
-        self.device_tool_button.clicked.connect(self.device_tool_button_handler)
-        self.setup_push_button.clicked.connect(self.setup_push_button_handler)
-        self.sub_window_button.clicked.connect(self.sub_window_button_handler)
+    def __setup_button_handlers(self):
+        self.device_tool_button.clicked.connect(self.__device_tool_button_handler)
+        self.setup_push_button.clicked.connect(self.__setup_push_button_handler)
+        self.sub_window_button.clicked.connect(self.__sub_window_button_handler)
 
-    def sub_window_button_handler(self):
+    def __sub_window_button_handler(self):
         if self.sub_link.isVisible():
             self.sub_link.hide()
         else:
             self.sub_link.show()
 
     # TODO: Figure out how to pass useful information from this handler and make it do useful things
-    def device_tool_button_handler(self):
-        print("Device Button Handler pressed for", self.objectName())
+    def __device_tool_button_handler(self):
+        print("Device Button Handler pressed for", self.device_name)
         self.window = MessageWindow("Device Button Handler", "CHANGEME This is the device tool button handler "
                                                              "for today")
         self.window.show()
 
     # TODO: Figure out how to pass useful information from this handler and make it do useful things
-    def setup_push_button_handler(self):
-        print("Setup Button Handler pressed for", self.objectName())
-        #self.window = MessageWindow("Setup Button Handler", "CHANGEME This is the setup button handler for today")
-        self.configure_widget = DeviceSettings()
-        self.configure_widget.show()
-        #self.window.show()
+    def __setup_push_button_handler(self):
+        if self.configure_widget.isVisible():
+            self.configure_widget.hide()
+        else:
+            self.configure_widget.show()
 
 
 # TODO: Create other subwindow versions based on device?
 class SubWindow(QtWidgets.QMdiSubWindow):
-    def __init__(self, name, msg_handler):
+    def __init__(self, device_id, msg_handler):
         super().__init__()
-        self.msg_hander = msg_handler
-        self.setObjectName(name)
+        self.device_name = device_id[0] + " on " + device_id[1]
+        self.device_id = device_id
+        self.msg_handler = msg_handler
+        self.setObjectName(self.device_name)
         # enable custom window hint
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
         # disable (but not hide) close button
         self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
         self.close_me_bool = False
-        self.setWindowTitle(name)
+        self.setWindowTitle(self.device_name)
         self.central_widget = QtWidgets.QWidget(self)
         self.central_widget_horiz_layout = QtWidgets.QHBoxLayout(self.central_widget)
         self.central_widget_horiz_layout.setObjectName("central_widget_horiz_layout")
@@ -917,44 +936,10 @@ class SubWindow(QtWidgets.QMdiSubWindow):
         self.central_widget_scroll_area.setWidget(self.scroll_area_contents)
         self.central_widget_horiz_layout.addWidget(self.central_widget_scroll_area)
         self.setWidget(self.central_widget)
-        self.set_texts(name)
-        self.setup_button_handlers()
+        self.__set_texts(self.device_name)
+        self.__setup_button_handlers()
 
-    def setup_button_handlers(self):
-        #self.device_tool_button.clicked.connect(self.device_tool_button_handler)
-        self.group_box_1_push_button_1.clicked.connect(self.CHANGEMEGB1PB1Handler)
-        self.group_box_1_push_button_2.clicked.connect(self.CHANGEMEGB1PB2Handler)
-        self.group_box_2_push_button_1.clicked.connect(self.CHANGEMEGB2PB1Handler)
-        self.group_box_2_push_button_2.clicked.connect(self.CHANGEMEGB2PB2Handler)
-
-    def closeEvent(self, event):
-        if self.close_me_bool:
-            super().closeEvent(event)
-        else:
-            event.ignore()
-            self.hide()
-
-    def CHANGEMEGB1PB1Handler(self):
-        print("This is a test")
-        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
-        self.window.show()
-
-    def CHANGEMEGB1PB2Handler(self):
-        print("This is a test")
-        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
-        self.window.show()
-
-    def CHANGEMEGB2PB1Handler(self):
-        print("This is a test")
-        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
-        self.window.show()
-
-    def CHANGEMEGB2PB2Handler(self):
-        print("This is a test")
-        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
-        self.window.show()
-
-    def set_texts(self, name):
+    def __set_texts(self, name):
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", name))
         self.scroll_area_contents_group_box_1.setTitle(_translate("MainWindow", "CHANGEME_group_box_1"))
@@ -967,6 +952,40 @@ class SubWindow(QtWidgets.QMdiSubWindow):
         self.group_box_2_push_button_1.setText(_translate("MainWindow", "CHANGEME_push_button_1"))
         self.group_box_2_push_button_2.setText(_translate("MainWindow", "CHANGEME_push_button_2"))
 
+    def __setup_button_handlers(self):
+        #self.device_tool_button.clicked.connect(self.device_tool_button_handler)
+        self.group_box_1_push_button_1.clicked.connect(self.__CHANGEMEGB1PB1Handler)
+        self.group_box_1_push_button_2.clicked.connect(self.__CHANGEMEGB1PB2Handler)
+        self.group_box_2_push_button_1.clicked.connect(self.__CHANGEMEGB2PB1Handler)
+        self.group_box_2_push_button_2.clicked.connect(self.__CHANGEMEGB2PB2Handler)
+
+    def __CHANGEMEGB1PB1Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def __CHANGEMEGB1PB2Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def __CHANGEMEGB2PB1Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def __CHANGEMEGB2PB2Handler(self):
+        print("This is a test")
+        self.window = MessageWindow("CHANGEME", "CHANGEME TOO")
+        self.window.show()
+
+    def closeEvent(self, event):
+        if self.close_me_bool:
+            super().closeEvent(event)
+        else:
+            event.ignore()
+            self.hide()
+
 
 class MessageWindow(QtWidgets.QMessageBox):
     def __init__(self, name, text):
@@ -978,19 +997,135 @@ class MessageWindow(QtWidgets.QMessageBox):
         self.setEscapeButton(QtWidgets.QMessageBox.Close)
 
 
-class DeviceSettings(QtWidgets.QWidget):
-    def __index__(self, name, msg_handler):
+class DRTSettingsWidget(QtWidgets.QWidget):
+    def __init__(self, device_id, msg_callback):
         super().__init__()
-        self.msg_handler = msg_handler
-        self.setObjectName(name)
-        self.setWindowTitle("Device settings")
-        self.setMaximumHeight(400)
-        self.setMaximumWidth(400)
-        rect = QtCore.QRect(0, 0, 400, 400)
-        self.setGeometry(rect)
-        self.vert_layout = QtWidgets.QVBoxLayout(self)
-        #self.grid_layout = QtWidgets.QGridLayout()
-        self.set_lowerISI = QtWidgets.QPushButton(self.vert_layout)
-        #self.grid_layout.addWidget(self.set_lowerISI, 0, 0, 0, 0)
-        self.setLayout(self.vert_layout)
+        #self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
+        #self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
+        self.close_me_bool = False
+        self.msg_callback = msg_callback
+        self.device_name = device_id[0] + " on " + device_id[1]
+        self.device_id = device_id
+        self.setObjectName(self.device_name + " settings")
+        self.resize(280, 210)
+        self.grid_layout_frame = QtWidgets.QWidget(self)
+        self.grid_layout_frame.setGeometry(QtCore.QRect(0, 0, 261, 241))
+        self.grid_layout_frame.setObjectName("grid_layout_frame")
+        self.grid_layout = QtWidgets.QGridLayout(self.grid_layout_frame)
+        self.grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.grid_layout.setObjectName("grid_layout")
+        self.set_lower_isi_line_edit = QtWidgets.QLineEdit(self.grid_layout_frame)
+        self.set_lower_isi_line_edit.setObjectName("set_lower_isi_text_edit")
+        self.grid_layout.addWidget(self.set_lower_isi_line_edit, 0, 1, 1, 1)
+        self.set_stim_dur_line_edit = QtWidgets.QLineEdit(self.grid_layout_frame)
+        self.set_stim_dur_line_edit.setObjectName("set_stim_dur_text_edit")
+        self.grid_layout.addWidget(self.set_stim_dur_line_edit, 2, 1, 1, 1)
+        self.set_stim_duration_push_button = QtWidgets.QPushButton(self.grid_layout_frame)
+        self.set_stim_duration_push_button.setObjectName("set_stim_duration_push_button")
+        self.grid_layout.addWidget(self.set_stim_duration_push_button, 2, 0, 1, 1)
+        self.set_intensity_line_edit = QtWidgets.QLineEdit(self.grid_layout_frame)
+        self.set_intensity_line_edit.setObjectName("set_intensity_text_edit")
+        self.grid_layout.addWidget(self.set_intensity_line_edit, 3, 1, 1, 1)
+        self.set_lower_isi_push_button = QtWidgets.QPushButton(self.grid_layout_frame)
+        self.set_lower_isi_push_button.setObjectName("set_lower_isi_push_button")
+        self.grid_layout.addWidget(self.set_lower_isi_push_button, 0, 0, 1, 1)
+        self.set_intensity_push_button = QtWidgets.QPushButton(self.grid_layout_frame)
+        self.set_intensity_push_button.setObjectName("set_intensity_push_button")
+        self.grid_layout.addWidget(self.set_intensity_push_button, 3, 0, 1, 1)
+        self.set_upper_isi_line_edit = QtWidgets.QLineEdit(self.grid_layout_frame)
+        self.set_upper_isi_line_edit.setObjectName("set_upper_isi_text_edit")
+        self.grid_layout.addWidget(self.set_upper_isi_line_edit, 1, 1, 1, 1)
+        self.set_upper_isi_push_button = QtWidgets.QPushButton(self.grid_layout_frame)
+        self.set_upper_isi_push_button.setObjectName("set_upper_isi_push_button")
+        self.grid_layout.addWidget(self.set_upper_isi_push_button, 1, 0, 1, 1)
+        self.lower_isi_val_label = QtWidgets.QLabel(self.grid_layout_frame)
+        self.lower_isi_val_label.setObjectName("lower_isi_val_label")
+        self.grid_layout.addWidget(self.lower_isi_val_label, 0, 2, 1, 1)
+        self.upper_isi_val_label = QtWidgets.QLabel(self.grid_layout_frame)
+        self.upper_isi_val_label.setObjectName("upper_isi_val_label")
+        self.grid_layout.addWidget(self.upper_isi_val_label, 1, 2, 1, 1)
+        self.stim_dur_val_label = QtWidgets.QLabel(self.grid_layout_frame)
+        self.stim_dur_val_label.setObjectName("stim_dur_val_label")
+        self.grid_layout.addWidget(self.stim_dur_val_label, 2, 2, 1, 1)
+        self.intensity_val_label = QtWidgets.QLabel(self.grid_layout_frame)
+        self.intensity_val_label.setObjectName("intensity_val_label")
+        self.grid_layout.addWidget(self.intensity_val_label, 3, 2, 1, 1)
+        self.close_button = QtWidgets.QPushButton(self.grid_layout_frame)
+        self.close_button.setObjectName("close_button")
+        self.grid_layout.addWidget(self.close_button, 4, 1, 1, 1)
+        self.__set_texts()
+        self.__set_button_handlers()
+        QtCore.QMetaObject.connectSlotsByName(self)
 
+    def __set_texts(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_translate("DeviceSettings", self.device_name + " settings"))
+        self.set_stim_duration_push_button.setText(_translate("DeviceSettings", "Set stim duration"))
+        self.set_lower_isi_push_button.setText(_translate("DeviceSettings", "Set lower ISI"))
+        self.set_intensity_push_button.setText(_translate("DeviceSettings", "Set intensity"))
+        self.set_upper_isi_push_button.setText(_translate("DeviceSettings", "Set upper ISI"))
+        self.lower_isi_val_label.setText(_translate("DeviceSettings", "0"))
+        self.upper_isi_val_label.setText(_translate("DeviceSettings", "0"))
+        self.stim_dur_val_label.setText(_translate("DeviceSettings", "0"))
+        self.intensity_val_label.setText(_translate("DeviceSettings", "0"))
+        self.close_button.setText(_translate("DeviceSettings", "Close"))
+
+    def __set_button_handlers(self):
+        self.close_button.clicked.connect(self.__show_hide_me)
+        self.set_intensity_push_button.clicked.connect(self.__set_intensity_handler)
+        self.set_upper_isi_push_button.clicked.connect(self.__set_upper_isi_handler)
+        self.set_lower_isi_push_button.clicked.connect(self.__set_lower_isi_handler)
+        self.set_stim_duration_push_button.clicked.connect(self.__set_stim_duration_handler)
+
+    def __show_hide_me(self):
+        if self.isVisible():
+            self.hide()
+        else:
+            self.show()
+
+    def closeEvent(self, event):
+        if self.close_me_bool:
+            super().closeEvent(event)
+        else:
+            event.ignore()
+            self.__show_hide_me()
+
+    # TODO: make this work
+    # TODO: update with communication protocol
+    def __set_intensity_handler(self):
+        value = self.set_intensity_line_edit.text()
+        msg_dict = {'action': "send",
+                    'device': self.device_name,
+                    'cmd': "set_intensity",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
+    # TODO: make this work
+    # TODO: update with communication protocol
+    def __set_upper_isi_handler(self):
+        value = self.set_upper_isi_line_edit.text()
+        msg_dict = {'action': "send",
+                    'device': self.device_name,
+                    'cmd': "set_upperISI",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
+    # TODO: make this work
+    # TODO: update with communication protocol
+    def __set_lower_isi_handler(self):
+        value = self.set_lower_isi_line_edit.text()
+        msg_dict = {'action': "send",
+                    'device': self.device_name,
+                    'cmd': "set_lowerISI",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
+    # TODO: make this work
+    # TODO: update with communication protocol
+    def __set_stim_duration_handler(self):
+        value = self.set_stim_dur_line_edit.text()
+        msg_dict = {'action': "send",
+                    'device': self.device_name,
+                    'cmd': "set_stimDur",
+                    'arg': value}
+        self.msg_callback(msg_dict)
