@@ -7,7 +7,6 @@
 import sys
 from UI.companion_view import *
 import Serial.companion_device_com as serial
-import Serial.companion_defs as defs
 
 
 # TODO: Document code
@@ -18,7 +17,7 @@ class CompanionController:
         self.companion_app = QtWidgets.QMainWindow()
         self.ui = CompanionWindow(self.companion_app, self.send_msg_to_manager)
         self.companion_app.show()
-        self.device_manager = serial.ControllerSerial(defs.devices, self.device_update_callback, self.send_msg_to_ui)
+        self.device_manager = serial.ControllerSerial(self.device_update_callback, self.send_msg_to_ui)
         self.update_timer = QtCore.QTimer()
         self.update_timer.setSingleShot(False)
         self.update_timer.timeout.connect(self.device_update)
@@ -27,7 +26,6 @@ class CompanionController:
     def device_update(self):
         self.device_manager.update()
 
-    # TODO: Change device[1] to be only port instead of serial.Serial return value
     # TODO: Change this to be handled by self.ui.handle_msg
     def device_update_callback(self, device, add_or_remove):
         if add_or_remove == 1:

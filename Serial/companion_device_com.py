@@ -6,10 +6,11 @@ disconnect_event flags are turned True.
 
 import serial
 from serial.tools import list_ports
+import Serial.companion_defs as defs
 
 
 class ControllerSerial:
-    def __init__(self, devices, callback, msg_handler):
+    def __init__(self, callback, msg_handler):
         # Global
         self.callback = callback
         self.msg_callback = msg_handler
@@ -21,7 +22,7 @@ class ControllerSerial:
         self.devices_to_remove = []
 
         # Local
-        self.profiles = devices
+        self.profiles = defs.devices
         self.devices = dict()
 
     def update(self):
@@ -41,10 +42,72 @@ class ControllerSerial:
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
-                        msg_dict['msg'] = self.devices[d]['port'].readline().decode("utf-8")
+                        if self.devices[d]['id'] == "drt":
+                            self.__parse_drt_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
+                        elif self.devices[d]['id'] == "vog":
+                            self.__parse_vog_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
+                        else:
+                            print("in companion_device_com.update(): couldn't match up device")
                         self.msg_callback(msg_dict)
                 except:
                     pass
+
+    # TODO: format based on type of device
+    def handle_msg(self, msg):
+        #if msg['device'][0] == "drt":
+        #    self.__prepare_msg_for_drt(msg)
+        if msg['type'] == "send":
+            port = None
+            for d in self.devices:
+                if msg['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
+                    port = self.devices[d]['port']
+            if not port:
+                print("Device not found")
+                pass
+            else:
+                if 'arg' in msg.keys():
+                    msg_to_send = msg['cmd'] + " " + msg['arg'] + "\n"
+                else:
+                    msg_to_send = msg['cmd'] + "\n"
+                self.__send_msg_on_port(port, msg_to_send)
+        else:
+            print("Unknown command")
+
+    def __prepare_msg_for_drt(self, msg_dict):
+        pass
+
+    def __parse_drt_msg(self, msg, msg_dict):
+        if msg[0:4] == "cfg>":
+            msg_dict['type'] = "cfg"
+            # Check if this is a response to get_config
+            if len(msg) > 90:
+                # Get relevant values from msg and insert into msg_dict
+                for i in range(0, len(defs.drt_config_fields)):
+                    index = msg.find(defs.drt_config_fields[i] + ":")
+                    index_len = len(defs.drt_config_fields[i])+1
+                    val_len = msg.find(', ', index + index_len)
+                    if val_len < 0:
+                        val_len = None
+                    msg_dict[msg[index:index+index_len-1]] = msg[index+index_len:val_len]
+            else:
+                # Single value update, find which value it is and insert into msg_dict
+                for i in range(0, len(defs.drt_config_fields)):
+                    index = msg.find(defs.drt_config_fields[i] + ":")
+                    if index > 0:
+                        index_len = len(defs.drt_config_fields[i])
+                        val_ind = index + index_len + 1
+                        msg_dict[msg[index:index + index_len]] = msg[val_ind:]
+        elif msg[0:4] == "trl>":
+            msg_dict['type'] = "trl"
+            val_ind_start = 4
+            for i in range(0, len(defs.drt_trial_fields)):
+                val_ind_end = msg.find(', ', val_ind_start + 1)
+                if val_ind_end < 0:
+                    val_ind_end = None
+                msg_dict[defs.drt_trial_fields[i]] = msg[val_ind_start:val_ind_end]
+
+    def __parse_vog_msg(self, msg, msg_dict):
+        pass
 
     def __scan_ports(self):
 
@@ -71,8 +134,12 @@ class ControllerSerial:
 
                     if port.vid == self.profiles[device]['vid'] and port.pid == self.profiles[device]['pid']:
                         # TODO: Figure out the intermittent issue that comes with plugging in a device
+                        # two errors at different times:
+                        #   serial.serialutil.SerialException: could not open port 'COM5': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)
+                        # and
+                        #   serial.serialutil.SerialException: could not open port 'COM5': PermissionError(13, 'Access is denied.', None, 5)
                         self.devices[port.device] = {'port': serial.Serial(port.device), 'id': device}
-                        print("attached {} on {}".format(device, port.device))
+                        #print("attached {} on {}".format(device, port.device))
                         self.callback((self.devices[port.device]['id'], self.devices[port.device]['port'].name), 1)
                         break
                     else:
@@ -83,30 +150,13 @@ class ControllerSerial:
     def __remove_devices(self):
 
         for e in self.devices_to_remove:
-            print("removed device from {}".format(e))
+            #print("removed device from {}".format(e))
             if not self.devices[e]['id'] == "unknown":
                 self.devices[e]['port'].close()
                 self.callback((self.devices[e]['id'], self.devices[e]['port'].name), 0)
             del self.devices[e]
 
         self.devices_known = list(self.devices.keys())
-
-    # TODO: format based on type of device
-    def handle_msg(self, msg):
-        if msg['action'] == "send":
-            port = None
-            for d in self.devices:
-                if msg['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
-                    port = self.devices[d]['port']
-            if not port:
-                print("Device not found")
-                pass
-            else:
-                msg_to_send = msg['cmd'] + " " + msg['arg'] + "\n"
-                print(msg_to_send)
-                self.__send_msg_on_port(port, msg_to_send)
-        else:
-            print("Unknown command")
 
     def __send_msg_on_port(self, port, msg_to_send):
         port.write(str.encode(msg_to_send))

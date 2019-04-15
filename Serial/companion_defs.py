@@ -16,3 +16,7 @@ devices = {'drt': {'probe': "get_name\n\r",
                    'name': 'VOG',
                    'pid': 1155,
                    'vid': 5824}}
+
+drt_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
+drt_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
+

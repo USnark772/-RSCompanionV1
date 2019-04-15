@@ -5,6 +5,7 @@
 # https://redscientific.com/index.html
 
 from PySide2 import QtCore, QtGui, QtWidgets
+import Serial.companion_defs as defs
 
 
 class CompanionWindow(object):
@@ -750,10 +751,12 @@ class CompanionWindow(object):
         window.move(pos)
 
     # Passes message received to proper device display object
-    def handle_msg(self, msg):
+    def handle_msg(self, msg_dict):
         for device in self.__list_of_devices__:
-            if device == msg['device']:
-                self.__list_of_devices__[device].handle_msg(msg['msg'])
+            if device == msg_dict['device']:
+                del msg_dict['device']
+                self.__list_of_devices__[device].handle_msg(msg_dict)
+                pass
 
     # Creates an RSDevice and adds it to the list of devices
     def add_rs_device_handler(self, device):
@@ -771,24 +774,32 @@ class CompanionWindow(object):
 
 # TODO: Make different subwindows etc. for each type of device and then build based on device type
 class RSDevice:
-    def __init__(self, device, msg_callback, box_parent, sub_parent):
-        self.device_id = device
-
+    def __init__(self, device_id, msg_callback, box_parent, sub_parent):
+        self.device_id = device_id
+        self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.box_parent = box_parent
         self.sub_parent = sub_parent
         self.msg_callback = msg_callback
         if self.device_id[0] == "drt":
-            print("Making a drt display")
-            self.device_sub = SubWindow(self.device_id, self.msg_callback)
+            self.device_sub = SubWindow(self.device_name, self.callback)
+            self.configure_widget = DRTSettingsWidget(self.device_name, self.callback)
         elif self.device_id == "vog":
             print("Making a vog display NOT IMPLEMENTED YET")
-        self.device_box = DeviceBox(self.device_id, self.device_sub, self.msg_callback)
+        self.device_box = DeviceBox(self.device_id, self.device_sub, self.callback,
+                                    self.show_hide_configure_widget_handler)
         self.box_parent.addWidget(self.device_box)
         self.sub_parent.addSubWindow(self.device_sub)
         self.device_sub.show()
 
+    # TODO: Maybe implement a bringtofront option?
+    def show_hide_configure_widget_handler(self):
+        if self.configure_widget.isVisible():
+            self.configure_widget.hide()
+        else:
+            self.configure_widget.show()
+
     def handle_msg(self, msg):
-        print(self.device_id + " just got a message: " + msg)
+        self.configure_widget.handle_msg(msg)
 
     def remove_self(self):
         self.box_parent.removeWidget(self.device_box)
@@ -796,11 +807,17 @@ class RSDevice:
         self.device_sub.deleteLater()
         self.device_box.deleteLater()
 
+    def callback(self, msg_dict):
+        msg_dict['type'] = "send"
+        msg_dict['device'] = self.device_id
+        self.msg_callback(msg_dict)
+
 
 class DeviceBox(QtWidgets.QGroupBox):
-    def __init__(self, device_id, sub, msg_handler):
+    def __init__(self, device_id, sub, msg_handler, show_hide_handler):
         super().__init__()
         self.msg_hander = msg_handler
+        self.show_hide_handler = show_hide_handler
         self.device_name = device_id[0] + " on " + device_id[1]
         self.device_id = device_id
         self.setObjectName(self.device_name)
@@ -815,7 +832,6 @@ class DeviceBox(QtWidgets.QGroupBox):
         self.sub_window_button = QtWidgets.QPushButton(self)
         self.sub_window_button.setObjectName("sub_window_button")
         self.device_group_box_horiz_layout.addWidget(self.sub_window_button)
-        self.configure_widget = DRTSettingsWidget(self.device_id, self.msg_hander)
         self.__set_texts(self.device_name)
         self.__setup_button_handlers()
         self.sub_link = sub
@@ -838,33 +854,23 @@ class DeviceBox(QtWidgets.QGroupBox):
         else:
             self.sub_link.show()
 
-    # TODO: Figure out how to pass useful information from this handler and make it do useful things
+    # TODO: Figure out what this button does
     def __device_tool_button_handler(self):
         print("Device Button Handler pressed for", self.device_name)
         self.window = MessageWindow("Device Button Handler", "CHANGEME This is the device tool button handler "
                                                              "for today")
         self.window.show()
 
-    # TODO: Figure out how to pass useful information from this handler and make it do useful things
     def __setup_push_button_handler(self):
-        if self.configure_widget.isVisible():
-            self.configure_widget.hide()
-        else:
-            self.configure_widget.show()
+        self.show_hide_handler()
 
 
-# TODO: Create other subwindow versions based on device?
 class SubWindow(QtWidgets.QMdiSubWindow):
-    def __init__(self, device_id, msg_handler):
+    def __init__(self, device_name, msg_handler):
         super().__init__()
-        self.device_name = device_id[0] + " on " + device_id[1]
-        self.device_id = device_id
         self.msg_handler = msg_handler
+        self.device_name = device_name
         self.setObjectName(self.device_name)
-        # enable custom window hint
-        self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
-        # disable (but not hide) close button
-        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
         self.close_me_bool = False
         self.setWindowTitle(self.device_name)
         self.central_widget = QtWidgets.QWidget(self)
@@ -953,7 +959,6 @@ class SubWindow(QtWidgets.QMdiSubWindow):
         self.group_box_2_push_button_2.setText(_translate("MainWindow", "CHANGEME_push_button_2"))
 
     def __setup_button_handlers(self):
-        #self.device_tool_button.clicked.connect(self.device_tool_button_handler)
         self.group_box_1_push_button_1.clicked.connect(self.__CHANGEMEGB1PB1Handler)
         self.group_box_1_push_button_2.clicked.connect(self.__CHANGEMEGB1PB2Handler)
         self.group_box_2_push_button_1.clicked.connect(self.__CHANGEMEGB2PB1Handler)
@@ -998,16 +1003,14 @@ class MessageWindow(QtWidgets.QMessageBox):
 
 
 class DRTSettingsWidget(QtWidgets.QWidget):
-    def __init__(self, device_id, msg_callback):
+    def __init__(self, device_name, msg_callback):
         super().__init__()
-        #self.setWindowFlags(self.windowFlags() | QtCore.Qt.CustomizeWindowHint)
-        #self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
         self.close_me_bool = False
         self.msg_callback = msg_callback
-        self.device_name = device_id[0] + " on " + device_id[1]
-        self.device_id = device_id
+        self.device_name = device_name
         self.setObjectName(self.device_name + " settings")
-        self.resize(280, 210)
+        size = QtCore.QSize(280, 230)
+        self.resize(size)
         self.grid_layout_frame = QtWidgets.QWidget(self)
         self.grid_layout_frame.setGeometry(QtCore.QRect(0, 0, 261, 241))
         self.grid_layout_frame.setObjectName("grid_layout_frame")
@@ -1016,6 +1019,7 @@ class DRTSettingsWidget(QtWidgets.QWidget):
         self.grid_layout.setObjectName("grid_layout")
         self.set_lower_isi_line_edit = QtWidgets.QLineEdit(self.grid_layout_frame)
         self.set_lower_isi_line_edit.setObjectName("set_lower_isi_text_edit")
+        # TODO: Resize lineedits to fixed size
         self.grid_layout.addWidget(self.set_lower_isi_line_edit, 0, 1, 1, 1)
         self.set_stim_dur_line_edit = QtWidgets.QLineEdit(self.grid_layout_frame)
         self.set_stim_dur_line_edit.setObjectName("set_stim_dur_text_edit")
@@ -1050,12 +1054,21 @@ class DRTSettingsWidget(QtWidgets.QWidget):
         self.intensity_val_label = QtWidgets.QLabel(self.grid_layout_frame)
         self.intensity_val_label.setObjectName("intensity_val_label")
         self.grid_layout.addWidget(self.intensity_val_label, 3, 2, 1, 1)
-        self.close_button = QtWidgets.QPushButton(self.grid_layout_frame)
-        self.close_button.setObjectName("close_button")
-        self.grid_layout.addWidget(self.close_button, 4, 1, 1, 1)
+        self.values = {'intensity': self.intensity_val_label,
+                       'upperISI': self.upper_isi_val_label,
+                       'lowerISI': self.lower_isi_val_label,
+                       'stimDur': self.stim_dur_val_label}
         self.__set_texts()
+        self.__get_vals()
         self.__set_button_handlers()
         QtCore.QMetaObject.connectSlotsByName(self)
+
+    def __get_vals(self):
+        msg_dict = {'cmd': "get_config"}
+        self.msg_callback(msg_dict)
+
+    def __set_val(self, var, val):
+        self.values[var].setText(val)
 
     def __set_texts(self):
         _translate = QtCore.QCoreApplication.translate
@@ -1068,10 +1081,8 @@ class DRTSettingsWidget(QtWidgets.QWidget):
         self.upper_isi_val_label.setText(_translate("DeviceSettings", "0"))
         self.stim_dur_val_label.setText(_translate("DeviceSettings", "0"))
         self.intensity_val_label.setText(_translate("DeviceSettings", "0"))
-        self.close_button.setText(_translate("DeviceSettings", "Close"))
 
     def __set_button_handlers(self):
-        self.close_button.clicked.connect(self.__show_hide_me)
         self.set_intensity_push_button.clicked.connect(self.__set_intensity_handler)
         self.set_upper_isi_push_button.clicked.connect(self.__set_upper_isi_handler)
         self.set_lower_isi_push_button.clicked.connect(self.__set_lower_isi_handler)
@@ -1083,6 +1094,30 @@ class DRTSettingsWidget(QtWidgets.QWidget):
         else:
             self.show()
 
+    def __set_intensity_handler(self):
+        value = self.set_intensity_line_edit.text()
+        msg_dict = {'cmd': "set_intensity",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
+    def __set_upper_isi_handler(self):
+        value = self.set_upper_isi_line_edit.text()
+        msg_dict = {'cmd': "set_upperISI",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
+    def __set_lower_isi_handler(self):
+        value = self.set_lower_isi_line_edit.text()
+        msg_dict = {'cmd': "set_lowerISI",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
+    def __set_stim_duration_handler(self):
+        value = self.set_stim_dur_line_edit.text()
+        msg_dict = {'cmd': "set_stimDur",
+                    'arg': value}
+        self.msg_callback(msg_dict)
+
     def closeEvent(self, event):
         if self.close_me_bool:
             super().closeEvent(event)
@@ -1090,42 +1125,8 @@ class DRTSettingsWidget(QtWidgets.QWidget):
             event.ignore()
             self.__show_hide_me()
 
-    # TODO: make this work
-    # TODO: update with communication protocol
-    def __set_intensity_handler(self):
-        value = self.set_intensity_line_edit.text()
-        msg_dict = {'action': "send",
-                    'device': self.device_name,
-                    'cmd': "set_intensity",
-                    'arg': value}
-        self.msg_callback(msg_dict)
-
-    # TODO: make this work
-    # TODO: update with communication protocol
-    def __set_upper_isi_handler(self):
-        value = self.set_upper_isi_line_edit.text()
-        msg_dict = {'action': "send",
-                    'device': self.device_name,
-                    'cmd': "set_upperISI",
-                    'arg': value}
-        self.msg_callback(msg_dict)
-
-    # TODO: make this work
-    # TODO: update with communication protocol
-    def __set_lower_isi_handler(self):
-        value = self.set_lower_isi_line_edit.text()
-        msg_dict = {'action': "send",
-                    'device': self.device_name,
-                    'cmd': "set_lowerISI",
-                    'arg': value}
-        self.msg_callback(msg_dict)
-
-    # TODO: make this work
-    # TODO: update with communication protocol
-    def __set_stim_duration_handler(self):
-        value = self.set_stim_dur_line_edit.text()
-        msg_dict = {'action': "send",
-                    'device': self.device_name,
-                    'cmd': "set_stimDur",
-                    'arg': value}
-        self.msg_callback(msg_dict)
+    def handle_msg(self, msg):
+        if msg['type'] == "cfg":
+            del msg['type']
+            for item in msg:
+                self.__set_val(item, msg[item])
