@@ -17,7 +17,7 @@ class CompanionController:
         self.companion_app = QtWidgets.QMainWindow()
         self.ui = CompanionWindow(self.companion_app, self.send_msg_to_manager)
         self.companion_app.show()
-        self.device_manager = serial.ControllerSerial(self.device_update_callback, self.send_msg_to_ui)
+        self.device_manager = serial.ControllerSerial(self.send_msg_to_ui)
         self.update_timer = QtCore.QTimer()
         self.update_timer.setSingleShot(False)
         self.update_timer.timeout.connect(self.device_update)
@@ -25,13 +25,6 @@ class CompanionController:
 
     def device_update(self):
         self.device_manager.update()
-
-    # TODO: Change this to be handled by self.ui.handle_msg
-    def device_update_callback(self, device, add_or_remove):
-        if add_or_remove == 1:
-                self.ui.add_rs_device_handler(device)
-        else:
-                self.ui.remove_rs_device_handler(device)
 
     def send_msg_to_manager(self, msg):
         self.device_manager.handle_msg(msg)

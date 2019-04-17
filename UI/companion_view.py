@@ -7,7 +7,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 import Serial.companion_defs as defs
 
-
+# TODO: handle closing all windows when main window is closed
 class CompanionWindow(object):
     # Class level globals to keep track of the different devices for Device Box and Device SubWindow purposes
     __list_of_devices__ = {}
@@ -41,7 +41,71 @@ class CompanionWindow(object):
         main_window.setCentralWidget(self.central_widget)
         # End Central Widget generation code
         ################################################################################################################
+        # Begin Experiment View Area generation code
+        self.exp_data_view_horiz_layout = QtWidgets.QHBoxLayout()
+        self.exp_data_view_horiz_layout.setObjectName("exp_data_view_horiz_layout")
+        self.exp_data_graph_view = QtWidgets.QGraphicsView(self.central_widget)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.exp_data_graph_view.sizePolicy().hasHeightForWidth())
+        self.exp_data_graph_view.setSizePolicy(size_policy)
+        self.exp_data_graph_view.setObjectName("graphicsView")
+        self.exp_data_view_horiz_layout.addWidget(self.exp_data_graph_view)
+        self.rs_devices_tab_widget = QtWidgets.QTabWidget(self.central_widget)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.rs_devices_tab_widget.sizePolicy().hasHeightForWidth())
+        self.rs_devices_tab_widget.setSizePolicy(size_policy)
+        self.rs_devices_tab_widget.setMinimumWidth(200)
+        self.rs_devices_tab_widget.setObjectName("rs_devices_tab_widget")
+
+
+        '''
+        self.device_tab_1 = QtWidgets.QWidget()
+        self.device_tab_1.setObjectName("device_tab")
+        self.device_tab_1_scroll_area = QtWidgets.QScrollArea(self.device_tab_1)
+        self.device_tab_1_scroll_area.setGeometry(QtCore.QRect(0, 0, 201, 521))
+        self.device_tab_1_scroll_area.setWidgetResizable(True)
+        self.device_tab_1_scroll_area.setObjectName("device_tab_1_scroll_area")
+        self.device_tab_1_scroll_area_contents = QtWidgets.QWidget()
+        self.device_tab_1_scroll_area_contents.setGeometry(QtCore.QRect(0, 0, 199, 519))
+        self.device_tab_1_scroll_area_contents.setObjectName("device_tab_1_scroll_area_contents")
+        self.device_tab_1_group_box_1 = QtWidgets.QGroupBox(self.device_tab_1_scroll_area_contents)
+        self.device_tab_1_group_box_1.setGeometry(QtCore.QRect(0, 0, 191, 101))
+        self.device_tab_1_group_box_1.setObjectName("device_tab_1_group_box_1")
+        self.device_tab_1_group_box_1_horiz_layout_1 = QtWidgets.QHBoxLayout(self.device_tab_1_group_box_1)
+        self.device_tab_1_group_box_1_horiz_layout_1.setObjectName("device_tab_1_group_box_1_horiz_layout")
+        self.device_tab_1_vert_layout = QtWidgets.QVBoxLayout()
+        self.device_tab_1_vert_layout.setObjectName("device_tab_1_vert_layout")
+        self.device_tab_1_push_button_1 = QtWidgets.QPushButton(self.device_tab_1_group_box_1)
+        self.device_tab_1_push_button_1.setObjectName("device_tab_1_push_button_1")
+        self.device_tab_1_vert_layout.addWidget(self.device_tab_1_push_button_1)
+        self.device_tab_1_push_button_2 = QtWidgets.QPushButton(self.device_tab_1_group_box_1)
+        self.device_tab_1_push_button_2.setObjectName("device_tab_1_push_button_2")
+        self.device_tab_1_vert_layout.addWidget(self.device_tab_1_push_button_2)
+        self.device_tab_1_group_box_1_horiz_layout_2 = QtWidgets.QHBoxLayout()
+        self.device_tab_1_group_box_1_horiz_layout_2.setObjectName("device_tab_1_group_box_1_horiz_layout_2")
+        self.device_tab_1_tool_button = QtWidgets.QToolButton(self.device_tab_1_group_box_1)
+        self.device_tab_1_tool_button.setObjectName("device_tab_1_tool_button")
+        self.device_tab_1_group_box_1_horiz_layout_2.addWidget(self.device_tab_1_tool_button)
+        self.device_tab_1_vert_layout.addLayout(self.device_tab_1_group_box_1_horiz_layout_2)
+        self.device_tab_1_group_box_1_horiz_layout_1.addLayout(self.device_tab_1_vert_layout)
+        self.device_tab_1_scroll_area.setWidget(self.device_tab_1_scroll_area_contents)
+
+        self.rs_devices_tab_widget.setUpdatesEnabled(False)
+        self.rs_devices_tab_widget.addTab(tab, "test")
+        self.rs_devices_tab_widget.setUpdatesEnabled(True)
+        '''
+
+        self.exp_data_view_horiz_layout.addWidget(self.rs_devices_tab_widget)
+        self.central_widget_vert_layout.addLayout(self.exp_data_view_horiz_layout)
+
+        # End Experiment View Area generation code
+        ################################################################################################################
         # Begin MDI Dock generation code
+        '''
         self.mdi_dock_frame = QtWidgets.QFrame(self.central_widget)
         self.mdi_dock_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.mdi_dock_frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -53,6 +117,7 @@ class CompanionWindow(object):
         self.mdi_dock_area.setObjectName("mdi_dock_area")
         self.mdi_dock_frame_horiz_layout.addWidget(self.mdi_dock_area)
         self.central_widget_vert_layout.addWidget(self.mdi_dock_frame)
+        '''
         # End MDI Dock generation code
         ################################################################################################################
         # Begin Menu Bar generation code
@@ -83,7 +148,7 @@ class CompanionWindow(object):
         size_policy.setHeightForWidth(self.control_widget_dock.sizePolicy().hasHeightForWidth())
         self.control_widget_dock.setSizePolicy(size_policy)
         self.control_widget_dock.setMinimumSize(QtCore.QSize(500, 150))
-        self.control_widget_dock.setMaximumSize(QtCore.QSize(650, 150))
+        self.control_widget_dock.setMaximumSize(QtCore.QSize(16777215, 150))
         self.control_widget_dock.setFeatures(
             QtWidgets.QDockWidget.DockWidgetFloatable |
             QtWidgets.QDockWidget.DockWidgetMovable |
@@ -225,6 +290,7 @@ class CompanionWindow(object):
         # End Trial/Block information generation code
         ################################################################################################################
         # Begin COM Widget generation code
+        '''
         self.com_widget_dock = QtWidgets.QDockWidget(main_window)
         size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
         size_policy.setHorizontalStretch(0)
@@ -263,9 +329,11 @@ class CompanionWindow(object):
         self.com_text_box.setBaseSize(QtCore.QSize(0, 0))
         self.com_text_box.setObjectName("com_text_box")
         self.com_widget_contents_grid_layout.addWidget(self.com_text_box, 0, 0, 1, 6)
+        '''
         # End COM Widget generation code
         ################################################################################################################
         # Begin Configure Widget generation code
+        '''
         self.configure_widget_dock = QtWidgets.QDockWidget(main_window)
         size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         size_policy.setHorizontalStretch(0)
@@ -299,6 +367,7 @@ class CompanionWindow(object):
         self.rs_devices_group_box_horiz_layout.addWidget(self.rs_devices_scroll_area)
         self.rs_devices_scroll_area_contents_vert_layout = QtWidgets.QVBoxLayout(self.rs_devices_scroll_area_contents)
         self.rs_devices_scroll_area_contents_vert_layout.setObjectName("RS_Devices_ScrollArea_Contents_Vert_Layout")
+        '''
         # End Configure Widget generation code
         ################################################################################################################
         # Begin RS Device box generation code
@@ -318,6 +387,7 @@ class CompanionWindow(object):
         # End RS Device box generation code
         ################################################################################################################
         # Begin MDI View option generation code
+        '''
         self.mdi_view_group_box = QtWidgets.QGroupBox(self.configure_widget_contents)
         self.mdi_view_group_box.setObjectName("mdi_view_group_box")
         self.mdi_view_group_box_vert_layout = QtWidgets.QVBoxLayout(self.mdi_view_group_box)
@@ -340,6 +410,7 @@ class CompanionWindow(object):
         self.configure_widget_contents_horiz_layout.addWidget(self.mdi_view_group_box)
         self.configure_widget_dock.setWidget(self.configure_widget_contents)
         main_window.addDockWidget(QtCore.Qt.DockWidgetArea(4), self.configure_widget_dock)
+        '''
         # End MDI View option generation code
         ################################################################################################################
         # Begin MenuBar item generation code
@@ -410,7 +481,7 @@ class CompanionWindow(object):
         # Begin final initialization
         self.__set_texts(main_window)
         self.__setup_handlers(msg_handler)
-        self.clear_push_button.clicked.connect(self.com_text_box.clear)
+        #self.clear_push_button.clicked.connect(self.com_text_box.clear)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
     # Auto generated code slightly altered for readability
@@ -433,7 +504,12 @@ class CompanionWindow(object):
         self.pushButton_15.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
         '''
+
         # End SubWindow SetTitle code
+        ################################################################################################################
+        # Begin Experiment View Area generation code
+        #self.rs_devices_tab_widget.setTabText(self.rs_devices_tab_widget.indexOf(self.device_tab_1), _translate("MainWindow", "CHANGEME Tab 1"))
+        # End  Experiment View Area generation code
         ################################################################################################################
         # Begin MenuBar SetTitle code
         self.file_menu.setTitle(_translate("MainWindow", "File"))
@@ -485,6 +561,7 @@ class CompanionWindow(object):
         # End Control Widget SetTitle code
         ################################################################################################################
         # Begin COM Widget SetTitle code
+        '''
         self.com_widget_dock.setToolTip(_translate("MainWindow", "<html><head/><body><p>Displays all communications"
                                                                  " with Red Scientific Hardware. These can be saved for"
                                                                  " later browsing and debugging.</p></body></html>"))
@@ -499,15 +576,19 @@ class CompanionWindow(object):
                                                                    " the pane above.</p></body></html>"))
         self.clear_push_button.setText(_translate("MainWindow", "Clear"))
         self.CHANGEME_check_box.setText(_translate("MainWindow", "CHANGEME_CheckBox"))
+        '''
         # End COM Widget SetTitle code
         ################################################################################################################
         # Begin Configure Widget SetTitle code
+        '''
         self.configure_widget_dock.setWindowTitle(_translate("MainWindow", "Configure"))
         self.rs_devices_group_box.setTitle(_translate("MainWindow", "Red Scientific Devices"))
+        '''
         '''
         self.Device_GroupBox.setTitle(_translate("MainWindow", "DRT - Wireless 1"))
         self.Setup_PushButton.setText(_translate("MainWindow", "Setup"))
         self.Device_ToolButton.setText(_translate("MainWindow", "..."))
+        '''
         '''
         self.mdi_view_group_box.setTitle(_translate("MainWindow", "MDI View"))
         self.mdi_view_main_radio_button.setText(_translate("MainWindow", "Main"))
@@ -515,6 +596,7 @@ class CompanionWindow(object):
         self.mdi_view_cascade_radio_button.setText(_translate("MainWindow", "Cascade"))
         self.mdi_view_vert_radio_button.setText(_translate("MainWindow", "Vertical"))
         self.mdi_view_horiz_radio_button.setText(_translate("MainWindow", "Horizontal"))
+        '''
         # End Configure Widget SetTitle code
 
     ################################################################################################################
@@ -537,18 +619,22 @@ class CompanionWindow(object):
         self.append_exp_action.triggered.connect(self.__append_experiment_action_handler)
         self.about_rs_action.triggered.connect(self.__about_rs_action_handler)
         self.about_rs_companion_action.triggered.connect(self.__about_rs_companion_action_handler)
+        '''
         self.mdi_view_main_radio_button.clicked.connect(self.__mdi_main_handler)
         self.mdi_view_tiled_radio_button.clicked.connect(self.__mdi_tile_handler)
         self.mdi_view_cascade_radio_button.clicked.connect(self.__mdi_cascade_handler)
         self.mdi_view_vert_radio_button.clicked.connect(self.__mdi_vert_handler)
         self.mdi_view_horiz_radio_button.clicked.connect(self.__mdi_horiz_handler)
+        '''
         self.run_trial_push_button.clicked.connect(self.__run_trial_button_handler)
         self.new_block_push_button.clicked.connect(self.__new_block_button_handler)
         self.post_push_button.clicked.connect(self.__post_button_handler)
+        '''
         self.record_push_button.clicked.connect(self.__record_button_handler)
         self.freeze_push_button.clicked.connect(self.__freeze_button_handler)
         self.clear_push_button.clicked.connect(self.__clear_button_handler)
         self.CHANGEME_check_box.toggled.connect(self.__CHANGEME_checkbox_handler)
+        '''
         self.msg_callback = msg_handler
         # TODO: Use msg_callback for any buttons that send stuff to devices
 
@@ -752,18 +838,24 @@ class CompanionWindow(object):
 
     # Passes message received to proper device display object
     def handle_msg(self, msg_dict):
-        for device in self.__list_of_devices__:
-            if device == msg_dict['device']:
-                del msg_dict['device']
-                self.__list_of_devices__[device].handle_msg(msg_dict)
-                pass
+        if msg_dict['type'] == "add":
+            del msg_dict['type']
+            self.add_rs_device_handler(msg_dict['device'])
+        elif msg_dict['type'] == "remove":
+            del msg_dict['type']
+            self.remove_rs_device_handler(msg_dict['device'])
+        elif msg_dict['type'] == "msg":
+            del msg_dict['type']
+            for device in self.__list_of_devices__:
+                if device == msg_dict['device']:
+                    del msg_dict['device']
+                    self.__list_of_devices__[device].handle_msg(msg_dict)
+                    pass
 
     # Creates an RSDevice and adds it to the list of devices
     def add_rs_device_handler(self, device):
         if device not in self.__list_of_devices__:
-            self.__list_of_devices__[device] = RSDevice(device, self.msg_callback,
-                                                        self.rs_devices_scroll_area_contents_vert_layout,
-                                                        self.mdi_dock_area)
+            self.__list_of_devices__[device] = RSDevice(device, self.msg_callback, self.rs_devices_tab_widget)
 
     # Deletes an RSDevice and removes it from the list of devices
     def remove_rs_device_handler(self, device):
@@ -774,24 +866,23 @@ class CompanionWindow(object):
 
 # TODO: Make different subwindows etc. for each type of device and then build based on device type
 class RSDevice:
-    def __init__(self, device_id, msg_callback, box_parent, sub_parent):
+    def __init__(self, device_id, msg_callback, box_parent):
         self.device_id = device_id
         self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.box_parent = box_parent
-        self.sub_parent = sub_parent
+        #self.sub_parent = sub_parent
         self.msg_callback = msg_callback
         if self.device_id[0] == "drt":
-            self.device_sub = SubWindow(self.device_name, self.callback)
+            print("handling display for a drt device")
             self.configure_widget = DRTSettingsWidget(self.device_name, self.callback)
-        elif self.device_id == "vog":
-            print("Making a vog display NOT IMPLEMENTED YET")
-        self.device_box = DeviceBox(self.device_id, self.device_sub, self.callback,
-                                    self.show_hide_configure_widget_handler)
-        self.box_parent.addWidget(self.device_box)
-        self.sub_parent.addSubWindow(self.device_sub)
-        self.device_sub.show()
+        elif self.device_id[0] == "vog":
+            print("handling display for a vog device")
+        self.device_box = DeviceBox(self.device_id, self.callback, self.show_hide_configure_widget_handler)
+        self.box_parent.setUpdatesEnabled(False)
+        index = self.box_parent.addTab(self.device_box, "")
+        self.box_parent.setUpdatesEnabled(True)
+        self.box_parent.setTabText(index, self.device_name)
 
-    # TODO: Maybe implement a bringtofront option?
     def show_hide_configure_widget_handler(self):
         if self.configure_widget.isVisible():
             self.configure_widget.hide()
@@ -802,9 +893,7 @@ class RSDevice:
         self.configure_widget.handle_msg(msg)
 
     def remove_self(self):
-        self.box_parent.removeWidget(self.device_box)
-        self.sub_parent.removeSubWindow(self.device_sub)
-        self.device_sub.deleteLater()
+        self.box_parent.removeTab(self.box_parent.indexOf(self.device_box))
         self.device_box.deleteLater()
 
     def callback(self, msg_dict):
@@ -813,7 +902,62 @@ class RSDevice:
         self.msg_callback(msg_dict)
 
 
-class DeviceBox(QtWidgets.QGroupBox):
+class DeviceBox(QtWidgets.QWidget):
+    def __init__(self, device_id, msg_handler, configure_widget_button):
+        super().__init__()
+        self.device_id = device_id
+        self.msg_handler = msg_handler
+        self.configure_widget_button = configure_widget_button
+        self.device_name = self.device_id[0] + " on " + self.device_id[1]
+
+        self.setObjectName(self.device_name)
+        self.scroll_area = QtWidgets.QScrollArea(self)
+        self.scroll_area.setGeometry(QtCore.QRect(0, 0, 201, 521))
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setObjectName("scroll_area")
+        self.scroll_area_contents = QtWidgets.QWidget()
+        self.scroll_area_contents.setGeometry(QtCore.QRect(0, 0, 199, 519))
+        self.scroll_area_contents.setObjectName("scroll_area_contents")
+        self.group_box_1 = QtWidgets.QGroupBox(self.scroll_area_contents)
+        self.group_box_1.setGeometry(QtCore.QRect(0, 0, 191, 101))
+        self.group_box_1.setObjectName("group_box_1")
+        self.group_box_1_horiz_layout_1 = QtWidgets.QHBoxLayout(self.group_box_1)
+        self.group_box_1_horiz_layout_1.setObjectName("group_box_1_horiz_layout")
+        self.vert_layout = QtWidgets.QVBoxLayout()
+        self.vert_layout.setObjectName("vert_layout")
+        self.push_button_1 = QtWidgets.QPushButton(self.group_box_1)
+        self.push_button_1.setObjectName("push_button_1")
+        self.vert_layout.addWidget(self.push_button_1)
+        self.push_button_2 = QtWidgets.QPushButton(self.group_box_1)
+        self.push_button_2.setObjectName("push_button_2")
+        self.vert_layout.addWidget(self.push_button_2)
+        self.group_box_1_horiz_layout_2 = QtWidgets.QHBoxLayout()
+        self.group_box_1_horiz_layout_2.setObjectName("group_box_1_horiz_layout_2")
+        self.tool_button = QtWidgets.QToolButton(self.group_box_1)
+        self.tool_button.setObjectName("tool_button")
+        self.group_box_1_horiz_layout_2.addWidget(self.tool_button)
+        self.vert_layout.addLayout(self.group_box_1_horiz_layout_2)
+        self.group_box_1_horiz_layout_1.addLayout(self.vert_layout)
+        self.scroll_area.setWidget(self.scroll_area_contents)
+        self.__set_texts()
+        self.__setup_button_handlers()
+
+    def __set_texts(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.push_button_1.setText(_translate("MainWindow", "CHANGEME PushButton"))
+        self.push_button_2.setText(_translate("MainWindow", "CHANGEME PushButton"))
+        self.tool_button.setText(_translate("MainWindow", "Configure device"))
+
+    def __setup_button_handlers(self):
+        self.tool_button.clicked.connect(self.__setup_push_button_handler)
+        #self.push_button_1.clicked.connect()
+        #self.push_button_2.clicked.connect()
+
+    def __setup_push_button_handler(self):
+        self.configure_widget_button()
+
+
+class DeviceBoxOld(QtWidgets.QGroupBox):
     def __init__(self, device_id, sub, msg_handler, show_hide_handler):
         super().__init__()
         self.msg_hander = msg_handler
@@ -1002,7 +1146,85 @@ class MessageWindow(QtWidgets.QMessageBox):
         self.setEscapeButton(QtWidgets.QMessageBox.Close)
 
 
+
 class DRTSettingsWidget(QtWidgets.QWidget):
+    def __init__(self, device_name, msg_callback):
+        super().__init__()
+        self.device_name = device_name
+        self.msg_callback = msg_callback
+        self.setObjectName(self.device_name)
+        self.resize(400, 300)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.setSizePolicy(size_policy)
+        self.setMinimumSize(QtCore.QSize(400, 300))
+        self.setMaximumSize(QtCore.QSize(400, 300))
+        self.settings_graphics_view = QtWidgets.QGraphicsView(self)
+        self.settings_graphics_view.setGeometry(QtCore.QRect(120, 20, 256, 192))
+        self.settings_graphics_view.setObjectName("settings_graphics_view")
+        self.intensity_slider = QtWidgets.QSlider(self)
+        self.intensity_slider.setGeometry(QtCore.QRect(85, 40, 16, 160))
+        self.intensity_slider.setOrientation(QtCore.Qt.Vertical)
+        self.intensity_slider.setObjectName("intensity_slider")
+        self.lower_isi_label = QtWidgets.QLabel(self)
+        self.lower_isi_label.setGeometry(QtCore.QRect(350, 240, 35, 10))
+        self.lower_isi_label.setObjectName("lower_isi_label")
+        self.stim_dur_label = QtWidgets.QLabel(self)
+        self.stim_dur_label.setGeometry(QtCore.QRect(10, 20, 51, 16))
+        self.stim_dur_label.setObjectName("stim_dur_label")
+        self.upper_isi_label = QtWidgets.QLabel(self)
+        self.upper_isi_label.setGeometry(QtCore.QRect(350, 220, 35, 10))
+        self.upper_isi_label.setObjectName("upper_isi_label")
+        self.iso_default_push_button = QtWidgets.QPushButton(self)
+        self.iso_default_push_button.setGeometry(QtCore.QRect(330, 270, 61, 20))
+        self.iso_default_push_button.setObjectName("iso_default_push_button")
+        self.upload_settings_push_button = QtWidgets.QPushButton(self)
+        self.upload_settings_push_button.setGeometry(QtCore.QRect(30, 230, 71, 41))
+        self.upload_settings_push_button.setObjectName("upload_settings_push_button")
+        self.upper_isi_slider = QtWidgets.QSlider(self)
+        self.upper_isi_slider.setGeometry(QtCore.QRect(180, 220, 160, 16))
+        self.upper_isi_slider.setOrientation(QtCore.Qt.Horizontal)
+        self.upper_isi_slider.setObjectName("upper_isi_slider")
+        self.lower_isi_slider = QtWidgets.QSlider(self)
+        self.lower_isi_slider.setGeometry(QtCore.QRect(180, 240, 160, 16))
+        self.lower_isi_slider.setOrientation(QtCore.Qt.Horizontal)
+        self.lower_isi_slider.setObjectName("lower_isi_slider")
+        self.stim_dur_slider = QtWidgets.QSlider(self)
+        self.stim_dur_slider.setGeometry(QtCore.QRect(25, 40, 16, 160))
+        self.stim_dur_slider.setOrientation(QtCore.Qt.Vertical)
+        self.stim_dur_slider.setObjectName("stim_dur_slider")
+        self.stim_intensity_label = QtWidgets.QLabel(self)
+        self.stim_intensity_label.setGeometry(QtCore.QRect(65, 20, 51, 16))
+        self.stim_intensity_label.setObjectName("stim_intensity_label")
+        self.__set_texts()
+        self.__set_handlers()
+
+    def __set_texts(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_translate("self", "DRT Config"))
+        self.lower_isi_label.setText(_translate("self", "Lower ISI"))
+        self.stim_dur_label.setText(_translate("self", "Stim Duration"))
+        self.upper_isi_label.setText(_translate("self", "Upper ISI"))
+        self.iso_default_push_button.setText(_translate("self", "ISO default"))
+        self.upload_settings_push_button.setText(_translate("self", "Upload settings"))
+        self.stim_intensity_label.setText(_translate("self", "Stim Intensity"))
+
+    def __set_handlers(self):
+        self.upload_settings_push_button.clicked.connect(self.__update_button_handler)
+        self.iso_default_push_button.clicked.connect(self.__iso_button_handler)
+        # TODO: Connect sliders
+        #self.stim_dur_slider.slider
+
+    def __update_button_handler(self):
+        print("Update button pressed")
+
+    def __iso_button_handler(self):
+        print("ISO default button pressed")
+
+
+class DRTSettingsWidgetOld(QtWidgets.QWidget):
     def __init__(self, device_name, msg_callback):
         super().__init__()
         self.close_me_bool = False
@@ -1061,7 +1283,7 @@ class DRTSettingsWidget(QtWidgets.QWidget):
         self.__set_texts()
         self.__get_vals()
         self.__set_button_handlers()
-        QtCore.QMetaObject.connectSlotsByName(self)
+        #QtCore.QMetaObject.connectSlotsByName(self)
 
     def __get_vals(self):
         msg_dict = {'cmd': "get_config"}
@@ -1125,8 +1347,6 @@ class DRTSettingsWidget(QtWidgets.QWidget):
             event.ignore()
             self.__show_hide_me()
 
-    def handle_msg(self, msg):
-        if msg['type'] == "cfg":
-            del msg['type']
-            for item in msg:
-                self.__set_val(item, msg[item])
+    def handle_msg(self, msg_dict):
+        for item in msg_dict:
+            self.__set_val(item, msg_dict[item])
