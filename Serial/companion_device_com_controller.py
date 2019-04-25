@@ -88,7 +88,7 @@ class ControllerSerial:
 
     # TODO: Fill this in
     def __parse_vog_msg(self, msg, msg_dict):
-        pass
+        print("Got message from a vog")
 
     def __prepare_drt_msg(self, msg_dict):
         if 'arg' in msg_dict.keys():

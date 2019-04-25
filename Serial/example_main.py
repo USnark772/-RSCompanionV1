@@ -1,5 +1,5 @@
 """The main portal to launch the wireless DRT+ program"""
-import Serial.companion_device_com as serial
+import Serial.companion_device_com_controller as serial
 import time
 import tkinter as tk
 

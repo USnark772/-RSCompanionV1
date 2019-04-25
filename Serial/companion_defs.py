@@ -20,3 +20,11 @@ devices = {'drt': {'probe': "get_name\n\r",
 drt_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drt_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
 
+drt_intensity_max = 255
+drt_intensity_min = 0
+
+drt_stim_dur_max = 10
+drt_stim_dur_min = 0
+
+drt_ISI_max = 10000
+drt_ISI_min = 0

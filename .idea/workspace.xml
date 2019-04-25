@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/UI/companion_view.py" line="880" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ui_files/companion_main_window_take2.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ui_files/drt_config_widget.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/companion_main_chart_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/companion_main_window_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/drt_device_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/rs_device_container_view.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serial/companion_device_com.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/companion_device_com.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/companion_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/companion_defs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/companion_device_com.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/companion_device_com_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/example_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/example_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/companion_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/companion_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/companion_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/companion_view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/companion_view.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,26 +20,84 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
+    <splitter split-orientation="horizontal" split-proportion="0.49936143">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/UI/companion_view.py">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/UI/companion_main_window_view.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-187">
-                  <caret line="885" selection-start-line="885" selection-end-line="885" />
+                <state relative-caret-position="396">
+                  <caret line="54" column="23" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
                   <folding>
                     <element signature="n#!!doc" />
+                    <element signature="e#136#167#0" expanded="true" />
+                    <element signature="e#490#602#0" />
+                    <element signature="e#1151#1183#0" />
+                    <element signature="e#2131#2167#0" />
+                    <element signature="e#3328#3370#0" />
+                    <element signature="e#4316#4353#0" />
+                    <element signature="e#4964#4993#0" />
+                    <element signature="e#6613#6649#0" />
+                    <element signature="e#8201#8255#0" />
+                    <element signature="e#9148#9187#0" />
+                    <element signature="e#10286#10328#0" />
+                    <element signature="e#16156#16201#0" />
+                    <element signature="e#19375#19409#0" />
+                    <element signature="e#19816#23316#0" />
+                    <element signature="e#19871#19983#0" />
+                    <element signature="e#20112#20224#0" />
+                    <element signature="e#21787#21814#0" />
+                    <element signature="e#23322#23434#0" />
+                    <element signature="e#23742#25113#0" />
+                    <element signature="e#25119#25173#0" />
+                    <element signature="e#25267#25307#0" />
+                    <element signature="e#25313#25367#0" />
+                    <element signature="e#25452#25483#0" />
+                    <element signature="e#25489#25543#0" />
+                    <element signature="e#25629#25661#0" />
+                    <element signature="e#25667#25721#0" />
+                    <element signature="e#25875#26001#0" />
+                    <element signature="e#26007#26061#0" />
+                    <element signature="e#26155#26195#0" />
+                    <element signature="e#26201#26255#0" />
+                    <element signature="e#26351#26393#0" />
+                    <element signature="e#26399#26453#0" />
+                    <element signature="e#26542#26577#0" />
+                    <element signature="e#26583#26637#0" />
+                    <element signature="e#26725#26759#0" />
+                    <element signature="e#26765#26819#0" />
+                    <element signature="e#26911#26949#0" />
+                    <element signature="e#26955#27009#0" />
+                    <element signature="e#27105#27379#0" />
+                    <element signature="e#27105#27199#0" />
+                    <element signature="e#27385#27439#0" />
+                    <element signature="e#27536#27579#0" />
+                    <element signature="e#27585#27639#0" />
+                    <element signature="e#27737#28421#0" />
+                    <element signature="e#27861#28388#0" />
+                    <element signature="e#28427#28481#0" />
+                    <element signature="e#28569#29328#0" />
+                    <element signature="e#28669#29295#0" />
+                    <element signature="e#29334#29388#0" />
+                    <element signature="e#29131#29164#0" />
+                    <element signature="e#29516#29570#0" />
+                    <element signature="e#29313#29346#0" />
+                    <element signature="e#29698#29752#0" />
+                    <element signature="e#29388#29453#0" />
+                    <element signature="e#29476#29535#0" />
+                    <element signature="e#29683#30366#0" />
+                    <element signature="e#30014#30093#0" />
+                    <element signature="e#30149#30231#0" />
+                    <element signature="e#29995#30366#0" />
+                    <element signature="e#30192#30366#0" />
+                    <element signature="e#30245#30366#0" />
+                    <element signature="e#30236#30479#0" />
+                    <element signature="e#30291#30479#0" />
+                    <element signature="e#30940#31086#0" />
+                    <element signature="e#30991#31086#0" />
+                    <element signature="e#32666#32963#0" />
+                    <element signature="e#32706#32963#0" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Serial/companion_defs.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="440">
-                  <caret line="20" column="59" selection-start-line="20" selection-start-column="59" selection-end-line="20" selection-end-column="59" />
                 </state>
               </provider>
             </entry>
@@ -46,10 +105,34 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/UI/companion_main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="484">
-                  <caret line="24" selection-start-line="24" selection-end-line="24" />
+                <state relative-caret-position="242">
+                  <caret line="11" column="55" lean-forward="true" selection-start-line="11" selection-start-column="55" selection-end-line="11" selection-end-column="55" />
                   <folding>
                     <element signature="e#136#146#0" expanded="true" />
+                    <element signature="e#904#932#0" />
+                    <element signature="e#982#1017#0" />
+                    <element signature="e#1062#1085#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Serial/companion_defs.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="88">
+                  <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/UI/companion_main_chart_view.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="506">
+                  <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+                  <folding>
+                    <element signature="e#0#37#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -59,11 +142,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Serial/companion_device_com.py">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Serial/companion_device_com_controller.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="110">
-                  <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+                <state relative-caret-position="319">
+                  <caret line="94" selection-start-line="94" selection-end-line="94" />
                   <folding>
                     <element signature="e#0#248#1" />
                     <element signature="e#408#703#0" />
@@ -72,33 +155,73 @@
                     <element signature="e#1102#1854#0" />
                     <element signature="e#1127#1805#0" />
                     <element signature="e#1194#1805#0" />
+                    <element signature="e#1900#2621#0" />
+                    <element signature="e#1943#2570#0" />
                     <element signature="e#2037#2167#0" />
                     <element signature="e#2209#2255#0" />
+                    <element signature="e#2290#2570#0" />
                     <element signature="e#2700#2704#0" />
                     <element signature="e#2779#2783#0" />
-                    <element signature="e#2858#3071#0" />
-                    <element signature="e#3152#3156#0" />
-                    <element signature="e#3456#4958#0" />
-                    <element signature="e#3491#4576#0" />
-                    <element signature="e#3618#4101#0" />
-                    <element signature="e#3758#4101#0" />
-                    <element signature="e#4136#4576#0" />
-                    <element signature="e#4291#4576#0" />
-                    <element signature="e#4399#4576#0" />
-                    <element signature="e#4622#4958#0" />
-                    <element signature="e#4752#4958#0" />
-                    <element signature="e#4997#5657#0" />
-                    <element signature="e#5150#5236#0" />
-                    <element signature="e#5700#6911#0" />
-                    <element signature="e#5747#6855#0" />
-                    <element signature="e#5802#6855#0" />
-                    <element signature="e#5851#6855#0" />
-                    <element signature="e#5965#6759#0" />
-                    <element signature="e#5965#6043#0" />
-                    <element signature="e#6954#7331#0" />
-                    <element signature="e#6999#7275#0" />
-                    <element signature="e#7058#7243#0" />
-                    <element signature="e#7394#7429#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/UI/drt_device_view.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="2244">
+                  <caret line="230" column="44" selection-start-line="230" selection-start-column="44" selection-end-line="230" selection-end-column="44" />
+                  <folding>
+                    <element signature="e#120#2939#0" />
+                    <element signature="e#196#2278#0" />
+                    <element signature="e#1336#1695#1" />
+                    <element signature="e#2315#2625#0" />
+                    <element signature="e#2363#2546#1" />
+                    <element signature="e#2674#2856#0" />
+                    <element signature="e#2749#2856#1" />
+                    <element signature="e#2909#2939#0" />
+                    <element signature="e#5966#6174#0" />
+                    <element signature="e#6280#6763#0" />
+                    <element signature="e#6237#6799#0" />
+                    <element signature="e#7437#7927#0" />
+                    <element signature="e#7264#7332#0" />
+                    <element signature="e#7985#8015#0" />
+                    <element signature="e#8218#8222#0" />
+                    <element signature="e#8219#8223#0" />
+                    <element signature="e#8123#8153#0" />
+                    <element signature="e#8205#8235#0" />
+                    <element signature="e#7456#7596#0" />
+                    <element signature="e#7645#7785#0" />
+                    <element signature="e#7834#7985#0" />
+                    <element signature="e#8031#8066#0" />
+                    <element signature="e#8714#8942#0" />
+                    <element signature="e#8771#8834#0" />
+                    <element signature="e#8928#9083#0" />
+                    <element signature="e#8363#8420#0" />
+                    <element signature="e#9132#9287#0" />
+                    <element signature="e#8568#8625#0" />
+                    <element signature="e#9340#9493#0" />
+                    <element signature="e#9387#9469#0" />
+                    <element signature="e#9530#9700#0" />
+                    <element signature="e#9624#9700#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/UI/rs_device_container_view.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="286">
+                  <caret line="34" column="28" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
+                  <folding>
+                    <element signature="e#184#964#0" />
+                    <element signature="e#414#545#0" />
+                    <element signature="e#1024#1157#0" />
+                    <element signature="e#1198#1235#0" />
+                    <element signature="e#1272#1377#0" />
+                    <element signature="e#1421#1526#0" />
                   </folding>
                 </state>
               </provider>
@@ -117,22 +240,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>QGridLayout</find>
-      <find>block_note_group_box_grid_layout</find>
-      <find>QPushButton</find>
-      <find>deviceSettings</find>
-      <find>DeviceSettingsWindow</find>
-      <find>DRTSettingsWidget</find>
-      <find>handle_ms</find>
-      <find>device not found</find>
-      <find>self.__num_subwindows</find>
-      <find>self.__num_subwindows__</find>
-      <find>UI found device</find>
-      <find>cfg&gt;</find>
-      <find>device.handl</find>
-      <find>handle_msg</find>
-      <find>self.msg_call</find>
-      <find>self.callback</find>
       <find>'action</find>
       <find>action</find>
       <find>'action'</find>
@@ -140,13 +247,29 @@
       <find>'type'</find>
       <find>print(</find>
       <find>msg_call</find>
-      <find>print</find>
       <find>control_wid</find>
       <find>qhboxlayout</find>
       <find>rs_devices</find>
       <find>device_tab_1</find>
       <find>drt_config_widget</find>
       <find>config device</find>
+      <find>about_</find>
+      <find>btn_run_block</find>
+      <find>about_rs</find>
+      <find>device_name</find>
+      <find>show_hide_me</find>
+      <find>Charts.QtCharts</find>
+      <find>QtGui.</find>
+      <find>QBarSet</find>
+      <find>QPercentBarSeries</find>
+      <find>.chart.</find>
+      <find>horizontal</find>
+      <find>scrolling</find>
+      <find>print</find>
+      <find>Test</find>
+      <find>scroll</find>
+      <find>QtCore.</find>
+      <find>QtWidgets.</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -177,12 +300,18 @@
         <option value="$PROJECT_DIR$/Serial/device_defs.py" />
         <option value="$PROJECT_DIR$/Serial/example_main.py" />
         <option value="$PROJECT_DIR$/UI/DeviceSettingsWidget.py" />
-        <option value="$PROJECT_DIR$/Serial/companion_defs.py" />
-        <option value="$PROJECT_DIR$/UI/companion_main.py" />
         <option value="$PROJECT_DIR$/ui_files/companion_main_window_take2.py" />
-        <option value="$PROJECT_DIR$/Serial/companion_device_com.py" />
         <option value="$PROJECT_DIR$/ui_files/drt_config_widget.py" />
+        <option value="$PROJECT_DIR$/Serial/companion_device_com.py" />
+        <option value="$PROJECT_DIR$/UI/DRT_device_view.py" />
         <option value="$PROJECT_DIR$/UI/companion_view.py" />
+        <option value="$PROJECT_DIR$/UI/rs_device_container_view.py" />
+        <option value="$PROJECT_DIR$/Serial/TestGraphing.py" />
+        <option value="$PROJECT_DIR$/Serial/companion_defs.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main_window_view.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main_chart_view.py" />
+        <option value="$PROJECT_DIR$/UI/drt_device_view.py" />
       </list>
     </option>
   </component>
@@ -214,11 +343,6 @@
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
               <item name="UI" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="ui_files" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -231,7 +355,7 @@
     <property name="RELEASE_customTagCommitMessage_text" value="Tagging version %name%" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -251,7 +375,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.companion_main">
-    <configuration name="Companion_View" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="TestGraphing" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -259,11 +383,32 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UI" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Serial" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI\companion_main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Serial/TestGraphing.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="VOG_Companion" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../Visual-Occlusion-Goggles" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../Visual-Occlusion-Goggles/VOG_Companion.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -305,7 +450,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/UI/companion_view.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI\companion_main_window_view.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -314,7 +459,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="controller" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -322,32 +467,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Serial" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../Visual-Occlusion-Goggles" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Serial\example_main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="rs_device_com" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Serial" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Serial\companion_device_com.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../Visual-Occlusion-Goggles/controller.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -359,10 +483,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.companion_main" />
+        <item itemvalue="Python.TestGraphing" />
+        <item itemvalue="Python.VOG_Companion" />
+        <item itemvalue="Python.controller" />
         <item itemvalue="Python.companion_view" />
-        <item itemvalue="Python.Companion_View" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.rs_device_com" />
       </list>
     </recent_temporary>
   </component>
@@ -392,20 +516,20 @@
     <frame x="-7" y="-7" width="2575" height="1455" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.07483261" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.07483261" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.35196376" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="GitLabIntegration" order="2" />
-      <window_info anchor="bottom" id="Python Console" order="3" />
+      <window_info anchor="bottom" id="Python Console" order="3" weight="0.32930514" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.32401812" />
       <window_info anchor="bottom" id="Version Control" order="6" />
-      <window_info anchor="bottom" id="Run" order="7" visible="true" weight="0.23942599" />
-      <window_info anchor="bottom" id="Debug" order="8" weight="0.39933443" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.23942599" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.39879155" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" weight="0.32663316" />
+      <window_info anchor="bottom" id="TODO" order="11" weight="0.326284" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -468,13 +592,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtWidgets/QWidget.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="618" column="8" selection-start-line="618" selection-start-column="8" selection-end-line="618" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtCore/QSize.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
@@ -489,6 +606,8 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ui_files/companion_main_window_take2.py" />
+    <entry file="file://$PROJECT_DIR$/ui_files/drt_config_widget.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/serial/serialwin32.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1232">
@@ -496,51 +615,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ui_files/companion_main_window_take2.py">
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtWidgets/QWidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="346" column="78" selection-start-line="346" selection-start-column="78" selection-end-line="346" selection-end-column="78" />
+        <state relative-caret-position="327">
+          <caret line="97" column="8" selection-start-line="97" selection-start-column="8" selection-end-line="97" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Serial/companion_defs.py">
+    <entry file="file://$PROJECT_DIR$/../Visual-Occlusion-Goggles/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="59" selection-start-line="20" selection-start-column="59" selection-end-line="20" selection-end-column="59" />
+        <state relative-caret-position="703" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Visual-Occlusion-Goggles/view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6952">
+          <caret line="326" column="35" selection-start-line="326" selection-start-column="35" selection-end-line="326" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Visual-Occlusion-Goggles/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="161" selection-start-line="161" selection-end-line="161" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/PySide2/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Visual-Occlusion-Goggles/VOG_Companion.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/UI/companion_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
+        <state relative-caret-position="242">
+          <caret line="11" column="55" lean-forward="true" selection-start-line="11" selection-start-column="55" selection-end-line="11" selection-end-column="55" />
           <folding>
             <element signature="e#136#146#0" expanded="true" />
+            <element signature="e#904#932#0" />
+            <element signature="e#982#1017#0" />
+            <element signature="e#1062#1085#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ui_files/drt_config_widget.py">
+    <entry file="file://$PROJECT_DIR$/Serial/companion_device_com_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="48" column="49" lean-forward="true" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/companion_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-187">
-          <caret line="885" selection-start-line="885" selection-end-line="885" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Serial/companion_device_com.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+        <state relative-caret-position="319">
+          <caret line="94" selection-start-line="94" selection-end-line="94" />
           <folding>
             <element signature="e#0#248#1" />
             <element signature="e#408#703#0" />
@@ -549,33 +678,173 @@
             <element signature="e#1102#1854#0" />
             <element signature="e#1127#1805#0" />
             <element signature="e#1194#1805#0" />
+            <element signature="e#1900#2621#0" />
+            <element signature="e#1943#2570#0" />
             <element signature="e#2037#2167#0" />
             <element signature="e#2209#2255#0" />
+            <element signature="e#2290#2570#0" />
             <element signature="e#2700#2704#0" />
             <element signature="e#2779#2783#0" />
-            <element signature="e#2858#3071#0" />
-            <element signature="e#3152#3156#0" />
-            <element signature="e#3456#4958#0" />
-            <element signature="e#3491#4576#0" />
-            <element signature="e#3618#4101#0" />
-            <element signature="e#3758#4101#0" />
-            <element signature="e#4136#4576#0" />
-            <element signature="e#4291#4576#0" />
-            <element signature="e#4399#4576#0" />
-            <element signature="e#4622#4958#0" />
-            <element signature="e#4752#4958#0" />
-            <element signature="e#4997#5657#0" />
-            <element signature="e#5150#5236#0" />
-            <element signature="e#5700#6911#0" />
-            <element signature="e#5747#6855#0" />
-            <element signature="e#5802#6855#0" />
-            <element signature="e#5851#6855#0" />
-            <element signature="e#5965#6759#0" />
-            <element signature="e#5965#6043#0" />
-            <element signature="e#6954#7331#0" />
-            <element signature="e#6999#7275#0" />
-            <element signature="e#7058#7243#0" />
-            <element signature="e#7394#7429#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UI/companion_main_window_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="54" column="23" selection-start-line="54" selection-start-column="23" selection-end-line="54" selection-end-column="23" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#167#0" expanded="true" />
+            <element signature="e#490#602#0" />
+            <element signature="e#1151#1183#0" />
+            <element signature="e#2131#2167#0" />
+            <element signature="e#3328#3370#0" />
+            <element signature="e#4316#4353#0" />
+            <element signature="e#4964#4993#0" />
+            <element signature="e#6613#6649#0" />
+            <element signature="e#8201#8255#0" />
+            <element signature="e#9148#9187#0" />
+            <element signature="e#10286#10328#0" />
+            <element signature="e#16156#16201#0" />
+            <element signature="e#19375#19409#0" />
+            <element signature="e#19816#23316#0" />
+            <element signature="e#19871#19983#0" />
+            <element signature="e#20112#20224#0" />
+            <element signature="e#21787#21814#0" />
+            <element signature="e#23322#23434#0" />
+            <element signature="e#23742#25113#0" />
+            <element signature="e#25119#25173#0" />
+            <element signature="e#25267#25307#0" />
+            <element signature="e#25313#25367#0" />
+            <element signature="e#25452#25483#0" />
+            <element signature="e#25489#25543#0" />
+            <element signature="e#25629#25661#0" />
+            <element signature="e#25667#25721#0" />
+            <element signature="e#25875#26001#0" />
+            <element signature="e#26007#26061#0" />
+            <element signature="e#26155#26195#0" />
+            <element signature="e#26201#26255#0" />
+            <element signature="e#26351#26393#0" />
+            <element signature="e#26399#26453#0" />
+            <element signature="e#26542#26577#0" />
+            <element signature="e#26583#26637#0" />
+            <element signature="e#26725#26759#0" />
+            <element signature="e#26765#26819#0" />
+            <element signature="e#26911#26949#0" />
+            <element signature="e#26955#27009#0" />
+            <element signature="e#27105#27379#0" />
+            <element signature="e#27105#27199#0" />
+            <element signature="e#27385#27439#0" />
+            <element signature="e#27536#27579#0" />
+            <element signature="e#27585#27639#0" />
+            <element signature="e#27737#28421#0" />
+            <element signature="e#27861#28388#0" />
+            <element signature="e#28427#28481#0" />
+            <element signature="e#28569#29328#0" />
+            <element signature="e#28669#29295#0" />
+            <element signature="e#29334#29388#0" />
+            <element signature="e#29131#29164#0" />
+            <element signature="e#29516#29570#0" />
+            <element signature="e#29313#29346#0" />
+            <element signature="e#29698#29752#0" />
+            <element signature="e#29388#29453#0" />
+            <element signature="e#29476#29535#0" />
+            <element signature="e#29683#30366#0" />
+            <element signature="e#30014#30093#0" />
+            <element signature="e#30149#30231#0" />
+            <element signature="e#29995#30366#0" />
+            <element signature="e#30192#30366#0" />
+            <element signature="e#30245#30366#0" />
+            <element signature="e#30236#30479#0" />
+            <element signature="e#30291#30479#0" />
+            <element signature="e#30940#31086#0" />
+            <element signature="e#30991#31086#0" />
+            <element signature="e#32666#32963#0" />
+            <element signature="e#32706#32963#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Serial/TestGraphing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="938">
+          <caret line="47" column="13" lean-forward="true" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+          <folding>
+            <element signature="e#69#99#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UI/drt_device_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2244">
+          <caret line="230" column="44" selection-start-line="230" selection-start-column="44" selection-end-line="230" selection-end-column="44" />
+          <folding>
+            <element signature="e#120#2939#0" />
+            <element signature="e#196#2278#0" />
+            <element signature="e#1336#1695#1" />
+            <element signature="e#2315#2625#0" />
+            <element signature="e#2363#2546#1" />
+            <element signature="e#2674#2856#0" />
+            <element signature="e#2749#2856#1" />
+            <element signature="e#2909#2939#0" />
+            <element signature="e#5966#6174#0" />
+            <element signature="e#6280#6763#0" />
+            <element signature="e#6237#6799#0" />
+            <element signature="e#7437#7927#0" />
+            <element signature="e#7264#7332#0" />
+            <element signature="e#7985#8015#0" />
+            <element signature="e#8218#8222#0" />
+            <element signature="e#8219#8223#0" />
+            <element signature="e#8123#8153#0" />
+            <element signature="e#8205#8235#0" />
+            <element signature="e#7456#7596#0" />
+            <element signature="e#7645#7785#0" />
+            <element signature="e#7834#7985#0" />
+            <element signature="e#8031#8066#0" />
+            <element signature="e#8714#8942#0" />
+            <element signature="e#8771#8834#0" />
+            <element signature="e#8928#9083#0" />
+            <element signature="e#8363#8420#0" />
+            <element signature="e#9132#9287#0" />
+            <element signature="e#8568#8625#0" />
+            <element signature="e#9340#9493#0" />
+            <element signature="e#9387#9469#0" />
+            <element signature="e#9530#9700#0" />
+            <element signature="e#9624#9700#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UI/companion_main_chart_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Serial/companion_defs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UI/rs_device_container_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="34" column="28" selection-start-line="34" selection-start-column="28" selection-end-line="34" selection-end-column="28" />
+          <folding>
+            <element signature="e#184#964#0" />
+            <element signature="e#414#545#0" />
+            <element signature="e#1024#1157#0" />
+            <element signature="e#1198#1235#0" />
+            <element signature="e#1272#1377#0" />
+            <element signature="e#1421#1526#0" />
           </folding>
         </state>
       </provider>

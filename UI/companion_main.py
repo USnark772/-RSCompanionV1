@@ -5,20 +5,23 @@
 # https://redscientific.com/index.html
 
 import sys
-from UI.companion_view import *
-import Serial.companion_device_com as serial
+from PySide2.QtCore import QTimer
+from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtCore import Qt
+from UI.companion_main_window_view import CompanionWindow
+import Serial.companion_device_com_controller as serial
 
 
 # TODO: Document code
 class CompanionController:
     def __init__(self):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
-        self.app = QtWidgets.QApplication(sys.argv)
-        self.companion_app = QtWidgets.QMainWindow()
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+        self.app = QApplication(sys.argv)
+        self.companion_app = QMainWindow()
         self.ui = CompanionWindow(self.companion_app, self.send_msg_to_manager)
         self.companion_app.show()
         self.device_manager = serial.ControllerSerial(self.send_msg_to_ui)
-        self.update_timer = QtCore.QTimer()
+        self.update_timer = QTimer()
         self.update_timer.setSingleShot(False)
         self.update_timer.timeout.connect(self.device_update)
         self.update_timer.start(1)
