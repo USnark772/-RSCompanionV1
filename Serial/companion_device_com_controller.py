@@ -40,13 +40,16 @@ class ControllerSerial:
             if self.devices[d]['id'] != 'unknown':
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
+                        # print("companion_device_com_controller.ControllerSerial.update() have msg from a device")
                         msg_dict = {'type': "msg", 'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
                         if self.devices[d]['id'] == "drt":
+                            # print("companion_device_com_controller.ControllerSerial.update() msg is from drt, parsing msg")
                             self.__parse_drt_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
                         elif self.devices[d]['id'] == "vog":
                             self.__parse_vog_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
                         else:
                             print("in companion_device_com.update(): couldn't match up device")
+                        # print("companion_device_com_controller.ControllerSerial.update() using msg_callback")
                         self.msg_callback(msg_dict)
                 except:
                     pass
@@ -67,65 +70,28 @@ class ControllerSerial:
                 elif msg_dict['device'][0] == "vog":
                     msg_to_send = self.__prepare_vog_msg(msg_dict)
                 self.__send_msg_on_port(port, msg_to_send)
+        elif msg_dict['type'] == "start exp":
+            print("companion_device_com_controller.ControllerSerial.handle_msg() starting exp")
+            self.__start_exp()
+        elif msg_dict['type'] == "stop exp":
+            print("companion_device_com_controller.ControllerSerial.handle_msg() ending exp")
+            self.__end_exp()
         else:
             print("Unknown command")
 
-    # TODO: send start exp to each device
     def __start_exp(self):
-        pass
+        for d in self.devices:
+            if self.devices[d]['id'] == "drt":
+                self.__send_msg_on_port(self.devices[d]['port'], "exp_start\n")
+            elif self.devices[d]['id'] == "vog":
+                print("Implement vog exp start")
 
-    # TODO: send end exp to each device
     def __end_exp(self):
-        pass
-
-    # TODO: test this
-    def __prepare_vog_msg(self, msg_dict):
-        if 'arg' in msg_dict.keys():
-            msg_to_send = ">" + msg_dict['cmd'] + "|" + msg_dict['arg'] + "<<\n"
-        else:
-            msg_to_send = ">" + msg_dict['cmd'] + "|" + "<<\n"
-        return msg_to_send
-
-    # TODO: Fill this in
-    def __parse_vog_msg(self, msg, msg_dict):
-        print("Got message from a vog")
-
-    def __prepare_drt_msg(self, msg_dict):
-        if 'arg' in msg_dict.keys():
-            msg_to_send = msg_dict['cmd'] + " " + msg_dict['arg'] + "\n"
-        else:
-            msg_to_send = msg_dict['cmd'] + "\n"
-        return msg_to_send
-
-    def __parse_drt_msg(self, msg, msg_dict):
-        if msg[0:4] == "cfg>":
-            msg_dict['type'] = "msg"
-            # Check if this is a response to get_config
-            if len(msg) > 90:
-                # Get relevant values from msg and insert into msg_dict
-                for i in range(0, len(defs.drt_config_fields)):
-                    index = msg.find(defs.drt_config_fields[i] + ":")
-                    index_len = len(defs.drt_config_fields[i])+1
-                    val_len = msg.find(', ', index + index_len)
-                    if val_len < 0:
-                        val_len = None
-                    msg_dict[msg[index:index+index_len-1]] = msg[index+index_len:val_len]
-            else:
-                # Single value update, find which value it is and insert into msg_dict
-                for i in range(0, len(defs.drt_config_fields)):
-                    index = msg.find(defs.drt_config_fields[i] + ":")
-                    if index > 0:
-                        index_len = len(defs.drt_config_fields[i])
-                        val_ind = index + index_len + 1
-                        msg_dict[msg[index:index + index_len]] = msg[val_ind:]
-        elif msg[0:4] == "trl>":
-            msg_dict['type'] = "trl"
-            val_ind_start = 4
-            for i in range(0, len(defs.drt_trial_fields)):
-                val_ind_end = msg.find(', ', val_ind_start + 1)
-                if val_ind_end < 0:
-                    val_ind_end = None
-                msg_dict[defs.drt_trial_fields[i]] = msg[val_ind_start:val_ind_end]
+        for d in self.devices:
+            if self.devices[d]['id'] == "drt":
+                self.__send_msg_on_port(self.devices[d]['port'], "exp_stop\n")
+            elif self.devices[d]['id'] == "vog":
+                print("Implement vog exp stop")
 
     def __scan_ports(self):
 
@@ -169,11 +135,70 @@ class ControllerSerial:
         for e in self.devices_to_remove:
             if not self.devices[e]['id'] == "unknown":
                 self.devices[e]['port'].close()
-                msg_dict = {'type': "remove", 'device':(self.devices[e]['id'], self.devices[e]['port'].name)}
+                msg_dict = {'type': "remove", 'device': (self.devices[e]['id'], self.devices[e]['port'].name)}
                 self.msg_callback(msg_dict)
             del self.devices[e]
 
         self.devices_known = list(self.devices.keys())
 
-    def __send_msg_on_port(self, port, msg_to_send):
+    @staticmethod
+    def __send_msg_on_port(port, msg_to_send):
         port.write(str.encode(msg_to_send))
+
+    @staticmethod
+    def __prepare_drt_msg(msg_dict):
+        if 'arg' in msg_dict.keys():
+            msg_to_send = msg_dict['cmd'] + " " + msg_dict['arg'] + "\n"
+        else:
+            msg_to_send = msg_dict['cmd'] + "\n"
+        return msg_to_send
+
+    @staticmethod
+    def __parse_drt_msg(msg, msg_dict):
+        if msg[0:4] == "cfg>":
+            msg_dict['type'] = "msg"
+            # Check if this is a response to get_config
+            if len(msg) > 90:
+                # Get relevant values from msg and insert into msg_dict
+                for i in range(0, len(defs.drt_config_fields)):
+                    index = msg.find(defs.drt_config_fields[i] + ":")
+                    index_len = len(defs.drt_config_fields[i])+1
+                    val_len = msg.find(', ', index + index_len)
+                    if val_len < 0:
+                        val_len = None
+                    msg_dict[msg[index:index+index_len-1]] = msg[index+index_len:val_len]
+            else:
+                # Single value update, find which value it is and insert into msg_dict
+                for i in range(0, len(defs.drt_config_fields)):
+                    index = msg.find(defs.drt_config_fields[i] + ":")
+                    if index > 0:
+                        index_len = len(defs.drt_config_fields[i])
+                        val_ind = index + index_len + 1
+                        msg_dict[msg[index:index + index_len]] = msg[val_ind:]
+        elif msg[0:4] == "trl>":
+            # print("companion_device_com_controller.ControllerSerial.__parse_drt_msg() msg is trl")
+            msg_dict['type'] = "update"
+            val_ind_start = 4
+            for i in range(0, len(defs.drt_trial_fields)):
+                val_ind_end = msg.find(', ', val_ind_start + 1)
+                if val_ind_end < 0:
+                    val_ind_end = None
+                msg_dict[defs.drt_trial_fields[i]] = msg[val_ind_start:val_ind_end]
+                if val_ind_end:
+                    val_ind_start = val_ind_end + 2
+                # print("companion_device_com_controller.ControllerSerial.__parse_drt_msg() just added ",
+                      # msg_dict[defs.drt_trial_fields[i]])
+
+    # TODO: test this
+    @staticmethod
+    def __prepare_vog_msg(msg_dict):
+        if 'arg' in msg_dict.keys():
+            msg_to_send = ">" + msg_dict['cmd'] + "|" + msg_dict['arg'] + "<<\n"
+        else:
+            msg_to_send = ">" + msg_dict['cmd'] + "|" + "<<\n"
+        return msg_to_send
+
+    # TODO: Fill this in
+    @staticmethod
+    def __parse_vog_msg(msg, msg_dict):
+        print("Got message from a vog")

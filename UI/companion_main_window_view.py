@@ -5,13 +5,12 @@
 # https://redscientific.com/index.html
 
 from PySide2.QtWidgets import *
-from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication
+from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication, QDir
 from PySide2.QtGui import QFont, QPainter
 from PySide2.QtCharts import QtCharts
 
 import UI.rs_device_container_view as device_container
 import UI.companion_main_chart_view as main_chart
-
 
 # TODO: handle closing all windows when main window is closed
 class CompanionWindow(object):
@@ -59,6 +58,7 @@ class CompanionWindow(object):
         self.chart_scroll_bar.setOrientation(Qt.Horizontal)
         self.chart_scroll_bar.setMaximum(100)
         self.chart_scroll_bar.setMinimum(0)
+        self.chart_scroll_bar.setValue(100)
         self.exp_data_view_vert_layout.addWidget(self.main_chart_view)
         self.exp_data_view_vert_layout.addWidget(self.chart_scroll_bar)
         # End Experiment View Area generation code
@@ -126,18 +126,21 @@ class CompanionWindow(object):
         self.run_new_group_box.setObjectName("run_new_group_box")
         self.run_new_group_box_vert_layout = QVBoxLayout(self.run_new_group_box)
         self.run_new_group_box_vert_layout.setObjectName("run_new_group_box_vert_layout")
-        self.run_trial_push_button = QPushButton(self.run_new_group_box)
+        self.run_block_push_button = QPushButton(self.run_new_group_box)
         size_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
-        size_policy.setHeightForWidth(self.run_trial_push_button.sizePolicy().hasHeightForWidth())
-        self.run_trial_push_button.setSizePolicy(size_policy)
-        self.run_trial_push_button.setMinimumSize(QSize(0, 0))
-        self.run_trial_push_button.setObjectName("run_trial_push_button")
-        self.run_new_group_box_vert_layout.addWidget(self.run_trial_push_button)
-        self.new_block_push_button = QPushButton(self.run_new_group_box)
-        self.new_block_push_button.setObjectName("new_block_push_button")
-        self.run_new_group_box_vert_layout.addWidget(self.new_block_push_button)
+        size_policy.setHeightForWidth(self.run_block_push_button.sizePolicy().hasHeightForWidth())
+        self.run_block_push_button.setSizePolicy(size_policy)
+        self.run_block_push_button.setMinimumSize(QSize(0, 0))
+        self.run_block_push_button.setObjectName("run_block_push_button")
+        self.run_new_group_box_vert_layout.addWidget(self.run_block_push_button)
+        self.end_block_push_button = QPushButton(self.run_new_group_box)
+        self.end_block_push_button.setObjectName("end_block_push_button")
+        self.run_new_group_box_vert_layout.addWidget(self.end_block_push_button)
+        self.block_name_label = QLineEdit(self.run_new_group_box)
+        self.block_name_label.setPlaceholderText("Enter block name here")
+        self.run_new_group_box_vert_layout.addWidget(self.block_name_label)
         self.control_widget_horiz_layout.addWidget(self.run_new_group_box)
         # End Control Widget Run/New group box generation code
         ################################################################################################################
@@ -334,8 +337,8 @@ class CompanionWindow(object):
         ################################################################################################################
         # Begin Control Widget SetTitle code
         self.control_widget_dock.setWindowTitle(_translate("MainWindow", "Control"))
-        self.run_trial_push_button.setText(_translate("MainWindow", "Run\nTrial"))
-        self.new_block_push_button.setText(_translate("MainWindow", "New Block"))
+        self.run_block_push_button.setText(_translate("MainWindow", "Run\nBlock"))
+        self.end_block_push_button.setText(_translate("MainWindow", "End Block"))
         self.key_flag_group_box.setTitle(_translate("MainWindow", "Key Flag"))
         self.key_flag_label.setText(_translate("MainWindow", "NA"))
         self.block_note_group_box.setTitle(_translate("MainWindow", "Block Note"))
@@ -372,8 +375,8 @@ class CompanionWindow(object):
         self.append_exp_action.triggered.connect(self.__append_experiment_action_handler)
         self.about_rs_action.triggered.connect(self.__about_rs_action_handler)
         self.about_rs_companion_action.triggered.connect(self.__about_rs_companion_action_handler)
-        self.run_trial_push_button.clicked.connect(self.__run_trial_button_handler)
-        self.new_block_push_button.clicked.connect(self.__new_block_button_handler)
+        self.run_block_push_button.clicked.connect(self.__run_block_button_handler)
+        self.end_block_push_button.clicked.connect(self.__end_block_button_handler)
         self.post_push_button.clicked.connect(self.__post_button_handler)
         self.chart_scroll_bar.valueChanged.connect(self.__move_main_graph)
         self.msg_callback = msg_handler
@@ -428,10 +431,15 @@ class CompanionWindow(object):
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def __begin_experiment_action_handler(self):
-        # foreach device attached, go to its own dictionary and send it its own version of the command
-        # dictionary[begin_exp] = >begin_exp|<<
-        # ControllerSerial will handle the exact message for each kind of device
-        print("Begin Experiment Action triggered")
+        # Open file explorer and have user select a place to save a file
+        directory = QDir()
+        self.fname_to_save_to = QFileDialog.getSaveFileName(None, 'Open file', directory.homePath(), '*.txt')
+        if self.fname_to_save_to[0] != '':
+            #print("Begin Experiment Action triggered, have fname of:", self.fname_to_save_to[0])
+            file = open(self.fname_to_save_to[0], 'w')
+            # TODO: Update header
+            file.write("RS Companion App save file\n")
+            file.close()
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
@@ -463,26 +471,41 @@ class CompanionWindow(object):
         self.help_window.show()
 
     # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __run_trial_button_handler(self):
-        print("Run Trial Button Pressed")
+    # TODO: Fix this thing
+    def __run_block_button_handler(self):
+        print("Run Block Button Pressed")
+        msg_dict = {'type': "start exp"}
+        self.__write_to_file({'Block name': self.block_name_label.text() + "\n"})
+        self.msg_callback(msg_dict)
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
-    def __new_block_button_handler(self):
+    def __end_block_button_handler(self):
         print("New Block Button Pressed")
+        msg_dict = {'type': "stop exp"}
+        self.msg_callback(msg_dict)
 
     # TODO: Remove prints in this function after debugging
     # TODO: Make this function useful
     def __post_button_handler(self):
         print("Post Button Pressed")
-        self.main_chart.handle_msg("drt on COM5", 20)
+        self.main_chart.append_point("drt on COM5", (20, 5))
 
     def __move_main_graph(self):
         self.main_chart.scroll_graph(self.chart_scroll_bar.value())
 
+    def __write_to_file(self, msg_dict):
+        file = open(self.fname_to_save_to[0], 'a')
+        line = ""
+        for key in msg_dict:
+            line += str(key) + ":" + str(msg_dict[key]) + ", "
+        line = line[0:-2]
+        file.write(line)
+        file.close()
+
     # Passes message received to proper device display object
     def handle_msg(self, msg_dict):
+        # print("companion_main_window_view.CompanionWindow.handle_msg() got a msg")
         if msg_dict['type'] == "add":
             del msg_dict['type']
             self.add_rs_device_handler(msg_dict['device'])
@@ -490,18 +513,24 @@ class CompanionWindow(object):
             del msg_dict['type']
             self.remove_rs_device_handler(msg_dict['device'])
         elif msg_dict['type'] == "msg":
+            # print("companion_main_window_view.CompanionWindow.handle_msg msg is for", msg_dict['device'])
             del msg_dict['type']
             for device in self.__list_of_devices__:
                 if device == msg_dict['device']:
                     del msg_dict['device']
                     self.__list_of_devices__[device].handle_msg(msg_dict)
                     pass
+        elif msg_dict['type'] == "update":
+            del msg_dict['type']
+            self.__write_to_file(msg_dict)
+            self.main_chart.handle_msg(msg_dict)
 
     # Creates an RSDevice and adds it to the list of devices
     def add_rs_device_handler(self, device):
         if device not in self.__list_of_devices__:
             self.__list_of_devices__[device] = device_container.RSDevice(device, self.msg_callback,
                                                                          self.rs_devices_tab_widget)
+            self.main_chart.add_device(device)
 
     # Deletes an RSDevice and removes it from the list of devices
     def remove_rs_device_handler(self, device):
