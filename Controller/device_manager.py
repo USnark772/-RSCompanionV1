@@ -6,10 +6,10 @@ disconnect_event flags are turned True.
 
 import serial
 from serial.tools import list_ports
-import Serial.companion_defs as defs
+import Model.defs as defs
 
 
-class ControllerSerial:
+class DeviceManager:
     def __init__(self, msg_handler):
         # Global
         self.msg_callback = msg_handler
@@ -41,15 +41,13 @@ class ControllerSerial:
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         # print("companion_device_com_controller.ControllerSerial.update() have msg from a device")
-                        msg_dict = {'type': "msg", 'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
+                        msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
                         if self.devices[d]['id'] == "drt":
-                            # print("companion_device_com_controller.ControllerSerial.update() msg is from drt, parsing msg")
                             self.__parse_drt_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
                         elif self.devices[d]['id'] == "vog":
                             self.__parse_vog_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
                         else:
                             print("in companion_device_com.update(): couldn't match up device")
-                        # print("companion_device_com_controller.ControllerSerial.update() using msg_callback")
                         self.msg_callback(msg_dict)
                 except:
                     pass
@@ -70,28 +68,28 @@ class ControllerSerial:
                 elif msg_dict['device'][0] == "vog":
                     msg_to_send = self.__prepare_vog_msg(msg_dict)
                 self.__send_msg_on_port(port, msg_to_send)
-        elif msg_dict['type'] == "start exp":
-            print("companion_device_com_controller.ControllerSerial.handle_msg() starting exp")
-            self.__start_exp()
-        elif msg_dict['type'] == "stop exp":
-            print("companion_device_com_controller.ControllerSerial.handle_msg() ending exp")
-            self.__end_exp()
+        elif msg_dict['type'] == "start block":
+            # print("companion_device_com_controller.ControllerSerial.handle_msg() starting block")
+            self.__start_block()
+        elif msg_dict['type'] == "stop block":
+            # print("companion_device_com_controller.ControllerSerial.handle_msg() ending block")
+            self.__end_block()
         else:
             print("Unknown command")
 
-    def __start_exp(self):
+    def __start_block(self):
         for d in self.devices:
             if self.devices[d]['id'] == "drt":
                 self.__send_msg_on_port(self.devices[d]['port'], "exp_start\n")
             elif self.devices[d]['id'] == "vog":
-                print("Implement vog exp start")
+                print("Implement vog block start")
 
-    def __end_exp(self):
+    def __end_block(self):
         for d in self.devices:
             if self.devices[d]['id'] == "drt":
                 self.__send_msg_on_port(self.devices[d]['port'], "exp_stop\n")
             elif self.devices[d]['id'] == "vog":
-                print("Implement vog exp stop")
+                print("Implement vog block stop")
 
     def __scan_ports(self):
 
@@ -162,7 +160,7 @@ class ControllerSerial:
                 # Get relevant values from msg and insert into msg_dict
                 for i in range(0, len(defs.drt_config_fields)):
                     index = msg.find(defs.drt_config_fields[i] + ":")
-                    index_len = len(defs.drt_config_fields[i])+1
+                    index_len = len(defs.drt_config_fields[i]) + 1
                     val_len = msg.find(', ', index + index_len)
                     if val_len < 0:
                         val_len = None

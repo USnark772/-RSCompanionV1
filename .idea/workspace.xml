@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/UI/companion_controller.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/main_chart.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serial/TestGraphing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/TestGraphing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serial/companion_device_com_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/companion_device_com_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/companion_main_chart_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/companion_main_chart_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/companion_main_window_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/companion_main_window_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/drt_device_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/drt_device_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/rs_device_container_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/rs_device_container_view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/companion_device_com_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Serial/companion_device_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serial/example_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/example_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/companion_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/companion_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/companion_main_window_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/main_view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/drt_device_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/drt_view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/rs_device_container_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/companion_device.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,50 +19,53 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.49936143">
+    <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/UI/companion_main_chart_view.py">
+            <entry file="file://$PROJECT_DIR$/View/main_view.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1826">
-                  <caret line="91" selection-start-line="91" selection-end-line="91" />
+                <state relative-caret-position="616">
+                  <caret line="395" column="32" lean-forward="true" selection-start-line="395" selection-start-column="32" selection-end-line="395" selection-end-column="32" />
                   <folding>
                     <element signature="n#!!doc" />
-                    <element signature="e#1004#1049#0" />
+                    <element signature="e#713#19656#0" />
+                    <element signature="e#981#1013#0" />
+                    <element signature="e#1911#1947#0" />
+                    <element signature="e#3037#3079#0" />
+                    <element signature="e#4024#4059#0" />
+                    <element signature="e#5105#5134#0" />
+                    <element signature="e#6636#6672#0" />
+                    <element signature="e#8363#8417#0" />
+                    <element signature="e#9267#9306#0" />
+                    <element signature="e#10365#10407#0" />
+                    <element signature="e#15924#15969#0" />
+                    <element signature="e#19331#19365#0" />
+                    <element signature="e#19765#23385#0" />
+                    <element signature="e#19813#19925#0" />
+                    <element signature="e#20054#20166#0" />
+                    <element signature="e#21856#21883#0" />
+                    <element signature="e#23440#23724#0" />
+                    <element signature="e#23785#24466#0" />
+                    <element signature="e#23906#24433#0" />
+                    <element signature="e#24517#25275#0" />
+                    <element signature="e#24614#25242#0" />
+                    <element signature="e#25318#25377#0" />
+                    <element signature="e#26537#26827#0" />
+                    <element signature="e#26951#27097#0" />
+                    <element signature="e#27002#27097#0" />
+                    <element signature="e#27135#27402#0" />
+                    <element signature="e#27175#27402#0" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Serial/companion_defs.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="660">
-                  <caret line="30" selection-start-line="30" selection-end-line="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/UI/companion_main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="220">
-                  <caret line="10" column="51" selection-start-line="10" selection-start-column="51" selection-end-line="10" selection-end-column="51" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/UI/companion_main_window_view.py">
+            <entry file="file://$PROJECT_DIR$/Controller/controller.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="189">
-                  <caret line="454" column="60" selection-start-line="454" selection-start-column="60" selection-end-line="454" selection-end-column="60" />
-                  <folding>
-                    <element signature="n#!!doc" />
-                    <element signature="e#29600#29654#0" />
-                    <element signature="e#29732#29924#0" />
-                  </folding>
+                <state relative-caret-position="280">
+                  <caret line="168" column="36" lean-forward="true" selection-start-line="168" selection-start-column="36" selection-end-line="168" selection-end-column="36" />
                 </state>
               </provider>
             </entry>
@@ -68,25 +73,69 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Serial/companion_device_com_controller.py">
+        <leaf>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="844">
-                  <caret line="146" selection-start-line="146" selection-end-line="146" />
+                <state relative-caret-position="281">
+                  <caret line="116" column="26" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
                   <folding>
                     <element signature="e#0#248#1" />
-                    <element signature="e#408#703#0" />
+                    <element signature="e#394#689#0" />
+                    <element signature="e#722#2194#0" />
+                    <element signature="e#1033#2194#0" />
+                    <element signature="e#1088#2194#0" />
+                    <element signature="e#1113#2145#0" />
+                    <element signature="e#1180#2145#0" />
+                    <element signature="e#2240#3302#0" />
+                    <element signature="e#2283#2910#0" />
+                    <element signature="e#2377#2507#0" />
+                    <element signature="e#2549#2595#0" />
+                    <element signature="e#2630#2910#0" />
+                    <element signature="e#2969#3083#0" />
+                    <element signature="e#3141#3251#0" />
+                    <element signature="e#3339#3586#0" />
+                    <element signature="e#3374#3586#0" />
+                    <element signature="e#3621#3866#0" />
+                    <element signature="e#3656#3866#0" />
+                    <element signature="e#3905#4565#0" />
+                    <element signature="e#4058#4144#0" />
+                    <element signature="e#5862#6240#0" />
+                    <element signature="e#5907#6184#0" />
+                    <element signature="e#5966#6152#0" />
+                    <element signature="e#6315#6350#0" />
+                    <element signature="e#6415#6606#0" />
+                    <element signature="e#6674#8532#0" />
+                    <element signature="e#6709#7796#0" />
+                    <element signature="e#6836#7321#0" />
+                    <element signature="e#6976#7321#0" />
+                    <element signature="e#7356#7796#0" />
+                    <element signature="e#7511#7796#0" />
+                    <element signature="e#7619#7796#0" />
+                    <element signature="e#7842#8532#0" />
+                    <element signature="e#8076#8532#0" />
+                    <element signature="e#8383#8472#0" />
+                    <element signature="e#8619#8832#0" />
+                    <element signature="e#8925#8956#0" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/UI/drt_device_view.py">
+            <entry file="file://$PROJECT_DIR$/Model/defs.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1628">
-                  <caret line="81" column="31" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
+                <state relative-caret-position="390">
+                  <caret line="45" column="42" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/View/device.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="110">
+                  <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
                   <folding>
                     <element signature="n#!!doc" />
                   </folding>
@@ -94,15 +143,13 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/UI/rs_device_container_view.py">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/View/drt_view.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="132">
-                  <caret line="10" column="15" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+                <state relative-caret-position="289">
+                  <caret line="35" column="10" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
                   <folding>
                     <element signature="n#!!doc" />
-                    <element signature="e#585#826#0" />
-                    <element signature="e#880#1032#0" />
                   </folding>
                 </state>
               </provider>
@@ -121,22 +168,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>QBarSet</find>
-      <find>QPercentBarSeries</find>
-      <find>.chart.</find>
-      <find>horizontal</find>
-      <find>scrolling</find>
-      <find>Test</find>
-      <find>scroll</find>
-      <find>QtCore.</find>
-      <find>QtWidgets.</find>
       <find>got msg for</find>
       <find>run_block_push</find>
-      <find>print</find>
       <find>end_block_</find>
       <find>y</find>
       <find>self.range_y</find>
-      <find>end_block</find>
       <find>zero</find>
       <find>offset</find>
       <find>num_visible</find>
@@ -148,9 +184,20 @@
       <find>file</find>
       <find>s</find>
       <find>save</find>
-      <find>.write</find>
       <find>run_block</find>
       <find>QSlider(</find>
+      <find>.write</find>
+      <find>__</find>
+      <find>self</find>
+      <find>handlers</find>
+      <find>handlers.</find>
+      <find>begin_</find>
+      <find>self.fname_to_save_to</find>
+      <find>end_block</find>
+      <find>print</find>
+      <find>menu</find>
+      <find>todo:</find>
+      <find>trial_start_time</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -188,20 +235,34 @@
         <option value="$PROJECT_DIR$/UI/companion_view.py" />
         <option value="$PROJECT_DIR$/Serial/TestGraphing.py" />
         <option value="$PROJECT_DIR$/Serial/companion_defs.py" />
-        <option value="$PROJECT_DIR$/UI/companion_main.py" />
-        <option value="$PROJECT_DIR$/UI/rs_device_container_view.py" />
         <option value="$PROJECT_DIR$/Tests/TestGraphing.py" />
         <option value="$PROJECT_DIR$/Tests/TestMultiAxis.py" />
         <option value="$PROJECT_DIR$/UI/drt_device_view.py" />
-        <option value="$PROJECT_DIR$/UI/companion_main_window_view.py" />
-        <option value="$PROJECT_DIR$/UI/companion_main_chart_view.py" />
         <option value="$PROJECT_DIR$/Serial/companion_device_com_controller.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main_chart_view.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main_window_view.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main.py" />
+        <option value="$PROJECT_DIR$/UI/companion_controller.py" />
+        <option value="$PROJECT_DIR$/UI/rs_device_container_view.py" />
+        <option value="$PROJECT_DIR$/UI/companion_main_view.py" />
+        <option value="$PROJECT_DIR$/Serial/companion_device_manager.py" />
+        <option value="$PROJECT_DIR$/UI/drt_view.py" />
+        <option value="$PROJECT_DIR$/UI/main_chart.py" />
+        <option value="$PROJECT_DIR$/UI/main_view.py" />
+        <option value="$PROJECT_DIR$/UI/controller.py" />
+        <option value="$PROJECT_DIR$/Controller/handlers.py" />
+        <option value="$PROJECT_DIR$/View/main_chart.py" />
+        <option value="$PROJECT_DIR$/../sDRT/sDRT---UI-master/controller_root.py" />
+        <option value="$PROJECT_DIR$/Model/defs.py" />
+        <option value="$PROJECT_DIR$/Controller/device_manager.py" />
+        <option value="$PROJECT_DIR$/View/main_view.py" />
+        <option value="$PROJECT_DIR$/Controller/controller.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="192" />
-    <option name="y" value="126" />
+    <option name="x" value="1242" />
+    <option name="y" value="-11" />
     <option name="width" value="1158" />
     <option name="height" value="774" />
   </component>
@@ -210,7 +271,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -221,22 +281,23 @@
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Serial" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Tests" type="462c0819:PsiDirectoryNode" />
+              <item name="Model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="UI" type="462c0819:PsiDirectoryNode" />
+              <item name="View" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -248,6 +309,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Controller" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Model" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Tests" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\UI" />
     </key>
@@ -264,8 +328,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.companion_main">
-    <configuration name="TestGraphing" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -273,95 +337,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Serial" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/View" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Tests\TestGraphing.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestMultiAxis" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Tests/TestMultiAxis.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="VOG_Companion" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../Visual-Occlusion-Goggles" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../Visual-Occlusion-Goggles/VOG_Companion.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="companion_main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UI" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/UI/companion_main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="companion_main_chart_view" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UI" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/UI/companion_main_chart_view.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Controller\main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -372,11 +352,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.companion_main" />
-        <item itemvalue="Python.companion_main_chart_view" />
-        <item itemvalue="Python.TestMultiAxis" />
-        <item itemvalue="Python.TestGraphing" />
-        <item itemvalue="Python.VOG_Companion" />
+        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -404,7 +380,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="2575" height="1455" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.0740449" />
@@ -420,7 +395,7 @@
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39879155" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" weight="0.326284" />
+      <window_info active="true" anchor="bottom" id="TODO" order="11" visible="true" weight="0.326284" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -447,13 +422,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../TestPySide2/venv/Lib/site-packages/PySide2/scripts/uic.py" />
-    <entry file="file://$PROJECT_DIR$/../../TestPySide2/Main.py" />
-    <entry file="file://$PROJECT_DIR$/Serial/controller_serial.py" />
-    <entry file="file://$PROJECT_DIR$/Serial/serial_config.ini" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/builtins.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/PyQt5-stubs/QtWidgets.pyi" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PyQt5/QtWidgets/QLabel.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PyQt5/QtCore/QObject.py" />
     <entry file="file://$PROJECT_DIR$/TestEventHandling.py" />
     <entry file="file://$PROJECT_DIR$/JUSTMDI.py" />
@@ -462,7 +430,6 @@
     <entry file="file://$PROJECT_DIR$/WidgetMakers.py" />
     <entry file="file://$PROJECT_DIR$/RS_Companion_Window_Class_Old.py" />
     <entry file="file://$PROJECT_DIR$/Backup_RS_Companion_Window_Class.py" />
-    <entry file="file://$PROJECT_DIR$/UI/__init__.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1384526572/PySide2/QtCore/QMetaObject.py" />
     <entry file="file://$PROJECT_DIR$/UI/TEMP.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtCore/QObject.py" />
@@ -473,13 +440,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1342">
           <caret line="62" selection-start-line="62" selection-end-line="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Serial/example_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="44" column="45" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -516,7 +476,7 @@
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/PySide2/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tests/TestGraphing.py">
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/TestGraphing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="696">
           <caret line="42" column="46" lean-forward="true" selection-start-line="42" selection-start-column="46" selection-end-line="42" selection-end-column="46" />
@@ -526,7 +486,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tests/TestMultiAxis.py">
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/TestMultiAxis.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="858">
           <caret line="39" column="5" lean-forward="true" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
@@ -569,79 +529,242 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UI/companion_main_chart_view.py">
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/Detection_Response_Task.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1826">
-          <caret line="91" selection-start-line="91" selection-end-line="91" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#1004#1049#0" />
-          </folding>
+        <state relative-caret-position="88">
+          <caret line="4" column="15" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Serial/companion_defs.py">
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/controller_serial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        <state relative-caret-position="271">
+          <caret line="97" column="35" selection-start-line="97" selection-start-column="29" selection-end-line="97" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UI/companion_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="51" selection-start-line="10" selection-start-column="51" selection-end-line="10" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Serial/companion_device_com_controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="844">
-          <caret line="146" selection-start-line="146" selection-end-line="146" />
-          <folding>
-            <element signature="e#0#248#1" />
-            <element signature="e#408#703#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/drt_device_view.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1628">
-          <caret line="81" column="31" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/rs_device_container_view.py">
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
-          <caret line="10" column="15" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+          <caret line="6" column="47" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
           <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#290#1697#0" />
-            <element signature="e#355#1135#0" />
-            <element signature="e#585#826#0" />
-            <element signature="e#880#1032#0" />
-            <element signature="e#1195#1328#0" />
-            <element signature="e#1369#1406#0" />
-            <element signature="e#1443#1548#0" />
-            <element signature="e#1592#1697#0" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UI/companion_main_window_view.py">
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/view_about.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="454" column="60" selection-start-line="454" selection-start-column="60" selection-end-line="454" selection-end-column="60" />
+        <state relative-caret-position="132">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/view_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/view_info.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="17" lean-forward="true" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/view_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/model_constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/model_variables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/example_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
           <folding>
             <element signature="n#!!doc" />
-            <element signature="e#29600#29654#0" />
-            <element signature="e#29732#29924#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/handlers.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/genericpath.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/main_chart.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+          <folding>
+            <element signature="n#!!doc" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/main_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="395" column="32" lean-forward="true" selection-start-line="395" selection-start-column="32" selection-end-line="395" selection-end-column="32" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#713#19656#0" />
+            <element signature="e#981#1013#0" />
+            <element signature="e#1911#1947#0" />
+            <element signature="e#3037#3079#0" />
+            <element signature="e#4024#4059#0" />
+            <element signature="e#5105#5134#0" />
+            <element signature="e#6636#6672#0" />
+            <element signature="e#8363#8417#0" />
+            <element signature="e#9267#9306#0" />
+            <element signature="e#10365#10407#0" />
+            <element signature="e#15924#15969#0" />
+            <element signature="e#19331#19365#0" />
+            <element signature="e#19765#23385#0" />
+            <element signature="e#19813#19925#0" />
+            <element signature="e#20054#20166#0" />
+            <element signature="e#21856#21883#0" />
+            <element signature="e#23440#23724#0" />
+            <element signature="e#23785#24466#0" />
+            <element signature="e#23906#24433#0" />
+            <element signature="e#24517#25275#0" />
+            <element signature="e#24614#25242#0" />
+            <element signature="e#25318#25377#0" />
+            <element signature="e#26537#26827#0" />
+            <element signature="e#26951#27097#0" />
+            <element signature="e#27002#27097#0" />
+            <element signature="e#27135#27402#0" />
+            <element signature="e#27175#27402#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/defs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="45" column="42" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="116" column="26" selection-start-line="116" selection-start-column="26" selection-end-line="116" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#248#1" />
+            <element signature="e#394#689#0" />
+            <element signature="e#722#2194#0" />
+            <element signature="e#1033#2194#0" />
+            <element signature="e#1088#2194#0" />
+            <element signature="e#1113#2145#0" />
+            <element signature="e#1180#2145#0" />
+            <element signature="e#2240#3302#0" />
+            <element signature="e#2283#2910#0" />
+            <element signature="e#2377#2507#0" />
+            <element signature="e#2549#2595#0" />
+            <element signature="e#2630#2910#0" />
+            <element signature="e#2969#3083#0" />
+            <element signature="e#3141#3251#0" />
+            <element signature="e#3339#3586#0" />
+            <element signature="e#3374#3586#0" />
+            <element signature="e#3621#3866#0" />
+            <element signature="e#3656#3866#0" />
+            <element signature="e#3905#4565#0" />
+            <element signature="e#4058#4144#0" />
+            <element signature="e#5862#6240#0" />
+            <element signature="e#5907#6184#0" />
+            <element signature="e#5966#6152#0" />
+            <element signature="e#6315#6350#0" />
+            <element signature="e#6415#6606#0" />
+            <element signature="e#6674#8532#0" />
+            <element signature="e#6709#7796#0" />
+            <element signature="e#6836#7321#0" />
+            <element signature="e#6976#7321#0" />
+            <element signature="e#7356#7796#0" />
+            <element signature="e#7511#7796#0" />
+            <element signature="e#7619#7796#0" />
+            <element signature="e#7842#8532#0" />
+            <element signature="e#8076#8532#0" />
+            <element signature="e#8383#8472#0" />
+            <element signature="e#8619#8832#0" />
+            <element signature="e#8925#8956#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/device.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+          <folding>
+            <element signature="n#!!doc" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/drt_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="35" column="10" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
+          <folding>
+            <element signature="n#!!doc" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sDRT/sDRT---UI-master/controller_root.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="9" lean-forward="true" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="168" column="36" lean-forward="true" selection-start-line="168" selection-start-column="36" selection-end-line="168" selection-end-column="36" />
         </state>
       </provider>
     </entry>

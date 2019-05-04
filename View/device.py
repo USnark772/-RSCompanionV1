@@ -4,7 +4,7 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import UI.drt_device_view as DRT
+import View.drt_view as DRT
 
 
 # TODO: Make different subwindows etc. for each type of device and then build based on device type
@@ -14,13 +14,14 @@ class RSDevice:
         self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.tab_parent = tab_parent
         self.msg_callback = msg_callback
+
         if self.device_id[0] == "drt":
-            print("handling display for a drt device")
             self.configure_widget = DRT.ConfigureWidget(self.device_name, self.callback)
             self.device_tab = DRT.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
+
         elif self.device_id[0] == "vog":
-            print("handling display for a vog device")
             self.device_tab = DRT.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
+
         self.tab_parent.setUpdatesEnabled(False)
         index = self.tab_parent.addTab(self.device_tab, "")
         self.tab_parent.setUpdatesEnabled(True)

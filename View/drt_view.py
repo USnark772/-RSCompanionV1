@@ -7,7 +7,7 @@
 from PySide2.QtWidgets import *
 from PySide2.QtCore import QRect, QCoreApplication, QSize, Qt
 from PySide2.QtCharts import QtCharts
-import Serial.companion_defs as defs
+import Model.defs as defs
 
 
 class Tab(QWidget):

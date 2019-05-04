@@ -5,21 +5,18 @@
 # https://redscientific.com/index.html
 
 from PySide2.QtWidgets import *
-from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication, QDir
+from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication
 from PySide2.QtGui import QFont, QPainter
 from PySide2.QtCharts import QtCharts
 
-import UI.rs_device_container_view as device_container
-import UI.companion_main_chart_view as main_chart
+import View.device as device_container
+import View.main_chart as main_chart
+
 
 # TODO: handle closing all windows when main window is closed
 class CompanionWindow(object):
-    # Class level globals to keep track of the different devices for Device Box and Device SubWindow purposes
+    # To keep track of which device is which for data display purposes
     __list_of_devices__ = {}
-
-    ################################################################################################################
-    # Begin auto-generated code
-    ################################################################################################################
 
     # Auto generated code slightly altered for readability
     def __init__(self, main_window, msg_handler):
@@ -252,6 +249,10 @@ class CompanionWindow(object):
         # Begin MenuBar item generation code
         self.begin_exp_action = QAction(main_window)
         self.begin_exp_action.setObjectName("begin_exp_action")
+        self.save_action = QAction(main_window)
+        self.save_action.setObjectName("save_action")
+        self.save_as_action = QAction(main_window)
+        self.save_as_action.setObjectName("save_as_action")
         self.com_messages_action = QAction(main_window)
         self.com_messages_action.setCheckable(True)
         self.com_messages_action.setObjectName("com_messages_action")
@@ -282,6 +283,8 @@ class CompanionWindow(object):
         self.file_menu.addSeparator()
         self.file_menu.addAction(self.append_exp_action)
         self.file_menu.addSeparator()
+        self.file_menu.addAction(self.save_action)
+        self.file_menu.addAction(self.save_as_action)
         self.file_menu.addAction(self.open_file_action)
         self.window_menu.addAction(self.trial_controls_action)
         self.window_menu.addAction(self.com_messages_action)
@@ -332,7 +335,9 @@ class CompanionWindow(object):
         self.output_action.setText(_translate("MainWindow", "Output"))
         self.input_action.setText(_translate("MainWindow", "Input"))
         self.append_exp_action.setText(_translate("MainWindow", "Append Experiment"))
-        self.open_file_action.setText(_translate("MainWindow", "Open File  Folder"))
+        self.open_file_action.setText(_translate("MainWindow", "Open"))
+        self.save_action.setText(_translate("MainWindow", "Save"))
+        self.save_as_action.setText(_translate("MainWindow", "Save As"))
         # End MenuBar SetTitle code
         ################################################################################################################
         # Begin Control Widget SetTitle code
@@ -355,102 +360,15 @@ class CompanionWindow(object):
         self.block_time_val_label.setText(_translate("MainWindow", "NA"))
         # End Control Widget SetTitle code
 
-    ################################################################################################################
-    # End auto-generated code
-    ################################################################################################################
-
-    # TODO: Get buttons working (need to know what they should each do)
-    # Assign buttons to functions
     def __setup_handlers(self, msg_handler):
-        self.trial_controls_action.triggered.connect(self.__trial_controls_action_handler)
-        self.input_action.triggered.connect(self.__input_action_handler)
-        self.output_action.triggered.connect(self.__output_action_handler)
-        self.open_file_action.triggered.connect(self.__open_action_handler)
-        self.end_exp_action.triggered.connect(self.__end_experiment_action_handler)
-        self.display_tool_tips_action.triggered.connect(self.__display_tooltips_action_handler)
-        self.configure_action.triggered.connect(self.__configure_action_handler)
-        self.com_port_action.triggered.connect(self.__com_port_action_handler)
-        self.com_messages_action.triggered.connect(self.__com_messages_action_handler)
-        self.begin_exp_action.triggered.connect(self.__begin_experiment_action_handler)
-        self.append_exp_action.triggered.connect(self.__append_experiment_action_handler)
+        self.chart_scroll_bar.valueChanged.connect(self.__move_main_graph)
         self.about_rs_action.triggered.connect(self.__about_rs_action_handler)
         self.about_rs_companion_action.triggered.connect(self.__about_rs_companion_action_handler)
-        self.run_block_push_button.clicked.connect(self.__run_block_button_handler)
-        self.end_block_push_button.clicked.connect(self.__end_block_button_handler)
-        self.post_push_button.clicked.connect(self.__post_button_handler)
-        self.chart_scroll_bar.valueChanged.connect(self.__move_main_graph)
         self.msg_callback = msg_handler
 
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __trial_controls_action_handler(self):
-        print("Trial Controls Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __input_action_handler(self):
-        print("Input Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __output_action_handler(self):
-        print("Output Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    # Allows user to select a file through file explorer and opens it
-    def __open_action_handler(self):
-        fname = QFileDialog.getOpenFileName(None, 'Open file',
-                                                      'c:\\')
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __end_experiment_action_handler(self):
-        print("End Experiment Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __display_tooltips_action_handler(self):
-        print("Display Tooltips Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __configure_action_handler(self):
-        print("Configure Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __com_port_action_handler(self):
-        print("COM Port Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __com_messages_action_handler(self):
-        print("COM Messages Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __begin_experiment_action_handler(self):
-        # Open file explorer and have user select a place to save a file
-        directory = QDir()
-        self.fname_to_save_to = QFileDialog.getSaveFileName(None, 'Open file', directory.homePath(), '*.txt')
-        if self.fname_to_save_to[0] != '':
-            #print("Begin Experiment Action triggered, have fname of:", self.fname_to_save_to[0])
-            file = open(self.fname_to_save_to[0], 'w')
-            # TODO: Update header
-            file.write("RS Companion App save file\n")
-            file.close()
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __append_experiment_action_handler(self):
-        print("Append Experiment Action triggered")
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
     def __about_rs_companion_action_handler(self):
         print("About RS Companion Action triggered")
-        self.help_window = MessageWindow("About Red Scientific Companion App", "CHANGEME The RS Companion App was "
+        self.help_window = HelpWindow("About Red Scientific Companion App", "CHANGEME The RS Companion App was "
                                                            "designed by "
                                                            "Joel Cooper and brought to life by Phillip Riskin. "
                                                            "It has many functionalities that you might not be "
@@ -458,50 +376,18 @@ class CompanionWindow(object):
                                                            "going on! Have fun :)")
         self.help_window.show()
 
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
     def __about_rs_action_handler(self):
         print("About RS Action triggered")
-        self.help_window = MessageWindow("About Red Scientific", "CHANGEME Red Scientific is an awesome company that will do "
+        self.help_window = HelpWindow("About Red Scientific", "CHANGEME Red Scientific is an awesome company that will do "
                                                               "great things in the years to come and keep Phillip "
                                                               "really happy by paying him lots of money because "
                                                               "RS is rich from selling all those awesome devices "
-                                                              "which are made even awesomer by the UI that Phillip "
+                                                              "which are made even awesomer by the View that Phillip "
                                                               "was instrumental in making work. boom.")
         self.help_window.show()
 
-    # TODO: Remove prints in this function after debugging
-    # TODO: Fix this thing
-    def __run_block_button_handler(self):
-        print("Run Block Button Pressed")
-        msg_dict = {'type': "start exp"}
-        self.__write_to_file({'Block name': self.block_name_label.text() + "\n"})
-        self.msg_callback(msg_dict)
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __end_block_button_handler(self):
-        print("New Block Button Pressed")
-        msg_dict = {'type': "stop exp"}
-        self.msg_callback(msg_dict)
-
-    # TODO: Remove prints in this function after debugging
-    # TODO: Make this function useful
-    def __post_button_handler(self):
-        print("Post Button Pressed")
-        self.main_chart.append_point("drt on COM5", (20, 5))
-
     def __move_main_graph(self):
         self.main_chart.scroll_graph(self.chart_scroll_bar.value())
-
-    def __write_to_file(self, msg_dict):
-        file = open(self.fname_to_save_to[0], 'a')
-        line = ""
-        for key in msg_dict:
-            line += str(key) + ":" + str(msg_dict[key]) + ", "
-        line = line[0:-2]
-        file.write(line)
-        file.close()
 
     # Passes message received to proper device display object
     def handle_msg(self, msg_dict):
@@ -539,7 +425,7 @@ class CompanionWindow(object):
             del self.__list_of_devices__[device]
 
 
-class MessageWindow(QMessageBox):
+class HelpWindow(QMessageBox):
     def __init__(self, name, text):
         super().__init__()
         self.setWindowTitle(name)

@@ -28,3 +28,33 @@ drt_stim_dur_min = 0
 
 drt_ISI_max = 10000
 drt_ISI_min = 0
+
+'''
+for internal storage:
+drt dict keys
+device name or type, probe timestamp, time from block start, probe iteration, reaction time, key flag at start, key flag time
+
+vog dict keys
+device name or type, setup name, open time, close time, debounce, button mode, total open time, total close time
+'''
+
+'''
+dict should look like
+exp_data
+    exp_number entry
+        block_number entry
+            device_entry (drt for example)
+            device_entry
+            etc.
+        block_number entry
+            device_entry
+            etc.
+    exp_number entry
+        block_number entry
+            device_entry
+            device_entry
+            etc.
+        block_number entry
+            device_entry
+            etc.
+'''

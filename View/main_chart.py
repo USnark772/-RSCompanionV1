@@ -8,6 +8,8 @@ from PySide2.QtCharts import QtCharts
 from PySide2.QtCore import Qt
 
 # TODO: Each device draws lines back to start when running multiple blocks
+# TODO: Make user able to choose graphing type (Bar, line, etc.)
+# TODO: update graph without needing a device plugged in
 class MainChartWidget(QtCharts.QChart):
     def __init__(self):
         super().__init__()
@@ -66,7 +68,7 @@ class MainChartWidget(QtCharts.QChart):
             self.setAxisX(temp_axis_x, self.lines[line])
             self.setAxisY(temp_axis_y, self.lines[line])
 
-    def append_point(self, device, point):
+    def __append_point(self, device, point):
         print("companion_main_chart_view.MainChartWidget.__append_point() point = ",
               int(point[0]), int(point[1]))
         self.lines[device].append(int(point[0]), int(point[1]))
@@ -88,7 +90,7 @@ class MainChartWidget(QtCharts.QChart):
     def handle_msg(self, msg_dict):
         # TODO: Handle msg better
         name = msg_dict['device'][0] + " on " + msg_dict['device'][1]
-        self.append_point(name, (msg_dict['trial'], msg_dict['rt']))
+        self.__append_point(name, (msg_dict['trial'], msg_dict['rt']))
 
     def add_device(self, device):
         name = device[0] + " on " + device[1]
