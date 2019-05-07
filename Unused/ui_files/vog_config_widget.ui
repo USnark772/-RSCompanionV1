@@ -16,24 +16,222 @@
   <widget class="QGraphicsView" name="settings_graphics_view_2">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>20</y>
-     <width>256</width>
-     <height>192</height>
+     <x>75</x>
+     <y>10</y>
+     <width>301</width>
+     <height>171</height>
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="set_current_push_button">
+  <widget class="QSlider" name="debounce_time_slider">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>230</y>
-     <width>71</width>
-     <height>41</height>
+     <y>30</y>
+     <width>16</width>
+     <height>160</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>100</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="debounce_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>61</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Upload settings</string>
+    <string>Debounce Time</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="upper_isi_label_2">
+   <property name="geometry">
+    <rect>
+     <x>304</x>
+     <y>227</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Opened State Duration</string>
+   </property>
+  </widget>
+  <widget class="QSlider" name="max_open_slider">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>230</y>
+     <width>160</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="upper_isi_label_3">
+   <property name="geometry">
+    <rect>
+     <x>304</x>
+     <y>257</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Closed State Duration</string>
+   </property>
+  </widget>
+  <widget class="QSlider" name="max_closed_slider">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>260</y>
+     <width>160</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="eblind_default_push_button_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>200</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>NHTSA Default</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="iso_default_push_button_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>230</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>eBlindfold</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="dir_control_default_push_button_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>260</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Direct Control</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="config_label">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>190</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Configuration:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="config_val_label">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>190</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>--Direct Control--</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="button_mode_combo_box">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>190</y>
+     <width>53</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="editable">
+    <bool>false</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>Click</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Hold</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="debounce_label_2">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>190</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Button Mode</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>230</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>INF</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_2">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>260</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>INF</string>
    </property>
   </widget>
  </widget>

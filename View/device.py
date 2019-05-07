@@ -5,7 +5,7 @@
 # https://redscientific.com/index.html
 
 import View.drt_view as DRT
-
+import View.vog_view as VOG
 
 # TODO: Make different subwindows etc. for each type of device and then build based on device type
 class RSDevice:
@@ -20,7 +20,8 @@ class RSDevice:
             self.device_tab = DRT.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
 
         elif self.device_id[0] == "vog":
-            self.device_tab = DRT.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
+            self.configure_widget = VOG.ConfigureWidget(self.device_name, self.callback)
+            self.device_tab = VOG.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
 
         self.tab_parent.setUpdatesEnabled(False)
         index = self.tab_parent.addTab(self.device_tab, "")
@@ -34,6 +35,7 @@ class RSDevice:
             self.configure_widget.show()
 
     def handle_msg(self, msg):
+        # print("device.handle_msg()")
         self.configure_widget.handle_msg(msg)
 
     def remove_self(self):

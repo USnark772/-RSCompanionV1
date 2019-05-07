@@ -4,7 +4,8 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from PySide2.QtWidgets import *
+from PySide2.QtWidgets import QSizePolicy, QLabel, QPushButton, QSlider, QWidget, QScrollArea, QGroupBox, \
+    QHBoxLayout, QVBoxLayout, QToolButton
 from PySide2.QtCore import QRect, QCoreApplication, QSize, Qt
 from PySide2.QtCharts import QtCharts
 import Model.defs as defs
@@ -17,7 +18,6 @@ class Tab(QWidget):
         self.msg_callback = msg_callback
         self.configure_widget_button = settings_widget_button
         self.device_name = self.device_id[0] + " on " + self.device_id[1]
-        self.zero_line = QtCharts.QLineSeries
         self.setObjectName(self.device_name)
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setGeometry(QRect(0, 0, 201, 521))
@@ -63,7 +63,6 @@ class Tab(QWidget):
         self.push_button_2.setText(_translate("MainWindow", "CHANGEME PushButton"))
 
         self.tool_button.setText(_translate("MainWindow", "Configure device"))
-
 
     def __setup_button_handlers(self):
         self.tool_button.clicked.connect(self.__setup_push_button_handler)
@@ -118,25 +117,19 @@ class ConfigureWidget(QWidget):
         self.intensity_slider = QSlider(self)
         self.intensity_slider.setGeometry(QRect(85, 40, 16, 160))
         self.intensity_slider.setOrientation(Qt.Vertical)
-        #self.intensity_slider.setPageStep(1)
         self.intensity_slider.setObjectName("intensity_slider")
         self.upper_isi_slider = QSlider(self)
         self.upper_isi_slider.setGeometry(QRect(180, 220, 160, 16))
         self.upper_isi_slider.setOrientation(Qt.Horizontal)
-        #self.upper_isi_slider.setPageStep(1)
         self.upper_isi_slider.setObjectName("upper_isi_slider")
         self.lower_isi_slider = QSlider(self)
         self.lower_isi_slider.setGeometry(QRect(180, 240, 160, 16))
         self.lower_isi_slider.setOrientation(Qt.Horizontal)
-        #self.lower_isi_slider.setPageStep(1)
         self.lower_isi_slider.setObjectName("lower_isi_slider")
         self.stim_dur_slider = QSlider(self)
         self.stim_dur_slider.setGeometry(QRect(25, 40, 16, 160))
         self.stim_dur_slider.setOrientation(Qt.Vertical)
-        #self.stim_dur_slider.setPageStep(1)
         self.stim_dur_slider.setObjectName("stim_dur_slider")
-
-
         self.stim_intensity_label = QLabel(self)
         self.stim_intensity_label.setGeometry(QRect(65, 20, 51, 16))
         self.stim_intensity_label.setObjectName("stim_intensity_label")
@@ -151,14 +144,10 @@ class ConfigureWidget(QWidget):
         self.__get_vals()
 
     def __set_slider_ranges(self):
-        self.intensity_slider.setMinimum(defs.drt_intensity_min)
-        self.intensity_slider.setMaximum(defs.drt_intensity_max)
-        self.upper_isi_slider.setMinimum(defs.drt_ISI_min)
-        self.upper_isi_slider.setMaximum(defs.drt_ISI_max)
-        self.lower_isi_slider.setMinimum(defs.drt_ISI_min)
-        self.lower_isi_slider.setMaximum(defs.drt_ISI_max)
-        self.stim_dur_slider.setMaximum(defs.drt_stim_dur_max)
-        self.stim_dur_slider.setMinimum(defs.drt_stim_dur_min)
+        self.intensity_slider.setRange(defs.drt_intensity_min, defs.drt_intensity_max)
+        self.upper_isi_slider.setRange(defs.drt_ISI_min, defs.drt_ISI_max)
+        self.lower_isi_slider.setRange(defs.drt_ISI_min, defs.drt_ISI_max)
+        self.stim_dur_slider.setRange(defs.drt_stim_dur_min, defs.drt_stim_dur_max)
 
     def __set_texts(self):
         _translate = QCoreApplication.translate
@@ -173,29 +162,31 @@ class ConfigureWidget(QWidget):
     def __set_handlers(self):
         self.upload_settings_push_button.clicked.connect(self.__update_button_handler)
         self.iso_default_push_button.clicked.connect(self.__iso_button_handler)
-        self.lower_isi_slider.valueChanged.connect(self.__lower_isi_slider_handler)
+        self.lower_isi_slider.sliderReleased.connect(self.__lower_isi_slider_handler)
         self.upper_isi_slider.valueChanged.connect(self.__upper_isi_slider_handler)
         self.stim_dur_slider.valueChanged.connect(self.__stim_dur_slider_handler)
-        self.intensity_slider.valueChanged.connect(self.__intensity_slider_handler)
+        self.intensity_slider.sliderReleased.connect(self.__intensity_slider_handler)
 
     def __get_vals(self):
         msg_dict = {'cmd': "get_config"}
         self.msg_callback(msg_dict)
 
     def __set_val(self, var, val):
-        print("drt_device_view.ConfigureWidget.__set_val")
+        # print("drt_device_view.ConfigureWidget.__set_val")
         self.values[var].setValue(int(val))
 
     def __stim_dur_slider_handler(self):
-        pass
+        print("__stim_dur_slider changed")
 
     def __intensity_slider_handler(self):
-        pass
+        print("__intensity_slider changed")
 
     def __lower_isi_slider_handler(self):
+        print("__lower_isi_slider changed")
         self.__push_upper_isi_slider()
 
     def __upper_isi_slider_handler(self):
+        print("__upper_isi_slider changed")
         self.__push_lower_isi_slider()
 
     def __push_upper_isi_slider(self):
@@ -213,41 +204,49 @@ class ConfigureWidget(QWidget):
         self.__set_stim_duration_handler()
 
     def __iso_button_handler(self):
-        print("ISO default button pressed")
+        self.__set_val('upperISI', 5000)
+        self.__set_val('lowerISI', 3000)
+        self.__set_val('stimDur', 1000)
+        self.__set_val('intensity', 255)
+        self.__set_intensity_handler()
+        self.__set_upper_isi_handler()
+        self.__set_lower_isi_handler()
+        self.__set_stim_duration_handler()
 
     def __set_intensity_handler(self):
-        print("drt_device_view.ConfigureWidget.__set_intensity_handler")
+        # print("drt_device_view.ConfigureWidget.__set_intensity_handler")
         value = self.intensity_slider.value()
         msg_dict = {'cmd': "set_intensity",
                     'arg': str(value)}
         self.msg_callback(msg_dict)
 
     def __set_upper_isi_handler(self):
-        print("drt_device_view.ConfigureWidget.__set_upper_isi_handler")
+        # print("drt_device_view.ConfigureWidget.__set_upper_isi_handler")
         value = self.upper_isi_slider.value()
         msg_dict = {'cmd': "set_upperISI",
                     'arg': str(value)}
         self.msg_callback(msg_dict)
 
     def __set_lower_isi_handler(self):
-        print("drt_device_view.ConfigureWidget.__set_lower_isi_handler")
+        # print("drt_device_view.ConfigureWidget.__set_lower_isi_handler")
         value = self.lower_isi_slider.value()
         msg_dict = {'cmd': "set_lowerISI",
                     'arg': str(value)}
         self.msg_callback(msg_dict)
 
     def __set_stim_duration_handler(self):
-        print("drt_device_view.ConfigureWidget.__set_stim_dur_handler")
+        # print("drt_device_view.ConfigureWidget.__set_stim_dur_handler")
         value = self.stim_dur_slider.value()
         msg_dict = {'cmd': "set_stimDur",
                     'arg': str(value)}
         self.msg_callback(msg_dict)
 
     def handle_msg(self, msg_dict):
-        print("drt_device_view.ConfigureWidget.handle_msg")
+        # print("drt_device_view.ConfigureWidget.handle_msg")
         for item in msg_dict:
-            print(item, msg_dict[item])
+            # print(item, msg_dict[item])
             self.__set_val(item, msg_dict[item])
+
 
 # TODO: Create graphic for drt config window
 class ConfigChart(QtCharts.QChart):

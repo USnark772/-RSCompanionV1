@@ -19,6 +19,7 @@ devices = {'drt': {'probe': "get_name\n\r",
 
 drt_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drt_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
+drt_ui_fields = ['Mills from block start', 'probe #', 'clicks', 'response time']
 
 drt_intensity_max = 255
 drt_intensity_min = 0
@@ -29,32 +30,12 @@ drt_stim_dur_min = 0
 drt_ISI_max = 10000
 drt_ISI_min = 0
 
-'''
-for internal storage:
-drt dict keys
-device name or type, probe timestamp, time from block start, probe iteration, reaction time, key flag at start, key flag time
+vog_config_fields = []
+vog_block_field = ['trialCounter', 'millis_openElapsed', 'millis_closeElapsed']
+vog_ui_fields = ['block #', 'Total millis open', 'Total millis closed']
 
-vog dict keys
-device name or type, setup name, open time, close time, debounce, button mode, total open time, total close time
-'''
+vog_max_open_close = 10000
+vog_min_open_close = 0
 
-'''
-dict should look like
-exp_data
-    exp_number entry
-        block_number entry
-            device_entry (drt for example)
-            device_entry
-            etc.
-        block_number entry
-            device_entry
-            etc.
-    exp_number entry
-        block_number entry
-            device_entry
-            device_entry
-            etc.
-        block_number entry
-            device_entry
-            etc.
-'''
+vog_debounce_max = 100
+vog_debounce_min = 0

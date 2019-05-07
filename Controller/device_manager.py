@@ -40,7 +40,6 @@ class DeviceManager:
             if self.devices[d]['id'] != 'unknown':
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
-                        # print("companion_device_com_controller.ControllerSerial.update() have msg from a device")
                         msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
                         if self.devices[d]['id'] == "drt":
                             self.__parse_drt_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
@@ -69,27 +68,39 @@ class DeviceManager:
                     msg_to_send = self.__prepare_vog_msg(msg_dict)
                 self.__send_msg_on_port(port, msg_to_send)
         elif msg_dict['type'] == "start block":
-            # print("companion_device_com_controller.ControllerSerial.handle_msg() starting block")
             self.__start_block()
         elif msg_dict['type'] == "stop block":
-            # print("companion_device_com_controller.ControllerSerial.handle_msg() ending block")
             self.__end_block()
+        elif msg_dict['type'] == "start exp":
+            self.__start_exp()
+        elif msg_dict['type'] == "stop exp":
+            self.__end_exp()
         else:
             print("Unknown command")
+
+    def __start_exp(self):
+        for d in self.devices:
+            if self.devices[d]['id'] == "vog":
+                self.__send_msg_on_port(self.devices[d]['port'], ">do_expStart|<<")
+
+    def __end_exp(self):
+        for d in self.devices:
+            if self.devices[d]['id'] == "vog":
+                self.__send_msg_on_port(self.devices[d]['port'], ">do_expStop|<<")
 
     def __start_block(self):
         for d in self.devices:
             if self.devices[d]['id'] == "drt":
                 self.__send_msg_on_port(self.devices[d]['port'], "exp_start\n")
             elif self.devices[d]['id'] == "vog":
-                print("Implement vog block start")
+                self.__send_msg_on_port(self.devices[d]['port'], ">do_trialStart|<<")
 
     def __end_block(self):
         for d in self.devices:
             if self.devices[d]['id'] == "drt":
                 self.__send_msg_on_port(self.devices[d]['port'], "exp_stop\n")
             elif self.devices[d]['id'] == "vog":
-                print("Implement vog block stop")
+                self.__send_msg_on_port(self.devices[d]['port'], ">do_trialStop|<<")
 
     def __scan_ports(self):
 
@@ -154,7 +165,7 @@ class DeviceManager:
     @staticmethod
     def __parse_drt_msg(msg, msg_dict):
         if msg[0:4] == "cfg>":
-            msg_dict['type'] = "msg"
+            msg_dict['type'] = "settings"
             # Check if this is a response to get_config
             if len(msg) > 90:
                 # Get relevant values from msg and insert into msg_dict
@@ -174,8 +185,7 @@ class DeviceManager:
                         val_ind = index + index_len + 1
                         msg_dict[msg[index:index + index_len]] = msg[val_ind:]
         elif msg[0:4] == "trl>":
-            # print("companion_device_com_controller.ControllerSerial.__parse_drt_msg() msg is trl")
-            msg_dict['type'] = "update"
+            msg_dict['type'] = "data"
             val_ind_start = 4
             for i in range(0, len(defs.drt_trial_fields)):
                 val_ind_end = msg.find(', ', val_ind_start + 1)
@@ -184,8 +194,6 @@ class DeviceManager:
                 msg_dict[defs.drt_trial_fields[i]] = msg[val_ind_start:val_ind_end]
                 if val_ind_end:
                     val_ind_start = val_ind_end + 2
-                # print("companion_device_com_controller.ControllerSerial.__parse_drt_msg() just added ",
-                      # msg_dict[defs.drt_trial_fields[i]])
 
     # TODO: test this
     @staticmethod
@@ -199,4 +207,26 @@ class DeviceManager:
     # TODO: Fill this in
     @staticmethod
     def __parse_vog_msg(msg, msg_dict):
-        print("Got message from a vog")
+        if msg[0:5] == "data|":
+            msg_dict['type'] = "data"
+            val_ind_start = 5
+            for i in range(len(defs.vog_block_field)):
+                val_ind_end = msg.find(',', val_ind_start + 1)
+                if val_ind_end < 0:
+                    val_ind_end = None
+                msg_dict[defs.vog_block_field[i]] = msg[val_ind_start:val_ind_end]
+                if val_ind_end:
+                    val_ind_start = val_ind_end + 1
+        elif msg[0:6] == "config":
+            msg_dict['type'] = "settings"
+            bar_ind = msg.find('|', 6)
+            if msg[6:bar_ind] == "Name":
+                msg_dict['Name'] = msg[bar_ind + 1: len(msg)]
+            elif msg[6:bar_ind] == "MaxOpen":
+                msg_dict['MaxOpen'] = msg[bar_ind + 1: len(msg)]
+            elif msg[6:bar_ind] == "MaxClose":
+                msg_dict['MaxClose'] = msg[bar_ind + 1: len(msg)]
+            elif msg[6:bar_ind] == "Debounce":
+                msg_dict['Debounce'] = msg[bar_ind + 1: len(msg)]
+            elif msg[6:bar_ind] == "ClickMode":
+                msg_dict['ClickMode'] = msg[bar_ind + 1: len(msg)]

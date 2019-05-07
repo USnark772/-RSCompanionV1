@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1025</width>
-    <height>753</height>
+    <width>1045</width>
+    <height>671</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -53,7 +53,7 @@
          <attribute name="title">
           <string>Tab 1</string>
          </attribute>
-         <widget class="QScrollArea" name="scrollArea">
+         <widget class="QScrollArea" name="TheScrollArea">
           <property name="geometry">
            <rect>
             <x>0</x>
@@ -61,6 +61,9 @@
             <width>111</width>
             <height>521</height>
            </rect>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
           </property>
           <property name="widgetResizable">
            <bool>true</bool>
@@ -206,6 +209,19 @@
              </item>
             </layout>
            </widget>
+           <widget class="QPushButton" name="ThisIsMyPushButton">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>310</y>
+              <width>56</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>PushButton</string>
+            </property>
+           </widget>
           </widget>
          </widget>
         </widget>
@@ -225,7 +241,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1025</width>
+     <width>1045</width>
      <height>18</height>
     </rect>
    </property>
