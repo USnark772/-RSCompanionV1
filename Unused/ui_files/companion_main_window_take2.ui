@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
-    <height>671</height>
+    <width>967</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -41,7 +41,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -53,182 +53,189 @@
          <attribute name="title">
           <string>Tab 1</string>
          </attribute>
-         <widget class="QScrollArea" name="TheScrollArea">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>111</width>
-            <height>521</height>
-           </rect>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QAbstractScrollArea::AdjustToContents</enum>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>109</width>
-             <height>519</height>
-            </rect>
-           </property>
-           <widget class="QGroupBox" name="Device_GroupBox_2">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>101</width>
-              <height>101</height>
-             </rect>
-            </property>
-            <property name="title">
-             <string>DRT - Wireless 1</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <item>
-                <widget class="QPushButton" name="Setup_PushButton_2">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="Setup_PushButton_3">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <layout class="QHBoxLayout" name="THISISMYHORIZLAYOUT">
+            <item>
+             <widget class="QScrollArea" name="TheScrollArea">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOn</enum>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOn</enum>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QAbstractScrollArea::AdjustToContents</enum>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>80</width>
+                 <height>416</height>
+                </rect>
+               </property>
+               <widget class="QGroupBox" name="Device_GroupBox_2">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>101</width>
+                  <height>101</height>
+                 </rect>
+                </property>
+                <property name="title">
+                 <string>DRT - Wireless 1</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
                  <item>
-                  <widget class="QToolButton" name="Device_ToolButton_2">
-                   <property name="text">
-                    <string>...</string>
-                   </property>
-                  </widget>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <widget class="QPushButton" name="Setup_PushButton_2">
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="Setup_PushButton_3">
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_3">
+                     <item>
+                      <widget class="QToolButton" name="Device_ToolButton_2">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QGroupBox" name="Device_GroupBox_3">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>100</y>
-              <width>101</width>
-              <height>101</height>
-             </rect>
-            </property>
-            <property name="title">
-             <string>DRT - Wireless 1</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <item>
-                <widget class="QPushButton" name="Setup_PushButton_4">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="Setup_PushButton_5">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_6">
+               </widget>
+               <widget class="QGroupBox" name="Device_GroupBox_3">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>100</y>
+                  <width>101</width>
+                  <height>101</height>
+                 </rect>
+                </property>
+                <property name="title">
+                 <string>DRT - Wireless 1</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
                  <item>
-                  <widget class="QToolButton" name="Device_ToolButton_3">
-                   <property name="text">
-                    <string>...</string>
-                   </property>
-                  </widget>
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <item>
+                    <widget class="QPushButton" name="Setup_PushButton_4">
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="Setup_PushButton_5">
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_6">
+                     <item>
+                      <widget class="QToolButton" name="Device_ToolButton_3">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QGroupBox" name="Device_GroupBox_4">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>200</y>
-              <width>101</width>
-              <height>101</height>
-             </rect>
-            </property>
-            <property name="title">
-             <string>DRT - Wireless 1</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_8">
-               <item>
-                <widget class="QPushButton" name="Setup_PushButton_6">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="Setup_PushButton_7">
-                 <property name="text">
-                  <string>PushButton</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
+               </widget>
+               <widget class="QGroupBox" name="Device_GroupBox_4">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>200</y>
+                  <width>101</width>
+                  <height>101</height>
+                 </rect>
+                </property>
+                <property name="title">
+                 <string>DRT - Wireless 1</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
                  <item>
-                  <widget class="QToolButton" name="Device_ToolButton_4">
-                   <property name="text">
-                    <string>...</string>
-                   </property>
-                  </widget>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="QPushButton" name="Setup_PushButton_6">
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="Setup_PushButton_7">
+                     <property name="text">
+                      <string>PushButton</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_7">
+                     <item>
+                      <widget class="QToolButton" name="Device_ToolButton_4">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QPushButton" name="ThisIsMyPushButton">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>310</y>
-              <width>56</width>
-              <height>17</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </widget>
-         </widget>
-        </widget>
-        <widget class="QWidget" name="tab_4">
-         <attribute name="title">
-          <string>Tab 2</string>
-         </attribute>
+               </widget>
+               <widget class="QPushButton" name="ThisIsMyPushButton">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>310</y>
+                  <width>56</width>
+                  <height>17</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>PushButton</string>
+                </property>
+               </widget>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>
@@ -241,7 +248,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1045</width>
+     <width>967</width>
      <height>18</height>
     </rect>
    </property>

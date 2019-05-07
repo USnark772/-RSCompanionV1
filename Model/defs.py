@@ -6,6 +6,8 @@
 
 # Definitions to use to detect devices
 
+debug_print = True
+
 devices = {'drt': {'probe': "get_name\n\r",
                    'key': 'sDRT',
                    'name': 'sDRT',
@@ -24,7 +26,7 @@ drt_ui_fields = ['Mills from block start', 'probe #', 'clicks', 'response time']
 drt_intensity_max = 255
 drt_intensity_min = 0
 
-drt_stim_dur_max = 10
+drt_stim_dur_max = 5000
 drt_stim_dur_min = 0
 
 drt_ISI_max = 10000
@@ -39,3 +41,5 @@ vog_min_open_close = 0
 
 vog_debounce_max = 100
 vog_debounce_min = 0
+
+vog_button_mode = 0

@@ -9,29 +9,30 @@ from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication
 from PySide2.QtGui import QFont, QPainter, QPalette
 from PySide2.QtCharts import QtCharts
 
-import View.device as device_container
+import Controller.device as device_container
 import View.main_chart as main_chart
 from View.help_window import HelpWindow
 
 
 # TODO: handle closing all windows when main window is closed
-class CompanionWindow(object):
+class CompanionWindow(QMainWindow):
     # To keep track of which device is which for data display purposes
     __list_of_devices__ = {}
 
     # Auto generated code slightly altered for readability
-    def __init__(self, main_window, msg_handler):
+    def __init__(self, msg_handler):
+        super().__init__()
         # Begin MainWindow generation code
-        main_window.setObjectName("main_window")
-        main_window.resize(840, 705)
-        main_window.setMinimumSize(QSize(840, 468))
+        self.setObjectName("main_window")
+        self.resize(840, 705)
+        self.setMinimumSize(QSize(840, 468))
         font = QFont()
         font.setPointSize(10)
-        main_window.setFont(font)
+        self.setFont(font)
         # End MainWindow generation code
         ################################################################################################################
         # Begin Central_Widget generation code
-        self.central_widget = QWidget(main_window)
+        self.central_widget = QWidget(self)
         self.central_widget.setObjectName("central_widget")
         self.central_widget_vert_layout = QVBoxLayout(self.central_widget)
         self.central_widget_vert_layout.setObjectName("central_widget_vert_layout")
@@ -40,7 +41,7 @@ class CompanionWindow(object):
         self.central_widget_separator_line.setFrameShadow(QFrame.Sunken)
         self.central_widget_separator_line.setObjectName("central_widget_separator_line")
         self.central_widget_vert_layout.addWidget(self.central_widget_separator_line)
-        main_window.setCentralWidget(self.central_widget)
+        self.setCentralWidget(self.central_widget)
         # End Central Widget generation code
         ################################################################################################################
         # Begin Experiment View Area generation code
@@ -76,7 +77,7 @@ class CompanionWindow(object):
         # End RS Device Tab generation code
         ################################################################################################################
         # Begin Menu Bar generation code
-        self.menu_bar = QMenuBar(main_window)
+        self.menu_bar = QMenuBar(self)
         self.menu_bar.setGeometry(QRect(0, 0, 840, 22))
         self.menu_bar.setObjectName("menu_bar")
         self.file_menu = QMenu(self.menu_bar)
@@ -89,14 +90,14 @@ class CompanionWindow(object):
         self.settings_menu.setObjectName("settings_menu")
         self.udp_controls_menu = QMenu(self.settings_menu)
         self.udp_controls_menu.setObjectName("udp_controls_menu")
-        main_window.setMenuBar(self.menu_bar)
-        self.status_bar = QStatusBar(main_window)
+        self.setMenuBar(self.menu_bar)
+        self.status_bar = QStatusBar(self)
         self.status_bar.setObjectName("status_bar")
-        main_window.setStatusBar(self.status_bar)
+        self.setStatusBar(self.status_bar)
         # End MenuBar generation code
         ################################################################################################################
         # Begin Control Widget generation code
-        self.control_widget_dock = QDockWidget(main_window)
+        self.control_widget_dock = QDockWidget(self)
         size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -115,7 +116,7 @@ class CompanionWindow(object):
         self.control_widget_horiz_layout = QHBoxLayout(self.control_widget_dock_contents)
         self.control_widget_horiz_layout.setObjectName("control_widget_horiz_layout")
         self.control_widget_dock.setWidget(self.control_widget_dock_contents)
-        main_window.addDockWidget(Qt.DockWidgetArea(4), self.control_widget_dock)
+        self.addDockWidget(Qt.DockWidgetArea(4), self.control_widget_dock)
         # End Control Widget generation code
         ################################################################################################################
         # Begin Control Widget Run/New group box generation code
@@ -271,34 +272,34 @@ class CompanionWindow(object):
         # Begin MenuBar item generation code
         #self.begin_exp_action = QAction(main_window)
         #self.begin_exp_action.setObjectName("begin_exp_action")
-        self.save_action = QAction(main_window)
+        self.save_action = QAction(self)
         self.save_action.setObjectName("save_action")
-        self.save_as_action = QAction(main_window)
+        self.save_as_action = QAction(self)
         self.save_as_action.setObjectName("save_as_action")
-        self.com_messages_action = QAction(main_window)
+        self.com_messages_action = QAction(self)
         self.com_messages_action.setCheckable(True)
         self.com_messages_action.setObjectName("com_messages_action")
-        self.about_rs_companion_action = QAction(main_window)
+        self.about_rs_companion_action = QAction(self)
         self.about_rs_companion_action.setObjectName("about_rs_companion_action")
-        self.about_rs_action = QAction(main_window)
+        self.about_rs_action = QAction(self)
         self.about_rs_action.setObjectName("about_rs_action")
         #self.end_exp_action = QAction(main_window)
         #self.end_exp_action.setObjectName("end_exp_action")
-        self.trial_controls_action = QAction(main_window)
+        self.trial_controls_action = QAction(self)
         self.trial_controls_action.setObjectName("trial_controls_action")
-        self.display_tool_tips_action = QAction(main_window)
+        self.display_tool_tips_action = QAction(self)
         self.display_tool_tips_action.setObjectName("display_tool_tips_action")
-        self.configure_action = QAction(main_window)
+        self.configure_action = QAction(self)
         self.configure_action.setObjectName("configure_action")
-        self.com_port_action = QAction(main_window)
+        self.com_port_action = QAction(self)
         self.com_port_action.setObjectName("com_port_action")
-        self.output_action = QAction(main_window)
+        self.output_action = QAction(self)
         self.output_action.setObjectName("output_action")
-        self.input_action = QAction(main_window)
+        self.input_action = QAction(self)
         self.input_action.setObjectName("input_action")
-        self.append_exp_action = QAction(main_window)
+        self.append_exp_action = QAction(self)
         self.append_exp_action.setObjectName("append_exp_action")
-        self.open_file_action = QAction(main_window)
+        self.open_file_action = QAction(self)
         self.open_file_action.setObjectName("open_file_action")
         #self.file_menu.addAction(self.begin_exp_action)
         #self.file_menu.addAction(self.end_exp_action)
@@ -327,10 +328,10 @@ class CompanionWindow(object):
         # End MenuBar item generation code
         ################################################################################################################
         # Begin final initialization
-        self.__set_texts(main_window)
+        self.__set_texts(self)
         # self.__set_colors()
         self.__setup_handlers(msg_handler)
-        QMetaObject.connectSlotsByName(main_window)
+        QMetaObject.connectSlotsByName(self)
 
     # Auto generated code slightly altered for readability
     def __set_texts(self, main_window):
@@ -428,6 +429,11 @@ class CompanionWindow(object):
 
     def __move_main_graph(self):
         self.main_chart.scroll_graph(self.chart_scroll_bar.value())
+
+    # TODO: End experiment/block on close
+    def closeEvent(self, event):
+        for device in self.__list_of_devices__:
+            self.__list_of_devices__[device].remove_self()
 
     # Passes message received to proper device display object
     def handle_msg(self, msg_dict):

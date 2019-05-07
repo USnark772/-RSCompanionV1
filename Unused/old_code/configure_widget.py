@@ -1,88 +1,197 @@
-# Author: Phillip Riskin
-# Date: Spring 2019
-# Project: Companion App
-# Company: Red Scientific
-# https://redscientific.com/index.html
 
-from PySide2.QtWidgets import QLabel, QPushButton, QSlider, QGraphicsView, QWidget, QComboBox, QScrollArea, QGroupBox,\
-    QHBoxLayout, QVBoxLayout, QToolButton, QCheckBox
-from PySide2.QtCore import QRect, QCoreApplication, Qt
-from PySide2.QtCharts import QtCharts
-import Model.defs as defs
-
-
-class Tab(QWidget):
-    def __init__(self, device_id, msg_callback, settings_widget_button):
+class OldDRTConfigureWidget(QWidget):
+    def __init__(self, device_name, msg_callback):
         super().__init__()
-        self.device_id = device_id
+        self.device_name = device_name
         self.msg_callback = msg_callback
-        self.configure_widget_button = settings_widget_button
-        self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.setObjectName(self.device_name)
-        self.scroll_area = QScrollArea(self)
-        self.scroll_area.setGeometry(QRect(0, 0, 201, 521))
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setObjectName("scroll_area")
-        self.scroll_area_contents = QWidget()
-        self.scroll_area_contents.setGeometry(QRect(0, 0, 199, 519))
-        self.scroll_area_contents.setObjectName("scroll_area_contents")
-        self.group_box_1 = QGroupBox(self.scroll_area_contents)
-        self.group_box_1.setGeometry(QRect(0, 0, 191, 101))
-        self.group_box_1.setObjectName("group_box_1")
-        self.group_box_1_horiz_layout_1 = QHBoxLayout(self.group_box_1)
-        self.group_box_1_horiz_layout_1.setObjectName("group_box_1_horiz_layout")
-        self.vert_layout = QVBoxLayout()
-        self.vert_layout.setObjectName("vert_layout")
-        # TODO: add more buttons?
-        '''
-        self.push_button_1 = QPushButton(self.group_box_1)
-        self.push_button_1.setObjectName("push_button_1")
-        self.vert_layout.addWidget(self.push_button_1)
-        '''
-        self.peek_button = QPushButton(self.scroll_area_contents)
-        self.peek_button.setObjectName("peek_button")
-        self.peek_button.setGeometry(50, 300, 100, 20)
+        self.resize(400, 300)
+        size_policy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.setSizePolicy(size_policy)
+        self.setMinimumSize(QSize(400, 300))
+        self.setMaximumSize(QSize(400, 300))
 
-        # self.vert_layout.addWidget(self.push_button_2)
+        self.config_chart = ConfigChart()
+        self.config_chart_view = QtCharts.QChartView(self)
+        self.config_chart_view.setGeometry(QRect(120, 20, 256, 192))
+        self.config_chart_view.setObjectName("settings_graphics_view")
+        self.config_chart_view.setChart(self.config_chart)
 
-        self.group_box_1_horiz_layout_2 = QHBoxLayout()
-        self.group_box_1_horiz_layout_2.setObjectName("group_box_1_horiz_layout_2")
-        self.tool_button = QToolButton(self.group_box_1)
-        self.tool_button.setObjectName("tool_button")
-        self.group_box_1_horiz_layout_2.addWidget(self.tool_button)
+        self.lower_isi_label = QLabel(self)
+        self.lower_isi_label.setGeometry(QRect(350, 260, 35, 10))
+        self.lower_isi_label.setObjectName("lower_isi_label")
 
-        self.vert_layout.addLayout(self.group_box_1_horiz_layout_2)
-        self.group_box_1_horiz_layout_1.addLayout(self.vert_layout)
-        self.scroll_area.setWidget(self.scroll_area_contents)
+        self.lower_isi_line_edit = QLineEdit(self)
+        self.lower_isi_line_edit.setGeometry(QRect(130, 260, 30, 15))
+        self.lower_isi_line_edit.setObjectName("lower_isi_line_edit")
+
+        self.upper_isi_line_edit = QLineEdit(self)
+        self.upper_isi_line_edit.setGeometry(QRect(130, 240, 30, 15))
+        self.upper_isi_line_edit.setObjectName("upper_isi_line_edit")
+
+        self.stim_dur_line_edit = QLineEdit(self)
+        self.stim_dur_line_edit.setGeometry(QRect(18, 210, 30, 15))
+        self.stim_dur_line_edit.setObjectName("stim_dur_line_edit")
+
+        self.intensity_line_edit = QLineEdit(self)
+        self.intensity_line_edit.setGeometry(QRect(78, 210, 30, 15))
+        self.intensity_line_edit.setObjectName("intensity_line_edit")
+
+        self.stim_dur_label = QLabel(self)
+        self.stim_dur_label.setGeometry(QRect(10, 20, 51, 16))
+        self.stim_dur_label.setObjectName("stim_dur_label")
+
+        self.upper_isi_label = QLabel(self)
+        self.upper_isi_label.setGeometry(QRect(350, 240, 35, 10))
+        self.upper_isi_label.setObjectName("upper_isi_label")
+
+        self.iso_default_push_button = QPushButton(self)
+        self.iso_default_push_button.setGeometry(QRect(35, 270, 61, 20))
+        self.iso_default_push_button.setObjectName("iso_default_push_button")
+        # self.upload_settings_push_button = QPushButton(self)
+        # self.upload_settings_push_button.setGeometry(QRect(30, 230, 71, 41))
+        # self.upload_settings_push_button.setObjectName("upload_settings_push_button")
+
+        # Sliders
+        self.intensity_slider = QSlider(self)
+        self.intensity_slider.setGeometry(QRect(85, 40, 16, 160))
+        self.intensity_slider.setOrientation(Qt.Vertical)
+        self.intensity_slider.setObjectName("intensity_slider")
+
+        self.upper_isi_slider = QSlider(self)
+        self.upper_isi_slider.setGeometry(QRect(180, 240, 160, 16))
+        self.upper_isi_slider.setOrientation(Qt.Horizontal)
+        self.upper_isi_slider.setObjectName("upper_isi_slider")
+
+        self.lower_isi_slider = QSlider(self)
+        self.lower_isi_slider.setGeometry(QRect(180, 260, 160, 16))
+        self.lower_isi_slider.setOrientation(Qt.Horizontal)
+        self.lower_isi_slider.setObjectName("lower_isi_slider")
+
+        self.stim_dur_slider = QSlider(self)
+        self.stim_dur_slider.setGeometry(QRect(25, 40, 16, 160))
+        self.stim_dur_slider.setOrientation(Qt.Vertical)
+        self.stim_dur_slider.setObjectName("stim_dur_slider")
+
+        self.stim_intensity_label = QLabel(self)
+        self.stim_intensity_label.setGeometry(QRect(65, 20, 51, 16))
+        self.stim_intensity_label.setObjectName("stim_intensity_label")
+
+        self.close_me_bool = False
         self.__set_texts()
-        self.__setup_button_handlers()
+        self.__set_handlers()
+        self.values = {'intensity': self.intensity_slider,
+                       'upperISI': self.upper_isi_slider,
+                       'lowerISI': self.lower_isi_slider,
+                       'stimDur': self.stim_dur_slider}
+        self.__set_slider_settings()
+        self.__set_line_edit_settings()
+        self.__get_vals()
 
     def __set_texts(self):
         _translate = QCoreApplication.translate
-        '''
-        self.push_button_1.setText(_translate("MainWindow", "CHANGEME PushButton"))
-        '''
-        self.peek_button.setText(_translate("MainWindow", "Open"))
+        self.setWindowTitle(_translate("self", "DRT Config"))
+        self.lower_isi_label.setText(_translate("self", "Lower ISI"))
+        self.stim_dur_label.setText(_translate("self", "Stim Duration"))
+        self.upper_isi_label.setText(_translate("self", "Upper ISI"))
+        self.iso_default_push_button.setText(_translate("self", "ISO default"))
+        # self.upload_settings_push_button.setText(_translate("self", "Upload settings"))
+        self.stim_intensity_label.setText(_translate("self", "Stim Intensity"))
 
-        self.tool_button.setText(_translate("MainWindow", "Configure device"))
+    def __set_slider_settings(self):
+        self.intensity_slider.setRange(defs.drt_intensity_min, defs.drt_intensity_max)
+        self.upper_isi_slider.setRange(defs.drt_ISI_min, defs.drt_ISI_max)
+        self.lower_isi_slider.setRange(defs.drt_ISI_min, defs.drt_ISI_max)
+        self.stim_dur_slider.setRange(defs.drt_stim_dur_min, defs.drt_stim_dur_max)
 
-    def __setup_button_handlers(self):
-        self.tool_button.clicked.connect(self.__setup_push_button_handler)
-        self.peek_button.clicked.connect(self.__peek_handler)
-        '''
-        self.push_button_1.clicked.connect()
-        '''
+    def __set_line_edit_settings(self):
+        self.stim_dur_line_edit.setReadOnly(True)
+        self.lower_isi_line_edit.setReadOnly(True)
+        self.upper_isi_line_edit.setReadOnly(True)
+        self.intensity_line_edit.setReadOnly(True)
 
-    # TODO: Change button text depending on if lenses are open or closed
-    def __peek_handler(self):
-        print("peek button clicked")
-        # if
+    def __set_handlers(self):
+        # self.upload_settings_push_button.clicked.connect(self.__update_button_handler)
+        self.iso_default_push_button.clicked.connect(self.__iso_button_handler)
+        self.lower_isi_slider.valueChanged.connect(self.__push_upper_isi_slider)
+        self.upper_isi_slider.valueChanged.connect(self.__push_lower_isi_slider)
+        self.stim_dur_slider.valueChanged.connect(self.__stim_dur_changed_handler)
+        self.intensity_slider.valueChanged.connect(self.__intensity_changed_handler)
+        self.lower_isi_slider.sliderReleased.connect(self.__isi_released_handler)
+        self.upper_isi_slider.sliderReleased.connect(self.__isi_released_handler)
+        self.stim_dur_slider.sliderReleased.connect(self.__set_stim_duration_handler)
+        self.intensity_slider.sliderReleased.connect(self.__set_intensity_handler)
+        self.stim_dur_line_edit.textEdited.connect(self.__stim_dur_line_edit_changed)
 
-    def __setup_push_button_handler(self):
-        self.configure_widget_button()
+    def __get_vals(self):
+        self.msg_callback({'cmd': "get_config"})
 
+    def __set_val(self, var, val):
+        self.values[var].setValue(int(val))
 
-class ConfigureWidget(QWidget):
+    def __lower_isi_tooltip_handler(self):
+        self.lower_isi_slider.setToolTip(str(self.lower_isi_slider.value()))
+
+    def __isi_released_handler(self):
+        self.__set_upper_isi_handler()
+        self.__set_lower_isi_handler()
+
+    def __push_upper_isi_slider(self):
+        if self.lower_isi_slider.value() >= self.upper_isi_slider.value():
+            self.upper_isi_slider.setValue(self.lower_isi_slider.value())
+        self.lower_isi_line_edit.setText(str(self.lower_isi_slider.value()))
+
+    def __push_lower_isi_slider(self):
+        self.__lower_isi_tooltip_handler()
+        if self.upper_isi_slider.value() <= self.lower_isi_slider.value():
+            self.lower_isi_slider.setValue(self.upper_isi_slider.value())
+        self.upper_isi_line_edit.setText(str(self.upper_isi_slider.value()))
+
+    def __intensity_changed_handler(self):
+        self.intensity_line_edit.setText(str(self.intensity_slider.value()))
+
+    def __stim_dur_changed_handler(self):
+        self.stim_dur_line_edit.setText(str(self.stim_dur_slider.value()))
+
+    # TODO: Fix this or toss it
+    def __stim_dur_line_edit_changed(self, text):
+        try:
+            value = int(text)
+            self.stim_dur_slider.setValue(value)
+            self.__set_stim_duration_handler()
+        except:
+            self.message = HelpWindow("Error", "Must be a valid integer")
+
+    def __iso_button_handler(self):
+        self.__set_val('upperISI', 5000)
+        self.__set_val('lowerISI', 3000)
+        self.__set_val('stimDur', 1000)
+        self.__set_val('intensity', 255)
+        self.__set_intensity_handler()
+        self.__set_upper_isi_handler()
+        self.__set_lower_isi_handler()
+        self.__set_stim_duration_handler()
+
+    def __set_intensity_handler(self):
+        self.msg_callback({'cmd': "set_intensity", 'arg': str(self.intensity_slider.value())})
+
+    def __set_upper_isi_handler(self):
+        self.msg_callback({'cmd': "set_upperISI", 'arg': str(self.upper_isi_slider.value())})
+
+    def __set_lower_isi_handler(self):
+        self.msg_callback({'cmd': "set_lowerISI", 'arg': str(self.lower_isi_slider.value())})
+
+    def __set_stim_duration_handler(self):
+        self.msg_callback({'cmd': "set_stimDur", 'arg': str(self.stim_dur_slider.value())})
+
+    def handle_msg(self, msg_dict):
+        for item in msg_dict:
+            self.__set_val(item, msg_dict[item])
+
+class OldVOGConfigureWidget(QWidget):
     def __init__(self, device_name, msg_callback):
         super().__init__()
         self.device_name = device_name
@@ -211,8 +320,10 @@ class ConfigureWidget(QWidget):
         if self.values[item].isEnabled():
             self.values[item].setValue(int(val))
 
+    '''
     def __update_button_handler(self):
         print("__update_button_handler")
+    '''
 
     def __opened_inf_handler(self):
         print("__opened_inf changed")

@@ -17,9 +17,8 @@ import Model.defs as defs
 class CompanionController:
     def __init__(self):
         """Set up view and device manager."""
-        self.view = QMainWindow()
-        self.ui = CompanionWindow(self.view, self.receive_msg_from_ui)
-        self.view.show()
+        self.ui = CompanionWindow(self.receive_msg_from_ui)
+        self.ui.show()
         self.device_manager = manager.DeviceManager(self.receive_msg_from_device_manager)
         # Experiment data structure
         self.exp_hdrs = []
@@ -43,8 +42,6 @@ class CompanionController:
         self.ui.trial_controls_action.triggered.connect(self.__trial_controls_action_handler)
         self.ui.input_action.triggered.connect(self.__input_action_handler)
         self.ui.output_action.triggered.connect(self.__output_action_handler)
-        #self.ui.begin_exp_action.triggered.connect(self.__begin_experiment_action_handler)
-        #self.ui.end_exp_action.triggered.connect(self.__end_experiment_action_handler)
         self.ui.run_new_exp_push_button.clicked.connect(self.__begin_exp_action_handler)
         self.ui.end_exp_push_button.clicked.connect(self.__end_exp_action_handler)
         self.ui.display_tool_tips_action.triggered.connect(self.__display_tooltips_action_handler)
@@ -134,7 +131,6 @@ class CompanionController:
 
     def __end_block_button_handler(self):
         """Ends a block if one is currently running."""
-        print("New Block Button Pressed")
         if self.block_running:
             self.block_running = False
             msg_dict = {'type': "stop block"}
@@ -168,7 +164,6 @@ class CompanionController:
         print("Append Experiment Action triggered")
 
     def __post_button_handler(self):
-        print("Post Button Pressed")
         if self.block_running:
             note = self.ui.block_note_text_box.toPlainText()
             if note != "":
@@ -192,22 +187,22 @@ class CompanionController:
         # TODO: Save all data from self.exp_data to file(s)
         lines = []
         for i in range(len(self.exp_hdrs)):
-            print("exp_hdrs[" + str(i) + "] = ", self.exp_hdrs[i])
+            # print("exp_hdrs[" + str(i) + "] = ", self.exp_hdrs[i])
             lines.append(self.exp_hdrs[i] + "\n")
             for j in range(len(self.blk_hdrs[i])):
-                print("blk_hdrs[" + str(i) + ", " + str(j) + "] = ", self.blk_hdrs[i][j])
+                # print("blk_hdrs[" + str(i) + ", " + str(j) + "] = ", self.blk_hdrs[i][j])
                 lines.append("\t" + self.blk_hdrs[i][j] + "\n")
                 for h in range(len(self.blk_data[i][j])):
-                    print("blk_data[" + str(i) + ", " + str(j) + ", " + str(h) + "] = ", self.blk_data[i][j][h])
+                    # print("blk_data[" + str(i) + ", " + str(j) + ", " + str(h) + "] = ", self.blk_data[i][j][h])
                     lines.append("\t\t" + self.blk_data[i][j][h] + "\n")
         self.__write_lines_to_file(lines)
 
     def __write_lines_to_file(self, lines):
-        print("__write_lines_to_file starting")
+        # print("__write_lines_to_file starting")
         file = open(self.fname_to_save_to[0], 'w+')
         file.writelines(lines)
         file.close()
-        print("__write_lines_to_file ended")
+        # print("__write_lines_to_file ended")
 
     def __start_update_timer(self):
         self.update_timer = QTimer()

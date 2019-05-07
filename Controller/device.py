@@ -4,42 +4,37 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import View.drt_view as DRT
-import View.vog_view as VOG
+import View.device_tab as tab
+import View.drt_tab_contents as DRT
+import View.vog_tab_contents as VOG
 
-# TODO: Make different subwindows etc. for each type of device and then build based on device type
+
 class RSDevice:
     def __init__(self, device_id, msg_callback, tab_parent):
         self.device_id = device_id
         self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.tab_parent = tab_parent
         self.msg_callback = msg_callback
+        self.device_tab = tab.Tab(self.device_id, self.callback)
 
         if self.device_id[0] == "drt":
-            self.configure_widget = DRT.ConfigureWidget(self.device_name, self.callback)
-            self.device_tab = DRT.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
+            self.tab_contents = DRT.TabContents(self.device_tab.scroll_area_contents, self.device_name, self.callback)
 
         elif self.device_id[0] == "vog":
-            self.configure_widget = VOG.ConfigureWidget(self.device_name, self.callback)
-            self.device_tab = VOG.Tab(self.device_id, self.callback, self.show_hide_configure_widget_handler)
+            self.tab_contents = VOG.TabContents(self.device_tab.scroll_area_contents, self.device_name, self.callback)
 
         self.tab_parent.setUpdatesEnabled(False)
         index = self.tab_parent.addTab(self.device_tab, "")
         self.tab_parent.setUpdatesEnabled(True)
         self.tab_parent.setTabText(index, self.device_name)
 
-    def show_hide_configure_widget_handler(self):
-        if self.configure_widget.isVisible():
-            self.configure_widget.hide()
-        else:
-            self.configure_widget.show()
-
     def handle_msg(self, msg):
         # print("device.handle_msg()")
-        self.configure_widget.handle_msg(msg)
+        self.tab_contents.handle_msg(msg)
 
     def remove_self(self):
         self.tab_parent.removeTab(self.tab_parent.indexOf(self.device_tab))
+        # self.configure_widget.deleteLater()
         self.device_tab.deleteLater()
 
     def callback(self, msg_dict):
