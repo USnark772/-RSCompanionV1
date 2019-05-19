@@ -6,6 +6,7 @@
 
 from PySide2.QtCharts import QtCharts
 from PySide2.QtCore import Qt
+from Model.device_graph_rep import DeviceRep
 
 
 # TODO: Each device draws lines back to start when running multiple blocks
@@ -17,6 +18,8 @@ class MainChartWidget(QtCharts.QChart):
         self.setTitle("Overview")
         self.bar_sets = {}
         self.lines = {}
+
+        self.sets = {}
 
         self.num_points = 0
         self.range_y = (-1, 10)
@@ -72,9 +75,8 @@ class MainChartWidget(QtCharts.QChart):
     def __append_drt_point(self, device, point):
         print("companion_main_chart_view.MainChartWidget.__append_drt_point() point = ",
               int(point[0]), int(point[1]))
-        self.lines[device].append(int(point[0]), int(point[1]))
+        self.sets[device].append(int(point[0]), int(point[1]))
         self.__refresh(point[1], point[0])
-
 
     def __append_vog_point(self, name, num, opened, closed):
         print("companion_main_chart_view.MainChartWidget.__append_vog_point() point = ",
@@ -102,7 +104,8 @@ class MainChartWidget(QtCharts.QChart):
     def add_device(self, device):
         name = device[0] + " on " + device[1]
         if device[0] == "drt":
-            self.__make_line_series(name)
+            self.sets[name] = DeviceRep(name)
+            self.sets[name].make_as_line_series()
         elif device[0] == "vog":
             self.bar_sets[name] = QtCharts.QBarSet(name)
             self.bar_series.append(self.bar_sets[name])

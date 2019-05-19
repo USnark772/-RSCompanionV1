@@ -9,7 +9,7 @@ from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication
 from PySide2.QtGui import QFont, QPainter, QPalette
 from PySide2.QtCharts import QtCharts
 
-import Controller.device as device_container
+import Model.device as device_container
 import View.main_chart as main_chart
 from View.help_window import HelpWindow
 

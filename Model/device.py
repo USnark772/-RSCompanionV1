@@ -5,8 +5,8 @@
 # https://redscientific.com/index.html
 
 import View.device_tab as tab
-import View.drt_tab_contents as DRT
-import View.vog_tab_contents as VOG
+import View.Devices.drt_tab_contents as DRT
+import View.Devices.vog_tab_contents as VOG
 
 
 class RSDevice:
