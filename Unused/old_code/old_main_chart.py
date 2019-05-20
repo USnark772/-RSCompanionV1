@@ -12,8 +12,6 @@ from Model.device_graph_rep import DeviceGraphData
 # TODO: Each device draws lines back to start when running multiple blocks
 # TODO: Make user able to choose graphing type (Bar, line, etc.)
 # TODO: update graph without needing a device plugged in
-
-# TODO: rewrite according to LineAndBarChartPlayground.py and using device_graph_rep.py
 class MainChartWidget(QtCharts.QChart):
     def __init__(self):
         super().__init__()
@@ -35,6 +33,21 @@ class MainChartWidget(QtCharts.QChart):
         # self.bar_series.setBarWidth(1 / 2)
         # self.bar_series.setLabelsVisible(True)
         # self.addSeries(self.bar_series)
+        self.__refresh()
+
+    def __make_bar_set(self, name, values=None):
+        self.bar_sets[name] = QtCharts.QBarSet(name)
+        if values:
+            self.bar_sets[name].append(values)
+
+    def __make_line_series(self, name, values=None):
+        self.lines[name] = QtCharts.QLineSeries()
+        self.lines[name].setName(name)
+        self.lines[name].setPointsVisible()
+        if values:
+            for value in values:
+                self.lines[name].append(value[0], value[1])
+        self.addSeries(self.lines[name])
         self.__refresh()
 
     def __refresh(self, new_y=0, num_points=0):

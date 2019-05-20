@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Model/device_graph_rep.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/LineAndBarChartExample.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/LineAndBarChartPlayground.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/old_code/old_main_chart.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/device.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/device.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/drt_tab_contents.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/Devices/drt_tab_contents.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/device_graph_rep.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/device_graph_rep.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/View/main_chart.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/main_chart.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/main_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/main_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/vog_tab_contents.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/Devices/vog_tab_contents.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,59 +16,129 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Model/device_graph_rep.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/View/main_view.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#771#21072#0" />
+                <element signature="e#1038#1070#0" />
+                <element signature="e#1954#1990#0" />
+                <element signature="e#3080#3122#0" />
+                <element signature="e#4067#4102#0" />
+                <element signature="e#5120#5149#0" />
+                <element signature="e#6637#6673#0" />
+                <element signature="e#10039#10093#0" />
+                <element signature="e#10943#10982#0" />
+                <element signature="e#12041#12083#0" />
+                <element signature="e#17408#17453#0" />
+                <element signature="e#18361#18404#0" />
+                <element signature="e#19372#19420#0" />
+                <element signature="e#20731#20765#0" />
+                <element signature="e#21181#24988#0" />
+                <element signature="e#21229#21341#0" />
+                <element signature="e#21470#21582#0" />
+                <element signature="e#21987#22063#0" />
+                <element signature="e#23275#23302#0" />
+                <element signature="e#25065#25701#0" />
+                <element signature="e#25756#26040#0" />
+                <element signature="e#26101#26782#0" />
+                <element signature="e#26222#26749#0" />
+                <element signature="e#26833#27591#0" />
+                <element signature="e#26930#27558#0" />
+                <element signature="e#27634#27693#0" />
+                <element signature="e#27778#27876#0" />
+                <element signature="e#27984#28687#0" />
+                <element signature="e#28026#28105#0" />
+                <element signature="e#28161#28243#0" />
+                <element signature="e#28301#28564#0" />
+                <element signature="e#28390#28564#0" />
+                <element signature="e#28443#28564#0" />
+                <element signature="e#28618#28687#0" />
+                <element signature="e#28803#29093#0" />
+                <element signature="e#28858#29093#0" />
+                <element signature="e#29217#29363#0" />
+                <element signature="e#29268#29363#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="252" selection-start-line="252" selection-end-line="252" />
+            <state relative-caret-position="132">
+              <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
               <folding>
                 <element signature="n#!!doc" />
-                <element signature="e#136#175#0" expanded="true" />
+                <element signature="e#494#1102#0" />
+                <element signature="e#1144#2533#0" />
+                <element signature="e#2573#2691#0" />
+                <element signature="e#2734#2941#0" />
+                <element signature="e#2886#2941#0" />
+                <element signature="e#2988#3220#0" />
+                <element signature="e#3272#4109#0" />
+                <element signature="e#3400#3980#0" />
+                <element signature="e#4007#4109#0" />
+                <element signature="e#4159#4775#0" />
+                <element signature="e#4283#4657#0" />
+                <element signature="e#4684#4775#0" />
+                <element signature="e#4829#5982#0" />
+                <element signature="e#4989#5688#0" />
+                <element signature="e#5755#5851#0" />
+                <element signature="e#5878#5982#0" />
+                <element signature="e#6034#6357#0" />
+                <element signature="e#6125#6244#0" />
+                <element signature="e#6271#6357#0" />
+                <element signature="e#6414#6454#0" />
+                <element signature="e#6502#6533#0" />
+                <element signature="e#6582#6614#0" />
+                <element signature="e#6673#6715#0" />
+                <element signature="e#6767#6802#0" />
+                <element signature="e#6853#6887#0" />
+                <element signature="e#6942#6980#0" />
+                <element signature="e#7040#7083#0" />
+                <element signature="e#7130#7738#0" />
+                <element signature="e#7165#7611#0" />
+                <element signature="e#7257#7462#0" />
+                <element signature="e#7497#7611#0" />
+                <element signature="e#7638#7738#0" />
+                <element signature="e#7783#7999#0" />
+                <element signature="e#7869#7905#0" />
+                <element signature="e#8031#8759#0" />
+                <element signature="e#8158#8717#0" />
+                <element signature="e#8332#8717#0" />
+                <element signature="e#8550#8717#0" />
+                <element signature="e#8813#9005#0" />
+                <element signature="e#9051#9225#0" />
+                <element signature="e#9266#9338#0" />
+                <element signature="e#9387#9550#0" />
+                <element signature="e#9600#10009#0" />
+                <element signature="e#10086#10489#0" />
+                <element signature="e#10556#10726#0" />
+                <element signature="e#10776#10811#0" />
+                <element signature="e#10873#10966#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Unused/Tests/LineAndBarChartExample.py">
+        <entry file="file://$PROJECT_DIR$/Unused/Tests/LineAndBarChartPlayground.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-              <folding>
-                <element signature="e#286#341#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/device_graph_rep.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="15" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/View/main_chart.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="107" column="49" lean-forward="true" selection-start-line="107" selection-start-column="49" selection-end-line="107" selection-end-column="49" />
-              <folding>
-                <element signature="n#!!doc" />
-                <element signature="e#136#173#0" expanded="true" />
-                <element signature="e#206#280#0" />
-                <element signature="e#1092#1202#0" />
-                <element signature="e#1860#2676#0" />
-                <element signature="e#2571#2676#0" />
-                <element signature="e#3498#4191#0" />
-                <element signature="e#3579#3719#0" />
-                <element signature="e#3775#4191#0" />
-                <element signature="e#4536#5255#0" />
-                <element signature="e#4603#5255#0" />
-                <element signature="e#5066#5161#0" />
-              </folding>
+            <state relative-caret-position="-216">
+              <caret line="75" column="27" lean-forward="true" selection-start-line="75" selection-start-column="27" selection-end-line="75" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -87,12 +154,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_ho</find>
-      <find>QtWidgets.</find>
-      <find>QtCore.</find>
-      <find>QtGui.</find>
-      <find>self.scroll_area_contents</find>
-      <find>verticalLayout.</find>
       <find>horizontalLayout</find>
       <find>_lcdNumber</find>
       <find>lower_isi_horizontalSlider</find>
@@ -117,6 +178,12 @@
       <find>post</find>
       <find>antial</find>
       <find>port</find>
+      <find>scroll</find>
+      <find>chart_scroll_bar</find>
+      <find>Qchartview</find>
+      <find>chartview</find>
+      <find>current_index</find>
+      <find>create_chart</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -125,8 +192,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Serial/example_main.py" />
-        <option value="$PROJECT_DIR$/UI/DeviceSettingsWidget.py" />
         <option value="$PROJECT_DIR$/ui_files/companion_main_window_take2.py" />
         <option value="$PROJECT_DIR$/ui_files/drt_config_widget.py" />
         <option value="$PROJECT_DIR$/Serial/companion_device_com.py" />
@@ -168,22 +233,24 @@
         <option value="$PROJECT_DIR$/Model/defs.py" />
         <option value="$PROJECT_DIR$/View/drt_tab_contents.py" />
         <option value="$PROJECT_DIR$/View/vog_tab_contents.py" />
-        <option value="$PROJECT_DIR$/Controller/controller.py" />
-        <option value="$PROJECT_DIR$/View/main_view.py" />
         <option value="$PROJECT_DIR$/Controller/main.py" />
         <option value="$PROJECT_DIR$/Unused/TestGraph2.py" />
         <option value="$PROJECT_DIR$/Unused/Tests/LineAndBarChartExample.py" />
         <option value="$PROJECT_DIR$/Model/device_bar_set.py" />
+        <option value="$PROJECT_DIR$/Controller/controller.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/LineAndBarChartPlayground.py" />
+        <option value="$PROJECT_DIR$/View/new_main_chart.py" />
+        <option value="$PROJECT_DIR$/View/main_view.py" />
         <option value="$PROJECT_DIR$/Model/device_graph_rep.py" />
         <option value="$PROJECT_DIR$/View/main_chart.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1296" />
-    <option name="height" value="1000" />
+    <option name="x" value="74" />
+    <option name="y" value="148" />
+    <option name="width" value="2584" />
+    <option name="height" value="2078" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -200,7 +267,34 @@
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
               <item name="Model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="Unused" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="Unused" type="462c0819:PsiDirectoryNode" />
+              <item name="old_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="Unused" type="462c0819:PsiDirectoryNode" />
+              <item name="Tests" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="View" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -218,11 +312,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\old_code" />
       <recent name="C:\Users\Snark\Documents\GitHub\RedScientific\Companion\Model" />
       <recent name="C:\Users\Snark\Documents\GitHub\RedScientific\Companion\View\Devices" />
       <recent name="C:\Users\Snark\Documents\GitHub\RedScientific\Companion\Unused\Tests" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Controller" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\View" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -237,7 +331,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.LineAndBarChartPlayground">
     <configuration name="LineAndBarChartExample" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -251,6 +345,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/LineAndBarChartExample.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="LineAndBarChartPlayground" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/LineAndBarChartPlayground.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -324,9 +439,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.LineAndBarChartPlayground" />
+        <item itemvalue="Python.LineAndBarChartExample" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.device_bar_set" />
-        <item itemvalue="Python.LineAndBarChartExample" />
         <item itemvalue="Python.TestGraph2" />
       </list>
     </recent_temporary>
@@ -354,21 +470,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1381" height="925" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.12321144" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.13140312" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3513825" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="GitLabIntegration" order="2" weight="0.32930514" />
       <window_info anchor="bottom" id="Python Console" order="3" weight="0.32930514" />
       <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" weight="0.32401812" />
+      <window_info anchor="bottom" id="Find" order="5" weight="0.32286432" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32930514" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.4032258" />
-      <window_info anchor="bottom" id="Debug" order="8" weight="0.3986175" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.35427135" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.39698493" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32401812" />
@@ -378,17 +493,17 @@
     </layout>
     <layout-to-restore>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.12327688" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.13195549" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="0" weight="0.35196376" />
+      <window_info anchor="bottom" id="Terminal" order="0" weight="0.3513825" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="GitLabIntegration" order="2" weight="0.32930514" />
       <window_info anchor="bottom" id="Python Console" order="3" weight="0.32930514" />
       <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" weight="0.32401812" />
+      <window_info anchor="bottom" id="Find" order="5" weight="0.32286432" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32930514" />
-      <window_info anchor="bottom" id="Run" order="7" visible="true" weight="0.40407854" />
-      <window_info anchor="bottom" id="Debug" order="8" weight="0.39879155" />
+      <window_info anchor="bottom" id="Run" order="7" visible="true" weight="0.35501653" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.39801544" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32401812" />
@@ -398,9 +513,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/serial/serialutil.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtCore/QSize.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtCore/QCoreApplication.py" />
     <entry file="file://$PROJECT_DIR$/ui_files/companion_main_window_take2.py" />
     <entry file="file://$PROJECT_DIR$/ui_files/drt_config_widget.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/serial/serialwin32.py" />
@@ -612,13 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Model/defs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="20" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/View/Devices/vog_tab_contents.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="481">
@@ -626,13 +731,6 @@
           <folding>
             <element signature="n#!!doc" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/help_window.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -677,20 +775,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Unused/ui_files/companion_main_window.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="252" selection-start-line="252" selection-end-line="252" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#136#175#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/ui_files/companion_main_window.py" />
     <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -747,51 +832,185 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/View/main_view.py">
+    <entry file="file://$PROJECT_DIR$/Model/defs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="441" selection-start-line="441" selection-end-line="441" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
+        <state relative-caret-position="383">
+          <caret line="28" column="20" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/help_window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="47" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-116874917/PySide2/QtWidgets/QScrollBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1210">
+          <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Unused/Tests/LineAndBarChartExample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+        <state relative-caret-position="1012">
+          <caret line="49" column="33" lean-forward="true" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
           <folding>
-            <element signature="e#286#341#0" expanded="true" />
+            <element signature="n#!!doc" />
+            <element signature="e#494#1102#0" />
+            <element signature="e#1144#2533#0" />
+            <element signature="e#2573#2691#0" />
+            <element signature="e#2734#2941#0" />
+            <element signature="e#2886#2941#0" />
+            <element signature="e#2988#3220#0" />
+            <element signature="e#3272#4109#0" />
+            <element signature="e#3400#3980#0" />
+            <element signature="e#4007#4109#0" />
+            <element signature="e#4159#4775#0" />
+            <element signature="e#4283#4657#0" />
+            <element signature="e#4684#4775#0" />
+            <element signature="e#4829#5982#0" />
+            <element signature="e#4989#5688#0" />
+            <element signature="e#5755#5851#0" />
+            <element signature="e#5878#5982#0" />
+            <element signature="e#6034#6357#0" />
+            <element signature="e#6125#6244#0" />
+            <element signature="e#6271#6357#0" />
+            <element signature="e#6414#6454#0" />
+            <element signature="e#6502#6533#0" />
+            <element signature="e#6582#6614#0" />
+            <element signature="e#6673#6715#0" />
+            <element signature="e#6767#6802#0" />
+            <element signature="e#6853#6887#0" />
+            <element signature="e#6942#6980#0" />
+            <element signature="e#7040#7083#0" />
+            <element signature="e#7130#7738#0" />
+            <element signature="e#7165#7611#0" />
+            <element signature="e#7257#7462#0" />
+            <element signature="e#7497#7611#0" />
+            <element signature="e#7638#7738#0" />
+            <element signature="e#7783#7999#0" />
+            <element signature="e#7869#7905#0" />
+            <element signature="e#8031#8759#0" />
+            <element signature="e#8158#8717#0" />
+            <element signature="e#8332#8717#0" />
+            <element signature="e#8550#8717#0" />
+            <element signature="e#8813#9005#0" />
+            <element signature="e#9051#9225#0" />
+            <element signature="e#9266#9338#0" />
+            <element signature="e#9387#9550#0" />
+            <element signature="e#9600#10009#0" />
+            <element signature="e#10086#10489#0" />
+            <element signature="e#10556#10726#0" />
+            <element signature="e#10776#10811#0" />
+            <element signature="e#10873#10966#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/main_view.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#771#21072#0" />
+            <element signature="e#1038#1070#0" />
+            <element signature="e#1954#1990#0" />
+            <element signature="e#3080#3122#0" />
+            <element signature="e#4067#4102#0" />
+            <element signature="e#5120#5149#0" />
+            <element signature="e#6637#6673#0" />
+            <element signature="e#10039#10093#0" />
+            <element signature="e#10943#10982#0" />
+            <element signature="e#12041#12083#0" />
+            <element signature="e#17408#17453#0" />
+            <element signature="e#18361#18404#0" />
+            <element signature="e#19372#19420#0" />
+            <element signature="e#20731#20765#0" />
+            <element signature="e#21181#24988#0" />
+            <element signature="e#21229#21341#0" />
+            <element signature="e#21470#21582#0" />
+            <element signature="e#21987#22063#0" />
+            <element signature="e#23275#23302#0" />
+            <element signature="e#25065#25701#0" />
+            <element signature="e#25756#26040#0" />
+            <element signature="e#26101#26782#0" />
+            <element signature="e#26222#26749#0" />
+            <element signature="e#26833#27591#0" />
+            <element signature="e#26930#27558#0" />
+            <element signature="e#27634#27693#0" />
+            <element signature="e#27778#27876#0" />
+            <element signature="e#27984#28687#0" />
+            <element signature="e#28026#28105#0" />
+            <element signature="e#28161#28243#0" />
+            <element signature="e#28301#28564#0" />
+            <element signature="e#28390#28564#0" />
+            <element signature="e#28443#28564#0" />
+            <element signature="e#28618#28687#0" />
+            <element signature="e#28803#29093#0" />
+            <element signature="e#28858#29093#0" />
+            <element signature="e#29217#29363#0" />
+            <element signature="e#29268#29363#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/old_code/old_main_chart.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="137" selection-start-line="137" selection-end-line="197" selection-end-column="20" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#173#0" expanded="true" />
+            <element signature="e#251#325#0" />
+            <element signature="e#779#820#0" />
+            <element signature="e#5808#6049#0" />
+            <element signature="e#6096#6263#0" />
+            <element signature="e#6349#6577#0" />
+            <element signature="e#6671#7364#0" />
+            <element signature="e#7443#7881#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/LineAndBarChartPlayground.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-216">
+          <caret line="75" column="27" lean-forward="true" selection-start-line="75" selection-start-column="27" selection-end-line="75" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/main_chart.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="15" column="87" selection-start-line="15" selection-start-column="87" selection-end-line="15" selection-end-column="87" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#173#0" expanded="true" />
+            <element signature="e#923#964#0" />
+            <element signature="e#5827#6068#0" />
+            <element signature="e#6134#6301#0" />
+            <element signature="e#6373#6601#0" />
+            <element signature="e#6675#7368#0" />
+            <element signature="e#7442#7881#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/device_graph_rep.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="15" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/main_chart.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="107" column="49" lean-forward="true" selection-start-line="107" selection-start-column="49" selection-end-line="107" selection-end-column="49" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#136#173#0" expanded="true" />
-            <element signature="e#206#280#0" />
-            <element signature="e#1092#1202#0" />
-            <element signature="e#1860#2676#0" />
-            <element signature="e#2571#2676#0" />
-            <element signature="e#3498#4191#0" />
-            <element signature="e#3579#3719#0" />
-            <element signature="e#3775#4191#0" />
-            <element signature="e#4536#5255#0" />
-            <element signature="e#4603#5255#0" />
-            <element signature="e#5066#5161#0" />
-          </folding>
+        <state relative-caret-position="330">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
