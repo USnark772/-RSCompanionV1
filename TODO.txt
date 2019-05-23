@@ -1,0 +1,20 @@
+Updater:
+Connect to server
+Query version
+if not latest version
+	Direct user to download latest version
+
+Installer:
+installer would replace previous version with latest version
+
+
+Graphing:
+change graphing to be multiple graphs in a scroll area for each device.
+
+Etc.:
+
+Possibly use numpy for internal data storage
+
+Save to separate files depending on device
+
+key flag goes into each device line

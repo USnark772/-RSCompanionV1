@@ -195,7 +195,6 @@ class DeviceManager:
                 if val_ind_end:
                     val_ind_start = val_ind_end + 2
 
-    # TODO: test this
     @staticmethod
     def __prepare_vog_msg(msg_dict):
         if 'arg' in msg_dict.keys():
@@ -204,7 +203,6 @@ class DeviceManager:
             msg_to_send = ">" + msg_dict['cmd'] + "|" + "<<\n"
         return msg_to_send
 
-    # TODO: Fill this in
     @staticmethod
     def __parse_vog_msg(msg, msg_dict):
         if msg[0:5] == "data|":

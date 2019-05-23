@@ -234,8 +234,6 @@ class TabContents(QVBoxLayout):
         self.msg_callback({'cmd': 'get_configButtonControl'})
 
     def __set_val(self, item, val):
-        if defs.debug_print:
-            print("item", item)
         if item == "ButtonControl":
             self.values[item] = int(val)
         elif item == "Name":
@@ -257,33 +255,22 @@ class TabContents(QVBoxLayout):
         self.debounce_lcd_number.display(self.debounce_time_slider.value())
 
     def __opened_inf_handler(self):
-        print("__opened_inf changed")
         if self.opened_state_inf_check_box.checkState() == Qt.Checked:
-            print("went form unchecked to checked")
             self.max_opened_slider.setDisabled(True)
             self.msg_callback({'cmd': "set_configMaxOpen", 'arg': str(self.max_val)})
         else:
-            print("went from checked to unchecked")
             self.max_opened_slider.setDisabled(False)
             self.msg_callback({'cmd': "set_configMaxOpen", 'arg': str(self.max_opened_slider.value())})
 
     def __closed_inf_handler(self):
-        if defs.debug_print:
-            print("__closed_inf changed")
         if self.closed_state_inf_check_box.checkState() == Qt.Checked:
-            if defs.debug_print:
-                print("went form unchecked to checked")
             self.max_closed_slider.setDisabled(True)
             self.msg_callback({'cmd': "set_configMaxClose", 'arg': str(self.max_val)})
         else:
-            if defs.debug_print:
-                print("went from checked to unchecked")
             self.max_closed_slider.setDisabled(False)
             self.msg_callback({'cmd': "set_configMaxClose", 'arg': str(self.max_closed_slider.value())})
 
     def __nhtsa_default_handler(self):
-        if defs.debug_print:
-            print("__nhtsa_default_handler")
         self.opened_state_inf_check_box.setChecked(False)
         self.closed_state_inf_check_box.setChecked(False)
         self.max_opened_slider.setDisabled(False)
@@ -297,8 +284,6 @@ class TabContents(QVBoxLayout):
 
 
     def __eblind_handler(self):
-        if defs.debug_print:
-            print("__eblind_handler")
         self.opened_state_inf_check_box.setChecked(False)
         self.closed_state_inf_check_box.setChecked(False)
         self.max_opened_slider.setDisabled(False)
@@ -311,8 +296,6 @@ class TabContents(QVBoxLayout):
         self.msg_callback({'cmd': "set_configButtonControl", 'arg': "0"})
 
     def __direct_control_handler(self):
-        if defs.debug_print:
-            print("__direct_control_handler")
         self.opened_state_inf_check_box.setChecked(True)
         self.closed_state_inf_check_box.setChecked(True)
         self.max_opened_slider.setDisabled(True)
@@ -325,19 +308,14 @@ class TabContents(QVBoxLayout):
         self.msg_callback({'cmd': "set_configButtonControl", 'arg': "1"})
 
     def __max_open_slider_handler(self):
-        # print("max_open_slider changed")
         self.msg_callback({'cmd': "set_configMaxOpen", 'arg': str(self.max_opened_slider.value())})
 
     def __max_closed_slider_handler(self):
-        # print("max_closed_slider changed")
         self.msg_callback({'cmd': "set_configMaxClose", 'arg': str(self.max_closed_slider.value())})
 
     def __debounce_slider_handler(self):
-        # print("debounce_slider changed")
         self.msg_callback({'cmd': "set_configDebounce", 'arg': str(self.debounce_time_slider.value())})
 
     def handle_msg(self, msg_dict):
-        # print("vog_device_view.ConfigureWidget.handle_msg()", msg_dict)
         for item in msg_dict:
-            # print(item, msg_dict[item])
             self.__set_val(item, msg_dict[item])

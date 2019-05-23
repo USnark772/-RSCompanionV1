@@ -44,7 +44,7 @@ chartView.setRenderHint(QPainter.Antialiasing)
 
 window = QMainWindow()
 window.setCentralWidget(chartView)
-window.resize(420, 300)
+window.resize(1000, 800)
 window.show()
 
 a.exec_()

@@ -6,15 +6,13 @@
 
 from PySide2.QtWidgets import *
 from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication
-from PySide2.QtGui import QFont, QPainter, QPalette
-from PySide2.QtCharts import QtCharts
+from PySide2.QtGui import QFont, QPalette, QKeyEvent
 
 import Model.device as device_container
 import View.main_chart as main_chart
 from View.help_window import HelpWindow
 
 
-# TODO: handle closing all windows when main window is closed
 class CompanionWindow(QMainWindow):
     # To keep track of which device is which for data display purposes
     __list_of_devices__ = {}
@@ -47,19 +45,8 @@ class CompanionWindow(QMainWindow):
         # Begin Experiment View Area generation code
         self.exp_data_view_horiz_layout = QHBoxLayout()
         self.exp_data_view_horiz_layout.setObjectName("exp_data_view_horiz_layout")
-        self.exp_data_view_vert_layout = QVBoxLayout()
-        self.exp_data_view_vert_layout.setObjectName("exp_data_view_vert_layout")
         self.main_chart = main_chart.MainChartWidget()
-        self.main_chart_view = QtCharts.QChartView(self.central_widget)
-        self.main_chart_view.setChart(self.main_chart)
-        self.main_chart_view.setRenderHint(QPainter.Antialiasing)
-        self.chart_scroll_bar = QScrollBar()
-        self.chart_scroll_bar.setOrientation(Qt.Horizontal)
-        self.chart_scroll_bar.setMaximum(100)
-        self.chart_scroll_bar.setMinimum(0)
-        self.chart_scroll_bar.setValue(100)
-        self.exp_data_view_vert_layout.addWidget(self.main_chart_view)
-        self.exp_data_view_vert_layout.addWidget(self.chart_scroll_bar)
+        self.exp_data_view_horiz_layout.addWidget(self.main_chart)
         # End Experiment View Area generation code
         ################################################################################################################
         # Begin RS Device Tab generation code
@@ -69,9 +56,8 @@ class CompanionWindow(QMainWindow):
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(self.rs_devices_tab_widget.sizePolicy().hasHeightForWidth())
         self.rs_devices_tab_widget.setSizePolicy(size_policy)
-        self.rs_devices_tab_widget.setMinimumWidth(200)
+        self.rs_devices_tab_widget.setMinimumWidth(250)
         self.rs_devices_tab_widget.setObjectName("rs_devices_tab_widget")
-        self.exp_data_view_horiz_layout.addLayout(self.exp_data_view_vert_layout)
         self.exp_data_view_horiz_layout.addWidget(self.rs_devices_tab_widget)
         self.central_widget_vert_layout.addLayout(self.exp_data_view_horiz_layout)
         # End RS Device Tab generation code
@@ -137,9 +123,9 @@ class CompanionWindow(QMainWindow):
         self.end_exp_push_button = QPushButton(self.exp_control_group_box)
         self.end_exp_push_button.setObjectName("end_block_push_button")
         self.exp_control_group_box_vert_layout.addWidget(self.end_exp_push_button)
-        self.exp_name_label = QLineEdit(self.exp_control_group_box)
-        self.exp_name_label.setPlaceholderText("Enter experiment name here")
-        self.exp_control_group_box_vert_layout.addWidget(self.exp_name_label)
+        self.exp_name_input_box = QLineEdit(self.exp_control_group_box)
+        self.exp_name_input_box.setPlaceholderText("Enter experiment name here")
+        self.exp_control_group_box_vert_layout.addWidget(self.exp_name_input_box)
         self.control_widget_horiz_layout.addWidget(self.exp_control_group_box)
         self.block_control_group_box = QGroupBox(self.control_widget_dock_contents)
         self.block_control_group_box.setTitle("")
@@ -166,7 +152,6 @@ class CompanionWindow(QMainWindow):
         ################################################################################################################
         # Begin KeyFlag group box generation code
         self.key_flag_group_box = QGroupBox(self.control_widget_dock_contents)
-        self.key_flag_group_box.setObjectName("key_flag_group_box")
         self.key_flag_vert_layout = QVBoxLayout(self.key_flag_group_box)
         self.key_flag_vert_layout.setObjectName("key_flag_vert_layout")
         self.key_flag_label = QLabel(self.key_flag_group_box)
@@ -185,10 +170,11 @@ class CompanionWindow(QMainWindow):
         self.block_note_group_box_grid_layout.setObjectName("block_note_group_box_grid_layout")
         self.block_note_text_box = QTextEdit(self.block_note_group_box)
         self.block_note_text_box.setObjectName("block_note_text_box")
+        self.block_note_text_box.setPlaceholderText("Enter block note text here")
         self.block_note_group_box_grid_layout.addWidget(self.block_note_text_box, 0, 1, 1, 1)
-        self.post_push_button = QPushButton(self.block_note_group_box)
-        self.post_push_button.setObjectName("post_push_button")
-        self.block_note_group_box_grid_layout.addWidget(self.post_push_button, 1, 1, 1, 1)
+        self.save_block_note_push_button = QPushButton(self.block_note_group_box)
+        self.save_block_note_push_button.setObjectName("save_block_note_push_button")
+        self.block_note_group_box_grid_layout.addWidget(self.save_block_note_push_button, 1, 1, 1, 1)
         self.control_widget_horiz_layout.addWidget(self.block_note_group_box)
         # End Block Note group box generation code
         ################################################################################################################
@@ -212,9 +198,9 @@ class CompanionWindow(QMainWindow):
         self.exp_block_labels_frame_vert_layout.setContentsMargins(2, 2, 2, 2)
         self.exp_block_labels_frame_vert_layout.setSpacing(6)
         self.exp_block_labels_frame_vert_layout.setObjectName("exp_block_labels_frame_vert_layout")
-        self.exp_labels = QLabel(self.exp_block_labels_frame)
-        self.exp_labels.setObjectName("exp_labels")
-        self.exp_block_labels_frame_vert_layout.addWidget(self.exp_labels)
+        self.exp_label = QLabel(self.exp_block_labels_frame)
+        self.exp_label.setObjectName("exp_labels")
+        self.exp_block_labels_frame_vert_layout.addWidget(self.exp_label)
         self.exp_num_label = QLabel(self.exp_block_labels_frame)
         self.exp_num_label.setObjectName("exp_num_label")
         self.exp_block_labels_frame_vert_layout.addWidget(self.exp_num_label)
@@ -283,6 +269,8 @@ class CompanionWindow(QMainWindow):
         self.about_rs_companion_action.setObjectName("about_rs_companion_action")
         self.about_rs_action = QAction(self)
         self.about_rs_action.setObjectName("about_rs_action")
+        self.check_for_updates_action = QAction(self)
+        self.check_for_updates_action.setObjectName("check_for_updates_action")
         #self.end_exp_action = QAction(main_window)
         #self.end_exp_action.setObjectName("end_exp_action")
         self.trial_controls_action = QAction(self)
@@ -317,6 +305,8 @@ class CompanionWindow(QMainWindow):
         self.window_menu.addSeparator()
         self.help_menu.addAction(self.about_rs_companion_action)
         self.help_menu.addAction(self.about_rs_action)
+        self.help_menu.addAction(self.check_for_updates_action)
+
         self.udp_controls_menu.addAction(self.output_action)
         self.udp_controls_menu.addAction(self.input_action)
         self.settings_menu.addAction(self.com_port_action)
@@ -331,6 +321,7 @@ class CompanionWindow(QMainWindow):
         self.__set_texts(self)
         # self.__set_colors()
         self.__setup_handlers(msg_handler)
+        self.__set_tool_tips()
         QMetaObject.connectSlotsByName(self)
 
     # Auto generated code slightly altered for readability
@@ -338,7 +329,7 @@ class CompanionWindow(QMainWindow):
         _translate = QCoreApplication.translate
         ################################################################################################################
         # Main Window SetTitle code
-        main_window.setWindowTitle(_translate("MainWindow", "RS Device Companion"))
+        main_window.setWindowTitle(_translate("MainWindow", "RS Device Companion App"))
         ################################################################################################################
         # Begin MenuBar SetTitle code
         self.file_menu.setTitle(_translate("MainWindow", "File"))
@@ -351,7 +342,7 @@ class CompanionWindow(QMainWindow):
         self.com_messages_action.setText(_translate("MainWindow", "COM Messages"))
         self.about_rs_companion_action.setText(_translate("MainWindow", "About RS Companion"))
         self.about_rs_action.setText(_translate("MainWindow", "About Red Scientific"))
-        #self.end_exp_action.setText(_translate("MainWindow", "End Experiment"))
+        self.check_for_updates_action.setText(_translate("MainWindow", "Check For Updates"))
         self.trial_controls_action.setText(_translate("MainWindow", "Trial Controls"))
         self.display_tool_tips_action.setText(_translate("MainWindow", "Display Tooltips"))
         self.configure_action.setText(_translate("MainWindow", "Configure"))
@@ -373,8 +364,8 @@ class CompanionWindow(QMainWindow):
         self.key_flag_group_box.setTitle(_translate("MainWindow", "Key Flag"))
         self.key_flag_label.setText(_translate("MainWindow", "NA"))
         self.block_note_group_box.setTitle(_translate("MainWindow", "Block Note"))
-        self.post_push_button.setText(_translate("MainWindow", "Post"))
-        self.exp_labels.setText(_translate("MainWindow", "Experiment"))
+        self.save_block_note_push_button.setText(_translate("MainWindow", "Save Block Note"))
+        self.exp_label.setText(_translate("MainWindow", "Experiment"))
         self.exp_num_label.setText(_translate("MainWindow", "    Number:"))
         self.exp_time_label.setText(_translate("MainWindow", "    Time:"))
         self.block_label.setText(_translate("MainWindow", "Block"))
@@ -385,6 +376,20 @@ class CompanionWindow(QMainWindow):
         self.block_num_val_label.setText(_translate("MainWindow", "NA"))
         self.block_time_val_label.setText(_translate("MainWindow", "NA"))
         # End Control Widget SetTitle code
+
+    def __set_tool_tips(self):
+        self.run_new_exp_push_button.setToolTip("Begin a new experiment")
+        self.end_exp_push_button.setToolTip("End a currently running experiment")
+        self.run_new_block_push_button.setToolTip("Begin a new block")
+        self.end_block_push_button.setToolTip("End a currently running block")
+        self.save_block_note_push_button.setToolTip("Save the block note to the save file")
+        self.key_flag_group_box.setToolTip("The most recent key pressed for reference in save file")
+        self.exp_label.setToolTip("Information about the current experiment")
+        self.exp_num_label.setToolTip("The number of the current experiment")
+        self.exp_time_label.setToolTip("The start time of the current experiment")
+        self.block_label.setToolTip("Information about the current block within the current experiment")
+        self.block_num_label.setToolTip("The number of the current block")
+        self.block_time_label.setToolTip("The start time of the current block")
 
     # TODO: Decide to use this or not.
     def __set_colors(self):
@@ -402,7 +407,6 @@ class CompanionWindow(QMainWindow):
         self.run_new_exp_push_button.update()
 
     def __setup_handlers(self, msg_handler):
-        self.chart_scroll_bar.valueChanged.connect(self.__move_main_graph)
         self.about_rs_action.triggered.connect(self.__about_rs_action_handler)
         self.about_rs_companion_action.triggered.connect(self.__about_rs_companion_action_handler)
         self.msg_callback = msg_handler
@@ -430,10 +434,30 @@ class CompanionWindow(QMainWindow):
     def __move_main_graph(self):
         self.main_chart.scroll_graph(self.chart_scroll_bar.value())
 
-    # TODO: End experiment/block on close
+    def keyPressEvent(self, event):
+        if type(event) == QKeyEvent:
+            if 0x41 <= event.key() <= 0x5a:
+                self.key_flag_label.setText(chr(event.key()))
+            event.accept()
+        else:
+            event.ignore()
+
+    def mouseMoveEvent(self, event):
+        event.accept()
+
     def closeEvent(self, event):
+        self.msg_callback({'action': "close"})
         for device in self.__list_of_devices__:
             self.__list_of_devices__[device].remove_self()
+
+    def set_current_exp_time(self, time):
+        self.exp_time_val_label.setText(time)
+
+    def set_current_block_time(self, time):
+        self.block_time_val_label.setText(time)
+
+    def get_block_note(self):
+        return self.block_note_text_box.toPlainText()
 
     # Passes message received to proper device display object
     def handle_msg(self, msg_dict):

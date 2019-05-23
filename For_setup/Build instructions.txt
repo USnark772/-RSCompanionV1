@@ -1,0 +1,4 @@
+cmd
+Go to this directory
+command: python setup.py build
+see results

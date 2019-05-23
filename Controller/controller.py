@@ -25,8 +25,11 @@ class CompanionController:
         self.blk_hdrs = []
         self.blk_notes = []
         self.blk_data = []
+        self.device_data = {}
         self.current_exp_number = 0
         self.current_block_number = -1
+        self.current_exp_name = "N\A"
+        self.closing = False
 
         self.exp_running = False
         self.block_running = False
@@ -51,7 +54,7 @@ class CompanionController:
         self.ui.append_exp_action.triggered.connect(self.__append_experiment_action_handler)
         self.ui.run_new_block_push_button.clicked.connect(self.__begin_block_button_handler)
         self.ui.end_block_push_button.clicked.connect(self.__end_block_button_handler)
-        self.ui.post_push_button.clicked.connect(self.__post_button_handler)
+        self.ui.save_block_note_push_button.clicked.connect(self.__save_block_note_button_handler)
 
     def __save_handler(self):
         if path.exists(self.fname_to_save_to[0]):
@@ -61,7 +64,7 @@ class CompanionController:
 
     def __save_as_handler(self):
         directory = QDir()
-        fname = QFileDialog.getSaveFileName(None, 'Open file', directory.homePath(), '*.txt')
+        fname = QFileDialog.getExistingDirectory(None, 'Save Directory', directory.homePath(), QFileDialog.ShowDirsOnly)
         if fname[0] != "":
             self.fname_to_save_to = fname
             self.__save()
@@ -80,14 +83,17 @@ class CompanionController:
             msg_dict = {'type': "start exp"}
             self.device_manager.handle_msg(msg_dict)
             self.ui.exp_num_val_label.setText(str(self.current_exp_number + 1))
-            exp_name = self.ui.exp_name_label.text()
+            exp_name = self.ui.exp_name_input_box.text()
+            current_time = self.__get_current_time()
             if exp_name == "":
                 exp_name = "N/A"
             self.exp_hdrs.append("Experiment name: " + exp_name +
-                                 ", start date/time: " + self.__get_current_time())
+                                 ", start date/time: " + current_time)
             self.blk_hdrs.append([])
             self.blk_notes.append([])
             self.blk_data.append([])
+            self.current_exp_name = exp_name
+            self.ui.set_current_exp_time(current_time)
         else:
             self.message = HelpWindow("Error", "An experiment is already running")
             self.message.show()
@@ -103,7 +109,7 @@ class CompanionController:
             self.ui.block_num_val_label.setText(str(self.current_block_number + 1))
             if self.block_running:
                 self.__end_block_button_handler()
-        else:
+        elif not self.closing:
             self.message = HelpWindow("Error", "No experiment running")
             self.message.show()
 
@@ -116,12 +122,14 @@ class CompanionController:
             msg_dict = {'type': "start block"}
             self.device_manager.handle_msg(msg_dict)
             block_name = self.ui.block_name_label.text()
+            current_time = self.__get_current_time()
             if block_name == "":
                 block_name = "N/A"
             self.blk_hdrs[self.current_exp_number].append("Block name: " + block_name +
-                                                          ", start date/time: " + self.__get_current_time())
+                                                          ", start date/time: " + current_time)
             self.blk_notes[self.current_exp_number].append([])
             self.blk_data[self.current_exp_number].append([])
+            self.ui.set_current_block_time(current_time)
         elif self.exp_running and self.block_running:
             self.message = HelpWindow("Error", "A block is already running")
             self.message.show()
@@ -163,9 +171,10 @@ class CompanionController:
     def __append_experiment_action_handler(self):
         print("Append Experiment Action triggered")
 
-    def __post_button_handler(self):
+    # TODO: Is this where keyflag goes?
+    def __save_block_note_button_handler(self):
         if self.block_running:
-            note = self.ui.block_note_text_box.toPlainText()
+            note = self.ui.get_block_note()
             if note != "":
                 current_time = self.__get_current_time(True)
                 self.blk_notes[self.current_exp_number][self.current_block_number].append(
@@ -184,25 +193,22 @@ class CompanionController:
         # Need to check and make sure file is a valid saved file before parsing, use headers?
 
     def __save(self):
-        # TODO: Save all data from self.exp_data to file(s)
+        # TODO: Save all data from self.exp_data to new file(s) based on number of devices
         lines = []
         for i in range(len(self.exp_hdrs)):
-            # print("exp_hdrs[" + str(i) + "] = ", self.exp_hdrs[i])
             lines.append(self.exp_hdrs[i] + "\n")
             for j in range(len(self.blk_hdrs[i])):
-                # print("blk_hdrs[" + str(i) + ", " + str(j) + "] = ", self.blk_hdrs[i][j])
-                lines.append("\t" + self.blk_hdrs[i][j] + "\n")
+                #lines.append("\t" + self.blk_hdrs[i][j] + "\n")
+                lines.append(self.blk_hdrs[i][j] + "\n")
                 for h in range(len(self.blk_data[i][j])):
-                    # print("blk_data[" + str(i) + ", " + str(j) + ", " + str(h) + "] = ", self.blk_data[i][j][h])
-                    lines.append("\t\t" + self.blk_data[i][j][h] + "\n")
+                    #lines.append("\t\t" + self.blk_data[i][j][h] + "\n")
+                    lines.append(self.blk_data[i][j][h] + "\n")
         self.__write_lines_to_file(lines)
 
     def __write_lines_to_file(self, lines):
-        # print("__write_lines_to_file starting")
         file = open(self.fname_to_save_to[0], 'w+')
         file.writelines(lines)
         file.close()
-        # print("__write_lines_to_file ended")
 
     def __start_update_timer(self):
         self.update_timer = QTimer()
@@ -226,9 +232,8 @@ class CompanionController:
         for i in range(0, len(defs.drt_trial_fields)):
             line += defs.drt_ui_fields[i] + ": " + msg_dict[defs.drt_trial_fields[i]] + ", "
         line = line[0:-3]
-        self.blk_data[self.current_exp_number][self.current_block_number].append(line)
+        self.device_data[msg_dict['device']].append(line)
 
-    # TODO: Make this work
     def __add_vog_line(self, msg_dict):
         line = "device: " + msg_dict['device'][0] + " on " + msg_dict['device'][1] +\
                ", timestamp: " + self.__get_current_time(True) + ", "
@@ -236,6 +241,9 @@ class CompanionController:
             line += defs.vog_ui_fields[i] + ": " + msg_dict[defs.vog_block_field[i]] + ", "
         line = line[0:-3]
         self.blk_data[self.current_exp_number][self.current_block_number].append(line)
+
+    def __add_device(self, msg_dict):
+        self.device_data[msg_dict['device']] = []
 
     @staticmethod
     def __get_current_time(mil=False):
@@ -245,9 +253,15 @@ class CompanionController:
             return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def receive_msg_from_ui(self, msg):
-        self.device_manager.handle_msg(msg)
+        if 'action' in msg.keys() and msg['action'] == "close":
+            self.closing = True
+            self.__end_exp_action_handler()
+        else:
+            self.device_manager.handle_msg(msg)
 
     def receive_msg_from_device_manager(self, msg):
         if msg['type'] == "data":
             self.__update_dict(msg)
+        if msg['type'] == "add":
+            self.__add_device(msg)
         self.ui.handle_msg(msg)

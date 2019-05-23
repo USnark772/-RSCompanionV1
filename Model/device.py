@@ -29,12 +29,10 @@ class RSDevice:
         self.tab_parent.setTabText(index, self.device_name)
 
     def handle_msg(self, msg):
-        # print("device.handle_msg()")
         self.tab_contents.handle_msg(msg)
 
     def remove_self(self):
         self.tab_parent.removeTab(self.tab_parent.indexOf(self.device_tab))
-        # self.configure_widget.deleteLater()
         self.device_tab.deleteLater()
 
     def callback(self, msg_dict):

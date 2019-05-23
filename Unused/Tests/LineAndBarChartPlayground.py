@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QApplication, QMainWindow, QScrollBar, QVBoxLayout, QWidget
 from PySide2.QtCore import QPoint, Qt, QTimer
 from PySide2.QtCharts import QtCharts
+from PySide2.QtGui import QColor
 import sys
 
 
@@ -23,9 +24,26 @@ def create_bar_series(sets=()):
     return the_series
 
 
+def create_stacked_bar_series(sets=()):
+    the_series = QtCharts.QStackedBarSeries()
+    the_series.setObjectName("stacked_bar_series")
+    for set in sets:
+        the_series.append(set)
+    return the_series
+
+
 def create_line_series(name, points):
     the_series = QtCharts.QLineSeries()
     the_series.setObjectName("line_series")
+    the_series.setName(name)
+    for point in points:
+        the_series.append(the_series.count(), point)
+    return the_series
+
+
+def create_scatter_series(name, points):
+    the_series = QtCharts.QScatterSeries()
+    the_series.setObjectName("scatter_series")
     the_series.setName(name)
     for point in points:
         the_series.append(the_series.count(), point)
@@ -94,7 +112,6 @@ class ChartExample(QMainWindow):
         self.chart_scroll_bar.setRange(0, 100)
         self.chart_scroll_bar.valueChanged.connect(self.__move_graph)
 
-        self.num_points = 0
         self.bar_sets = []
         self.set_of_series = []
         self.bar_set_data = (("Jane", (1, 2, 3, 4, 5, 6)),
@@ -104,18 +121,21 @@ class ChartExample(QMainWindow):
         self.additional_bar_set = ("Sam", (9, 7, 5, 3, 1, 2))
         self.num_points = 12
         for item in self.bar_set_data:
-            self.bar_sets.append(create_bar_set(item[0], item[1]))
+            self.bar_sets.append(create_bar_set(item[0], item[1], 0))
 
-        self.bar_series = create_bar_series(self.bar_sets)
+        self.bar_series = create_stacked_bar_series(self.bar_sets)
+
+        for i in range(1):
+            bar_set = [create_bar_set(self.additional_bar_set[0], self.additional_bar_set[1], 0)]
+            self.set_of_series.append(create_stacked_bar_series(bar_set))
+
         self.set_of_series.append(self.bar_series)
-        self.line_series = create_line_series("trend", (4, 15, 20, 4, 12, 17))
+        self.line_series = create_scatter_series("trend", (4, 15, 20, 4, 12, 17))
         self.set_of_series.append(self.line_series)
 
         self.chart_obj = create_chart("Line and barchart example", self.set_of_series)
 
-        # self.categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         x_range = (0, 7)
-        # set_chart_axis(self.chart_obj, self.categories, range)
         set_chart_axis(self.chart_obj, x_range)
 
         self.chart_view = QtCharts.QChartView(self.chart_obj)
@@ -128,8 +148,9 @@ class ChartExample(QMainWindow):
 
     def __move_graph(self):
         temp_range_val = (self.num_points - 7) * (self.chart_scroll_bar.value() / 100)
-        x_range = (temp_range_val, temp_range_val + 7)
-        set_chart_axis(self.chart_obj, x_range)
+        x_range = (temp_range_val - 1, temp_range_val + 7)
+        self.chart_obj.axisX().setRange(x_range[0], x_range[1])
+        # set_chart_axis(self.chart_obj, x_range)
 
     def change(self):
         print("Change called")
@@ -172,6 +193,7 @@ class ChartExample(QMainWindow):
         for set in bar_sets:
             if set.label() == self.additional_bar_set[0]:
                 self.bar_series.remove(set)
+
 
 def main():
     a = QApplication(sys.argv)

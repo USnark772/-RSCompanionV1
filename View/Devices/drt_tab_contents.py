@@ -200,8 +200,6 @@ class TabContents(QVBoxLayout):
         self.stim_intens_slider.sliderReleased.connect(self.__set_intensity_handler)
 
     def __get_vals(self):
-        if defs.debug_print:
-            print("drt Getting vals")
         self.msg_callback({'cmd': "get_config"})
 
     def __set_val(self, var, val):
@@ -253,15 +251,8 @@ class TabContents(QVBoxLayout):
         self.msg_callback({'cmd': "set_lowerISI", 'arg': str(self.lower_isi_slider.value())})
 
     def __set_stim_duration_handler(self):
-        if defs.debug_print:
-            print("drt Sending update to device")
         self.msg_callback({'cmd': "set_stimDur", 'arg': str(self.stim_dur_slider.value())})
 
     def handle_msg(self, msg_dict):
-        if defs.debug_print:
-            print()
-            print("drt Handling message")
         for item in msg_dict:
-            if defs.debug_print:
-                print(item)
             self.__set_val(item, msg_dict[item])
