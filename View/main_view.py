@@ -9,7 +9,7 @@ from PySide2.QtCore import QSize, QRect, Qt, QMetaObject, QCoreApplication
 from PySide2.QtGui import QFont, QPalette, QKeyEvent
 
 import Model.device as device_container
-import View.main_chart as main_chart
+import View.chart_container as main_chart
 from View.help_window import HelpWindow
 
 
@@ -22,8 +22,7 @@ class CompanionWindow(QMainWindow):
         super().__init__()
         # Begin MainWindow generation code
         self.setObjectName("main_window")
-        self.resize(840, 705)
-        self.setMinimumSize(QSize(840, 468))
+        self.setMinimumSize(QSize(450, 350))
         font = QFont()
         font.setPointSize(10)
         self.setFont(font)
@@ -45,8 +44,8 @@ class CompanionWindow(QMainWindow):
         # Begin Experiment View Area generation code
         self.exp_data_view_horiz_layout = QHBoxLayout()
         self.exp_data_view_horiz_layout.setObjectName("exp_data_view_horiz_layout")
-        self.main_chart = main_chart.MainChartWidget()
-        self.exp_data_view_horiz_layout.addWidget(self.main_chart)
+        self.main_chart_area = main_chart.GraphContainer()
+        self.exp_data_view_horiz_layout.addWidget(self.main_chart_area)
         # End Experiment View Area generation code
         ################################################################################################################
         # Begin RS Device Tab generation code
@@ -194,6 +193,7 @@ class CompanionWindow(QMainWindow):
         self.exp_block_labels_frame.setFrameShape(QFrame.StyledPanel)
         self.exp_block_labels_frame.setFrameShadow(QFrame.Raised)
         self.exp_block_labels_frame.setObjectName("exp_block_labels_frame")
+        self.exp_block_labels_frame.setFixedWidth(150)
         self.exp_block_labels_frame_vert_layout = QVBoxLayout(self.exp_block_labels_frame)
         self.exp_block_labels_frame_vert_layout.setContentsMargins(2, 2, 2, 2)
         self.exp_block_labels_frame_vert_layout.setSpacing(6)
@@ -432,7 +432,7 @@ class CompanionWindow(QMainWindow):
         self.help_window.show()
 
     def __move_main_graph(self):
-        self.main_chart.scroll_graph(self.chart_scroll_bar.value())
+        self.main_chart_area.scroll_graph(self.chart_scroll_bar.value())
 
     def keyPressEvent(self, event):
         if type(event) == QKeyEvent:
@@ -476,17 +476,18 @@ class CompanionWindow(QMainWindow):
                     pass
         elif msg_dict['type'] == "data":
             del msg_dict['type']
-            self.main_chart.handle_msg(msg_dict)
+            self.main_chart_area.handle_msg(msg_dict)
 
     # Creates an RSDevice and adds it to the list of devices
     def add_rs_device_handler(self, device):
         if device not in self.__list_of_devices__:
             self.__list_of_devices__[device] = device_container.RSDevice(device, self.msg_callback,
                                                                          self.rs_devices_tab_widget)
-            self.main_chart.add_device(device)
+            self.main_chart_area.add_device(device)
 
     # Deletes an RSDevice and removes it from the list of devices
     def remove_rs_device_handler(self, device):
         if device in self.__list_of_devices__:
             self.__list_of_devices__[device].remove_self()
             del self.__list_of_devices__[device]
+            self.main_chart_area.remove_device(device)
