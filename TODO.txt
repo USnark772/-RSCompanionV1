@@ -7,11 +7,6 @@ Updater:
 Installer:
 - Installer would install latest version replacing any previous versions
 
-Graphing:
-- Change graphing to be multiple graphs in a scroll area for each device.
-
 Etc.:
 - Possibly use numpy for internal data storage
-- Save to separate files depending on device
-- Key flag goes into each device line
 - NEED TO output mils from block start properly for at least drt

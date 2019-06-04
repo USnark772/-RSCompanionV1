@@ -2,23 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Controller/version_checker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/View/saved_file_tab_contents.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_connect_to_google.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/defs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/device.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/device.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/device_graph_rep.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/old_code/device_graph_rep.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/version_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/version_checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/old_code/old_main_chart.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/old_code/old_main_chart.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/ui_files/vog_tab_contents.ui" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/ui_files/vog_tab_contents.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/Devices/drt_tab_contents.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/Devices/drt_tab_contents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/Devices/vog_tab_contents.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/Devices/vog_tab_contents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/chart_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/chart_container.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/chart_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/chart_obj.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/device_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/device_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/main_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/main_view.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,76 +19,107 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TODO.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="16" column="64" selection-start-line="16" selection-start-column="64" selection-end-line="16" selection-end-column="64" />
+            <state relative-caret-position="242">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller/version_checker.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="661">
+              <caret line="44" column="62" selection-start-line="44" selection-start-column="62" selection-end-line="44" selection-end-column="62" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#136#177#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test_connect_to_google.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="8" column="9" lean-forward="true" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Version.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="3" lean-forward="true" selection-start-column="3" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="880">
-              <caret line="213" column="25" selection-start-line="213" selection-start-column="25" selection-end-line="213" selection-end-column="25" />
+            <state relative-caret-position="748">
+              <caret line="155" column="4" selection-start-line="155" selection-start-column="4" selection-end-line="155" selection-end-column="4" />
               <folding>
                 <element signature="n#!!doc" />
                 <element signature="e#522#1410#0" />
-                <element signature="e#1416#2026#0" />
-                <element signature="e#2080#2263#0" />
-                <element signature="e#2305#2374#0" />
-                <element signature="e#2427#2583#0" />
-                <element signature="e#2492#2583#0" />
-                <element signature="e#2630#2862#0" />
-                <element signature="e#2914#3328#0" />
-                <element signature="e#2986#3208#0" />
-                <element signature="e#3040#3136#0" />
-                <element signature="e#3235#3328#0" />
-                <element signature="e#3378#3559#0" />
-                <element signature="e#3502#3559#0" />
-                <element signature="e#3596#4026#0" />
-                <element signature="e#4061#4361#0" />
-                <element signature="e#4415#4654#0" />
-                <element signature="e#4475#4536#0" />
-                <element signature="e#4603#4654#0" />
-                <element signature="e#4706#4856#0" />
-                <element signature="e#4797#4856#0" />
-                <element signature="e#4895#5393#0" />
-                <element signature="e#5430#5595#0" />
-                <element signature="e#5601#6337#1" />
-                <element signature="e#6395#6894#0" />
-                <element signature="e#6430#6894#0" />
-                <element signature="e#6505#6894#0" />
-                <element signature="e#6563#6894#0" />
-                <element signature="e#6975#8297#0" />
-                <element signature="e#7120#7241#0" />
-                <element signature="e#8022#8362#0" />
-                <element signature="e#8059#8362#0" />
-                <element signature="e#7949#8627#0" />
-                <element signature="e#8074#8213#0" />
-                <element signature="e#8027#8198#0" />
-                <element signature="e#8257#8426#0" />
-                <element signature="e#8472#8646#0" />
-                <element signature="e#8687#8715#0" />
-                <element signature="e#8764#8927#0" />
-                <element signature="e#8990#9336#0" />
-                <element signature="e#9386#9641#0" />
-                <element signature="e#9691#9901#0" />
-                <element signature="e#9949#10800#0" />
-                <element signature="e#10190#10728#0" />
-                <element signature="e#10424#10728#0" />
-                <element signature="e#10851#11344#0" />
-                <element signature="e#10886#11092#0" />
-                <element signature="e#11138#11344#0" />
-                <element signature="e#11404#11533#0" />
-                <element signature="e#11593#11675#0" />
-                <element signature="e#11734#11942#0" />
-                <element signature="e#11843#11921#0" />
-                <element signature="e#12044#12668#0" />
-                <element signature="e#13266#13363#0" />
-                <element signature="e#12944#13092#0" />
-                <element signature="e#13142#13655#0" />
-                <element signature="e#13210#13273#0" />
-                <element signature="e#13717#13878#0" />
+                <element signature="e#1452#2062#0" />
+                <element signature="e#2116#2299#0" />
+                <element signature="e#2341#2410#0" />
+                <element signature="e#2463#2619#0" />
+                <element signature="e#2528#2619#0" />
+                <element signature="e#2666#2898#0" />
+                <element signature="e#2950#3364#0" />
+                <element signature="e#3022#3244#0" />
+                <element signature="e#3076#3172#0" />
+                <element signature="e#3271#3364#0" />
+                <element signature="e#3414#3595#0" />
+                <element signature="e#3538#3595#0" />
+                <element signature="e#3632#4062#0" />
+                <element signature="e#4097#4397#0" />
+                <element signature="e#4451#4690#0" />
+                <element signature="e#4511#4572#0" />
+                <element signature="e#4639#4690#0" />
+                <element signature="e#4742#4892#0" />
+                <element signature="e#4833#4892#0" />
+                <element signature="e#4931#5429#0" />
+                <element signature="e#5466#5631#0" />
+                <element signature="e#5637#6373#1" />
+                <element signature="e#6431#6930#0" />
+                <element signature="e#6466#6930#0" />
+                <element signature="e#6541#6930#0" />
+                <element signature="e#6599#6930#0" />
+                <element signature="e#6975#7752#0" />
+                <element signature="e#7156#7277#0" />
+                <element signature="e#7412#7752#0" />
+                <element signature="e#7449#7752#0" />
+                <element signature="e#7818#8303#0" />
+                <element signature="e#7943#8082#0" />
+                <element signature="e#8348#8519#0" />
+                <element signature="e#8578#8747#0" />
+                <element signature="e#8793#8967#0" />
+                <element signature="e#9008#9036#0" />
+                <element signature="e#9085#9248#0" />
+                <element signature="e#9311#9657#0" />
+                <element signature="e#9707#9962#0" />
+                <element signature="e#10012#10222#0" />
+                <element signature="e#10270#11121#0" />
+                <element signature="e#10511#11049#0" />
+                <element signature="e#10745#11049#0" />
+                <element signature="e#11172#11665#0" />
+                <element signature="e#11207#11413#0" />
+                <element signature="e#11459#11665#0" />
+                <element signature="e#11725#11854#0" />
+                <element signature="e#11914#11996#0" />
+                <element signature="e#12055#12263#0" />
+                <element signature="e#12164#12242#0" />
+                <element signature="e#12365#12989#0" />
+                <element signature="e#13032#13129#0" />
+                <element signature="e#13173#13321#0" />
+                <element signature="e#13371#13884#0" />
+                <element signature="e#13439#13502#0" />
+                <element signature="e#13946#14107#0" />
               </folding>
             </state>
           </provider>
@@ -155,8 +174,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/View/tab.py" />
-        <option value="$PROJECT_DIR$/View/vog_view.py" />
         <option value="$PROJECT_DIR$/Unused/ui_files/TabExample.py" />
         <option value="$PROJECT_DIR$/Unused/ui_files/drt_tab_contents.py" />
         <option value="$PROJECT_DIR$/Unused/old_code/configure_widget.py" />
@@ -191,8 +208,6 @@
         <option value="$PROJECT_DIR$/Controller/new_controller.py" />
         <option value="$PROJECT_DIR$/View/Devices/vog_tab_contents.py" />
         <option value="$PROJECT_DIR$/Controller/main.py" />
-        <option value="$PROJECT_DIR$/Controller/version_checker.py" />
-        <option value="$PROJECT_DIR$/TODO.txt" />
         <option value="$PROJECT_DIR$/View/chart_container.py" />
         <option value="$PROJECT_DIR$/View/chart_obj.py" />
         <option value="$PROJECT_DIR$/Controller/device_manager.py" />
@@ -206,6 +221,10 @@
         <option value="$PROJECT_DIR$/View/main_view.py" />
         <option value="$PROJECT_DIR$/Controller/controller.py" />
         <option value="$PROJECT_DIR$/View/saved_file_tab_contents.py" />
+        <option value="$PROJECT_DIR$/TODO.txt" />
+        <option value="$PROJECT_DIR$/Controller/version_checker.py" />
+        <option value="$PROJECT_DIR$/test_connect_to_google.py" />
+        <option value="$PROJECT_DIR$/Version.txt" />
       </list>
     </option>
   </component>
@@ -220,6 +239,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -240,17 +260,6 @@
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Unused" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Unused" type="462c0819:PsiDirectoryNode" />
-              <item name="ui_files" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
               <item name="View" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -263,7 +272,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -294,28 +302,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="LineAndBarChartPlayground" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/LineAndBarChartPlayground.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.test_connect_to_google">
     <configuration name="NewGraphing" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -400,13 +387,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test_connect_to_google" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_connect_to_google.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test_connect_to_google" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.main_view" />
         <item itemvalue="Python.main_chart" />
         <item itemvalue="Python.NewGraphing" />
-        <item itemvalue="Python.LineAndBarChartPlayground" />
       </list>
     </recent_temporary>
   </component>
@@ -437,7 +445,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.1391097" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.1391097" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.35060638" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.44833067" side_tool="true" weight="0.39470783" />
@@ -446,7 +454,7 @@
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.31973538" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32930514" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" sideWeight="0.5516693" visible="true" weight="0.41786107" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.5516693" visible="true" weight="0.41786107" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39470783" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
@@ -477,14 +485,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Unused/Tests/LineAndBarChartExample.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1012">
-          <caret line="49" column="33" lean-forward="true" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py" />
     <entry file="file://$PROJECT_DIR$/For_setup/defs.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -747,16 +747,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/version_checker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="13" column="28" lean-forward="true" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Controller/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -816,13 +806,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="50" column="54" selection-start-line="50" selection-start-column="54" selection-end-line="50" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" column="64" selection-start-line="16" selection-start-column="64" selection-end-line="16" selection-end-column="64" />
         </state>
       </provider>
     </entry>
@@ -906,68 +889,100 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Controller/controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="880">
-          <caret line="213" column="25" selection-start-line="213" selection-start-column="25" selection-end-line="213" selection-end-column="25" />
+        <state relative-caret-position="748">
+          <caret line="155" column="4" selection-start-line="155" selection-start-column="4" selection-end-line="155" selection-end-column="4" />
           <folding>
             <element signature="n#!!doc" />
             <element signature="e#522#1410#0" />
-            <element signature="e#1416#2026#0" />
-            <element signature="e#2080#2263#0" />
-            <element signature="e#2305#2374#0" />
-            <element signature="e#2427#2583#0" />
-            <element signature="e#2492#2583#0" />
-            <element signature="e#2630#2862#0" />
-            <element signature="e#2914#3328#0" />
-            <element signature="e#2986#3208#0" />
-            <element signature="e#3040#3136#0" />
-            <element signature="e#3235#3328#0" />
-            <element signature="e#3378#3559#0" />
-            <element signature="e#3502#3559#0" />
-            <element signature="e#3596#4026#0" />
-            <element signature="e#4061#4361#0" />
-            <element signature="e#4415#4654#0" />
-            <element signature="e#4475#4536#0" />
-            <element signature="e#4603#4654#0" />
-            <element signature="e#4706#4856#0" />
-            <element signature="e#4797#4856#0" />
-            <element signature="e#4895#5393#0" />
-            <element signature="e#5430#5595#0" />
-            <element signature="e#5601#6337#1" />
-            <element signature="e#6395#6894#0" />
-            <element signature="e#6430#6894#0" />
-            <element signature="e#6505#6894#0" />
-            <element signature="e#6563#6894#0" />
-            <element signature="e#6975#8297#0" />
-            <element signature="e#7120#7241#0" />
-            <element signature="e#8022#8362#0" />
-            <element signature="e#8059#8362#0" />
-            <element signature="e#7949#8627#0" />
-            <element signature="e#8074#8213#0" />
-            <element signature="e#8027#8198#0" />
-            <element signature="e#8257#8426#0" />
-            <element signature="e#8472#8646#0" />
-            <element signature="e#8687#8715#0" />
-            <element signature="e#8764#8927#0" />
-            <element signature="e#8990#9336#0" />
-            <element signature="e#9386#9641#0" />
-            <element signature="e#9691#9901#0" />
-            <element signature="e#9949#10800#0" />
-            <element signature="e#10190#10728#0" />
-            <element signature="e#10424#10728#0" />
-            <element signature="e#10851#11344#0" />
-            <element signature="e#10886#11092#0" />
-            <element signature="e#11138#11344#0" />
-            <element signature="e#11404#11533#0" />
-            <element signature="e#11593#11675#0" />
-            <element signature="e#11734#11942#0" />
-            <element signature="e#11843#11921#0" />
-            <element signature="e#12044#12668#0" />
-            <element signature="e#13266#13363#0" />
-            <element signature="e#12944#13092#0" />
-            <element signature="e#13142#13655#0" />
-            <element signature="e#13210#13273#0" />
-            <element signature="e#13717#13878#0" />
+            <element signature="e#1452#2062#0" />
+            <element signature="e#2116#2299#0" />
+            <element signature="e#2341#2410#0" />
+            <element signature="e#2463#2619#0" />
+            <element signature="e#2528#2619#0" />
+            <element signature="e#2666#2898#0" />
+            <element signature="e#2950#3364#0" />
+            <element signature="e#3022#3244#0" />
+            <element signature="e#3076#3172#0" />
+            <element signature="e#3271#3364#0" />
+            <element signature="e#3414#3595#0" />
+            <element signature="e#3538#3595#0" />
+            <element signature="e#3632#4062#0" />
+            <element signature="e#4097#4397#0" />
+            <element signature="e#4451#4690#0" />
+            <element signature="e#4511#4572#0" />
+            <element signature="e#4639#4690#0" />
+            <element signature="e#4742#4892#0" />
+            <element signature="e#4833#4892#0" />
+            <element signature="e#4931#5429#0" />
+            <element signature="e#5466#5631#0" />
+            <element signature="e#5637#6373#1" />
+            <element signature="e#6431#6930#0" />
+            <element signature="e#6466#6930#0" />
+            <element signature="e#6541#6930#0" />
+            <element signature="e#6599#6930#0" />
+            <element signature="e#6975#7752#0" />
+            <element signature="e#7156#7277#0" />
+            <element signature="e#7412#7752#0" />
+            <element signature="e#7449#7752#0" />
+            <element signature="e#7818#8303#0" />
+            <element signature="e#7943#8082#0" />
+            <element signature="e#8348#8519#0" />
+            <element signature="e#8578#8747#0" />
+            <element signature="e#8793#8967#0" />
+            <element signature="e#9008#9036#0" />
+            <element signature="e#9085#9248#0" />
+            <element signature="e#9311#9657#0" />
+            <element signature="e#9707#9962#0" />
+            <element signature="e#10012#10222#0" />
+            <element signature="e#10270#11121#0" />
+            <element signature="e#10511#11049#0" />
+            <element signature="e#10745#11049#0" />
+            <element signature="e#11172#11665#0" />
+            <element signature="e#11207#11413#0" />
+            <element signature="e#11459#11665#0" />
+            <element signature="e#11725#11854#0" />
+            <element signature="e#11914#11996#0" />
+            <element signature="e#12055#12263#0" />
+            <element signature="e#12164#12242#0" />
+            <element signature="e#12365#12989#0" />
+            <element signature="e#13032#13129#0" />
+            <element signature="e#13173#13321#0" />
+            <element signature="e#13371#13884#0" />
+            <element signature="e#13439#13502#0" />
+            <element signature="e#13946#14107#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/version_checker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="661">
+          <caret line="44" column="62" selection-start-line="44" selection-start-column="62" selection-end-line="44" selection-end-column="62" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#177#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_connect_to_google.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="9" lean-forward="true" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Version.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="3" lean-forward="true" selection-start-column="3" selection-end-column="3" />
         </state>
       </provider>
     </entry>

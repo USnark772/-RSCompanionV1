@@ -5,7 +5,8 @@
 # https://redscientific.com/index.html
 
 from os.path import dirname, join, exists
-
+import socket
+import sys
 
 class VersionChecker:
     def __init__(self):
