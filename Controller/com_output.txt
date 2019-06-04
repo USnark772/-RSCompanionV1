@@ -1,1 +1,4 @@
 timestamp, device, port, device output
+2019-06-04-15-32-19, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-06-04-15-32-42, drt, COM9, trl>4982, 1, 1, 263
+2019-06-04-15-32-44, drt, COM9, trl>9463, 2, 1, 323

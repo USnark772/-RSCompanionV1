@@ -6,7 +6,10 @@ Updater:
 
 Installer:
 - Installer would install latest version replacing any previous versions
+- Need to add new repo for consumer download target and place latest build version in it
 
 Etc.:
 - Possibly use numpy for internal data storage
 - NEED TO output mils from block start properly for at least drt
+- Check on how saving exp name / block name is handled
+- Check on how saving a .txt per device is handled on new experiment
