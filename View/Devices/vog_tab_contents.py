@@ -25,6 +25,18 @@ class TabContents(QVBoxLayout):
         self.config_horizontal_layout = QHBoxLayout()
         self.config_horizontal_layout.setObjectName("config_horizontal_layout")
 
+        '''
+        self.run_push_button = QPushButton()
+        self.run_push_button.setObjectName("run_push_button")
+        self.addWidget(self.run_push_button)
+
+        self.button_line = QFrame()
+        self.button_line.setFrameShape(QFrame.HLine)
+        self.button_line.setFrameShadow(QFrame.Sunken)
+        self.button_line.setObjectName("button_line")
+        self.addWidget(self.button_line)
+        '''
+
         font = QFont()
         font.setPointSize(14)
         self.config_label = QLabel()
@@ -205,6 +217,7 @@ class TabContents(QVBoxLayout):
         self.nhtsa_standard_push_button.setText(_translate("Form", "NHTSA Standard"))
         self.eblind_push_button.setText(_translate("Form", "eBlindfold"))
         self.dir_control_default_push_button.setText(_translate("Form", "Direct Control"))
+        # self.run_push_button.setText(_translate("Form", "Run Device"))
 
     def __set_slider_ranges(self):
         self.max_opened_slider.setRange(defs.vog_min_open_close, defs.vog_max_open_close)
@@ -224,6 +237,7 @@ class TabContents(QVBoxLayout):
         self.debounce_time_slider.valueChanged.connect(self.__debounce_slider_lcd_monitor)
         self.opened_state_inf_check_box.clicked.connect(self.__opened_inf_handler)
         self.closed_state_inf_check_box.clicked.connect(self.__closed_inf_handler)
+        # self.run_push_button.clicked.connect(self.__run_stop)
 
     def __get_vals(self):
         self.msg_callback({'cmd': 'get_configName'})
@@ -282,7 +296,6 @@ class TabContents(QVBoxLayout):
         self.msg_callback({'cmd': "set_configClickMode", 'arg': "1"})
         self.msg_callback({'cmd': "set_configButtonControl", 'arg': "0"})
 
-
     def __eblind_handler(self):
         self.opened_state_inf_check_box.setChecked(False)
         self.closed_state_inf_check_box.setChecked(False)
@@ -316,6 +329,23 @@ class TabContents(QVBoxLayout):
     def __debounce_slider_handler(self):
         self.msg_callback({'cmd': "set_configDebounce", 'arg': str(self.debounce_time_slider.value())})
 
+    def __run_stop(self):
+        if self.run_push_button.text() == "Stop Device":
+            self.swap_run_push_button()
+            self.msg_callback({'control': "stop"})
+        else:
+            self.swap_run_push_button()
+            self.msg_callback({'control': "run"})
+
+    def swap_run_push_button(self):
+        if self.run_push_button.text() == "Run Device":
+            self.run_push_button.setText("Stop Device")
+        else:
+            self.run_push_button.setText("Run Device")
+
     def handle_msg(self, msg_dict):
+        #if 'action' in msg_dict.keys() and msg_dict['action'] == "Click":
+        #    self.swap_run_push_button()
+        #else:
         for item in msg_dict:
             self.__set_val(item, msg_dict[item])

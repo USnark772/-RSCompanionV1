@@ -6,7 +6,7 @@
 
 from PySide2.QtCharts import QtCharts
 from PySide2.QtCore import Qt
-from Model.device_graph_rep import DeviceGraphData
+from Unused.old_code.device_graph_rep import DeviceGraphData
 
 
 # TODO: Each device draws lines back to start when running multiple blocks

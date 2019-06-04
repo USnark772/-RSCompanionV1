@@ -1,20 +1,17 @@
 Updater:
-Connect to server
-Query version
-if not latest version
-	Direct user to download latest version
+-   Connect to server
+    Query version
+    if not latest version
+	    Direct user to download latest version
 
 Installer:
-installer would replace previous version with latest version
-
+- Installer would install latest version replacing any previous versions
 
 Graphing:
-change graphing to be multiple graphs in a scroll area for each device.
+- Change graphing to be multiple graphs in a scroll area for each device.
 
 Etc.:
-
-Possibly use numpy for internal data storage
-
-Save to separate files depending on device
-
-key flag goes into each device line
+- Possibly use numpy for internal data storage
+- Save to separate files depending on device
+- Key flag goes into each device line
+- NEED TO output mils from block start properly for at least drt

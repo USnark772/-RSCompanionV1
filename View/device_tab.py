@@ -9,14 +9,10 @@ from PySide2.QtCore import Qt, QRect
 
 
 class Tab(QWidget):
-    def __init__(self, device_id, msg_callback):
+    def __init__(self, msg_callback):
         super().__init__()
-        self.device_id = device_id
         self.msg_callback = msg_callback
-        self.device_name = self.device_id[0] + " on " + self.device_id[1]
-        self.setObjectName(self.device_name)
-        self.tab_vert_layout = QVBoxLayout(self)
-        self.tab_vert_layout.setObjectName("vert_layout_1")
+        self.setLayout(QVBoxLayout())
         self.scroll_area = QScrollArea(self)
         size_policy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         size_policy.setHorizontalStretch(0)
@@ -27,9 +23,7 @@ class Tab(QWidget):
         self.scroll_area.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.scroll_area.setSizePolicy(size_policy)
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setObjectName("scroll_area")
-        self.tab_vert_layout.addWidget(self.scroll_area)
+        self.layout().addWidget(self.scroll_area)
         self.scroll_area_contents = QWidget()
         self.scroll_area_contents.setGeometry(QRect(0, 0, 199, 519))
-        self.scroll_area_contents.setObjectName("scroll_area_contents")
         self.scroll_area.setWidget(self.scroll_area_contents)

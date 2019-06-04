@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>589</height>
+    <width>365</width>
+    <height>707</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,11 +57,25 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>223</width>
-              <height>521</height>
+              <width>302</width>
+              <height>624</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QPushButton" name="pushButton">
+               <property name="text">
+                <string>Run Device</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
              <item>
               <layout class="QHBoxLayout" name="config_horizontalLayout">
                <item>

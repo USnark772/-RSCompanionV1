@@ -23,6 +23,18 @@ class TabContents(QVBoxLayout):
         self.config_horizontal_layout = QHBoxLayout()
         self.config_horizontal_layout.setObjectName("config_horizontal_layout")
 
+        '''
+        self.run_push_button = QPushButton()
+        self.run_push_button.setObjectName("run_push_button")
+        self.addWidget(self.run_push_button)
+
+        self.button_line = QFrame()
+        self.button_line.setFrameShape(QFrame.HLine)
+        self.button_line.setFrameShadow(QFrame.Sunken)
+        self.button_line.setObjectName("button_line")
+        self.addWidget(self.button_line)
+        '''
+
         font = QFont()
         font.setPointSize(14)
         self.config_label = QLabel()
@@ -181,6 +193,7 @@ class TabContents(QVBoxLayout):
         self.stim_intens_label.setText(_translate("Form", "Stim Intensity"))
         self.upper_isi_label.setText(_translate("Form", "Upper ISI"))
         self.lower_isi_label.setText(_translate("Form", "Lower ISI"))
+        # self.run_push_button.setText(_translate("Form", "Run Device"))
 
     def __set_slider_settings(self):
         self.stim_intens_slider.setRange(defs.drt_intensity_min, defs.drt_intensity_max)
@@ -198,6 +211,7 @@ class TabContents(QVBoxLayout):
         self.upper_isi_slider.sliderReleased.connect(self.__isi_released_handler)
         self.stim_dur_slider.sliderReleased.connect(self.__set_stim_duration_handler)
         self.stim_intens_slider.sliderReleased.connect(self.__set_intensity_handler)
+        # self.run_push_button.clicked.connect(self.__run_stop)
 
     def __get_vals(self):
         self.msg_callback({'cmd': "get_config"})
@@ -252,6 +266,20 @@ class TabContents(QVBoxLayout):
 
     def __set_stim_duration_handler(self):
         self.msg_callback({'cmd': "set_stimDur", 'arg': str(self.stim_dur_slider.value())})
+
+    def __run_stop(self):
+        if self.run_push_button.text() == "Stop Device":
+            self.swap_run_push_button()
+            self.msg_callback({'control': "stop"})
+        else:
+            self.swap_run_push_button()
+            self.msg_callback({'control': "run"})
+
+    def swap_run_push_button(self):
+        if self.run_push_button.text() == "Run Device":
+            self.run_push_button.setText("Stop Device")
+        else:
+            self.run_push_button.setText("Run Device")
 
     def handle_msg(self, msg_dict):
         for item in msg_dict:

@@ -15,7 +15,7 @@ class RSDevice:
         self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.tab_parent = tab_parent
         self.msg_callback = msg_callback
-        self.device_tab = tab.Tab(self.device_id, self.callback)
+        self.device_tab = tab.Tab(self.callback)
 
         if self.device_id[0] == "drt":
             self.tab_contents = DRT.TabContents(self.device_tab.scroll_area_contents, self.device_name, self.callback)
@@ -36,6 +36,7 @@ class RSDevice:
         self.device_tab.deleteLater()
 
     def callback(self, msg_dict):
-        msg_dict['type'] = "send"
+        if 'cmd' in msg_dict.keys():
+            msg_dict['type'] = "send"
         msg_dict['device'] = self.device_id
         self.msg_callback(msg_dict)

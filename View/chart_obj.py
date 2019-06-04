@@ -33,7 +33,7 @@ class GraphObj(QFrame):
         self.scroll_bar = self.__create_scroll_bar(self.__move_graph)
         self.layout().addWidget(self.scroll_bar)
 
-        self.__set_device_type()
+        self.__set_graph_type()
         self.num_points = 0
         self.range_y = [0, 200]
         self.range_x = [-1, 7]
@@ -44,7 +44,6 @@ class GraphObj(QFrame):
         if self.device_info[0] == "vog":
             for series in self.chart.series():
                 if series.name() == "open":
-                    print("appending vog open point")
                     series.append(series.count(), data[0])
                     self.__update_axes(data[0], series.count())
                 elif series.name() == "closed":
@@ -55,7 +54,7 @@ class GraphObj(QFrame):
                 series.append(series.count(), data)
                 self.__update_axes(data, series.count())
 
-    def __set_device_type(self):
+    def __set_graph_type(self):
         if self.device_info[0] == "vog":
             self.chart.addSeries(self.__create_scatter_series("open"))
             self.chart.addSeries(self.__create_scatter_series("closed"))

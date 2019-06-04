@@ -10,9 +10,10 @@ import Model.defs as defs
 
 
 class DeviceManager:
-    def __init__(self, msg_handler):
+    def __init__(self, msg_handler, com_save_handler):
         # Global
         self.msg_callback = msg_handler
+        self.com_callback = com_save_handler
         self.inc_msg = ""
 
         self.devices_known = []
@@ -40,11 +41,15 @@ class DeviceManager:
             if self.devices[d]['id'] != 'unknown':
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
+                        the_message = self.devices[d]['port'].readline().decode("utf-8")
+                        print(the_message)
+                        self.com_callback(str(self.devices[d]['id'] + ", " + self.devices[d]['port'].name
+                                              + ", " + the_message))
                         msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
                         if self.devices[d]['id'] == "drt":
-                            self.__parse_drt_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
+                            self.__parse_drt_msg(the_message, msg_dict)
                         elif self.devices[d]['id'] == "vog":
-                            self.__parse_vog_msg(self.devices[d]['port'].readline().decode("utf-8"), msg_dict)
+                            self.__parse_vog_msg(the_message, msg_dict)
                         else:
                             print("in companion_device_com.update(): couldn't match up device")
                         self.msg_callback(msg_dict)
@@ -52,7 +57,8 @@ class DeviceManager:
                     pass
 
     def handle_msg(self, msg_dict):
-        if msg_dict['type'] == "send":
+        msg_type = msg_dict['type']
+        if msg_type == "send":
             port = None
             msg_to_send = None
             for d in self.devices:
@@ -67,40 +73,52 @@ class DeviceManager:
                 elif msg_dict['device'][0] == "vog":
                     msg_to_send = self.__prepare_vog_msg(msg_dict)
                 self.__send_msg_on_port(port, msg_to_send)
-        elif msg_dict['type'] == "start block":
-            self.__start_block()
-        elif msg_dict['type'] == "stop block":
-            self.__end_block()
-        elif msg_dict['type'] == "start exp":
-            self.__start_exp()
-        elif msg_dict['type'] == "stop exp":
-            self.__end_exp()
+        elif msg_type == "start block all":
+            self.__start_block_all()
+        elif msg_type == "stop block all":
+            self.__end_block_all()
+        elif msg_type == "start exp all":
+            self.__start_exp_all()
+        elif msg_type == "stop exp all":
+            self.__end_exp_all()
         else:
             print("Unknown command")
 
-    def __start_exp(self):
+    def __start_exp_all(self):
         for d in self.devices:
-            if self.devices[d]['id'] == "vog":
-                self.__send_msg_on_port(self.devices[d]['port'], ">do_expStart|<<")
+            self.__start_exp(self.devices[d]['id'], self.devices[d]['port'])
 
-    def __end_exp(self):
+    def __end_exp_all(self):
         for d in self.devices:
-            if self.devices[d]['id'] == "vog":
-                self.__send_msg_on_port(self.devices[d]['port'], ">do_expStop|<<")
+            self.__end_exp(self.devices[d]['id'], self.devices[d]['port'])
 
-    def __start_block(self):
+    def __start_block_all(self):
         for d in self.devices:
-            if self.devices[d]['id'] == "drt":
-                self.__send_msg_on_port(self.devices[d]['port'], "exp_start\n")
-            elif self.devices[d]['id'] == "vog":
-                self.__send_msg_on_port(self.devices[d]['port'], ">do_trialStart|<<")
+            self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
 
-    def __end_block(self):
+    def __end_block_all(self):
         for d in self.devices:
-            if self.devices[d]['id'] == "drt":
-                self.__send_msg_on_port(self.devices[d]['port'], "exp_stop\n")
-            elif self.devices[d]['id'] == "vog":
-                self.__send_msg_on_port(self.devices[d]['port'], ">do_trialStop|<<")
+            self.__end_block(self.devices[d]['id'], self.devices[d]['port'])
+
+    def __start_exp(self, device, port):
+        if device == "vog":
+            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_expStart"}))
+
+    def __end_exp(self, device, port):
+        if device == "vog":
+            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_expStop"}))
+
+    def __start_block(self, device, port):
+        if device == "drt":
+            self.__send_msg_on_port(port, self.__prepare_drt_msg({'cmd': "exp_start"}))
+        elif device == "vog":
+            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStart"}))
+
+    def __end_block(self, device, port):
+        if device == "drt":
+            self.__send_msg_on_port(port, self.__prepare_drt_msg({'cmd': "exp_stop"}))
+        elif device == "vog":
+            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStop"}))
 
     def __scan_ports(self):
 
@@ -228,3 +246,5 @@ class DeviceManager:
                 msg_dict['Debounce'] = msg[bar_ind + 1: len(msg)]
             elif msg[6:bar_ind] == "ClickMode":
                 msg_dict['ClickMode'] = msg[bar_ind + 1: len(msg)]
+        elif "Click" in msg:
+            msg_dict['action'] = "Click"

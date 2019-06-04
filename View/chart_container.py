@@ -23,15 +23,15 @@ class GraphContainer(QWidget):
         self.scroll_area.setWidget(self.contents)
         self.list_of_graphs = {}
 
-    def __add_data_point(self, device, data):
+    def add_data_point(self, device, data):
         self.list_of_graphs[device].add_point(data)
 
     def handle_msg(self, msg_dict):
         device = msg_dict['device']
         if device[0] == "drt":
-            self.__add_data_point(device, int(msg_dict['rt']))
+            self.add_data_point(device, int(msg_dict[defs.drt_trial_fields[3]]))
         elif device[0] == "vog":
-            self.__add_data_point(device, (int(msg_dict[defs.vog_block_field[1]]), int(msg_dict[defs.vog_block_field[2]])))
+            self.add_data_point(device, (int(msg_dict[defs.vog_block_field[1]]), int(msg_dict[defs.vog_block_field[2]])))
 
     def add_device(self, device):
         graph_obj = chart.GraphObj(device)
