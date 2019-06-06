@@ -13,3 +13,7 @@ Etc.:
 - NEED TO output mils from block start properly for at least drt
 - Check on how saving exp name / block name is handled
 - Check on how saving a .txt per device is handled on new experiment
+
+How to save?
+- If new exp then make new save files
+- If append exp then continue with current save files
