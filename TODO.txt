@@ -5,15 +5,20 @@ Updater:
 	    Direct user to download latest version
 
 Installer:
-- Installer would install latest version replacing any previous versions
-- Need to add new repo for consumer download target and place latest build version in it
+-   Installer would install latest version replacing any previous versions
+-   Need to add new repo for consumer download target and place latest build version in it
 
 Etc.:
-- Possibly use numpy for internal data storage
-- NEED TO output mils from block start properly for at least drt
-- Check on how saving exp name / block name is handled
-- Check on how saving a .txt per device is handled on new experiment
+-   Possibly use numpy for internal data storage
+-   NEED TO output mils from block start properly for at least drt
+-   Check on how saving exp name / block name is handled
+-   Check on how saving a .txt per device is handled on new experiment
 
 How to save?
-- If new exp then make new save files
-- If append exp then continue with current save files
+-   If new exp then make new save files
+-   If append exp then continue with current save files
+
+
+-   Rebuild main.exe because in For_setup.controller.py it's putting the com_output.txt filepath on the block number
+    label and it's not checking for updates properly. the Companion/Controller/controller.py doesn't do this with the
+    filepath

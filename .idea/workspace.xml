@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.2/build/exe.win32-3.7/com_output.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.2/build/exe.win32-3.7/main.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/com_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/com_output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,20 +13,84 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TODO.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="18" column="53" selection-start-line="18" selection-start-column="53" selection-end-line="18" selection-end-column="53" />
+            <state relative-caret-position="418">
+              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/defs.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="132">
               <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller/controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="161">
+              <caret line="309" column="17" lean-forward="true" selection-start-line="309" selection-start-column="17" selection-end-line="309" selection-end-column="17" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#2116#2299#0" />
+                <element signature="e#2341#2410#0" />
+                <element signature="e#2463#2619#0" />
+                <element signature="e#2528#2619#0" />
+                <element signature="e#2666#2898#0" />
+                <element signature="e#2950#3364#0" />
+                <element signature="e#3022#3244#0" />
+                <element signature="e#3076#3172#0" />
+                <element signature="e#3271#3364#0" />
+                <element signature="e#3414#3595#0" />
+                <element signature="e#3538#3595#0" />
+                <element signature="e#3632#4062#0" />
+                <element signature="e#4097#4397#0" />
+                <element signature="e#4451#4690#0" />
+                <element signature="e#4511#4572#0" />
+                <element signature="e#4639#4690#0" />
+                <element signature="e#4742#4892#0" />
+                <element signature="e#4833#4892#0" />
+                <element signature="e#4931#5429#0" />
+                <element signature="e#5466#5631#0" />
+                <element signature="e#5637#6373#1" />
+                <element signature="e#6431#6930#0" />
+                <element signature="e#6466#6930#0" />
+                <element signature="e#6541#6930#0" />
+                <element signature="e#6599#6930#0" />
+                <element signature="e#6975#7752#0" />
+                <element signature="e#7156#7277#0" />
+                <element signature="e#7412#7752#0" />
+                <element signature="e#7449#7752#0" />
+                <element signature="e#7818#8303#0" />
+                <element signature="e#7943#8082#0" />
+                <element signature="e#8348#8519#0" />
+                <element signature="e#8578#8747#0" />
+                <element signature="e#8793#8967#0" />
+                <element signature="e#9008#9036#0" />
+                <element signature="e#9085#9248#0" />
+                <element signature="e#9311#9657#0" />
+                <element signature="e#9707#9962#0" />
+                <element signature="e#10012#10222#0" />
+                <element signature="e#10270#11121#0" />
+                <element signature="e#10511#11049#0" />
+                <element signature="e#10745#11049#0" />
+                <element signature="e#11172#11665#0" />
+                <element signature="e#11207#11413#0" />
+                <element signature="e#11459#11665#0" />
+                <element signature="e#11725#11854#0" />
+                <element signature="e#11914#11996#0" />
+                <element signature="e#12365#12989#0" />
+                <element signature="e#13032#13129#0" />
+                <element signature="e#13371#13884#0" />
+                <element signature="e#13439#13502#0" />
+                <element signature="e#13946#14107#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -44,7 +106,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.device_data</find>
       <find>__get_current_time</find>
       <find>self.exp_hdrs</find>
       <find>__write_lines_to_file</find>
@@ -74,6 +135,7 @@
       <find>QtCore.</find>
       <find>frame_3.</find>
       <find>frame_3</find>
+      <find>self.ui.set_</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -147,7 +209,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -155,10 +216,16 @@
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Companion" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -334,7 +401,7 @@
     <frame x="-7" y="-7" width="1381" height="925" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.20786934" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.20786934" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.35060638" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.4491256" side_tool="true" weight="0.41786107" />
@@ -343,7 +410,7 @@
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.31973538" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32930514" />
-      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.5508744" weight="0.41786107" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.5508744" weight="0.41708544" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39470783" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
@@ -638,69 +705,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="317" column="73" selection-start-line="317" selection-start-column="73" selection-end-line="317" selection-end-column="73" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#1452#2062#0" />
-            <element signature="e#2116#2299#0" />
-            <element signature="e#2341#2410#0" />
-            <element signature="e#2463#2619#0" />
-            <element signature="e#2528#2619#0" />
-            <element signature="e#2666#2898#0" />
-            <element signature="e#2950#3364#0" />
-            <element signature="e#3022#3244#0" />
-            <element signature="e#3076#3172#0" />
-            <element signature="e#3271#3364#0" />
-            <element signature="e#3414#3595#0" />
-            <element signature="e#3538#3595#0" />
-            <element signature="e#3632#4062#0" />
-            <element signature="e#4097#4397#0" />
-            <element signature="e#4451#4690#0" />
-            <element signature="e#4511#4572#0" />
-            <element signature="e#4639#4690#0" />
-            <element signature="e#4742#4892#0" />
-            <element signature="e#4833#4892#0" />
-            <element signature="e#4931#5429#0" />
-            <element signature="e#5466#5631#0" />
-            <element signature="e#5637#6373#1" />
-            <element signature="e#6431#6930#0" />
-            <element signature="e#6466#6930#0" />
-            <element signature="e#6541#6930#0" />
-            <element signature="e#6599#6930#0" />
-            <element signature="e#6975#7752#0" />
-            <element signature="e#7156#7277#0" />
-            <element signature="e#7412#7752#0" />
-            <element signature="e#7449#7752#0" />
-            <element signature="e#7818#8303#0" />
-            <element signature="e#7943#8082#0" />
-            <element signature="e#8348#8519#0" />
-            <element signature="e#8578#8747#0" />
-            <element signature="e#8793#8967#0" />
-            <element signature="e#9008#9036#0" />
-            <element signature="e#9085#9248#0" />
-            <element signature="e#9311#9657#0" />
-            <element signature="e#9707#9962#0" />
-            <element signature="e#10012#10222#0" />
-            <element signature="e#10270#11121#0" />
-            <element signature="e#10511#11049#0" />
-            <element signature="e#10745#11049#0" />
-            <element signature="e#11172#11665#0" />
-            <element signature="e#11207#11413#0" />
-            <element signature="e#11459#11665#0" />
-            <element signature="e#11725#11854#0" />
-            <element signature="e#11914#11996#0" />
-            <element signature="e#12365#12989#0" />
-            <element signature="e#13032#13129#0" />
-            <element signature="e#13371#13884#0" />
-            <element signature="e#13439#13502#0" />
-            <element signature="e#13946#14107#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/For_setup/Build 0.2/controller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="314">
@@ -800,17 +804,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="18" column="53" selection-start-line="18" selection-start-column="53" selection-end-line="18" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Model/defs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="309" column="17" lean-forward="true" selection-start-line="309" selection-start-column="17" selection-end-line="309" selection-end-column="17" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#2116#2299#0" />
+            <element signature="e#2341#2410#0" />
+            <element signature="e#2463#2619#0" />
+            <element signature="e#2528#2619#0" />
+            <element signature="e#2666#2898#0" />
+            <element signature="e#2950#3364#0" />
+            <element signature="e#3022#3244#0" />
+            <element signature="e#3076#3172#0" />
+            <element signature="e#3271#3364#0" />
+            <element signature="e#3414#3595#0" />
+            <element signature="e#3538#3595#0" />
+            <element signature="e#3632#4062#0" />
+            <element signature="e#4097#4397#0" />
+            <element signature="e#4451#4690#0" />
+            <element signature="e#4511#4572#0" />
+            <element signature="e#4639#4690#0" />
+            <element signature="e#4742#4892#0" />
+            <element signature="e#4833#4892#0" />
+            <element signature="e#4931#5429#0" />
+            <element signature="e#5466#5631#0" />
+            <element signature="e#5637#6373#1" />
+            <element signature="e#6431#6930#0" />
+            <element signature="e#6466#6930#0" />
+            <element signature="e#6541#6930#0" />
+            <element signature="e#6599#6930#0" />
+            <element signature="e#6975#7752#0" />
+            <element signature="e#7156#7277#0" />
+            <element signature="e#7412#7752#0" />
+            <element signature="e#7449#7752#0" />
+            <element signature="e#7818#8303#0" />
+            <element signature="e#7943#8082#0" />
+            <element signature="e#8348#8519#0" />
+            <element signature="e#8578#8747#0" />
+            <element signature="e#8793#8967#0" />
+            <element signature="e#9008#9036#0" />
+            <element signature="e#9085#9248#0" />
+            <element signature="e#9311#9657#0" />
+            <element signature="e#9707#9962#0" />
+            <element signature="e#10012#10222#0" />
+            <element signature="e#10270#11121#0" />
+            <element signature="e#10511#11049#0" />
+            <element signature="e#10745#11049#0" />
+            <element signature="e#11172#11665#0" />
+            <element signature="e#11207#11413#0" />
+            <element signature="e#11459#11665#0" />
+            <element signature="e#11725#11854#0" />
+            <element signature="e#11914#11996#0" />
+            <element signature="e#12365#12989#0" />
+            <element signature="e#13032#13129#0" />
+            <element signature="e#13371#13884#0" />
+            <element signature="e#13439#13502#0" />
+            <element signature="e#13946#14107#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
