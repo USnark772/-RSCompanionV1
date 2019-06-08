@@ -5,7 +5,7 @@
 # https://redscientific.com/index.html
 
 from os.path import dirname, join, exists
-import requests
+from requests import get
 
 
 class VersionChecker:
@@ -44,7 +44,7 @@ class VersionChecker:
     @staticmethod
     def get_latest_version(url):
         """ Use internet to get latest version from server """
-        r = requests.get(url)
+        r = get(url)
         if "Companion App Version:" in r.text:
             return r.text[r.text.index(":") + 1:]
         else:

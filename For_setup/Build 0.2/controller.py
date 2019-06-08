@@ -6,14 +6,14 @@
 
 from PySide2.QtCore import QTimer, QDir
 from PySide2.QtWidgets import QFileDialog
-from main_view import CompanionWindow
-import device_manager as manager
 from os import path
-import sys
 import datetime
+import sys
+from main_view import CompanionWindow
 from help_window import HelpWindow
-import defs as defs
 from version_checker import VersionChecker
+import device_manager as manager
+import defs as defs
 
 
 class CompanionController:
@@ -49,17 +49,17 @@ class CompanionController:
     def __setup_handlers(self):
         """Wire up all buttons etc. from the view."""
         self.ui.set_open_handler(self.__open_action_handler)
-        self.ui.set_new_exp_handler(self.__begin_exp_action_handler)
+        self.ui.add_exp_create_end_handler(self.__begin_exp_action_handler)
         self.ui.set_end_exp_handler(self.__end_exp_action_handler)
-        self.ui.set_new_block_handler(self.__begin_block_button_handler)
+        self.ui.add_exp_start_stop_handler(self.__begin_block_button_handler)
         self.ui.set_end_block_handler(self.__end_block_button_handler)
-        self.ui.set_save_note_handler(self.__save_block_note_button_handler)
-        self.ui.set_update_handler(self.__check_for_updates_handler)
-        self.ui.set_note_box_event_handler(self.__check_note_button_activity)
+        self.ui.add_post_handler(self.__save_block_note_button_handler)
+        self.ui.add_update_handler(self.__check_for_updates_handler)
+        self.ui.add_note_box_changed_handler(self.__check_note_button_activity)
 
     def __check_note_button_activity(self):
-        if self.exp_running and self.block_running and len(self.ui.get_block_note()) > 0:
-            self.ui.activate_save_button()
+        if self.exp_running and self.block_running and len(self.ui.get_note()) > 0:
+            self.ui.toggle_post_button()
         else:
             self.ui.deactivate_save_button()
 
@@ -106,11 +106,11 @@ class CompanionController:
         self.device_manager.handle_msg(msg_dict)
         self.current_exp_number += 1
         self.ui.set_current_exp_number(self.current_exp_number)
-        exp_name = self.ui.get_exp_name()
+        exp_name = self.ui.get_condition_name()
         if exp_name == "":
             exp_name = "N/A"
         self.current_exp_name = exp_name
-        self.ui.set_current_exp_time(self.__get_current_time(time=True))
+        self.ui.set_exp_start_time(self.__get_current_time(time=True))
 
     def __end_exp(self):
         self.exp_running = False
@@ -182,7 +182,7 @@ class CompanionController:
 
     def __save_block_note_button_handler(self):
         if self.block_running:
-            note = self.ui.get_block_note()
+            note = self.ui.get_note()
             if note != "":
                 for device in self.fnames_to_save_to:
                     self.__write_line_to_file(self.fnames_to_save_to[device]['fn'], "note: " + self.current_exp_name
@@ -316,7 +316,6 @@ class CompanionController:
 
     def __setup_output_file(self):
         fname = path.dirname(sys.argv[0]) + "\\com_output.txt"
-        self.ui.set_current_block_number(fname)
         if path.exists(fname):
             with open(fname, "w") as temp:
                 temp.write(defs.com_output_hdr)

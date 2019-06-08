@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QLabel, QPushButton, QSlider, QComboBox, QHBoxLayo
     QLCDNumber
 from PySide2.QtCore import QCoreApplication, Qt, QSize
 from PySide2.QtGui import QFont
-import Model.defs as defs
+from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode
 
 
 class TabContents(QVBoxLayout):
@@ -220,10 +220,10 @@ class TabContents(QVBoxLayout):
         # self.run_push_button.setText(_translate("Form", "Run Device"))
 
     def __set_slider_ranges(self):
-        self.max_opened_slider.setRange(defs.vog_min_open_close, defs.vog_max_open_close)
-        self.max_closed_slider.setRange(defs.vog_min_open_close, defs.vog_max_open_close)
-        self.debounce_time_slider.setRange(defs.vog_debounce_min, defs.vog_debounce_max)
-        self.button_mode_combo_box.setCurrentIndex(defs.vog_button_mode)
+        self.max_opened_slider.setRange(vog_min_open_close, vog_max_open_close)
+        self.max_closed_slider.setRange(vog_min_open_close, vog_max_open_close)
+        self.debounce_time_slider.setRange(vog_debounce_min, vog_debounce_max)
+        self.button_mode_combo_box.setCurrentIndex(vog_button_mode)
 
     def __set_handlers(self):
         self.eblind_push_button.clicked.connect(self.__eblind_handler)

@@ -7,7 +7,8 @@
 from PySide2.QtWidgets import QLabel, QPushButton, QSlider, QHBoxLayout, QVBoxLayout, QFrame, QLCDNumber
 from PySide2.QtCore import QCoreApplication, QSize, Qt
 from PySide2.QtGui import QFont
-import Model.defs as defs
+from Model.defs import drt_intensity_max, drt_intensity_min, drt_ISI_max, drt_ISI_min, drt_stim_dur_max, \
+    drt_stim_dur_min
 
 
 class TabContents(QVBoxLayout):
@@ -18,22 +19,7 @@ class TabContents(QVBoxLayout):
         self.msg_callback = msg_callback
         self.setObjectName(self.device_name)
 
-        self.iso_default = False
-
         self.config_horizontal_layout = QHBoxLayout()
-        self.config_horizontal_layout.setObjectName("config_horizontal_layout")
-
-        '''
-        self.run_push_button = QPushButton()
-        self.run_push_button.setObjectName("run_push_button")
-        self.addWidget(self.run_push_button)
-
-        self.button_line = QFrame()
-        self.button_line.setFrameShape(QFrame.HLine)
-        self.button_line.setFrameShadow(QFrame.Sunken)
-        self.button_line.setObjectName("button_line")
-        self.addWidget(self.button_line)
-        '''
 
         font = QFont()
         font.setPointSize(14)
@@ -172,17 +158,20 @@ class TabContents(QVBoxLayout):
         self.lower_isi_slider.setObjectName("lower_isi_slider")
         self.addWidget(self.lower_isi_slider)
 
+        self.iso_default = False
         self.__set_texts()
-        # FROM CONFIG WIDGET
         self.__set_handlers()
         self.values = {'intensity': self.stim_intens_slider,
                        'upperISI': self.upper_isi_slider,
                        'lowerISI': self.lower_isi_slider,
                        'stimDur': self.stim_dur_slider}
         self.__set_slider_settings()
-        # self.__set_line_edit_settings()
         self.__set_handlers()
         self.__get_vals()
+
+    def handle_msg(self, msg_dict):
+        for item in msg_dict:
+            self.__set_val(item, msg_dict[item])
 
     def __set_texts(self):
         _translate = QCoreApplication.translate
@@ -196,10 +185,10 @@ class TabContents(QVBoxLayout):
         # self.run_push_button.setText(_translate("Form", "Run Device"))
 
     def __set_slider_settings(self):
-        self.stim_intens_slider.setRange(defs.drt_intensity_min, defs.drt_intensity_max)
-        self.upper_isi_slider.setRange(defs.drt_ISI_min, defs.drt_ISI_max)
-        self.lower_isi_slider.setRange(defs.drt_ISI_min, defs.drt_ISI_max)
-        self.stim_dur_slider.setRange(defs.drt_stim_dur_min, defs.drt_stim_dur_max)
+        self.stim_intens_slider.setRange(drt_intensity_min, drt_intensity_max)
+        self.upper_isi_slider.setRange(drt_ISI_min, drt_ISI_max)
+        self.lower_isi_slider.setRange(drt_ISI_min, drt_ISI_max)
+        self.stim_dur_slider.setRange(drt_stim_dur_min, drt_stim_dur_max)
 
     def __set_handlers(self):
         self.iso_default_push_button.clicked.connect(self.__iso_button_handler)
@@ -209,9 +198,8 @@ class TabContents(QVBoxLayout):
         self.stim_intens_slider.valueChanged.connect(self.__intensity_changed_handler)
         self.lower_isi_slider.sliderReleased.connect(self.__isi_released_handler)
         self.upper_isi_slider.sliderReleased.connect(self.__isi_released_handler)
-        self.stim_dur_slider.sliderReleased.connect(self.__set_stim_duration_handler)
-        self.stim_intens_slider.sliderReleased.connect(self.__set_intensity_handler)
-        # self.run_push_button.clicked.connect(self.__run_stop)
+        self.stim_dur_slider.sliderReleased.connect(self.__set_stim_duration)
+        self.stim_intens_slider.sliderReleased.connect(self.__set_intensity)
 
     def __get_vals(self):
         self.msg_callback({'cmd': "get_config"})
@@ -220,8 +208,8 @@ class TabContents(QVBoxLayout):
         self.values[var].setValue(int(val))
 
     def __isi_released_handler(self):
-        self.__set_upper_isi_handler()
-        self.__set_lower_isi_handler()
+        self.__set_upper_isi()
+        self.__set_lower_isi()
 
     def __push_upper_isi_slider(self):
         if self.lower_isi_slider.value() >= self.upper_isi_slider.value():
@@ -250,23 +238,24 @@ class TabContents(QVBoxLayout):
         self.__set_val('lowerISI', 3000)
         self.__set_val('stimDur', 1000)
         self.__set_val('intensity', 255)
-        self.__set_intensity_handler()
-        self.__set_upper_isi_handler()
-        self.__set_lower_isi_handler()
-        self.__set_stim_duration_handler()
+        self.__set_intensity()
+        self.__set_upper_isi()
+        self.__set_lower_isi()
+        self.__set_stim_duration()
 
-    def __set_intensity_handler(self):
+    def __set_intensity(self):
         self.msg_callback({'cmd': "set_intensity", 'arg': str(self.stim_intens_slider.value())})
 
-    def __set_upper_isi_handler(self):
+    def __set_upper_isi(self):
         self.msg_callback({'cmd': "set_upperISI", 'arg': str(self.upper_isi_slider.value())})
 
-    def __set_lower_isi_handler(self):
+    def __set_lower_isi(self):
         self.msg_callback({'cmd': "set_lowerISI", 'arg': str(self.lower_isi_slider.value())})
 
-    def __set_stim_duration_handler(self):
+    def __set_stim_duration(self):
         self.msg_callback({'cmd': "set_stimDur", 'arg': str(self.stim_dur_slider.value())})
 
+    # TODO: Remove?
     def __run_stop(self):
         if self.run_push_button.text() == "Stop Device":
             self.swap_run_push_button()
@@ -275,12 +264,9 @@ class TabContents(QVBoxLayout):
             self.swap_run_push_button()
             self.msg_callback({'control': "run"})
 
+    # TODO: Remove?
     def swap_run_push_button(self):
         if self.run_push_button.text() == "Run Device":
             self.run_push_button.setText("Stop Device")
         else:
             self.run_push_button.setText("Run Device")
-
-    def handle_msg(self, msg_dict):
-        for item in msg_dict:
-            self.__set_val(item, msg_dict[item])

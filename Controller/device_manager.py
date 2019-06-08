@@ -4,16 +4,16 @@ When the target device is plugged in or removed the connect_event or
 disconnect_event flags are turned True.
 """
 
-import serial
+from serial import Serial
 from serial.tools import list_ports
-import Model.defs as defs
+from Model.defs import devices, drt_config_fields, drt_trial_fields, vog_block_field
 
 
 class DeviceManager:
     def __init__(self, msg_handler, com_save_handler):
         # Global
         self.msg_callback = msg_handler
-        self.com_callback = com_save_handler
+        self.output_callback = com_save_handler
         self.inc_msg = ""
 
         self.devices_known = []
@@ -22,7 +22,7 @@ class DeviceManager:
         self.devices_to_remove = []
 
         # Local
-        self.profiles = defs.devices
+        self.profiles = devices
         self.devices = dict()
 
     def update(self):
@@ -42,16 +42,16 @@ class DeviceManager:
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         the_message = self.devices[d]['port'].readline().decode("utf-8")
-                        print(the_message)
-                        self.com_callback(str(self.devices[d]['id'] + ", " + self.devices[d]['port'].name
-                                              + ", " + the_message))
+                        self.output_callback(str(self.devices[d]['id'] + ", " + self.devices[d]['port'].name
+                                                 + ", " + the_message))
                         msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
                         if self.devices[d]['id'] == "drt":
                             self.__parse_drt_msg(the_message, msg_dict)
                         elif self.devices[d]['id'] == "vog":
                             self.__parse_vog_msg(the_message, msg_dict)
                         else:
-                            print("in companion_device_com.update(): couldn't match up device")
+                            self.output_callback("Debug, DeviceManager.update(), couldn't match up device"
+                                                 + str(self.devices[d]['id']))
                         self.msg_callback(msg_dict)
                 except:
                     pass
@@ -65,7 +65,7 @@ class DeviceManager:
                 if msg_dict['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
                     port = self.devices[d]['port']
             if not port:
-                print("Device not found")
+                self.output_callback("Debug, DeviceManager.handle_msg(), Device not found")
                 pass
             else:
                 if msg_dict['device'][0] == "drt":
@@ -73,30 +73,22 @@ class DeviceManager:
                 elif msg_dict['device'][0] == "vog":
                     msg_to_send = self.__prepare_vog_msg(msg_dict)
                 self.__send_msg_on_port(port, msg_to_send)
-        elif msg_type == "start block all":
-            self.__start_block_all()
-        elif msg_type == "stop block all":
-            self.__end_block_all()
-        elif msg_type == "start exp all":
-            self.__start_exp_all()
-        elif msg_type == "stop exp all":
-            self.__end_exp_all()
         else:
-            print("Unknown command")
+            self.output_callback("Debug, DeviceManager.handle_msg(), Unknown command")
 
-    def __start_exp_all(self):
+    def start_exp_all(self):
         for d in self.devices:
             self.__start_exp(self.devices[d]['id'], self.devices[d]['port'])
 
-    def __end_exp_all(self):
+    def end_exp_all(self):
         for d in self.devices:
             self.__end_exp(self.devices[d]['id'], self.devices[d]['port'])
 
-    def __start_block_all(self):
+    def start_block_all(self):
         for d in self.devices:
             self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
 
-    def __end_block_all(self):
+    def end_block_all(self):
         for d in self.devices:
             self.__end_block(self.devices[d]['id'], self.devices[d]['port'])
 
@@ -148,7 +140,7 @@ class DeviceManager:
                         #   serial.serialutil.SerialException: could not open port 'COM5': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)
                         # and
                         #   serial.serialutil.SerialException: could not open port 'COM5': PermissionError(13, 'Access is denied.', None, 5)
-                        self.devices[port.device] = {'port': serial.Serial(port.device), 'id': device}
+                        self.devices[port.device] = {'port': Serial(port.device), 'id': device}
                         msg_dict = {'type': "add", 'device': (self.devices[port.device]['id'], self.devices[port.device]['port'].name)}
                         self.msg_callback(msg_dict)
                         break
@@ -187,29 +179,29 @@ class DeviceManager:
             # Check if this is a response to get_config
             if len(msg) > 90:
                 # Get relevant values from msg and insert into msg_dict
-                for i in range(0, len(defs.drt_config_fields)):
-                    index = msg.find(defs.drt_config_fields[i] + ":")
-                    index_len = len(defs.drt_config_fields[i]) + 1
+                for i in range(0, len(drt_config_fields)):
+                    index = msg.find(drt_config_fields[i] + ":")
+                    index_len = len(drt_config_fields[i]) + 1
                     val_len = msg.find(', ', index + index_len)
                     if val_len < 0:
                         val_len = None
                     msg_dict[msg[index:index+index_len-1]] = msg[index+index_len:val_len]
             else:
                 # Single value update, find which value it is and insert into msg_dict
-                for i in range(0, len(defs.drt_config_fields)):
-                    index = msg.find(defs.drt_config_fields[i] + ":")
+                for i in range(0, len(drt_config_fields)):
+                    index = msg.find(drt_config_fields[i] + ":")
                     if index > 0:
-                        index_len = len(defs.drt_config_fields[i])
+                        index_len = len(drt_config_fields[i])
                         val_ind = index + index_len + 1
                         msg_dict[msg[index:index + index_len]] = msg[val_ind:]
         elif msg[0:4] == "trl>":
             msg_dict['type'] = "data"
             val_ind_start = 4
-            for i in range(0, len(defs.drt_trial_fields)):
+            for i in range(0, len(drt_trial_fields)):
                 val_ind_end = msg.find(', ', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict[defs.drt_trial_fields[i]] = msg[val_ind_start:val_ind_end]
+                msg_dict[drt_trial_fields[i]] = msg[val_ind_start:val_ind_end]
                 if val_ind_end:
                     val_ind_start = val_ind_end + 2
 
@@ -226,11 +218,11 @@ class DeviceManager:
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
             val_ind_start = 5
-            for i in range(len(defs.vog_block_field)):
+            for i in range(len(vog_block_field)):
                 val_ind_end = msg.find(',', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict[defs.vog_block_field[i]] = msg[val_ind_start:val_ind_end]
+                msg_dict[vog_block_field[i]] = msg[val_ind_start:val_ind_end]
                 if val_ind_end:
                     val_ind_start = val_ind_end + 1
         elif msg[0:6] == "config":

@@ -4,9 +4,9 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import View.device_tab as tab
-import View.Devices.drt_tab_contents as DRT
-import View.Devices.vog_tab_contents as VOG
+from View.TabWidget import device_tab as tab
+from View.TabWidget import drt_tab_contents as DRT
+from View.TabWidget import vog_tab_contents as VOG
 
 
 class RSDevice:
@@ -15,7 +15,7 @@ class RSDevice:
         self.device_name = self.device_id[0] + " on " + self.device_id[1]
         self.tab_parent = tab_parent
         self.msg_callback = msg_callback
-        self.device_tab = tab.Tab(self.callback)
+        self.device_tab = tab.Tab()
 
         if self.device_id[0] == "drt":
             self.tab_contents = DRT.TabContents(self.device_tab.scroll_area_contents, self.device_name, self.callback)

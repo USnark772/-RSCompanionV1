@@ -4,9 +4,31 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+#################################################################################################################
+# general
+#################################################################################################################
+
 version = 1.0
 
-# Definitions to use to detect devices
+block_note_hdr = "Note: Exp Name, Block Name, Key Flag, Timestamp, block note"
+program_output_hdr = "timestamp, author, location, message\n"
+
+about_RS_text = "CHANGEME Red Scientific is an awesome company that will do great things in the years to come and " \
+                "keep Phillip really happy by paying him lots of money because RS is rich from selling all those " \
+                "awesome devices which are made even awesomer by the View that Phillip was instrumental in making " \
+                "work. boom."
+
+about_RS_app_text = "CHANGEME The RS Companion App was designed by Joel Cooper and brought to life by Phillip " \
+                    "Riskin. It has many functionalities that you might not be aware of so play around with it and " \
+                    "see what's going on! Have fun :)"
+
+update_available = "An update is available."
+
+up_to_date = "Your program is up to date."
+
+#################################################################################################################
+# device list for usb port detection
+#################################################################################################################
 
 devices = {'drt': {'probe': "get_name\n\r",
                    'key': 'sDRT',
@@ -18,6 +40,10 @@ devices = {'drt': {'probe': "get_name\n\r",
                    'name': 'VOG',
                    'pid': 1155,
                    'vid': 5824}}
+
+#################################################################################################################
+# drt specific
+#################################################################################################################
 
 drt_file_hdr = "device type: drt\nData: Exp Name, Block Name, Key Flag, Timestamp, Mills from Block Start, Probe #, " \
                "Clicks, Response Time"
@@ -35,6 +61,10 @@ drt_stim_dur_min = 0
 drt_ISI_max = 10000
 drt_ISI_min = 0
 
+#################################################################################################################
+# vog specific
+#################################################################################################################
+
 vog_file_hdr = "device type: vog\nData: Exp Name, Block Name, Key Flag, Timestamp, block #, Total Millis Open, " \
                "Total Millis Closed"
 
@@ -49,6 +79,3 @@ vog_debounce_max = 100
 vog_debounce_min = 0
 
 vog_button_mode = 0
-
-block_note_hdr = "Note: Exp Name, Block Name, Key Flag, Timestamp, block note"
-com_output_hdr = "timestamp, device, port, device output\n"

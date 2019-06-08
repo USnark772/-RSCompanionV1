@@ -1,1 +1,0 @@
-timestamp, device, port, device output

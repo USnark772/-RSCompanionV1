@@ -12,8 +12,8 @@ from PySide2.QtCore import Qt
 class GraphObj(QFrame):
     def __init__(self, name):
         super().__init__()
-        self.device_info = name
-        self.name = self.__get_device_name(name)
+        self.__device_info = name
+        self.__name = self.__get_device_name(name)
 
         size_policy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
         size_policy.setHorizontalStretch(0)
@@ -25,86 +25,86 @@ class GraphObj(QFrame):
         self.setFrameShape(QFrame.NoFrame)
         self.setFrameShadow(QFrame.Raised)
 
-        self.chart = self.__make_chart()
-        self.chart_view = QtCharts.QChartView(self.chart)
+        self.__chart = self.__make_chart()
+        self.__chart_view = QtCharts.QChartView(self.__chart)
 
         self.setLayout(QVBoxLayout())
-        self.layout().addWidget(self.chart_view)
-        self.scroll_bar = self.__create_scroll_bar(self.__move_graph)
-        self.layout().addWidget(self.scroll_bar)
+        self.layout().addWidget(self.__chart_view)
+        self.__scroll_bar = self.__create_scroll_bar(self.__move_graph)
+        self.layout().addWidget(self.__scroll_bar)
 
         self.__set_graph_type()
-        self.num_points = 0
-        self.range_y = [0, 200]
-        self.range_x = [-1, 7]
+        self.__num_points = 0
+        self.__range_y = [0, 200]
+        self.__range_x = [-1, 7]
         self.__set_chart_axes()
-        self.scrolling = False
+        self.__scrolling = False
 
     def add_point(self, data):
-        if self.device_info[0] == "vog":
-            for series in self.chart.series():
+        if self.__device_info[0] == "vog":
+            for series in self.__chart.series():
                 if series.name() == "open":
                     series.append(series.count(), data[0])
                     self.__update_axes(data[0], series.count())
                 elif series.name() == "closed":
                     series.append(series.count(), data[1])
                     self.__update_axes(data[1], series.count())
-        elif self.device_info[0] == "drt":
-            for series in self.chart.series():
+        elif self.__device_info[0] == "drt":
+            for series in self.__chart.series():
                 series.append(series.count(), data)
                 self.__update_axes(data, series.count())
 
     def __set_graph_type(self):
-        if self.device_info[0] == "vog":
-            self.chart.addSeries(self.__create_scatter_series("open"))
-            self.chart.addSeries(self.__create_scatter_series("closed"))
-        elif self.device_info[0] == "drt":
-            self.chart.addSeries(self.__create_line_series(self.name))
+        if self.__device_info[0] == "vog":
+            self.__chart.addSeries(self.__create_scatter_series("open"))
+            self.__chart.addSeries(self.__create_scatter_series("closed"))
+        elif self.__device_info[0] == "drt":
+            self.__chart.addSeries(self.__create_line_series(self.__name))
 
     def __set_chart_axes(self):
         x_axis = QtCharts.QValueAxis()
         x_axis.setTitleText("Trial Number")
-        x_axis.setRange(self.range_x[0], self.range_x[1])
+        x_axis.setRange(self.__range_x[0], self.__range_x[1])
         x_axis.setTickInterval(1)
         x_axis.setTickCount(9)
         y_axis = QtCharts.QValueAxis()
         y_axis.setTitleText("Milliseconds Elapsed")
-        y_axis.setRange(self.range_y[0], self.range_y[1])
-        for axis in self.chart.axes():
-            self.chart.removeAxis(axis)
-            for series in self.chart.series():
+        y_axis.setRange(self.__range_y[0], self.__range_y[1])
+        for axis in self.__chart.axes():
+            self.__chart.removeAxis(axis)
+            for series in self.__chart.series():
                 series.detachAxis(axis)
-        self.chart.addAxis(x_axis, Qt.AlignBottom)
-        self.chart.addAxis(y_axis, Qt.AlignLeft)
-        for series in self.chart.series():
+        self.__chart.addAxis(x_axis, Qt.AlignBottom)
+        self.__chart.addAxis(y_axis, Qt.AlignLeft)
+        for series in self.__chart.series():
             series.attachAxis(x_axis)
             series.attachAxis(y_axis)
 
     def __move_graph(self):
-        self.scrolling = True
-        if self.num_points > 7:
-            temp_range_val = (self.num_points - 7) * (self.scroll_bar.value() / 100)
+        self.__scrolling = True
+        if self.__num_points > 7:
+            temp_range_val = (self.__num_points - 7) * (self.__scroll_bar.value() / 100)
             x_range = (temp_range_val - 1, temp_range_val + 7)
-            self.chart.axisX().setRange(x_range[0], x_range[1])
-        if self.scroll_bar.value() == self.scroll_bar.maximum():
-            self.scrolling = False
+            self.__chart.axisX().setRange(x_range[0], x_range[1])
+        if self.__scroll_bar.value() == self.__scroll_bar.maximum():
+            self.__scrolling = False
 
     def __update_axes(self, data, num_points):
-        if num_points > self.range_x[1]:
-            self.range_x[0] += 1
-            self.range_x[1] += 1
-            if not self.scrolling:
-                self.chart.axisX().setRange(self.range_x[0], self.range_x[1])
-            self.num_points = num_points
-        if data > self.range_y[1]:  # Update y axis if new data exceeds range
-            self.range_y[1] = data + self.range_y[1] * 0.2
-            self.chart.axisY().setRange(self.range_y[0], self.range_y[1])
+        if num_points > self.__range_x[1]:
+            self.__range_x[0] += 1
+            self.__range_x[1] += 1
+            if not self.__scrolling:
+                self.__chart.axisX().setRange(self.__range_x[0], self.__range_x[1])
+            self.__num_points = num_points
+        if data > self.__range_y[1]:  # Update y axis if new data exceeds range
+            self.__range_y[1] = data + self.__range_y[1] * 0.2
+            self.__chart.axisY().setRange(self.__range_y[0], self.__range_y[1])
 
     def __make_chart(self):
         show_legend = False
-        if self.device_info[0] == "vog":
+        if self.__device_info[0] == "vog":
             show_legend = True
-        return self.__create_chart(self.name, show_legend)
+        return self.__create_chart(self.__name, show_legend)
 
     @staticmethod
     def __get_device_name(item):
