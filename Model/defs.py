@@ -52,6 +52,10 @@ drt_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drt_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
 drt_ui_fields = ['Mills from block start', 'probe #', 'clicks', 'response time']
 
+drt_iso_standards = {'upperISI': 5000, 'lowerISI': 3000, 'intensity': 255, 'stimDur': 1000}
+
+drt_max_val = 65535
+
 drt_intensity_max = 255
 drt_intensity_min = 0
 

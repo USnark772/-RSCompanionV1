@@ -4,11 +4,11 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QFrame, QLineEdit
-from PySide2.QtCore import Qt, QRect
+from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QSlider, QHBoxLayout, QVBoxLayout, QFrame, QLCDNumber
+from PySide2.QtCore import QSize, Qt, QRect
 from PySide2.QtGui import QFont
 from Model.defs import drt_intensity_max, drt_intensity_min, drt_ISI_max, drt_ISI_min, drt_stim_dur_max, \
-    drt_stim_dur_min, drt_iso_standards, drt_max_val
+    drt_stim_dur_min
 
 
 class TabContents(QWidget):
@@ -20,10 +20,9 @@ class TabContents(QWidget):
         self.config_horizontal_layout = QHBoxLayout()
 
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.config_label = QLabel()
         self.config_label.setFont(font)
-        self.config_label.setAlignment(Qt.AlignCenter)
         self.config_horizontal_layout.addWidget(self.config_label)
 
         self.config_label_val_sep_line = QFrame()
@@ -35,7 +34,6 @@ class TabContents(QWidget):
         font.setPointSize(12)
         self.config_val_label = QLabel()
         self.config_val_label.setFont(font)
-        self.config_val_label.setAlignment(Qt.AlignCenter)
         self.config_horizontal_layout.addWidget(self.config_val_label)
         self.layout().addLayout(self.config_horizontal_layout)
 
@@ -50,15 +48,20 @@ class TabContents(QWidget):
         self.stim_dur_horizontal_layout = QHBoxLayout()
 
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.stim_dur_label = QLabel()
         self.stim_dur_label.setFont(font)
         self.stim_dur_horizontal_layout.addWidget(self.stim_dur_label)
 
-        self.stim_dur_text_edit = QLineEdit()
-        self.stim_dur_text_edit.setFixedWidth(100)
-        self.stim_dur_horizontal_layout.addWidget(self.stim_dur_text_edit)
+        self.stim_dur_lcd_number = QLCDNumber()
+        self.stim_dur_lcd_number.setMinimumSize(QSize(80, 40))
+        self.stim_dur_horizontal_layout.addWidget(self.stim_dur_lcd_number)
         self.layout().addLayout(self.stim_dur_horizontal_layout)
+
+        self.stim_dur_slider = QSlider()
+        self.stim_dur_slider.setMinimumSize(QSize(175, 0))
+        self.stim_dur_slider.setOrientation(Qt.Horizontal)
+        self.layout().addWidget(self.stim_dur_slider)
 
         self.stim_dur_intens_sep_line = QFrame()
         self.stim_dur_intens_sep_line.setFrameShape(QFrame.HLine)
@@ -68,16 +71,20 @@ class TabContents(QWidget):
         self.stim_intens_horizontal_layout = QHBoxLayout()
 
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.stim_intens_label = QLabel()
         self.stim_intens_label.setFont(font)
         self.stim_intens_horizontal_layout.addWidget(self.stim_intens_label)
 
-        self.stim_intens_text_edit = QLineEdit()
-        self.stim_intens_text_edit.setFixedWidth(100)
-        self.stim_dur_horizontal_layout.addWidget(self.stim_intens_text_edit)
-        self.stim_intens_horizontal_layout.addWidget(self.stim_intens_text_edit)
+        self.stim_intens_lcd_number = QLCDNumber()
+        self.stim_intens_lcd_number.setMinimumSize(QSize(80, 40))
+        self.stim_intens_horizontal_layout.addWidget(self.stim_intens_lcd_number)
         self.layout().addLayout(self.stim_intens_horizontal_layout)
+
+        self.stim_intens_slider = QSlider()
+        self.stim_intens_slider.setMinimumSize(QSize(175, 0))
+        self.stim_intens_slider.setOrientation(Qt.Horizontal)
+        self.layout().addWidget(self.stim_intens_slider)
 
         self.stim_intens_upper_isi_sep_line = QFrame()
         self.stim_intens_upper_isi_sep_line.setFrameShape(QFrame.HLine)
@@ -87,15 +94,20 @@ class TabContents(QWidget):
         self.upper_isi_horizontal_layout = QHBoxLayout()
 
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.upper_isi_label = QLabel()
         self.upper_isi_label.setFont(font)
         self.upper_isi_horizontal_layout.addWidget(self.upper_isi_label)
 
-        self.upper_isi_text_edit = QLineEdit()
-        self.upper_isi_text_edit.setFixedWidth(100)
-        self.upper_isi_horizontal_layout.addWidget(self.upper_isi_text_edit)
+        self.upper_isi_lcd_number = QLCDNumber()
+        self.upper_isi_lcd_number.setMinimumSize(QSize(80, 40))
+        self.upper_isi_horizontal_layout.addWidget(self.upper_isi_lcd_number)
         self.layout().addLayout(self.upper_isi_horizontal_layout)
+
+        self.upper_isi_slider = QSlider()
+        self.upper_isi_slider.setMinimumSize(QSize(175, 0))
+        self.upper_isi_slider.setOrientation(Qt.Horizontal)
+        self.layout().addWidget(self.upper_isi_slider)
 
         self.upper_lower_isi_sep_line = QFrame()
         self.upper_lower_isi_sep_line.setFrameShape(QFrame.HLine)
@@ -105,29 +117,32 @@ class TabContents(QWidget):
         self.lower_isi_horizontal_layout = QHBoxLayout()
 
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         self.lower_isi_label = QLabel()
         self.lower_isi_label.setFont(font)
         self.lower_isi_horizontal_layout.addWidget(self.lower_isi_label)
 
-        self.lower_isi_text_edit = QLineEdit()
-        self.lower_isi_text_edit.setFixedWidth(100)
-        self.lower_isi_horizontal_layout.addWidget(self.lower_isi_text_edit)
+        self.lower_isi_lcd_number = QLCDNumber()
+        self.lower_isi_lcd_number.setMinimumSize(QSize(80, 40))
+        self.lower_isi_horizontal_layout.addWidget(self.lower_isi_lcd_number)
         self.layout().addLayout(self.lower_isi_horizontal_layout)
 
-        self.iso = False
-        self.current_dur = drt_iso_standards['stimDur']
-        self.current_intens = drt_iso_standards['intensity']
-        self.current_upper = drt_iso_standards['upperISI']
-        self.current_lower = drt_iso_standards['lowerISI']
+        self.lower_isi_slider = QSlider()
+        self.lower_isi_slider.setMinimumSize(QSize(175, 0))
+        self.lower_isi_slider.setOrientation(Qt.Horizontal)
+        self.layout().addWidget(self.lower_isi_slider)
+
         self.msg_callback = msg_callback
         self.device_info = device
+        self.iso_default = False
         self.__index = 0
-        self.text_edits = {'intensity': self.stim_intens_text_edit,
-                           'upperISI': self.upper_isi_text_edit,
-                           'lowerISI': self.lower_isi_text_edit,
-                           'stimDur': self.stim_dur_text_edit}
+        self.values = {'intensity': self.stim_intens_slider,
+                       'upperISI': self.upper_isi_slider,
+                       'lowerISI': self.lower_isi_slider,
+                       'stimDur': self.stim_dur_slider}
         self.__set_texts()
+        self.__set_handlers()
+        self.__set_slider_ranges()
         self.__set_handlers()
         self.__get_vals()
 
@@ -145,7 +160,7 @@ class TabContents(QWidget):
         return self.__index
 
     def __set_texts(self):
-        self.config_label.setText("Config")
+        self.config_label.setText("Configuration")
         self.config_val_label.setText("ISO Standard")
         self.iso_default_push_button.setText("ISO Standard")
         self.stim_dur_label.setText("Stim Duration\n(msecs)")
@@ -153,18 +168,32 @@ class TabContents(QWidget):
         self.upper_isi_label.setText("Upper ISI")
         self.lower_isi_label.setText("Lower ISI")
 
+    def __set_slider_ranges(self):
+        self.stim_intens_slider.setRange(drt_intensity_min, drt_intensity_max)
+        self.upper_isi_slider.setRange(drt_ISI_min, drt_ISI_max)
+        self.lower_isi_slider.setRange(drt_ISI_min, drt_ISI_max)
+        self.stim_dur_slider.setRange(drt_stim_dur_min, drt_stim_dur_max)
+
     def __set_handlers(self):
         self.iso_default_push_button.clicked.connect(self.__iso_button_handler)
-        self.stim_dur_text_edit.editingFinished.connect(self.__stim_dur_changed_handler)
-        self.stim_intens_text_edit.editingFinished.connect(self.__stim_intens_changed_handler)
-        self.upper_isi_text_edit.editingFinished.connect(self.__upper_isi_changed_handler)
-        self.lower_isi_text_edit.editingFinished.connect(self.__lower_isi_changed_handler)
+        self.lower_isi_slider.valueChanged.connect(self.__push_upper_isi_slider)
+        self.upper_isi_slider.valueChanged.connect(self.__push_lower_isi_slider)
+        self.stim_dur_slider.valueChanged.connect(self.__stim_dur_changed_handler)
+        self.stim_intens_slider.valueChanged.connect(self.__intensity_changed_handler)
+        self.lower_isi_slider.sliderReleased.connect(self.__isi_released_handler)
+        self.upper_isi_slider.sliderReleased.connect(self.__isi_released_handler)
+        self.stim_dur_slider.sliderReleased.connect(self.__set_stim_duration)
+        self.stim_intens_slider.sliderReleased.connect(self.__set_intensity)
 
     def __get_vals(self):
         self.__callback({'cmd': "get_config"})
 
     def __set_val(self, var, val):
-        self.text_edits[var].setText(str(val))
+        self.values[var].setValue(int(val))
+
+    def __isi_released_handler(self):
+        self.__set_upper_isi()
+        self.__set_lower_isi()
 
     def __push_upper_isi_slider(self):
         if self.lower_isi_slider.value() >= self.upper_isi_slider.value():
@@ -178,73 +207,37 @@ class TabContents(QWidget):
         self.upper_isi_lcd_number.display(self.upper_isi_slider.value())
         self.config_val_label.setText("Custom")
 
+    def __intensity_changed_handler(self):
+        self.stim_intens_lcd_number.display(self.stim_intens_slider.value())
+        self.config_val_label.setText("Custom")
+
     def __stim_dur_changed_handler(self):
-        new_dur = self.stim_dur_text_edit.text()
-        new_dur_int = int(new_dur)
-        if new_dur.isdigit() and drt_max_val >= new_dur_int > 0 and new_dur_int != self.current_dur:
-            self.current_dur = new_dur_int
-            if self.current_dur != drt_iso_standards['stimDur']:
-                self.config_val_label.setText("Custom")
-            self.__set_stim_duration()
-        else:
-            self.stim_dur_text_edit.setText(str(self.current_dur))
-
-    def __stim_intens_changed_handler(self):
-        new_intens = self.stim_intens_text_edit.text()
-        new_intens_int = int(new_intens)
-        if new_intens.isdigit() and 255 >= new_intens_int > 0 and new_intens_int != self.current_dur:
-            self.current_intens = new_intens_int
-            if self.current_intens != drt_iso_standards['intensity']:
-                self.config_val_label.setText("Custom")
-            self.__set_intensity()
-        else:
-            self.stim_intens_text_edit.setText(str(self.current_intens))
-
-    def __upper_isi_changed_handler(self):
-        new_upper = self.upper_isi_text_edit.text()
-        new_upper_int = int(new_upper)
-        if new_upper.isdigit() and drt_max_val >= new_upper_int > 0 and new_upper_int != self.current_upper:
-            self.current_upper = new_upper_int
-            if self.current_upper != drt_iso_standards['upperISI']:
-                self.config_val_label.setText("Custom")
-            self.__set_upper_isi()
-        else:
-            self.upper_isi_text_edit.setText(str(self.current_upper))
-
-    def __lower_isi_changed_handler(self):
-        new_lower = self.lower_isi_text_edit.text()
-        new_lower_int = int(new_lower)
-        if new_lower.isdigit() and drt_max_val >= new_lower_int > 0 and new_lower_int != self.current_lower:
-            self.current_lower = new_lower_int
-            if self.current_lower != drt_iso_standards['lowerISI']:
-                self.config_val_label.setText("Custom")
-            self.__set_lower_isi()
-        else:
-            self.lower_isi_text_edit.setText(str(self.current_lower))
+        self.stim_dur_lcd_number.display(self.stim_dur_slider.value())
+        self.config_val_label.setText("Custom")
 
     def __iso_button_handler(self):
-
+        self.iso_default = True
         self.config_val_label.setText("ISO Standard")
-        self.__set_val('upperISI', drt_iso_standards['upperISI'])
-        self.__set_val('lowerISI', drt_iso_standards['lowerISI'])
-        self.__set_val('intensity', drt_iso_standards['intensity'])
-        self.__set_val('stimDur', drt_iso_standards['stimDur'])
+        self.__set_val('upperISI', 5000)
+        self.__set_val('lowerISI', 3000)
+        self.__set_val('stimDur', 1000)
+        self.__set_val('intensity', 255)
+        self.__set_intensity()
         self.__set_upper_isi()
         self.__set_lower_isi()
-        self.__set_intensity()
         self.__set_stim_duration()
 
     def __set_intensity(self):
-        self.__callback({'cmd': "set_intensity", 'arg': self.stim_intens_text_edit.text()})
+        self.__callback({'cmd': "set_intensity", 'arg': str(self.stim_intens_slider.value())})
 
     def __set_upper_isi(self):
-        self.__callback({'cmd': "set_upperISI", 'arg': self.upper_isi_text_edit.text()})
+        self.__callback({'cmd': "set_upperISI", 'arg': str(self.upper_isi_slider.value())})
 
     def __set_lower_isi(self):
-        self.__callback({'cmd': "set_lowerISI", 'arg': self.lower_isi_text_edit.text()})
+        self.__callback({'cmd': "set_lowerISI", 'arg': str(self.lower_isi_slider.value())})
 
     def __set_stim_duration(self):
-        self.__callback({'cmd': "set_stimDur", 'arg': self.stim_dur_text_edit.text()})
+        self.__callback({'cmd': "set_stimDur", 'arg': str(self.stim_dur_slider.value())})
 
     def __callback(self, msg):
         self.msg_callback(self.device_info, msg)

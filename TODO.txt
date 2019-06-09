@@ -9,28 +9,18 @@ Installer:
 -   Need to add new repo for consumer download target and place latest build version in it
 
 Etc.:
--   Check on how saving exp name is handled
--   When saving a line, if not exp name put in a blank
--   If new exp then make new save files
 -   Change save location of output file
--   Change default save location of save files
 -   Update is available, download now? if yes, don't make user go find it.
 -   Check to make sure output from drt and vog are similar to output from old version of gui.
-
--   Rebuild main.exe because it's not checking for updates properly.
-
+-   figure out why with builds it's not checking for updates properly.
+-   Figure out what to do with buttonControl in vog
+-   Figure out what maxvalue for vog is and fix like drt
 
 Design:
--   Experiment frame with two buttons and one textentry for ~CONDITION NAME~,
--   One button on left is smaller and create/close exp, other button is for block start/stop
--   Removing block name entirely
--   When posting a note ( call it post ) reset text box to empty
 -   Resize of config menus shall be not happening in height, but width may change as needed
 -   config fields be changed to text entries instead of sliders.
 
-
 At some point:
--   Refactor code.
 -   Change to matplotlib for graphing.
 -   Possibly use numpy for internal data storage.
 -   x axis label needs to be timestamp

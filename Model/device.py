@@ -5,7 +5,7 @@
 # https://redscientific.com/index.html
 
 from View.TabWidget import device_tab as tab
-from View.TabWidget import drt_tab_contents as DRT
+from Unused.old_code import drt_tab_contents as DRT
 from View.TabWidget import vog_tab_contents as VOG
 
 

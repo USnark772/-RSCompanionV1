@@ -4,8 +4,8 @@ from PySide2.QtCore import QRect
 
 
 class MenuBar(QMenuBar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
         self.setGeometry(QRect(0, 0, 840, 22))
 
         self.__help = QMenu(self)

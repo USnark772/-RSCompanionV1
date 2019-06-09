@@ -1,9 +1,6 @@
--   Go to this directory
 -   Add new folder for build version (ex. Build 1.1)
--   add all needed files to build version directory and change imports in each
-    file to point to that directory
+-   Add all needed modules to folder and rewrite all imports to point to same level
 -   copy setup.py to build version directory
 -   Edit version number in setup.py to build version
 -   in cmd go to build version directory
 -   command: python setup.py build
--   see results

@@ -11,8 +11,8 @@ import View.GraphWidget.chart_obj as chart
 
 
 class GraphContainer(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.__scroll_area = QScrollArea(self)
         self.__scroll_area.setWidgetResizable(True)

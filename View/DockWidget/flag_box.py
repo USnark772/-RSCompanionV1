@@ -9,7 +9,7 @@ from PySide2.QtGui import QFont, QGuiApplication
 from PySide2.QtCore import Qt
 
 
-class KeyFlagger(QGroupBox):
+class FlagBox(QGroupBox):
     def __init__(self, parent):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())

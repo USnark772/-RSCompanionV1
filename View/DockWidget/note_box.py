@@ -7,7 +7,7 @@
 from PySide2.QtWidgets import QGroupBox, QGridLayout, QTextEdit, QPushButton
 
 
-class NoteTaker(QGroupBox):
+class NoteBox(QGroupBox):
     def __init__(self, parent):
         super().__init__(parent)
         self.setLayout(QGridLayout())

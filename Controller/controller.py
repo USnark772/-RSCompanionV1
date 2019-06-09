@@ -4,80 +4,133 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from os import path, mkdir
-import datetime
-import sys
-from PySide2.QtCore import QTimer, QDir
+from os import path
+from datetime import datetime
+from sys import argv
 from PySide2.QtWidgets import QFileDialog
-from Model.defs import update_available, up_to_date, vog_block_field, drt_trial_fields, drt_file_hdr, vog_file_hdr, \
+from PySide2.QtCore import QTimer, QDir
+from PySide2.QtGui import QKeyEvent
+from Model.defs import vog_block_field, drt_trial_fields, drt_file_hdr, vog_file_hdr, \
     block_note_hdr, program_output_hdr
-from View.main_view import CompanionWindow
-from View.help_window import HelpWindow
+from View.main_window.main_window import CompanionWindow
+from View.DockWidget.control_dock import ControlDock
+from View.DockWidget.button_box import ButtonBox
+from View.DockWidget.info_box import InfoBox
+from View.DockWidget.flag_box import FlagBox
+from View.DockWidget.note_box import NoteBox
+from View.MenuBarWidget.menu_bar import MenuBar
+from View.GraphWidget.chart_container import GraphContainer
+from View.TabWidget.device_tab import TabContainer
+from View.TabWidget.drt_tab_contents import TabContents as DRTTab
+from View.TabWidget.vog_tab_contents import TabContents as VOGTab
 from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
 
 
 class CompanionController:
     def __init__(self):
-        """Set up view and device manager."""
-        self.ui = CompanionWindow(self.receive_msg_from_ui)
-        self.ui.show()
-        self.device_manager = DeviceManager(self.receive_msg_from_device_manager, self.save_output_msg)
+        self.ui = CompanionWindow()
+        self.menu_bar = MenuBar(self.ui)
+        self.control_dock = ControlDock(self.ui)
+        self.button_box = ButtonBox(self.control_dock)
+        self.info_box = InfoBox(self.control_dock)
+        self.flag_box = FlagBox(self.control_dock)
+        self.note_box = NoteBox(self.control_dock)
+        self.graph_box = GraphContainer(self.ui)
+        self.tab_box = TabContainer(self.ui)
+        self.tabs = {}
+        self.file_dialog = QFileDialog(self.ui)
 
-        # Experiment data structure
-        self.exp_hdrs = []
-        self.blk_hdrs = []
-        self.blk_notes = []
-        self.blk_data = []
-        self.device_data = {}
-        self.current_cond_name = ""
-
-        self.closing = False
+        self.device_manager = DeviceManager(self.receive_msg_from_device_manager)
 
         self.exp_created = False
         self.exp_running = False
-        self.__setup_handlers()
-        self.__start_update_timer()
-        self.directory = ""
-        self.fnames_to_save_to = {}
+        self.__dir_chosen = False
+        self.current_cond_name = ""
         self.program_output_save_file = self.__setup_output_file()
+        self.devices = {}
 
-        self.saved_files_open = []
+        self.__initialize_view()
 
-    def close_file(self, fname):
-        if fname in self.saved_files_open:
-            self.saved_files_open.remove([fname[0], fname[1]])
-
-    def save_output_msg(self, msg):
-        line = str(self.__get_current_time(save=True)) + ", " + msg
-        with open(self.program_output_save_file, 'a+') as file:
-            file.write(line)
-
-    def receive_msg_from_ui(self, msg):
-        if 'action' in msg.keys() and msg['action'] == "close":
-            self.closing = True
-            self.device_manager.end_block_all()
-            self.device_manager.end_exp_all()
-        elif 'control' in msg.keys() and msg['control'] == "run":
-            self.device_manager.handle_msg({'type': "start device", 'device': msg['device']})
-        elif 'control' in msg.keys() and msg['control'] == "stop":
-            self.device_manager.handle_msg({'type': "stop device", 'device': msg['device']})
-        else:
-            self.device_manager.handle_msg(msg)
+    ########################################################################################
+    # public functions
+    ########################################################################################
 
     def receive_msg_from_device_manager(self, msg):
-        if msg['type'] == "data":
+        msg_type = msg['type']
+        if msg_type == "data":
             self.__update_save(msg)
-        elif msg['type'] == "add":
-            self.__add_device(msg)
-        elif msg['type'] == "remove":
-            self.__remove_device(msg)
-        self.ui.handle_msg(msg)
+        elif msg_type == "settings":
+            self.devices[msg['device']]['tab'].handle_msg(msg['values'])
+        elif msg_type == "add":
+            self.__add_device(msg['device'])
+        elif msg_type == "remove":
+            self.__remove_device(msg['device'])
+        elif msg_type == "save":
+            self.__save_output_msg(msg['msg'])
+        elif msg_type == "i dunno!":
+            pass # TODO: Fix this
+        elif msg_type == "error":
+            self.ui.raise_error(msg_type, msg['msg'])
 
-    def __begin_exp_action_handler(self):
+    ########################################################################################
+    # initial setup
+    ########################################################################################
+
+    def __initialize_view(self):
+        self.__setup_file_dialog()
+        self.__setup_handlers()
+        self.__start_update_timer()
+        self.control_dock.add_widget(self.button_box)
+        self.control_dock.add_widget(self.flag_box)
+        self.control_dock.add_widget(self.note_box)
+        self.control_dock.add_widget(self.info_box)
+        self.ui.add_menu_bar(self.menu_bar)
+        self.ui.add_dock_widget(self.control_dock)
+        self.ui.add_graph_container(self.graph_box)
+        self.ui.add_tab_widget(self.tab_box)
+        self.ui.show()
+
+    def __setup_file_dialog(self):
+        self.file_dialog.setOptions(QFileDialog.ShowDirsOnly)
+        self.file_dialog.setViewMode(QFileDialog.Detail)
+        self.file_dialog.setDirectory(QDir().homePath())
+        self.file_dialog.setFileMode(QFileDialog.Directory)
+
+    def __setup_handlers(self):
+        """Wire up buttons etc. in the view."""
+        self.button_box.add_create_button_handler(self.__create_end_exp)
+        self.button_box.add_start_button_handler(self.__start_stop_exp)
+        self.note_box.add_note_box_changed_handler(self.__check_toggle_post_button)
+        self.note_box.add_post_handler(self.__post_handler)
+        self.menu_bar.add_about_app_handler(self.__about_app)
+        self.menu_bar.add_about_company_handler(self.__about_company)
+        self.menu_bar.add_update_handler(self.__check_for_updates_handler)
+        self.ui.keyPressEvent = self.__key_press_handler
+
+    def __key_press_handler(self, event):
+        if type(event) == QKeyEvent:
+            if 0x41 <= event.key() <= 0x5a:
+                self.flag_box.set_flag(chr(event.key()))
+            event.accept()
+        else:
+            event.ignore()
+
+    def __start_update_timer(self):
+        self.update_timer = QTimer()
+        self.update_timer.setSingleShot(False)
+        self.update_timer.timeout.connect(self.__device_update)
+        self.update_timer.start(1)
+
+    ########################################################################################
+    # Experiment handling
+    ########################################################################################
+
+    def __create_end_exp(self):
         """Begin an experiment. Get a directory to save to, """
         if not self.exp_created:
-            self.__get_save_dir_path()
+            if not self.__get_save_dir_path():
+                return
             self.__update_device_filenames()
             self.__check_save_file_hdrs()
             self.__create_exp()
@@ -85,17 +138,15 @@ class CompanionController:
             self.__end_exp()
 
     def __create_exp(self):
-        self.exp_created = True
+        self.button_box.toggle_create_button()
         self.device_manager.start_exp_all()
-        cond_name = self.ui.get_condition_name()
-        if cond_name == "":
-            cond_name = "N/A"
-        self.current_cond_name = cond_name
-        self.ui.set_exp_start_time(self.__get_current_time(time=True))
+        self.info_box.set_start_time(self.__get_current_time(time=True))
+        self.exp_created = True
 
     def __end_exp(self):
-        self.exp_created = False
+        self.button_box.toggle_create_button()
         self.device_manager.end_exp_all()
+        self.exp_created = False
 
     def __start_stop_exp(self):
         if self.exp_running:
@@ -104,76 +155,57 @@ class CompanionController:
             self.__start_exp()
 
     def __start_exp(self):
-        self.exp_running = True
         self.device_manager.start_block_all()
+        self.current_cond_name = self.button_box.get_condition_name()
         self.__check_toggle_post_button()
+        self.button_box.toggle_start_button()
+        self.button_box.toggle_condition_name_box()
+        self.exp_running = True
 
     def __stop_exp(self):
-        self.exp_running = False
         self.device_manager.end_block_all()
         self.__check_toggle_post_button()
-
-    def __setup_handlers(self):
-        """Wire up buttons etc. in the view."""
-        self.ui.add_exp_create_end_handler(self.__begin_exp_action_handler)
-        self.ui.add_exp_start_stop_handler(self.__start_stop_exp)
-        self.ui.add_post_handler(self.__save_block_note_button_handler)
-        self.ui.add_update_handler(self.__check_for_updates_handler)
-        self.ui.add_note_box_changed_handler(self.__check_toggle_post_button)
+        self.button_box.toggle_start_button()
+        self.button_box.toggle_condition_name_box()
+        self.exp_running = False
 
     def __check_toggle_post_button(self):
-        if self.exp_created and self.exp_running and len(self.ui.get_note()) > 0:
-            self.ui.toggle_post_button(True)
+        if self.exp_created and self.exp_running and len(self.note_box.get_note()) > 0:
+            self.note_box.toggle_post_button(True)
         else:
-            self.ui.toggle_post_button(False)
+            self.note_box.toggle_post_button(False)
 
-    def __check_save_dir(self):
-        """Check to see if user has chosen a dir path and that the chosen dir path is valid"""
-        if self.directory != "" and path.isdir(self.directory):
-            return True
-        return False
+    ########################################################################################
+    # Data saving
+    ########################################################################################
 
-    def __check_for_updates_handler(self):
-        """Check to see if there is an updated version of the app and let user know result"""
-        vc = VersionChecker()
-        if vc.check_version():
-            self.window = HelpWindow("Update", update_available)
-        else:
-            self.window = HelpWindow("Update", up_to_date)
-        self.window.show()
+    def __save_output_msg(self, msg):
+        line = str(self.__get_current_time(save=True)) + ", " + msg
+        with open(self.program_output_save_file, 'a+') as file:
+            file.write(line)
 
-    def __save_block_note_button_handler(self):
-        for device in self.fnames_to_save_to:
-            self.__write_line_to_file(self.fnames_to_save_to[device]['fn'],
+    def __post_handler(self):
+        for device in self.devices:
+            self.__write_line_to_file(self.devices[device]['fn'],
                                       self.current_cond_name
-                                      + ", " + self.ui.get_key_flag()
+                                      + ", " + self.flag_box.get_flag()
                                       + ", " + self.__get_current_time(True, True, True)
-                                      + ", " + self.ui.get_note())
-        self.ui.clear_note()
+                                      + ", " + self.note_box.get_note())
+        self.note_box.clear_note()
 
-    # TODO: If directory does not exist, make it.
     def __get_save_dir_path(self):
-        fname = QFileDialog.getExistingDirectory(None, 'Save Directory', QDir().homePath(), QFileDialog.ShowDirsOnly)
-        if fname[0] != "":
-            self.directory = fname
-            # if not self.__check_save_dir():
-                # mkdir(self.directory, )
+        return self.file_dialog.exec_()
 
     def __write_line_to_file(self, fname, line):
         line = line + "\n"
-        filepath = path.join(self.directory, fname)
+        filepath = path.join(self.file_dialog.directory().path(), fname)
         filepath += ".txt"
         with open(filepath, 'a+') as file:
             file.write(line)
 
-    def __start_update_timer(self):
-        self.update_timer = QTimer()
-        self.update_timer.setSingleShot(False)
-        self.update_timer.timeout.connect(self.__device_update)
-        self.update_timer.start(1)
-
-    def __device_update(self):
-        self.device_manager.update()
+    def __check_for_updates_handler(self):
+        vc = VersionChecker()
+        self.ui.show_update_available(vc.check_version())
 
     def __update_save(self, msg_dict):
         if msg_dict['device'][0] == "drt":
@@ -182,13 +214,12 @@ class CompanionController:
             self.__format_vog_line(msg_dict)
 
     def __finish_line_and_write(self, device, line):
-        prepend = "data: " \
+        prepend = device[0] \
                   + self.current_cond_name + ", " \
-                  + self.current_block_name + ", " \
                   + self.ui.get_key_flag() + ", " \
                   + self.__get_current_time(True, True, True)
         line = prepend + line
-        self.__write_line_to_file(self.fnames_to_save_to[device]['fn'], line)
+        self.__write_line_to_file(self.devices[device]['fn'], line)
 
     def __format_drt_line(self, msg_dict):
         line = ""
@@ -205,71 +236,93 @@ class CompanionController:
         self.__finish_line_and_write(msg_dict['device'], line)
 
     def __check_save_file_hdrs(self):
-        for device in self.fnames_to_save_to:
-            if not self.fnames_to_save_to[device]['hdr']:
+        for device in self.devices:
+            if not self.devices[device]['hdr_bool']:
                 self.__add_hdr_to_file(device)
 
     def __make_save_filename_for_device(self, device):
-        self.fnames_to_save_to[device]['fn'] = device[0] + " on " + device[1] + " " + self.__get_current_time(save=True)
-        self.fnames_to_save_to[device]['hdr'] = False
+        self.devices[device]['fn'] = device[0] + " on " + device[1] + " " + self.__get_current_time(save=True)
+        self.devices[device]['hdr_bool'] = False
 
     def __update_device_filenames(self):
-        for device in self.fnames_to_save_to:
+        for device in self.devices:
             self.__make_save_filename_for_device(device)
-
-    def __add_device(self, msg_dict):
-        device = msg_dict['device']
-        self.fnames_to_save_to[device] = {}
-        self.__make_save_filename_for_device(device)
-        if self.__check_save_dir():
-            self.__add_hdr_to_file(device)
-
-    def __remove_device(self, msg_dict):
-        device = msg_dict['device']
-        del(self.fnames_to_save_to[device])
 
     def __add_hdr_to_file(self, device):
         if device[0] == 'drt':
-            self.__write_line_to_file(self.fnames_to_save_to[device]['fn'], drt_file_hdr + "\n"
+            self.__write_line_to_file(self.devices[device]['fn'], drt_file_hdr + "\n"
                                       + block_note_hdr)
-            self.fnames_to_save_to[device]['hdr'] = True
+            self.devices[device]['hdr_bool'] = True
         elif device[0] == 'vog':
-            self.__write_line_to_file(self.fnames_to_save_to[device]['fn'], vog_file_hdr + "\n"
+            self.__write_line_to_file(self.devices[device]['fn'], vog_file_hdr + "\n"
                                       + block_note_hdr)
-            self.fnames_to_save_to[device]['hdr'] = True
-
-    @staticmethod
-    def __parse_vog_line(line):
-        the_parts = line.split(", ")
-        data = (int(the_parts[-2]), int(the_parts[-1]))
-        return data
-
-    @staticmethod
-    def __parse_drt_line(line):
-        the_parts = line.split(", ")
-        data = the_parts[-1]
-        return int(data)
+            self.devices[device]['hdr_bool'] = True
 
     @staticmethod
     def __setup_output_file():
-        fname = path.dirname(sys.argv[0]) + "\\program_output.txt"
+        fname = path.dirname(argv[0]) + "\\program_output.txt"
         if path.exists(fname):
             with open(fname, "w") as temp:
                 temp.write(program_output_hdr)
         return fname
 
+    ########################################################################################
+    # device handling
+    ########################################################################################
+
+    def __handle_drt_request(self, device, msg):
+        msg['device'] = device
+        msg['type'] = "send"
+        self.device_manager.handle_msg(msg)
+
+    def __handle_vog_request(self, device, msg):
+        msg['device'] = device
+        msg['type'] = "send"
+        self.device_manager.handle_msg(msg)
+
+    def __device_update(self):
+        self.device_manager.update()
+
+    def __add_device(self, device):
+        if device[0] == "drt":
+            contents = DRTTab(self.tab_box, self.__handle_drt_request, device)
+        elif device[0] == "vog":
+            contents = VOGTab(self.tab_box, self.__handle_vog_request, device)
+        else:
+            return
+        self.devices[device] = {}
+        self.devices[device]['tab'] = contents
+        self.devices[device]['tab'].set_index(self.tab_box.add_tab(contents))
+        self.__make_save_filename_for_device(device)
+        if self.__dir_chosen:
+            self.__add_hdr_to_file(device)
+
+    def __remove_device(self, device):
+        if device in self.devices:
+            self.tab_box.remove_tab(self.devices[device]['tab'].get_index())
+            del(self.devices[device])
+
+    ########################################################################################
+    # Other handlers
+    ########################################################################################
+
+    def __about_company(self):
+        self.ui.about_company()
+
+    def __about_app(self):
+        self.ui.about_app()
+
     @staticmethod
     def __get_current_time(day=False, time=False, mil=False, save=False):
         if day and time and mil:
-            return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+            return datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
         elif day and time and not mil:
-            return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         elif day and not time and not mil:
-            return datetime.datetime.now().strftime("%Y-%m-%d")
+            return datetime.now().strftime("%Y-%m-%d")
         elif not day and time and not mil:
-            return datetime.datetime.now().strftime("%H:%M:%S")
+            return datetime.now().strftime("%H:%M:%S")
         elif not day and time and mil:
-            return datetime.datetime.now().strftime("%H:%M:%S.%f")
+            return datetime.now().strftime("%H:%M:%S.%f")
         elif save:
-            return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-
+            return datetime.now().strftime("%Y-%m-%d-%H-%M-%S")

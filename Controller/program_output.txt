@@ -1,1 +1,8 @@
 timestamp, author, location, message
+2019-06-08-21-07-33, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-06-08-21-07-38, drt, COM9, cfg>intensity:254
+2019-06-08-21-07-40, drt, COM9, cfg>intensity:254
+2019-06-08-21-07-40, drt, COM9, cfg>upperISI:5000
+2019-06-08-21-07-40, drt, COM9, cfg>lowerISI:3000
+2019-06-08-21-07-40, drt, COM9, cfg>intensity:255
+2019-06-08-21-07-40, drt, COM9, cfg>stimDur:1000

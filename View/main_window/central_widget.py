@@ -8,8 +8,8 @@ from PySide2.QtWidgets import QWidget, QVBoxLayout, QFrame
 
 
 class CentralWidget(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.__sep_line = QFrame()
         self.__sep_line.setFrameShape(QFrame.HLine)
