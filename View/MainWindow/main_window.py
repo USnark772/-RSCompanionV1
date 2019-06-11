@@ -8,8 +8,8 @@ from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame
 from PySide2.QtCore import QSize, Qt
 from PySide2.QtGui import QFont
 from Model.defs import about_RS_text, about_RS_app_text, up_to_date, update_available
-from View.main_window.help_window import HelpWindow
-from View.main_window.central_widget import CentralWidget
+from View.MainWindow.help_window import HelpWindow
+from View.MainWindow.central_widget import CentralWidget
 
 
 class CompanionWindow(QMainWindow):

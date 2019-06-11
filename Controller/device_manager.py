@@ -6,7 +6,7 @@ disconnect_event flags are turned True.
 
 from serial import Serial, SerialException
 from serial.tools import list_ports
-from Model.defs import devices, drt_config_fields, drt_trial_fields, vog_block_field
+from Model.defs import devices, drtv1_0_config_fields, drtv1_0_trial_fields, vog_block_field
 
 
 class DeviceManager:
@@ -132,7 +132,8 @@ class DeviceManager:
                         try:
                             the_port = Serial(port.device)
                         except SerialException:
-                            self.msg_callback({'type': "error", 'msg': "Connection error, please reconnect device"})
+                            self.msg_callback({'type': "error", 'msg': "Potential connection error, "
+                                                                       "please reconnect device"})
                             del port
                             return
                         self.devices[port.device] = {'port': the_port, 'id': device}
@@ -175,29 +176,29 @@ class DeviceManager:
             # Check if this is a response to get_config
             if len(msg) > 90:
                 # Get relevant values from msg and insert into msg_dict
-                for i in range(0, len(drt_config_fields)):
-                    index = msg.find(drt_config_fields[i] + ":")
-                    index_len = len(drt_config_fields[i]) + 1
+                for i in range(0, len(drtv1_0_config_fields)):
+                    index = msg.find(drtv1_0_config_fields[i] + ":")
+                    index_len = len(drtv1_0_config_fields[i]) + 1
                     val_len = msg.find(', ', index + index_len)
                     if val_len < 0:
                         val_len = None
                     msg_dict['values'][msg[index:index+index_len-1]] = int(msg[index+index_len:val_len])
             else:
                 # Single value update, find which value it is and insert into msg_dict
-                for i in range(0, len(drt_config_fields)):
-                    index = msg.find(drt_config_fields[i] + ":")
+                for i in range(0, len(drtv1_0_config_fields)):
+                    index = msg.find(drtv1_0_config_fields[i] + ":")
                     if index > 0:
-                        index_len = len(drt_config_fields[i])
+                        index_len = len(drtv1_0_config_fields[i])
                         val_ind = index + index_len + 1
                         msg_dict['values'][msg[index:index + index_len]] = int(msg[val_ind:])
         elif msg[0:4] == "trl>":
             msg_dict['type'] = "data"
             val_ind_start = 4
-            for i in range(0, len(drt_trial_fields)):
+            for i in range(0, len(drtv1_0_trial_fields)):
                 val_ind_end = msg.find(', ', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict[drt_trial_fields[i]] = int(msg[val_ind_start:val_ind_end])
+                msg_dict[drtv1_0_trial_fields[i]] = int(msg[val_ind_start:val_ind_end])
                 if val_ind_end:
                     val_ind_start = val_ind_end + 2
 
@@ -212,6 +213,7 @@ class DeviceManager:
     # TODO: Clean this up
     @staticmethod
     def __parse_vog_msg(msg, msg_dict):
+        print("device_manager.__parse_vog_msg", msg)
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
             val_ind_start = 5
@@ -238,3 +240,8 @@ class DeviceManager:
                 msg_dict['values']['ClickMode'] = msg[bar_ind + 1: len(msg)]
         elif "Click" in msg:
             msg_dict['action'] = "Click"
+        elif "buttonControl" in msg:
+            msg_dict['type'] = "settings"
+            bar_ind = msg.find('|')
+            msg_dict['values'] = {}
+            msg_dict['values']['buttonControl'] = msg[bar_ind + 1: len(msg)]

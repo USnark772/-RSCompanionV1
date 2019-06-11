@@ -7,8 +7,8 @@
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QSlider, QHBoxLayout, QVBoxLayout, QFrame, QLCDNumber
 from PySide2.QtCore import QSize, Qt, QRect
 from PySide2.QtGui import QFont
-from Model.defs import drt_intensity_max, drt_intensity_min, drt_ISI_max, drt_ISI_min, drt_stim_dur_max, \
-    drt_stim_dur_min
+from Model.defs import drtv1_intensity_max, drtv1_intensity_min, drtv1_0_ISI_max, drtv1_ISI_min, drtv1_stim_dur_max, \
+    drtv1_stim_dur_min
 
 
 class TabContents(QWidget):
@@ -169,10 +169,10 @@ class TabContents(QWidget):
         self.lower_isi_label.setText("Lower ISI")
 
     def __set_slider_ranges(self):
-        self.stim_intens_slider.setRange(drt_intensity_min, drt_intensity_max)
-        self.upper_isi_slider.setRange(drt_ISI_min, drt_ISI_max)
-        self.lower_isi_slider.setRange(drt_ISI_min, drt_ISI_max)
-        self.stim_dur_slider.setRange(drt_stim_dur_min, drt_stim_dur_max)
+        self.stim_intens_slider.setRange(drtv1_intensity_min, drtv1_intensity_max)
+        self.upper_isi_slider.setRange(drtv1_ISI_min, drtv1_0_ISI_max)
+        self.lower_isi_slider.setRange(drtv1_ISI_min, drtv1_0_ISI_max)
+        self.stim_dur_slider.setRange(drtv1_stim_dur_min, drtv1_stim_dur_max)
 
     def __set_handlers(self):
         self.iso_default_push_button.clicked.connect(self.__iso_button_handler)

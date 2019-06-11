@@ -211,7 +211,7 @@ class CompanionWindow(QMainWindow):
         # End Trial/Block information generation code
         ################################################################################################################
         # Begin MenuBar item generation code
-        #self.begin_exp_action = QAction(main_window)
+        #self.begin_exp_action = QAction(MainWindow)
         # self.save_action = QAction(self)
         # self.save_as_action = QAction(self)
         # self.com_messages_action = QAction(self)
@@ -219,7 +219,7 @@ class CompanionWindow(QMainWindow):
         self.about_rs_companion_action = QAction(self)
         self.about_rs_action = QAction(self)
         self.check_for_updates_action = QAction(self)
-        # self.end_exp_action = QAction(main_window)
+        # self.end_exp_action = QAction(MainWindow)
         # self.trial_controls_action = QAction(self)
         # self.display_tool_tips_action = QAction(self)
         # self.configure_action = QAction(self)

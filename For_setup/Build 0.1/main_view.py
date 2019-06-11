@@ -22,7 +22,7 @@ class CompanionWindow(QMainWindow):
     def __init__(self, msg_handler):
         super().__init__()
         # Begin MainWindow generation code
-        self.setObjectName("main_window")
+        self.setObjectName("MainWindow")
         self.resize(840, 705)
         self.setMinimumSize(QSize(840, 468))
         font = QFont()
@@ -257,7 +257,7 @@ class CompanionWindow(QMainWindow):
         # End Trial/Block information generation code
         ################################################################################################################
         # Begin MenuBar item generation code
-        #self.begin_exp_action = QAction(main_window)
+        #self.begin_exp_action = QAction(MainWindow)
         #self.begin_exp_action.setObjectName("begin_exp_action")
         self.save_action = QAction(self)
         self.save_action.setObjectName("save_action")
@@ -270,7 +270,7 @@ class CompanionWindow(QMainWindow):
         self.about_rs_companion_action.setObjectName("about_rs_companion_action")
         self.about_rs_action = QAction(self)
         self.about_rs_action.setObjectName("about_rs_action")
-        #self.end_exp_action = QAction(main_window)
+        #self.end_exp_action = QAction(MainWindow)
         #self.end_exp_action.setObjectName("end_exp_action")
         self.trial_controls_action = QAction(self)
         self.trial_controls_action.setObjectName("trial_controls_action")

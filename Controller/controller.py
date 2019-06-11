@@ -10,9 +10,9 @@ from sys import argv
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir
 from PySide2.QtGui import QKeyEvent
-from Model.defs import vog_block_field, drt_trial_fields, drt_file_hdr, vog_file_hdr, \
+from Model.defs import vog_block_field, drtv1_0_trial_fields, drtv1_0_file_hdr, vog_file_hdr, \
     block_note_hdr, program_output_hdr
-from View.main_window.main_window import CompanionWindow
+from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
 from View.DockWidget.info_box import InfoBox
@@ -21,10 +21,10 @@ from View.DockWidget.note_box import NoteBox
 from View.MenuBarWidget.menu_bar import MenuBar
 from View.GraphWidget.chart_container import GraphContainer
 from View.TabWidget.device_tab import TabContainer
-from View.TabWidget.drt_tab_contents import TabContents as DRTTab
-from View.TabWidget.vog_tab_contents import TabContents as VOGTab
 from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
+#from Controller.drt_configurator import DRTConfigureController
+from Controller.vog_configurator import VOGConfigureController
 
 
 class CompanionController:
@@ -61,7 +61,9 @@ class CompanionController:
         if msg_type == "data":
             self.__update_save(msg)
         elif msg_type == "settings":
-            self.devices[msg['device']]['tab'].handle_msg(msg['values'])
+            print("handlng settings msg")
+            print("sending to", msg['device'])
+            self.devices[msg['device']]['controller'].handle_msg(msg['values'])
         elif msg_type == "add":
             self.__add_device(msg['device'])
         elif msg_type == "remove":
@@ -107,14 +109,6 @@ class CompanionController:
         self.menu_bar.add_about_company_handler(self.__about_company)
         self.menu_bar.add_update_handler(self.__check_for_updates_handler)
         self.ui.keyPressEvent = self.__key_press_handler
-
-    def __key_press_handler(self, event):
-        if type(event) == QKeyEvent:
-            if 0x41 <= event.key() <= 0x5a:
-                self.flag_box.set_flag(chr(event.key()))
-            event.accept()
-        else:
-            event.ignore()
 
     def __start_update_timer(self):
         self.update_timer = QTimer()
@@ -179,6 +173,14 @@ class CompanionController:
     # Data saving
     ########################################################################################
 
+    def __key_press_handler(self, event):
+        if type(event) == QKeyEvent:
+            if 0x41 <= event.key() <= 0x5a:
+                self.flag_box.set_flag(chr(event.key()))
+            event.accept()
+        else:
+            event.ignore()
+
     def __save_output_msg(self, msg):
         line = str(self.__get_current_time(save=True)) + ", " + msg
         with open(self.program_output_save_file, 'a+') as file:
@@ -223,8 +225,8 @@ class CompanionController:
 
     def __format_drt_line(self, msg_dict):
         line = ""
-        for i in range(0, len(drt_trial_fields)):
-            line += ", " + msg_dict[drt_trial_fields[i]]
+        for i in range(0, len(drtv1_0_trial_fields)):
+            line += ", " + msg_dict[drtv1_0_trial_fields[i]]
         line = line[0:-2]
         self.__finish_line_and_write(msg_dict['device'], line)
 
@@ -250,7 +252,7 @@ class CompanionController:
 
     def __add_hdr_to_file(self, device):
         if device[0] == 'drt':
-            self.__write_line_to_file(self.devices[device]['fn'], drt_file_hdr + "\n"
+            self.__write_line_to_file(self.devices[device]['fn'], drtv1_0_file_hdr + "\n"
                                       + block_note_hdr)
             self.devices[device]['hdr_bool'] = True
         elif device[0] == 'vog':
@@ -267,7 +269,7 @@ class CompanionController:
         return fname
 
     ########################################################################################
-    # device handling
+    # generic device handling
     ########################################################################################
 
     def __handle_drt_request(self, device, msg):
@@ -285,22 +287,31 @@ class CompanionController:
 
     def __add_device(self, device):
         if device[0] == "drt":
-            contents = DRTTab(self.tab_box, self.__handle_drt_request, device)
+            controller = DRTConfigureController(self.tab_box, device, self.device_manager.handle_msg)
         elif device[0] == "vog":
-            contents = VOGTab(self.tab_box, self.__handle_vog_request, device)
+            controller = VOGConfigureController(self.tab_box, device, self.device_manager.handle_msg)
+            # contents = VOGTab(self.tab_box, device)
         else:
             return
         self.devices[device] = {}
-        self.devices[device]['tab'] = contents
-        self.devices[device]['tab'].set_index(self.tab_box.add_tab(contents))
+        self.devices[device]['controller'] = controller
+        self.devices[device]['controller'].tab.set_index(self.tab_box.add_tab(controller.tab))
         self.__make_save_filename_for_device(device)
         if self.__dir_chosen:
             self.__add_hdr_to_file(device)
 
     def __remove_device(self, device):
         if device in self.devices:
-            self.tab_box.remove_tab(self.devices[device]['tab'].get_index())
+            self.tab_box.remove_tab(self.devices[device]['controller'].tab.get_index())
             del(self.devices[device])
+
+    ########################################################################################
+    # drt specific handling
+    ########################################################################################
+
+    ########################################################################################
+    # vog specific handling
+    ########################################################################################
 
     ########################################################################################
     # Other handlers

@@ -45,25 +45,26 @@ devices = {'drt': {'probe': "get_name\n\r",
 # drt specific
 #################################################################################################################
 
-drt_file_hdr = "device type: drt\nData: Exp Name, Block Name, Key Flag, Timestamp, Mills from Block Start, Probe #, " \
+drtv1_0_file_hdr = "device type: drt\nData: Exp Name, Block Name, Key Flag, Timestamp, Mills from Block Start, Probe #, " \
                "Clicks, Response Time"
 
-drt_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
-drt_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
-drt_ui_fields = ['Mills from block start', 'probe #', 'clicks', 'response time']
+drtv1_0_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
+drtv1_0_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
+drtv1_0_ui_fields = ['Mills from block start', 'probe #', 'clicks', 'response time']
 
-drt_iso_standards = {'upperISI': 5000, 'lowerISI': 3000, 'intensity': 255, 'stimDur': 1000}
+drtv1_0_iso_standards = {'upperISI': 5000, 'lowerISI': 3000, 'intensity': 255, 'stimDur': 1000}
 
-drt_max_val = 65535
+# drt v1.0 uses uint16_t for drt value storage
+drtv1_0_max_val = 65535
+# All the following drt values must be between 0 and drt_max_val
+drtv1_0_intensity_max = 255
+drtv1_0_intensity_min = 0
 
-drt_intensity_max = 255
-drt_intensity_min = 0
+drtv1_0_stim_dur_max = drtv1_0_max_val
+drtv1_0_stim_dur_min = 0
 
-drt_stim_dur_max = 5000
-drt_stim_dur_min = 0
-
-drt_ISI_max = 10000
-drt_ISI_min = 0
+drtv1_0_ISI_max = drtv1_0_max_val
+drtv1_0_ISI_min = 0
 
 #################################################################################################################
 # vog specific
@@ -76,7 +77,9 @@ vog_config_fields = []
 vog_block_field = ['trialCounter', 'millis_openElapsed', 'millis_closeElapsed']
 vog_ui_fields = ['block #', 'Total millis open', 'Total millis closed']
 
-vog_max_open_close = 10000
+vog_max_val = 2147483647
+
+vog_max_open_close = vog_max_val
 vog_min_open_close = 0
 
 vog_debounce_max = 100

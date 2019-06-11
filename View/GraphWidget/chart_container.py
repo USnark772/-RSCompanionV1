@@ -30,7 +30,7 @@ class GraphContainer(QWidget):
     def handle_msg(self, msg_dict):
         device = msg_dict['device']
         if device[0] == "drt":
-            self.add_data_point(device, int(msg_dict[defs.drt_trial_fields[3]]))
+            self.add_data_point(device, int(msg_dict[defs.drtv1_trial_fields[3]]))
         elif device[0] == "vog":
             self.add_data_point(device, (int(msg_dict[defs.vog_block_field[1]]), int(msg_dict[defs.vog_block_field[2]])))
 
