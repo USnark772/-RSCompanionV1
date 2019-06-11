@@ -213,7 +213,6 @@ class DeviceManager:
     # TODO: Clean this up
     @staticmethod
     def __parse_vog_msg(msg, msg_dict):
-        print("device_manager.__parse_vog_msg", msg)
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
             val_ind_start = 5
@@ -229,19 +228,19 @@ class DeviceManager:
             bar_ind = msg.find('|', 6)
             msg_dict['values'] = {}
             if msg[6:bar_ind] == "Name":
-                msg_dict['values']['Name'] = msg[bar_ind + 1: len(msg)]
+                msg_dict['values']['Name'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
             elif msg[6:bar_ind] == "MaxOpen":
-                msg_dict['values']['MaxOpen'] = msg[bar_ind + 1: len(msg)]
+                msg_dict['values']['MaxOpen'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
             elif msg[6:bar_ind] == "MaxClose":
-                msg_dict['values']['MaxClose'] = msg[bar_ind + 1: len(msg)]
+                msg_dict['values']['MaxClose'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
             elif msg[6:bar_ind] == "Debounce":
-                msg_dict['values']['Debounce'] = msg[bar_ind + 1: len(msg)]
+                msg_dict['values']['Debounce'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
             elif msg[6:bar_ind] == "ClickMode":
-                msg_dict['values']['ClickMode'] = msg[bar_ind + 1: len(msg)]
+                msg_dict['values']['ClickMode'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
         elif "Click" in msg:
             msg_dict['action'] = "Click"
         elif "buttonControl" in msg:
             msg_dict['type'] = "settings"
             bar_ind = msg.find('|')
             msg_dict['values'] = {}
-            msg_dict['values']['buttonControl'] = msg[bar_ind + 1: len(msg)]
+            msg_dict['values']['buttonControl'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")

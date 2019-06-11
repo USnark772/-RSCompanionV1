@@ -23,7 +23,7 @@ from View.GraphWidget.chart_container import GraphContainer
 from View.TabWidget.device_tab import TabContainer
 from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
-#from Controller.drt_configurator import DRTConfigureController
+from Controller.drt_configurator import DRTConfigureController
 from Controller.vog_configurator import VOGConfigureController
 
 
@@ -61,8 +61,6 @@ class CompanionController:
         if msg_type == "data":
             self.__update_save(msg)
         elif msg_type == "settings":
-            print("handlng settings msg")
-            print("sending to", msg['device'])
             self.devices[msg['device']]['controller'].handle_msg(msg['values'])
         elif msg_type == "add":
             self.__add_device(msg['device'])

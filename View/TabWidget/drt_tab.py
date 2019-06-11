@@ -5,181 +5,183 @@
 # https://redscientific.com/index.html
 
 from math import trunc
-from PySide2.QtWidgets import QWidget, QSlider, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QFrame, QLineEdit
-from PySide2.QtCore import Qt, QRect
-from PySide2.QtGui import QFont
-from Model.defs import drtv1_0_intensity_max, drtv1_0_intensity_min, drtv1_0_ISI_max, drtv1_0_ISI_min, \
-    drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_iso_standards, drtv1_0_max_val
+from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QFrame,\
+    QLineEdit
+from PySide2.QtCore import Qt, QRect, QSize
+from Model.defs import drtv1_0_intensity_max, drtv1_0_intensity_min, drtv1_0_ISI_max, drtv1_0_ISI_min,\
+    drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_iso_standards, drtv1_0_max_val,\
+    tab_line_edit_compliant_style, tab_line_edit_error_style
 
 
 class DRTTab(QWidget):
-    def __init__(self, parent, msg_callback, device):
+    def __init__(self, parent, device):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setFixedHeight(400)
+        self.setFixedHeight(350)
 
         self.config_horizontal_layout = QHBoxLayout()
 
-        font = QFont()
-        font.setPointSize(10)
-        self.config_label = QLabel()
-        self.config_label.setFont(font)
+        self.layout().addWidget(self.__MyFrame(True))
+
+        self.config_frame = self.__MyFrame()
+        self.config_layout = QHBoxLayout(self.config_frame)
+        self.config_label = QLabel(self.config_frame)
         self.config_label.setAlignment(Qt.AlignCenter)
-        self.config_horizontal_layout.addWidget(self.config_label)
+        self.config_layout.addWidget(self.config_label)
+        self.config_layout.addWidget(self.__MyFrame(True, True))
+        self.config_val = QLabel(self.config_frame)
+        self.config_val.setAlignment(Qt.AlignCenter)
+        self.config_layout.addWidget(self.config_val)
+        self.layout().addWidget(self.config_frame)
 
-        self.config_label_val_sep_line = QFrame()
-        self.config_label_val_sep_line.setFrameShape(QFrame.VLine)
-        self.config_label_val_sep_line.setFrameShadow(QFrame.Sunken)
-        self.config_horizontal_layout.addWidget(self.config_label_val_sep_line)
+        self.layout().addWidget(self.__MyFrame(True))
 
-        font = QFont()
-        font.setPointSize(10)
-        self.config_val_label = QLabel()
-        self.config_val_label.setFont(font)
-        self.config_val_label.setAlignment(Qt.AlignCenter)
-        self.config_horizontal_layout.addWidget(self.config_val_label)
-        self.layout().addLayout(self.config_horizontal_layout)
+        self.presets_frame = self.__MyFrame()
+        self.presets_layout = QVBoxLayout(self.presets_frame)
+        self.iso_button = QPushButton(self.presets_frame)
+        self.presets_layout.addWidget(self.iso_button)
+        self.layout().addWidget(self.presets_frame)
 
-        self.iso_default_push_button = QPushButton()
-        self.layout().addWidget(self.iso_default_push_button)
+        self.layout().addWidget(self.__MyFrame(True))
 
-        self.config_stim_dur_sep_line = QFrame()
-        self.config_stim_dur_sep_line.setFrameShape(QFrame.HLine)
-        self.config_stim_dur_sep_line.setFrameShadow(QFrame.Sunken)
-        self.layout().addWidget(self.config_stim_dur_sep_line)
-
-        self.stim_dur_horizontal_layout = QHBoxLayout()
-
-        font = QFont()
-        font.setPointSize(10)
-        self.stim_dur_label = QLabel()
-        self.stim_dur_label.setFont(font)
-        self.stim_dur_horizontal_layout.addWidget(self.stim_dur_label)
-
-        self.stim_dur_text_edit = QLineEdit()
-        self.stim_dur_text_edit.setFixedWidth(100)
-        self.stim_dur_horizontal_layout.addWidget(self.stim_dur_text_edit)
-        self.layout().addLayout(self.stim_dur_horizontal_layout)
-
-        self.stim_dur_intens_sep_line = QFrame()
-        self.stim_dur_intens_sep_line.setFrameShape(QFrame.HLine)
-        self.stim_dur_intens_sep_line.setFrameShadow(QFrame.Sunken)
-        self.layout().addWidget(self.stim_dur_intens_sep_line)
-
-        self.stim_intens_horizontal_layout = QHBoxLayout()
-
-        font = QFont()
-        font.setPointSize(10)
-        self.stim_intens_label = QLabel()
-        self.stim_intens_label.setFont(font)
-        self.stim_intens_horizontal_layout.addWidget(self.stim_intens_label)
-
-        self.stim_intens_val = QLabel()
-        self.stim_intens_val.setAlignment(Qt.AlignCenter)
-        self.stim_dur_horizontal_layout.addWidget(self.stim_intens_val)
-        self.stim_intens_horizontal_layout.addWidget(self.stim_intens_val)
-        self.layout().addLayout(self.stim_intens_horizontal_layout)
-
-        self.stim_intens_slider = QSlider()
+        self.slider_frame = self.__MyFrame()
+        self.slider_layout = QVBoxLayout(self.slider_frame)
+        self.STIMINTENSLAYOUT = QHBoxLayout(self.slider_frame)
+        self.stim_intens_label = QLabel(self.slider_frame)
+        self.stim_intens_label.setAlignment(Qt.AlignLeft)
+        self.STIMINTENSLAYOUT.addWidget(self.stim_intens_label)
+        self.stim_intens_val = QLabel(self.slider_frame)
+        self.stim_intens_val.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        self.STIMINTENSLAYOUT.addWidget(self.stim_intens_val)
+        self.slider_layout.addLayout(self.STIMINTENSLAYOUT)
+#        self.slider_layout.addWidget(self.stim_intens_label)
+        self.stim_intens_slider = QSlider(self.slider_frame)
+        self.stim_intens_slider.setMinimum(1)
+        self.stim_intens_slider.setMaximum(100)
+        self.stim_intens_slider.setSliderPosition(100)
         self.stim_intens_slider.setOrientation(Qt.Horizontal)
-        self.stim_intens_slider.setRange(drtv1_0_intensity_min, drtv1_0_intensity_max)
-        self.layout().addWidget(self.stim_intens_slider)
+        self.stim_intens_slider.setTickPosition(QSlider.TicksBelow)
+        self.stim_intens_slider.setTickInterval(10)
+        self.slider_layout.addWidget(self.stim_intens_slider)
+        self.layout().addWidget(self.slider_frame)
 
-        self.stim_intens_upper_isi_sep_line = QFrame()
-        self.stim_intens_upper_isi_sep_line.setFrameShape(QFrame.HLine)
-        self.stim_intens_upper_isi_sep_line.setFrameShadow(QFrame.Sunken)
-        self.layout().addWidget(self.stim_intens_upper_isi_sep_line)
+        self.layout().addWidget(self.__MyFrame(True))
 
-        self.upper_isi_horizontal_layout = QHBoxLayout()
+        self.input_box_frame = self.__MyFrame()
+        self.input_box_layout = QGridLayout(self.input_box_frame)
+        self.stim_dur_line_edit = QLineEdit(self.input_box_frame)
+        self.stim_dur_line_edit.setMaximumSize(QSize(100, 16777215))
+        self.input_box_layout.addWidget(self.stim_dur_line_edit, 0, 1, 1, 1)
+        self.upper_isi_label = QLabel(self.input_box_frame)
+        self.input_box_layout.addWidget(self.upper_isi_label, 1, 0, 1, 1)
+        self.upper_isi_line_edit = QLineEdit(self.input_box_frame)
+        self.upper_isi_line_edit.setMaximumSize(QSize(100, 16777215))
+        self.input_box_layout.addWidget(self.upper_isi_line_edit, 1, 1, 1, 1)
+        self.stim_dur_label = QLabel(self.input_box_frame)
+        self.input_box_layout.addWidget(self.stim_dur_label, 0, 0, 1, 1)
+        self.lower_isi_line_edit = QLineEdit(self.input_box_frame)
+        self.lower_isi_line_edit.setMaximumSize(QSize(100, 16777215))
+        self.input_box_layout.addWidget(self.lower_isi_line_edit, 2, 1, 1, 1)
+        self.lower_isi_label = QLabel(self.input_box_frame)
+        self.input_box_layout.addWidget(self.lower_isi_label, 2, 0, 1, 1)
+        self.layout().addWidget(self.input_box_frame)
 
-        font = QFont()
-        font.setPointSize(10)
-        self.upper_isi_label = QLabel()
-        self.upper_isi_label.setFont(font)
-        self.upper_isi_horizontal_layout.addWidget(self.upper_isi_label)
-
-        self.upper_isi_text_edit = QLineEdit()
-        self.upper_isi_text_edit.setFixedWidth(100)
-        self.upper_isi_horizontal_layout.addWidget(self.upper_isi_text_edit)
-        self.layout().addLayout(self.upper_isi_horizontal_layout)
-
-        self.upper_lower_isi_sep_line = QFrame()
-        self.upper_lower_isi_sep_line.setFrameShape(QFrame.HLine)
-        self.upper_lower_isi_sep_line.setFrameShadow(QFrame.Sunken)
-        self.layout().addWidget(self.upper_lower_isi_sep_line)
-
-        self.lower_isi_horizontal_layout = QHBoxLayout()
-
-        font = QFont()
-        font.setPointSize(10)
-        self.lower_isi_label = QLabel()
-        self.lower_isi_label.setFont(font)
-        self.lower_isi_horizontal_layout.addWidget(self.lower_isi_label)
-
-        self.lower_isi_text_edit = QLineEdit()
-        self.lower_isi_text_edit.setFixedWidth(100)
-        self.lower_isi_horizontal_layout.addWidget(self.lower_isi_text_edit)
-        self.layout().addLayout(self.lower_isi_horizontal_layout)
+        self.layout().addWidget(self.__MyFrame(True))
 
         self.upload_settings_button = QPushButton()
         self.layout().addWidget(self.upload_settings_button)
 
-        self.compliant_text_color = "rgb(0, 0, 0)"
-        self.error_text_color = "rgb(255, 0, 0)"
-        self.selection_color = "rgb(0, 150, 255)"
-        self.font_size = "13px"
-        self.error_style = "QLineEdit { color: "\
-                           + self.error_text_color\
-                           + "; selection-background-color: "\
-                           + self.selection_color \
-                           + "; font: " \
-                           + self.font_size + "; }"
-        self.compliant_style = "QLineEdit { color: "\
-                               + self.compliant_text_color\
-                               + "; selection-background-color: "\
-                               + self.selection_color \
-                               + "; font: " \
-                               + self.font_size + "; }"
-        self.handling_msg = False
-        self.errors = [False, False, False]  # upper, lower, dur
-        self.current_vals = {'intensity': drtv1_0_iso_standards['intensity'],
-                             'upperISI': drtv1_0_iso_standards['upperISI'],
-                             'lowerISI': drtv1_0_iso_standards['lowerISI'],
-                             'stimDur': drtv1_0_iso_standards['stimDur']}
-        self.msg_callback = msg_callback
+        self.layout().addWidget(self.__MyFrame(True))
+
         self.device_info = device
         self.__index = 0
-        self.text_edits = {'intensity': self.stim_intens_val,
-                           'upperISI': self.upper_isi_text_edit,
-                           'lowerISI': self.lower_isi_text_edit,
-                           'stimDur': self.stim_dur_text_edit}
-        self.sliders = {'intensity': self.stim_intens_slider}
         self.__set_texts()
         self.__set_tooltips()
-        self.__set_handlers()
-        self.__get_vals()
 
-    def handle_msg(self, msg_dict):
-        self.handling_msg = True
-        for item in msg_dict:
-            self.__set_val(item, msg_dict[item])
-        self.__check_vals()
-        self.handling_msg = False
+    def add_iso_button_handler(self, func):
+        self.iso_button.clicked.connect(func)
+
+    def add_upload_button_handler(self, func):
+        self.upload_settings_button.clicked.connect(func)
+
+    def add_stim_dur_entry_changed_handler(self, func):
+        self.stim_dur_line_edit.textChanged.connect(func)
+
+    def add_stim_intens_entry_changed_handler(self, func):
+        self.stim_intens_slider.valueChanged.connect(func)
+
+    def add_upper_isi_entry_changed_handler(self, func):
+        self.upper_isi_line_edit.textChanged.connect(func)
+
+    def add_lower_isi_entry_changed_handler(self, func):
+        self.lower_isi_line_edit.textChanged.connect(func)
+
+    def set_upload_button_activity(self, is_active):
+        self.upload_settings_button.setEnabled(is_active)
+
+    def set_config_val(self, val):
+        self.config_val.setText(str(val))
+
+    def get_stim_dur_val(self):
+        return self.stim_dur_line_edit.text()
+
+    def set_stim_dur_val(self, val):
+        self.stim_dur_line_edit.setText(str(val))
+
+    def set_stim_dur_val_error(self, is_error):
+        if is_error:
+            self.stim_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
+        else:
+            self.stim_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+
+    def set_upper_isi_val_error(self, is_error):
+        if is_error:
+            self.upper_isi_line_edit.setStyleSheet(tab_line_edit_error_style)
+        else:
+            self.upper_isi_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+
+    def set_lower_isi_val_error(self, is_error):
+        if is_error:
+            self.lower_isi_line_edit.setStyleSheet(tab_line_edit_error_style)
+        else:
+            self.lower_isi_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+
+    def get_stim_intens_val(self):
+        return self.stim_intens_slider.value()
+
+    def set_stim_intens_val(self, val):
+        self.stim_intens_slider.setValue(int(val))
+        self.set_stim_intens_val_label(val)
+
+    def set_stim_intens_val_label(self, val):
+        self.stim_intens_val.setText(str(val) + "%")
+
+    def get_upper_isi_val(self):
+        return self.upper_isi_line_edit.text()
+
+    def set_upper_isi_val(self, val):
+        self.upper_isi_line_edit.setText(str(val))
+
+    def get_lower_isi_val(self):
+        return self.lower_isi_line_edit.text()
+
+    def set_lower_isi_val(self, val):
+        self.lower_isi_line_edit.setText(str(val))
 
     def get_name(self):
-        return self.device_info[0]
-
-    def set_index(self, new_index):
-        self.__index = new_index
+        return self.device_info
 
     def get_index(self):
         return self.__index
 
+    def set_index(self, new_index):
+        self.__index = new_index
+
     def __set_texts(self):
         self.config_label.setText("Config")
-        self.config_val_label.setText("ISO Standard")
-        self.iso_default_push_button.setText("ISO Standard")
+        self.config_val.setText("ISO")
+        self.iso_button.setText("ISO")
         self.stim_dur_label.setText("Stim Duration")
         self.stim_intens_label.setText("Stim Intensity")
         self.upper_isi_label.setText("Upper ISI")
@@ -188,11 +190,30 @@ class DRTTab(QWidget):
 
     def __set_tooltips(self):
         self.config_label.setToolTip("Current device configuration")
-        self.iso_default_push_button.setToolTip("Set device to ISO standard")
+        self.iso_button.setToolTip("Set device to ISO standard")
         self.upper_isi_label.setToolTip("Milliseconds. Range: Lower ISI-" + str(drtv1_0_max_val))
-        self.lower_isi_label.setToolTip("Milliseconds. Range: 0-Upper ISI")
-        self.stim_dur_label.setToolTip("Milliseconds. Range: 0-" + str(drtv1_0_max_val))
+        self.lower_isi_label.setToolTip("Milliseconds. Range: " + str(drtv1_0_ISI_min) + "-Upper ISI")
+        self.stim_dur_label.setToolTip("Milliseconds. Range: " + str(drtv1_0_stim_dur_min) + "-" + str(drtv1_0_max_val))
+        self.stim_intens_label.setToolTip("Intensity of the stimulus")
         self.upload_settings_button.setToolTip("Upload current configuration to device")
+        self.stim_intens_slider.setToolTip(str(self.stim_intens_slider.value()) + "%")
+
+    class __MyFrame(QFrame):
+        def __init__(self, line=False, vert=False):
+            super().__init__()
+            if line:
+                if vert:
+                    self.setFrameShape(QFrame.VLine)
+                else:
+                    self.setFrameShape(QFrame.HLine)
+                self.setFrameShadow(QFrame.Sunken)
+            else:
+                self.setFrameShape(QFrame.StyledPanel)
+                self.setFrameShadow(QFrame.Raised)
+
+
+
+    '''
 
     def __set_handlers(self):
         self.iso_default_push_button.clicked.connect(self.__iso_button_handler)
@@ -252,30 +273,6 @@ class DRTTab(QWidget):
         self.config_val_label.setText("Custom")
         self.__set_upload_button(False)
 
-    def __check_stim_dur_val(self):
-        self.errors[2] = True
-        new_dur = self.stim_dur_text_edit.text()
-        if new_dur.isdigit():
-            new_dur_int = int(new_dur)
-            if drtv1_0_stim_dur_max >= new_dur_int >= drtv1_0_stim_dur_min:
-                self.errors[2] = False
-
-    def __check_upper_isi_val(self):
-        self.errors[0] = True
-        new_upper = self.upper_isi_text_edit.text()
-        if new_upper.isdigit():
-            new_upper_int = int(new_upper)
-            if drtv1_0_ISI_max >= new_upper_int >= int(self.lower_isi_text_edit.text()):
-                self.errors[0] = False
-
-    def __check_lower_isi_val(self):
-        self.errors[1] = True
-        new_lower = self.lower_isi_text_edit.text()
-        if new_lower.isdigit():
-            new_lower_int = int(new_lower)
-            if int(self.upper_isi_text_edit.text()) >= new_lower_int >= drtv1_0_ISI_min:
-                self.errors[1] = False
-
     def __set_upload_button(self, is_active):
         if self.errors[0] or self.errors[1] or self.errors[2] or self.handling_msg:
             self.upload_settings_button.setEnabled(False)
@@ -318,21 +315,4 @@ class DRTTab(QWidget):
             self.errors[i] = False
         self.__check_error_colors()
 
-    def __set_intens(self, val):
-        self.__callback({'cmd': "set_intensity", 'arg': str(val)})
-
-    def __set_upper_isi(self, val):
-        self.__callback({'cmd': "set_upperISI", 'arg': str(val)})
-
-    def __set_lower_isi(self, val):
-        self.__callback({'cmd': "set_lowerISI", 'arg': str(val)})
-
-    def __set_stim_duration(self, val):
-        self.__callback({'cmd': "set_stimDur", 'arg': str(val)})
-
-    def __callback(self, msg):
-        self.msg_callback(self.device_info, msg)
-
-    @staticmethod
-    def __calc_intens_percentage(val):
-        return str(trunc(val / drtv1_0_intensity_max * 100)) + "%"
+    '''

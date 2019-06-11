@@ -4,11 +4,11 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout, \
+from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout,\
     QCheckBox, QFrame, QLineEdit
 from PySide2.QtCore import Qt, QRect
-from PySide2.QtGui import QFont
-from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode
+from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode,\
+    tab_line_edit_error_style, tab_line_edit_compliant_style
 
 
 class VOGTab(QWidget):
@@ -17,6 +17,8 @@ class VOGTab(QWidget):
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
         self.setFixedHeight(400)
+
+        self.layout().addWidget(self.__MyFrame(True))
 
         self.__config_frame = self.__MyFrame()
         self.__config_horiz_layout = QHBoxLayout(self.__config_frame)
@@ -84,6 +86,25 @@ class VOGTab(QWidget):
         self.__upload_settings_button = QPushButton()
         self.layout().addWidget(self.__upload_settings_button)
 
+        self.layout().addWidget(self.__MyFrame(True))
+
+        compliant_text_color = "rgb(0, 0, 0)"
+        error_text_color = "rgb(255, 0, 0)"
+        selection_color = "rgb(0, 150, 255)"
+        font_size = "13px"
+        tab_line_edit_error_style = "QLineEdit { color: " \
+                           + error_text_color \
+                           + "; selection-background-color: " \
+                           + selection_color \
+                           + "; font: " \
+                           + font_size + "; }"
+        tab_line_edit_compliant_style = "QLineEdit { color: " \
+                               + compliant_text_color \
+                               + "; selection-background-color: " \
+                               + selection_color \
+                               + "; font: " \
+                               + font_size + "; }"
+
         self.__name = name
         self.__index = 0
         self.__set_texts()
@@ -107,6 +128,21 @@ class VOGTab(QWidget):
     def add_close_inf_handler(self, func):
         self.__close_inf_check_box.toggled.connect(func)
 
+    def add_open_entry_changed_handler(self, func):
+        self.__open_dur_line_edit.textChanged.connect(func)
+
+    def add_close_entry_changed_handler(self, func):
+        self.__close_dur_line_edit.textChanged.connect(func)
+
+    def add_debounce_entry_changed_handler(self, func):
+        self.__debounce_time_line_edit.textChanged.connect(func)
+
+    def add_button_mode_entry_changed_handler(self, func):
+        self.__button_mode_selector.currentIndexChanged.connect(func)
+
+    def set_upload_button_activity(self, is_active):
+        self.__upload_settings_button.setEnabled(is_active)
+
     def set_config_value(self, value):
         self.__config_val.setText(value)
 
@@ -115,6 +151,24 @@ class VOGTab(QWidget):
 
     def set_open_val(self, val):
         self.__open_dur_line_edit.setText(str(val))
+
+    def set_open_val_error(self, is_error):
+        if is_error:
+            self.__open_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
+        else:
+            self.__open_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+
+    def set_close_val_error(self, is_error):
+        if is_error:
+            self.__close_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
+        else:
+            self.__close_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+
+    def set_debounce_val_error(self, is_error):
+        if is_error:
+            self.__debounce_time_line_edit.setStyleSheet(tab_line_edit_error_style)
+        else:
+            self.__debounce_time_line_edit.setStyleSheet(tab_line_edit_compliant_style)
 
     def set_open_val_entry_activity(self, is_active):
         self.__open_dur_line_edit.setEnabled(is_active)
@@ -163,8 +217,8 @@ class VOGTab(QWidget):
 
     def __set_texts(self):
         self.__config_label.setText("Config")
-        self.__config_val.setText("--DIRECT CONTROL--")
-        self.__nhtsa_button.setText("NHTSA Default")
+        self.__config_val.setText("DIRECT CONTROL")
+        self.__nhtsa_button.setText("NHTSA")
         self.__eblindfold_button.setText("eBlindfold")
         self.__direct_control_button.setText("Direct Control")
         self.__open_dur_label.setText("Open Duration")
@@ -208,25 +262,3 @@ class VOGTab(QWidget):
             else:
                 self.setFrameShape(QFrame.StyledPanel)
                 self.setFrameShadow(QFrame.Raised)
-
-
-
-    def handle_msg(self, msg_dict):
-        self.handling_msg = True
-        #for item in msg_dict:
-        #    self.__set_val(item, msg_dict[item])
-        self.handling_msg = False
-
-    def __set_handlers(self):
-        pass
-
-    def __change_event(self):
-        self.__callback({'cmd': 'set_configClickMode', 'arg': self.button_mode_combo_box.currentIndex()})
-
-    def __set_val(self, item, val):
-        if item == "ButtonControl":
-            self.values[item].setCurrentIndex(int(val))
-        elif item == "Name":
-            self.values[item].setText(val)
-        elif self.values[item].isEnabled():
-            self.values[item].setValue(val)

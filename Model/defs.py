@@ -10,6 +10,7 @@
 
 version = 1.0
 
+# TODO: Change this
 block_note_hdr = "Note: Exp Name, Block Name, Key Flag, Timestamp, block note"
 program_output_hdr = "timestamp, author, location, message\n"
 
@@ -25,6 +26,24 @@ about_RS_app_text = "CHANGEME The RS Companion App was designed by Joel Cooper a
 update_available = "An update is available."
 
 up_to_date = "Your program is up to date."
+
+
+compliant_text_color = "rgb(0, 0, 0)"
+error_text_color = "rgb(255, 0, 0)"
+selection_color = "rgb(0, 150, 255)"
+font_size = "13px"
+tab_line_edit_compliant_style = "QLineEdit { color: "\
+                                + compliant_text_color\
+                                + "; selection-background-color: "\
+                                + selection_color \
+                                + "; font: " \
+                                + font_size + "; }"
+tab_line_edit_error_style = "QLineEdit { color: "\
+                            + error_text_color\
+                            + "; selection-background-color: "\
+                            + selection_color \
+                            + "; font: " \
+                            + font_size + "; }"
 
 #################################################################################################################
 # device list for usb port detection
@@ -45,8 +64,9 @@ devices = {'drt': {'probe': "get_name\n\r",
 # drt specific
 #################################################################################################################
 
-drtv1_0_file_hdr = "device type: drt\nData: Exp Name, Block Name, Key Flag, Timestamp, Mills from Block Start, Probe #, " \
-               "Clicks, Response Time"
+# TODO: Change this
+drtv1_0_file_hdr = "device type: drt\nData: Exp Name, Block Name, Key Flag, Timestamp, Mills from Block Start," \
+                   " Probe #, Clicks, Response Time"
 
 drtv1_0_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drtv1_0_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
@@ -70,6 +90,7 @@ drtv1_0_ISI_min = 0
 # vog specific
 #################################################################################################################
 
+# TODO: Change this
 vog_file_hdr = "device type: vog\nData: Exp Name, Block Name, Key Flag, Timestamp, block #, Total Millis Open, " \
                "Total Millis Closed"
 
