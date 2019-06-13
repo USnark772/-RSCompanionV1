@@ -4,13 +4,11 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from math import trunc
 from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QFrame,\
     QLineEdit
 from PySide2.QtCore import Qt, QRect, QSize
-from Model.defs import drtv1_0_intensity_max, drtv1_0_intensity_min, drtv1_0_ISI_max, drtv1_0_ISI_min,\
-    drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_iso_standards, drtv1_0_max_val,\
-    tab_line_edit_compliant_style, tab_line_edit_error_style
+from Model.defs import drtv1_0_ISI_min, drtv1_0_stim_dur_min, drtv1_0_max_val, tab_line_edit_compliant_style,\
+    tab_line_edit_error_style
 
 
 class DRTTab(QWidget):
@@ -18,7 +16,7 @@ class DRTTab(QWidget):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setFixedHeight(350)
+        self.setFixedHeight(270)
 
         self.config_horizontal_layout = QHBoxLayout()
 
@@ -29,7 +27,6 @@ class DRTTab(QWidget):
         self.config_label = QLabel(self.config_frame)
         self.config_label.setAlignment(Qt.AlignCenter)
         self.config_layout.addWidget(self.config_label)
-        self.config_layout.addWidget(self.__MyFrame(True, True))
         self.config_val = QLabel(self.config_frame)
         self.config_val.setAlignment(Qt.AlignCenter)
         self.config_layout.addWidget(self.config_val)
@@ -47,15 +44,14 @@ class DRTTab(QWidget):
 
         self.slider_frame = self.__MyFrame()
         self.slider_layout = QVBoxLayout(self.slider_frame)
-        self.STIMINTENSLAYOUT = QHBoxLayout(self.slider_frame)
+        self.slider_label_layout = QHBoxLayout(self.slider_frame)
         self.stim_intens_label = QLabel(self.slider_frame)
         self.stim_intens_label.setAlignment(Qt.AlignLeft)
-        self.STIMINTENSLAYOUT.addWidget(self.stim_intens_label)
+        self.slider_label_layout.addWidget(self.stim_intens_label)
         self.stim_intens_val = QLabel(self.slider_frame)
         self.stim_intens_val.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self.STIMINTENSLAYOUT.addWidget(self.stim_intens_val)
-        self.slider_layout.addLayout(self.STIMINTENSLAYOUT)
-#        self.slider_layout.addWidget(self.stim_intens_label)
+        self.slider_label_layout.addWidget(self.stim_intens_val)
+        self.slider_layout.addLayout(self.slider_label_layout)
         self.stim_intens_slider = QSlider(self.slider_frame)
         self.stim_intens_slider.setMinimum(1)
         self.stim_intens_slider.setMaximum(100)
@@ -179,7 +175,7 @@ class DRTTab(QWidget):
         self.__index = new_index
 
     def __set_texts(self):
-        self.config_label.setText("Config")
+        self.config_label.setText("Current configuration:")
         self.config_val.setText("ISO")
         self.iso_button.setText("ISO")
         self.stim_dur_label.setText("Stim Duration")

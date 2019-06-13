@@ -5,7 +5,7 @@
 # https://redscientific.com/index.html
 
 from View.TabWidget.vog_tab import VOGTab
-from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode
+from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min
 
 
 class VOGConfigureController:
@@ -14,10 +14,17 @@ class VOGConfigureController:
         self.__device_info = device
         self.__msg_callback = msg_callback
         self.__handling_msg = False
-        self.__errors = [False, False, False]  # MaxOpen, MaxClose, Debounce
-        self.__current_vals = [0, 0, 0, 0, 0]  # MaxOpen, MaxClose, Debounce, ClickMode, buttonControl
+        self.__errors = [False] * 3
+        self.__current_vals = [0] * 5  # MaxOpen, MaxClose, Debounce, ClickMode, buttonControl
+        self.__open_changed = False
+        self.__closed_changed = False
+        self.__debounce_changed = False
+        self.__mode_changed = False
+        # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
+        self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
         self.__set_handlers()
         self.__get_vals()
+        self.__set_upload_button(False)
 
     def handle_msg(self, msg):
         self.__handling_msg = True
@@ -38,50 +45,60 @@ class VOGConfigureController:
         self.tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
 
     def __open_entry_changed(self):
-        self.__check_open_val()
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_open_val()
+            self.__set_upload_button(True)
 
     def __close_entry_changed(self):
-        self.__check_close_val()
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_close_val()
+            self.__set_upload_button(True)
 
     def __debounce_entry_changed(self):
-        self.__check_debounce_val()
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_debounce_val()
+            self.__set_upload_button(True)
 
     def __button_mode_entry_changed(self):
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_button_mode_val()
+            self.__set_upload_button(True)
 
     def __toggle_open_inf(self, is_checked):
         if is_checked:
-            self.__set_device_open(vog_max_open_close)
+            self.__prev_vals[0] = self.tab.get_open_val()
+            self.tab.set_open_val(str(vog_max_open_close))
         else:
-            self.__set_device_open(self.tab.get_open_val())
+            self.tab.set_open_val(self.__prev_vals[0])
         self.tab.set_open_val_entry_activity(not is_checked)
 
     def __toggle_close_inf(self, is_checked):
         if is_checked:
-            self.__set_device_close(vog_max_open_close)
+            self.__prev_vals[1] = self.tab.get_close_val()
+            self.tab.set_close_val(str(vog_max_open_close))
         else:
-            self.__set_device_close(self.tab.get_close_val())
+            self.tab.set_close_val(self.__prev_vals[1])
         self.tab.set_close_val_entry_activity(not is_checked)
 
     def __update_device(self):
         # Only send uploads if needed, then set as custom and disable upload button
-        open_val = int(self.tab.get_open_val())
-        close_val = int(self.tab.get_close_val())
-        debounce_val = int(self.tab.get_debounce_val())
-        button_mode = int(self.tab.get_button_mode())
-        if open_val != self.__current_vals[0]:
-            self.__set_device_open(open_val)
-        if close_val != self.__current_vals[1]:
-            self.__set_device_close(close_val)
-        if debounce_val != self.__current_vals[2]:
-            self.__set_device_debounce(debounce_val)
-        if button_mode != self.__current_vals[3]:
-            self.__set_device_click(button_mode)
+        if self.__open_changed:
+            self.__set_device_open(self.tab.get_open_val())
+        if self.__closed_changed:
+            self.__set_device_close(self.tab.get_close_val())
+        if self.__debounce_changed:
+            self.__set_device_debounce(self.tab.get_debounce_val())
+        if self.__mode_changed:
+            self.__set_device_click(self.tab.get_button_mode())
         self.tab.set_config_value("Custom")
-        self.tab.set_upload_button_activity(False)
+        self.__set_changed_bools_false()
+        self.__set_upload_button(False)
+
+    def __set_changed_bools_false(self):
+        self.__open_changed = False
+        self.__closed_changed = False
+        self.__debounce_changed = False
+        self.__mode_changed = False
 
     def __get_vals(self):
         self.__send_msg({'cmd': "get_configName"})
@@ -92,10 +109,11 @@ class VOGConfigureController:
         self.__send_msg({'cmd': 'get_configButtonControl'})
 
     def __set_upload_button(self, is_active):
-        if self.__errors[0] or self.__errors[1] or self.__errors[2] or self.__handling_msg:
-            self.tab.set_upload_button_activity(False)
-        else:
+        if (self.__open_changed or self.__closed_changed or self.__debounce_changed or self.__mode_changed)\
+                and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
             self.tab.set_upload_button_activity(is_active)
+        else:
+            self.tab.set_upload_button_activity(False)
 
     def __check_open_val(self):
         self.__errors[0] = True
@@ -104,6 +122,7 @@ class VOGConfigureController:
             usr_input_int = int(usr_input)
             if vog_max_open_close >= usr_input_int >= vog_min_open_close:
                 self.__errors[0] = False
+                self.__open_changed = usr_input_int != self.__current_vals[0]
         self.tab.set_open_val_error(self.__errors[0])
 
     def __check_close_val(self):
@@ -113,6 +132,7 @@ class VOGConfigureController:
             usr_input_int = int(usr_input)
             if vog_max_open_close >= usr_input_int >= vog_min_open_close:
                 self.__errors[1] = False
+                self.__closed_changed = usr_input_int != self.__current_vals[1]
         self.tab.set_close_val_error(self.__errors[1])
 
     def __check_debounce_val(self):
@@ -122,21 +142,32 @@ class VOGConfigureController:
             usr_input_int = int(usr_input)
             if vog_debounce_max >= usr_input_int >= vog_debounce_min:
                 self.__errors[2] = False
+                self.__debounce_changed = usr_input_int != self.__current_vals[2]
         self.tab.set_debounce_val_error(self.__errors[2])
+
+    def __check_button_mode_val(self):
+        self.__mode_changed = self.tab.get_button_mode() != self.__current_vals[3]
 
     def __set_val(self, var, val):
         if var == "Name":
             self.tab.set_config_value(val)
         elif var == "MaxOpen":
+            self.__current_vals[0] = int(val)
             self.tab.set_open_val(val)
+            self.tab.set_open_val_error(False)
         elif var == "MaxClose":
+            self.__current_vals[1] = int(val)
+            self.tab.set_close_val_error(False)
             self.tab.set_close_val(val)
         elif var == "Debounce":
+            self.__current_vals[2] = int(val)
             self.tab.set_debounce_val(val)
+            self.tab.set_debounce_val_error(False)
         elif var == "ClickMode":
+            self.__current_vals[3] = int(val)
             self.tab.set_button_mode(val)
         elif var == "buttonControl":
-            pass
+            self.__current_vals[4] = int(val)
 
     def __nhtsa(self):
         self.tab.set_open_inf(False)
@@ -147,9 +178,10 @@ class VOGConfigureController:
         self.__set_device_debounce("20")
         self.__set_device_click("1")
         self.__set_device_button_control("0")
+        self.__set_upload_button(False)
 
     def __eblind(self):
-        self.tab.set_open_inf(False)
+        self.tab.set_open_inf(True)
         self.tab.set_close_inf(False)
         self.__set_device_config("eBlindfold")
         self.__set_device_open(vog_max_open_close)
@@ -157,6 +189,7 @@ class VOGConfigureController:
         self.__set_device_debounce("100")
         self.__set_device_click("1")
         self.__set_device_button_control("0")
+        self.__set_upload_button(False)
 
     def __direct_control(self):
         self.tab.set_open_inf(True)
@@ -167,6 +200,7 @@ class VOGConfigureController:
         self.__set_device_debounce("100")
         self.__set_device_click("1")
         self.__set_device_button_control("1")
+        self.__set_upload_button(False)
 
     def __set_device_config(self, val):
         self.__send_msg({'cmd': "set_configName", 'arg': str(val)})

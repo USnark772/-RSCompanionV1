@@ -10,8 +10,7 @@ from sys import argv
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir
 from PySide2.QtGui import QKeyEvent
-from Model.defs import vog_block_field, drtv1_0_trial_fields, drtv1_0_file_hdr, vog_file_hdr, \
-    block_note_hdr, program_output_hdr
+from Model.defs import vog_block_field, drtv1_0_trial_fields, drtv1_0_file_hdr, vog_file_hdr, program_output_hdr
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -59,7 +58,9 @@ class CompanionController:
     def receive_msg_from_device_manager(self, msg):
         msg_type = msg['type']
         if msg_type == "data":
-            self.__update_save(msg)
+            print("got data")
+            print(msg)
+            self.__update_save(msg['values'])
         elif msg_type == "settings":
             self.devices[msg['device']]['controller'].handle_msg(msg['values'])
         elif msg_type == "add":
@@ -68,8 +69,6 @@ class CompanionController:
             self.__remove_device(msg['device'])
         elif msg_type == "save":
             self.__save_output_msg(msg['msg'])
-        elif msg_type == "i dunno!":
-            pass # TODO: Fix this
         elif msg_type == "error":
             self.ui.raise_error(msg_type, msg['msg'])
 
@@ -187,9 +186,10 @@ class CompanionController:
     def __post_handler(self):
         for device in self.devices:
             self.__write_line_to_file(self.devices[device]['fn'],
-                                      self.current_cond_name
+                                      "note, " + self.current_cond_name
                                       + ", " + self.flag_box.get_flag()
                                       + ", " + self.__get_current_time(True, True, True)
+                                      + self.__make_note_spacer(device[0])
                                       + ", " + self.note_box.get_note())
         self.note_box.clear_note()
 
@@ -209,8 +209,10 @@ class CompanionController:
 
     def __update_save(self, msg_dict):
         if msg_dict['device'][0] == "drt":
+            print("Saving to drt file")
             self.__format_drt_line(msg_dict)
         elif msg_dict['device'][0] == "vog":
+            print("Saving to vog file")
             self.__format_vog_line(msg_dict)
 
     def __finish_line_and_write(self, device, line):
@@ -223,9 +225,12 @@ class CompanionController:
 
     def __format_drt_line(self, msg_dict):
         line = ""
+        print("in __format_drt_line()")
         for i in range(0, len(drtv1_0_trial_fields)):
             line += ", " + msg_dict[drtv1_0_trial_fields[i]]
         line = line[0:-2]
+        print("going to finish line and write to file")
+        print("line looks like", line)
         self.__finish_line_and_write(msg_dict['device'], line)
 
     def __format_vog_line(self, msg_dict):
@@ -250,12 +255,10 @@ class CompanionController:
 
     def __add_hdr_to_file(self, device):
         if device[0] == 'drt':
-            self.__write_line_to_file(self.devices[device]['fn'], drtv1_0_file_hdr + "\n"
-                                      + block_note_hdr)
+            self.__write_line_to_file(self.devices[device]['fn'], drtv1_0_file_hdr)
             self.devices[device]['hdr_bool'] = True
         elif device[0] == 'vog':
-            self.__write_line_to_file(self.devices[device]['fn'], vog_file_hdr + "\n"
-                                      + block_note_hdr)
+            self.__write_line_to_file(self.devices[device]['fn'], vog_file_hdr)
             self.devices[device]['hdr_bool'] = True
 
     @staticmethod
@@ -263,8 +266,16 @@ class CompanionController:
         fname = path.dirname(argv[0]) + "\\program_output.txt"
         if path.exists(fname):
             with open(fname, "w") as temp:
+                print("writing output file hdr")
                 temp.write(program_output_hdr)
         return fname
+
+    @staticmethod
+    def __make_note_spacer(device):
+        if device[0] == "drt":
+            return ", , "
+        elif device[1] == "vog":
+            return ", , , , "
 
     ########################################################################################
     # generic device handling

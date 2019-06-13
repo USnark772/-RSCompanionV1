@@ -11,8 +11,7 @@
 version = 1.0
 
 # TODO: Change this
-block_note_hdr = "Note: Exp Name, Block Name, Key Flag, Timestamp, block note"
-program_output_hdr = "timestamp, author, location, message\n"
+program_output_hdr = "Timestamp, Author, Location, Message\n"
 
 about_RS_text = "CHANGEME Red Scientific is an awesome company that will do great things in the years to come and " \
                 "keep Phillip really happy by paying him lots of money because RS is rich from selling all those " \
@@ -31,7 +30,7 @@ up_to_date = "Your program is up to date."
 compliant_text_color = "rgb(0, 0, 0)"
 error_text_color = "rgb(255, 0, 0)"
 selection_color = "rgb(0, 150, 255)"
-font_size = "13px"
+font_size = "10px"
 tab_line_edit_compliant_style = "QLineEdit { color: "\
                                 + compliant_text_color\
                                 + "; selection-background-color: "\
@@ -64,9 +63,8 @@ devices = {'drt': {'probe': "get_name\n\r",
 # drt specific
 #################################################################################################################
 
-# TODO: Change this
-drtv1_0_file_hdr = "device type: drt\nData: Exp Name, Block Name, Key Flag, Timestamp, Mills from Block Start," \
-                   " Probe #, Clicks, Response Time"
+drtv1_0_file_hdr = "Type, Condition, Key Flag, Timestamp, Millisecond counter, trial counter, Clicks, Response Time,"\
+                   " Note"
 
 drtv1_0_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drtv1_0_trial_fields = ['startMillis', 'trial', 'clicks', 'rt']
@@ -91,8 +89,7 @@ drtv1_0_ISI_min = 0
 #################################################################################################################
 
 # TODO: Change this
-vog_file_hdr = "device type: vog\nData: Exp Name, Block Name, Key Flag, Timestamp, block #, Total Millis Open, " \
-               "Total Millis Closed"
+vog_file_hdr = "Type, Condition, Key Flag, Timestamp, Trial #, Millis Open, Millis Closed, Note"
 
 vog_config_fields = []
 vog_block_field = ['trialCounter', 'millis_openElapsed', 'millis_closeElapsed']

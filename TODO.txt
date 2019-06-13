@@ -13,14 +13,11 @@ Etc.:
 -   Update is available, download now? if yes, don't make user go find it.
 -   Check to make sure output from drt and vog are similar to output from old version of gui.
 -   figure out why with builds it's not checking for updates properly.
--   Figure out what to do with buttonControl in vog
 -   Figure out what maxvalue for vog is and fix like drt
-
-Design:
--   Resize of config menus shall be not happening in height, but width may change as needed
--   config fields be changed to text entries instead of sliders.
+-   Reimplement current use of Qt.Charts for graphing. Figure out matplotlib later
 
 At some point:
 -   Change to matplotlib for graphing.
 -   Possibly use numpy for internal data storage.
 -   x axis label needs to be timestamp
+-   Figure out what to do with buttonControl in vog

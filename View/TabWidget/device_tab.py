@@ -11,7 +11,7 @@ from PySide2.QtCore import Qt
 class TabContainer(QTabWidget):
     def __init__(self, parent):
         super().__init__(parent)
-        self.setFixedWidth(300)
+        self.setFixedWidth(240)
         size_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)

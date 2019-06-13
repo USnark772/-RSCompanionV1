@@ -4,7 +4,7 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from math import trunc
+from math import trunc, ceil
 from View.TabWidget.drt_tab import DRTTab
 from Model.defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
     drtv1_0_ISI_min
@@ -17,9 +17,11 @@ class DRTConfigureController:
         self.__msg_callback = msg_callback
         self.__handling_msg = False
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
+        self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
         self.__current_vals = [0, 0, 0, 0]  # stimDur, stimIntens, upperISI, lowerISI
         self.__set_handlers()
         self.__get_vals()
+        self.__set_upload_button(False)
 
     def handle_msg(self, msg):
         self.__handling_msg = True
@@ -36,38 +38,49 @@ class DRTConfigureController:
         self.tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
 
     def __stim_dur_entry_changed(self):
-        self.__check_stim_dur_val()
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_stim_dur_val()
+            self.__set_upload_button(True)
 
     def __stim_intens_entry_changed(self):
-        self.tab.set_stim_intens_val_label(self.tab.get_stim_intens_val())
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_stim_intens_val()
+            self.__set_upload_button(True)
 
     def __upper_isi_entry_changed(self):
-        self.__check_upper_isi_val()
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_upper_isi_val()
+            self.__set_upload_button(True)
 
     def __lower_isi_entry_changed(self):
-        self.__check_lower_isi_val()
-        self.__set_upload_button(True)
+        if not self.__handling_msg:
+            self.__check_lower_isi_val()
+            self.__set_upload_button(True)
 
     def __check_stim_dur_val(self):
         self.__errors[0] = True
         usr_input = self.tab.get_stim_dur_val()
         if usr_input.isdigit():
-            new_dur_int = int(usr_input)
-            if drtv1_0_stim_dur_max >= new_dur_int >= drtv1_0_stim_dur_min:
+            usr_input_int = int(usr_input)
+            if drtv1_0_stim_dur_max >= usr_input_int >= drtv1_0_stim_dur_min:
                 self.__errors[0] = False
+                self.__changed[0] = usr_input_int != self.__current_vals[0]
         self.tab.set_stim_dur_val_error(self.__errors[0])
+
+    def __check_stim_intens_val(self):
+        new_val_percent = self.tab.get_stim_intens_val()
+        self.tab.set_stim_intens_val_label(new_val_percent)
+        self.__changed[1] = self.__calc_percent_to_val(new_val_percent) != self.__current_vals[1]
 
     def __check_upper_isi_val(self):
         self.__errors[1] = True
         usr_input = self.tab.get_upper_isi_val()
         lower = self.tab.get_lower_isi_val()
         if usr_input.isdigit() and lower.isdigit():
-            new_upper_int = int(usr_input)
-            if drtv1_0_ISI_max >= new_upper_int >= int(lower):
+            usr_input_int = int(usr_input)
+            if drtv1_0_ISI_max >= usr_input_int >= int(lower):
                 self.__errors[1] = False
+                self.__changed[2] = usr_input_int != self.__current_vals[2]
         self.tab.set_upper_isi_val_error(self.__errors[1])
         if not self.__errors[1] and self.__errors[2]:
             self.__check_lower_isi_val()
@@ -79,9 +92,10 @@ class DRTConfigureController:
         usr_input = self.tab.get_lower_isi_val()
         upper = self.tab.get_upper_isi_val()
         if usr_input.isdigit() and upper.isdigit():
-            new_lower_int = int(usr_input)
-            if int(upper) >= new_lower_int >= drtv1_0_ISI_min:
+            usr_input_int = int(usr_input)
+            if int(upper) >= usr_input_int >= drtv1_0_ISI_min:
                 self.__errors[2] = False
+                self.__changed[3] = usr_input_int != self.__current_vals[3]
         self.tab.set_lower_isi_val_error(self.__errors[2])
         if not self.__errors[2] and self.__errors[1]:
             self.__check_upper_isi_val()
@@ -89,54 +103,63 @@ class DRTConfigureController:
             self.__check_upper_isi_val()
 
     def __set_upload_button(self, is_active):
-        if self.__errors[0] or self.__errors[1] or self.__errors[2] or self.__handling_msg:
-            self.tab.set_upload_button_activity(False)
-        else:
+        if (self.__changed[0] or self.__changed[1] or self.__changed[2] or self.__changed[3])\
+                and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
             self.tab.set_upload_button_activity(is_active)
+        else:
+            self.tab.set_upload_button_activity(False)
 
     def __update_device(self):
         # Only send uploads if needed, then set as custom and disable upload button
-        duration = int(self.tab.get_stim_dur_val())
-        intensity = int(self.tab.get_stim_intens_val())
-        upper = int(self.tab.get_upper_isi_val())
-        lower = int(self.tab.get_lower_isi_val())
-        if duration != self.__current_vals[0]:
-            self.__set_device_stim_duration(duration)
-        if intensity != self.__current_vals[1]:
-            self.__set_device_stim_intensity(intensity)
-        if upper != self.__current_vals[2]:
-            self.__set_device_upper_isi(upper)
-        if lower != self.__current_vals[3]:
-            self.__set_device_lower_isi(lower)
+        if self.__changed[0]:
+            self.__set_device_stim_duration(self.tab.get_stim_dur_val())
+        if self.__changed[1]:
+            self.__set_device_stim_intensity(self.tab.get_stim_intens_val())
+        if self.__changed[2]:
+            self.__set_device_upper_isi(self.tab.get_upper_isi_val())
+        if self.__changed[3]:
+            self.__set_device_lower_isi(self.tab.get_lower_isi_val())
         self.tab.set_config_val("Custom")
-        self.tab.set_upload_button_activity(False)
+        self.__set_change_bools_false()
+        self.__set_upload_button(False)
+
+    def __set_change_bools_false(self):
+        for i in self.__changed:
+            self.__changed[i] = False
 
     def __get_vals(self):
         self.__send_msg({'cmd': "get_config"})
 
     def __set_val(self, var, val):
         if var == "stimDur":
+            self.__current_vals[0] = int(val)
             self.tab.set_stim_dur_val(val)
+            self.tab.set_stim_dur_val_error(False)
         elif var == "intensity":
-            print("setting tab.stim_intensity_val")
-            self.tab.set_stim_intens_val(val)
+            self.__current_vals[1] = int(val)
+            self.tab.set_stim_intens_val(self.__calc_val_to_percent(val))
         elif var == "upperISI":
+            self.__current_vals[2] = int(val)
             self.tab.set_upper_isi_val(val)
+            self.tab.set_upper_isi_val_error(False)
         elif var == "lowerISI":
+            self.__current_vals[3] = int(val)
             self.tab.set_lower_isi_val(val)
+            self.tab.set_lower_isi_val_error(False)
 
     def __iso(self):
         self.tab.set_config_val("ISO")
-        self.tab.set_upper_isi_val("5000")
-        self.tab.set_lower_isi_val("3000")
-        self.tab.set_stim_intens_val(100)
-        self.tab.set_stim_dur_val("1000")
+        self.__set_device_upper_isi("5000")
+        self.__set_device_lower_isi("3000")
+        self.__set_device_stim_intensity(100)
+        self.__set_device_stim_duration("1000")
+        self.__set_upload_button(False)
 
     def __set_device_stim_duration(self, val):
         self.__send_msg({'cmd': "set_stimDur", 'arg': str(val)})
 
     def __set_device_stim_intensity(self, val):
-        self.__send_msg({'cmd': "set_intensity", 'arg': str(val)})
+        self.__send_msg({'cmd': "set_intensity", 'arg': str(self.__calc_percent_to_val(val))})
 
     def __set_device_upper_isi(self, val):
         self.__send_msg({'cmd': "set_upperISI", 'arg': str(val)})
@@ -150,5 +173,9 @@ class DRTConfigureController:
         self.__msg_callback(msg)
 
     @staticmethod
-    def __calc_intens_percentage(val):
+    def __calc_val_to_percent(val):
         return trunc(val / drtv1_0_intensity_max * 100)
+
+    @staticmethod
+    def __calc_percent_to_val(val):
+        return ceil(val / 100 * drtv1_0_intensity_max)

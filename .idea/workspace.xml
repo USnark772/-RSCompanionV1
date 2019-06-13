@@ -2,14 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/drt_configurator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/drt_configurator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/program_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/program_output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/vog_configurator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/vog_configurator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Model/defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/defs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/UIFiles/new_drt_tab_contents.ui" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/UIFiles/new_drt_tab_contents.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/TabWidget/device_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/device_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/View/TabWidget/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/drt_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/View/TabWidget/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/vog_tab.py" afterDir="false" />
     </list>
@@ -20,7 +20,135 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TODO.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller/controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="249">
+              <caret line="268" column="46" selection-start-line="268" selection-start-column="46" selection-end-line="268" selection-end-column="46" />
+              <folding>
+                <element signature="e#136#155#0" expanded="true" />
+                <element signature="e#1205#2042#0" />
+                <element signature="e#2048#2136#0" />
+                <element signature="e#2925#3013#0" />
+                <element signature="e#3169#3688#0" />
+                <element signature="e#3733#3960#0" />
+                <element signature="e#4002#4594#0" />
+                <element signature="e#4640#4814#0" />
+                <element signature="e#4820#4908#0" />
+                <element signature="e#5069#5389#0" />
+                <element signature="e#5170#5346#0" />
+                <element signature="e#5427#5614#0" />
+                <element signature="e#5649#5762#0" />
+                <element signature="e#5804#5899#0" />
+                <element signature="e#5936#6215#0" />
+                <element signature="e#6251#6459#0" />
+                <element signature="e#6511#6707#0" />
+                <element signature="e#6713#6801#0" />
+                <element signature="e#6964#7161#0" />
+                <element signature="e#7005#7120#0" />
+                <element signature="e#7209#7361#0" />
+                <element signature="e#7330#7764#0" />
+                <element signature="e#7383#7742#0" />
+                <element signature="e#7869#7900#0" />
+                <element signature="e#7959#8149#0" />
+                <element signature="e#8202#8281#0" />
+                <element signature="e#8562#8847#0" />
+                <element signature="e#9414#9541#0" />
+                <element signature="e#9454#9541#0" />
+                <element signature="e#9606#9757#0" />
+                <element signature="e#9808#9892#0" />
+                <element signature="e#9943#10390#0" />
+                <element signature="e#9978#10163#0" />
+                <element signature="e#10209#10390#0" />
+                <element signature="e#10601#10712#0" />
+                <element signature="e#10651#10739#0" />
+                <element signature="e#10921#11016#0" />
+                <element signature="e#11075#11170#0" />
+                <element signature="e#11211#11239#0" />
+                <element signature="e#11285#11942#0" />
+                <element signature="e#11455#11598#0" />
+                <element signature="e#11991#12143#0" />
+                <element signature="e#12030#12143#0" />
+                <element signature="e#12149#12237#0" />
+                <element signature="e#12822#12845#0" />
+                <element signature="e#12882#12901#0" />
+                <element signature="e#13003#13573#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="573">
+              <caret line="215" column="31" lean-forward="true" selection-start-line="215" selection-start-column="31" selection-end-line="215" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#248#1" />
+                <element signature="e#490#721#0" />
+                <element signature="e#753#2349#0" />
+                <element signature="e#1062#2349#0" />
+                <element signature="e#1117#2349#0" />
+                <element signature="e#1142#2300#0" />
+                <element signature="e#1209#2300#0" />
+                <element signature="e#1359#1620#0" />
+                <element signature="e#2045#2248#0" />
+                <element signature="e#2063#2247#0" />
+                <element signature="e#2087#2217#0" />
+                <element signature="e#2395#3288#0" />
+                <element signature="e#2466#3165#0" />
+                <element signature="e#2560#2690#0" />
+                <element signature="e#2732#2850#0" />
+                <element signature="e#2885#3165#0" />
+                <element signature="e#3327#3426#0" />
+                <element signature="e#3463#3560#0" />
+                <element signature="e#3601#3702#0" />
+                <element signature="e#3741#3840#0" />
+                <element signature="e#3891#4000#0" />
+                <element signature="e#4049#4157#0" />
+                <element signature="e#4210#4439#0" />
+                <element signature="e#4490#4717#0" />
+                <element signature="e#4755#5415#0" />
+                <element signature="e#4908#4994#0" />
+                <element signature="e#5457#6561#0" />
+                <element signature="e#5504#6505#0" />
+                <element signature="e#5559#6505#0" />
+                <element signature="e#5608#6505#0" />
+                <element signature="e#5722#6409#0" />
+                <element signature="e#5862#6106#0" />
+                <element signature="e#5880#6033#0" />
+                <element signature="e#5905#6032#0" />
+                <element signature="e#6603#6981#0" />
+                <element signature="e#6648#6925#0" />
+                <element signature="e#6707#6893#0" />
+                <element signature="e#7056#7091#0" />
+                <element signature="e#7156#7352#0" />
+                <element signature="e#9168#9386#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Model/defs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="13" column="52" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -31,36 +159,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>click</find>
-      <find>Click</find>
-      <find>__parse_vog_msg</find>
-      <find>upload_</find>
-      <find>setEnabled</find>
-      <find>name</find>
-      <find>parse_vog</find>
-      <find>-4</find>
-      <find>--DIRE</find>
+      <find>__current_vals</find>
+      <find>self.__prev_vals</find>
+      <find>set_upload_button_activity</find>
+      <find>self.__current_vals[</find>
+      <find>__errors</find>
+      <find>self.__changed[1</find>
+      <find>self.__changed[</find>
+      <find>check_open_val</find>
+      <find>__changed[0]</find>
+      <find>__changed[1]</find>
+      <find>__changed[2]</find>
+      <find>__changed[3]</find>
+      <find>__changed</find>
+      <find>__set_upload_button</find>
+      <find>__set_upload_button(</find>
+      <find>__open_inf</find>
+      <find>eblind</find>
+      <find>self.__mode_changed</find>
       <find>print(</find>
-      <find>config_frame</find>
-      <find>verticalLayout_5</find>
-      <find>setObjectName(&quot;</find>
-      <find>.addWidget</find>
-      <find>self.error_style</find>
-      <find>self.compliant_style</find>
-      <find>``</find>
-      <find>self.scrollAreaWidgetContents</find>
-      <find>MyFrame</find>
-      <find>self.layout()</find>
-      <find>QFrame(</find>
-      <find>QFrame</find>
-      <find>set_texts</find>
-      <find>stim_inten</find>
-      <find>self.label</find>
-      <find>QtCore.</find>
-      <find>QtWidgets.</find>
-      <find>self.errors</find>
-      <find>self.__errors</find>
-      <find>handling_msg</find>
+      <find>tab_line_edit_compliant_style</find>
+      <find>_error(</find>
+      <find>__current_vals[0]</find>
+      <find>errors</find>
+      <find>error</find>
+      <find>__check</find>
+      <find>vog_max_open_close</find>
+      <find>['values']</find>
+      <find>p</find>
+      <find>msg_dict[</find>
+      <find>program_output_hdr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -104,30 +232,30 @@
         <option value="$PROJECT_DIR$/For_setup/Build instructions.txt" />
         <option value="$PROJECT_DIR$/View/TabWidget/new_drt_tab_contents.py" />
         <option value="$PROJECT_DIR$/Unused/ui_files/new_drt_tab_contents.py" />
-        <option value="$PROJECT_DIR$/TODO.txt" />
         <option value="$PROJECT_DIR$/Unused/ui_files/new_vog_tab_contents.py" />
-        <option value="$PROJECT_DIR$/View/TabWidget/device_tab.py" />
         <option value="$PROJECT_DIR$/View/TabWidget/new_vog_tab_contents.py" />
         <option value="$PROJECT_DIR$/View/TabWidget/drt_tab_contents.py" />
         <option value="$PROJECT_DIR$/View/TabWidget/vog_configurator.py" />
         <option value="$PROJECT_DIR$/View/TabWidget/drt_configurator.py" />
         <option value="$PROJECT_DIR$/View/MainWindow/main_window.py" />
-        <option value="$PROJECT_DIR$/Controller/device_manager.py" />
         <option value="$PROJECT_DIR$/Unused/UIFiles/new_drt_tab_contents.py" />
-        <option value="$PROJECT_DIR$/Controller/controller.py" />
-        <option value="$PROJECT_DIR$/View/TabWidget/vog_tab.py" />
-        <option value="$PROJECT_DIR$/Model/defs.py" />
-        <option value="$PROJECT_DIR$/Controller/vog_configurator.py" />
-        <option value="$PROJECT_DIR$/View/TabWidget/drt_tab.py" />
+        <option value="$PROJECT_DIR$/View/TabWidget/device_tab.py" />
         <option value="$PROJECT_DIR$/Controller/drt_configurator.py" />
+        <option value="$PROJECT_DIR$/View/TabWidget/drt_tab.py" />
+        <option value="$PROJECT_DIR$/View/TabWidget/vog_tab.py" />
+        <option value="$PROJECT_DIR$/Controller/vog_configurator.py" />
+        <option value="$PROJECT_DIR$/Controller/device_manager.py" />
+        <option value="$PROJECT_DIR$/TODO.txt" />
+        <option value="$PROJECT_DIR$/Controller/controller.py" />
+        <option value="$PROJECT_DIR$/Model/defs.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="978" />
-    <option name="y" value="-1065" />
-    <option name="width" value="648" />
-    <option name="height" value="518" />
+    <option name="x" value="1092" />
+    <option name="y" value="-23" />
+    <option name="width" value="2462" />
+    <option name="height" value="3308" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -145,13 +273,12 @@
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Unused" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
               <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Unused" type="462c0819:PsiDirectoryNode" />
-              <item name="UIFiles" type="462c0819:PsiDirectoryNode" />
+              <item name="Model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
@@ -340,23 +467,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="756" y="-1032" width="1296" height="1040" extended-state="6" />
+    <frame x="-7" y="-7" width="2575" height="1455" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" weight="0.2662957" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.13981883" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.35060638" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.4491256" side_tool="true" weight="0.41786107" />
       <window_info anchor="bottom" id="GitLabIntegration" order="2" weight="0.32930514" />
       <window_info anchor="bottom" id="Python Console" order="3" weight="0.32930514" />
       <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" weight="0.3164278" />
+      <window_info anchor="bottom" id="Find" order="5" weight="0.31570998" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32930514" />
-      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.5508744" weight="0.3748622" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.5508744" weight="0.37462234" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39470783" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" weight="0.323043" />
+      <window_info anchor="bottom" id="TODO" order="11" weight="0.32250756" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -704,13 +831,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/View/MainWindow/main_window.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
@@ -732,10 +852,183 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/UIFiles/new_drt_tab_contents.py" />
+    <entry file="file://$PROJECT_DIR$/View/TabWidget/device_tab.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="23" column="37" lean-forward="true" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#245#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/TabWidget/drt_tab.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#266#0" expanded="true" />
+            <element signature="e#481#12856#0" />
+            <element signature="e#525#4390#0" />
+            <element signature="e#4444#4481#0" />
+            <element signature="e#4538#4587#0" />
+            <element signature="e#4653#4702#0" />
+            <element signature="e#4771#4821#0" />
+            <element signature="e#4888#4938#0" />
+            <element signature="e#5005#5055#0" />
+            <element signature="e#5118#5167#0" />
+            <element signature="e#5212#5245#0" />
+            <element signature="e#5287#5324#0" />
+            <element signature="e#5371#5412#0" />
+            <element signature="e#5470#5654#0" />
+            <element signature="e#5713#5899#0" />
+            <element signature="e#5958#6144#0" />
+            <element signature="e#6189#6227#0" />
+            <element signature="e#6277#6363#0" />
+            <element signature="e#6419#6463#0" />
+            <element signature="e#6506#6544#0" />
+            <element signature="e#6592#6634#0" />
+            <element signature="e#6677#6715#0" />
+            <element signature="e#6763#6805#0" />
+            <element signature="e#6839#6862#0" />
+            <element signature="e#6897#6916#0" />
+            <element signature="e#6962#6986#0" />
+            <element signature="e#7023#7425#0" />
+            <element signature="e#7465#8159#0" />
+            <element signature="e#8198#8621#0" />
+            <element signature="e#8254#8621#0" />
+            <element signature="e#8310#8497#0" />
+            <element signature="e#8532#8621#0" />
+            <element signature="e#8629#12856#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/TabWidget/vog_tab.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#524#10593#0" />
+            <element signature="e#566#4613#0" />
+            <element signature="e#4669#4710#0" />
+            <element signature="e#4767#4813#0" />
+            <element signature="e#4878#4928#0" />
+            <element signature="e#4985#5036#0" />
+            <element signature="e#5088#5135#0" />
+            <element signature="e#5188#5236#0" />
+            <element signature="e#5298#5349#0" />
+            <element signature="e#5412#5464#0" />
+            <element signature="e#5530#5586#0" />
+            <element signature="e#5655#5716#0" />
+            <element signature="e#5779#5830#0" />
+            <element signature="e#5879#5911#0" />
+            <element signature="e#5949#5988#0" />
+            <element signature="e#6031#6074#0" />
+            <element signature="e#6128#6316#0" />
+            <element signature="e#6371#6561#0" />
+            <element signature="e#6619#6817#0" />
+            <element signature="e#6881#6928#0" />
+            <element signature="e#6966#7010#0" />
+            <element signature="e#7060#7108#0" />
+            <element signature="e#7147#7187#0" />
+            <element signature="e#7231#7275#0" />
+            <element signature="e#7340#7388#0" />
+            <element signature="e#7427#7472#0" />
+            <element signature="e#7523#7572#0" />
+            <element signature="e#7614#7658#0" />
+            <element signature="e#7705#7753#0" />
+            <element signature="e#7794#7843#0" />
+            <element signature="e#7889#7942#0" />
+            <element signature="e#7976#7994#0" />
+            <element signature="e#8029#8048#0" />
+            <element signature="e#8094#8118#0" />
+            <element signature="e#8155#8929#0" />
+            <element signature="e#8969#10131#0" />
+            <element signature="e#10170#10593#0" />
+            <element signature="e#10226#10593#0" />
+            <element signature="e#10282#10469#0" />
+            <element signature="e#10504#10593#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/vog_configurator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="7" column="97" selection-start-line="7" selection-start-column="97" selection-end-line="7" selection-end-column="97" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#177#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/drt_configurator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="9" column="19" lean-forward="true" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#164#0" expanded="true" />
+            <element signature="e#371#7341#0" />
+            <element signature="e#429#940#0" />
+            <element signature="e#981#1109#0" />
+            <element signature="e#1149#1599#0" />
+            <element signature="e#1649#1759#0" />
+            <element signature="e#1689#1759#0" />
+            <element signature="e#1812#1925#0" />
+            <element signature="e#1852#1925#0" />
+            <element signature="e#1976#2087#0" />
+            <element signature="e#2016#2087#0" />
+            <element signature="e#2138#2249#0" />
+            <element signature="e#2178#2249#0" />
+            <element signature="e#2295#2694#0" />
+            <element signature="e#2411#2636#0" />
+            <element signature="e#2536#2636#0" />
+            <element signature="e#2743#2949#0" />
+            <element signature="e#2996#3639#0" />
+            <element signature="e#3178#3388#0" />
+            <element signature="e#3288#3388#0" />
+            <element signature="e#3686#4329#0" />
+            <element signature="e#3868#4078#0" />
+            <element signature="e#3978#4078#0" />
+            <element signature="e#4385#4683#0" />
+            <element signature="e#4724#5331#0" />
+            <element signature="e#5381#5443#0" />
+            <element signature="e#5479#5517#0" />
+            <element signature="e#5562#6223#0" />
+            <element signature="e#5595#5722#0" />
+            <element signature="e#5768#5875#0" />
+            <element signature="e#5920#6049#0" />
+            <element signature="e#6094#6223#0" />
+            <element signature="e#6254#6506#0" />
+            <element signature="e#6563#6619#0" />
+            <element signature="e#6677#6763#0" />
+            <element signature="e#6816#6873#0" />
+            <element signature="e#6926#6983#0" />
+            <element signature="e#7024#7120#0" />
+            <element signature="e#7184#7231#0" />
+            <element signature="e#7295#7341#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+        <state relative-caret-position="573">
+          <caret line="215" column="31" lean-forward="true" selection-start-line="215" selection-start-column="31" selection-end-line="215" selection-end-column="31" />
           <folding>
             <element signature="e#0#248#1" />
             <element signature="e#490#721#0" />
@@ -776,229 +1069,71 @@
             <element signature="e#6707#6893#0" />
             <element signature="e#7056#7091#0" />
             <element signature="e#7156#7352#0" />
-            <element signature="e#7446#9103#0" />
-            <element signature="e#7481#8633#0" />
-            <element signature="e#7649#8146#0" />
-            <element signature="e#7788#8146#0" />
-            <element signature="e#8181#8633#0" />
-            <element signature="e#8335#8633#0" />
-            <element signature="e#8442#8633#0" />
-            <element signature="e#8679#9103#0" />
-            <element signature="e#8809#9103#0" />
             <element signature="e#9168#9386#0" />
-            <element signature="e#9480#11068#0" />
-            <element signature="e#9569#9974#0" />
-            <element signature="e#9691#9974#0" />
-            <element signature="e#9969#10753#0" />
-            <element signature="e#10873#11068#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/View/TabWidget/device_tab.py">
+    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="49" column="43" selection-start-line="49" selection-start-column="43" selection-end-line="49" selection-end-column="43" />
+        <state relative-caret-position="249">
+          <caret line="268" column="46" selection-start-line="268" selection-start-column="46" selection-end-line="268" selection-end-column="46" />
           <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Unused/UIFiles/new_drt_tab_contents.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-111">
-          <caret line="74" column="20" selection-start-line="74" selection-start-column="20" selection-end-line="74" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/vog_configurator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="126" column="8" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="8" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#1351#2045#0" />
-            <element signature="e#1832#1895#0" />
-            <element signature="e#1945#2011#0" />
-            <element signature="e#2064#2094#0" />
-            <element signature="e#2148#2352#0" />
-            <element signature="e#2408#2616#0" />
-            <element signature="e#2086#2847#0" />
-            <element signature="e#1703#2025#0" />
-            <element signature="e#4345#4650#0" />
-            <element signature="e#3040#3183#0" />
-            <element signature="e#4640#4947#0" />
-            <element signature="e#4340#4483#0" />
-            <element signature="e#4937#5246#0" />
-            <element signature="e#4638#4781#0" />
-            <element signature="e#5605#5916#0" />
-            <element signature="e#5950#6276#0" />
-            <element signature="e#6318#6646#0" />
-            <element signature="e#4262#4321#0" />
-            <element signature="e#4369#4431#0" />
-            <element signature="e#4480#4543#0" />
-            <element signature="e#4595#4658#0" />
-            <element signature="e#4707#4771#0" />
-            <element signature="e#4829#4897#0" />
-            <element signature="e#4938#5030#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/drt_configurator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="76" column="36" selection-start-line="76" selection-start-column="36" selection-end-line="76" selection-end-column="36" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#297#684#0" />
-            <element signature="e#727#855#0" />
-            <element signature="e#938#1237#0" />
-            <element signature="e#1525#1591#0" />
-            <element signature="e#1651#1681#0" />
-            <element signature="e#1734#1764#0" />
-            <element signature="e#1852#1882#0" />
-            <element signature="e#1746#2065#0" />
-            <element signature="e#1773#1914#0" />
-            <element signature="e#2395#2962#0" />
-            <element signature="e#2504#2661#0" />
-            <element signature="e#3009#3576#0" />
-            <element signature="e#2944#3068#0" />
-            <element signature="e#1496#1707#0" />
-            <element signature="e#1941#2699#0" />
-            <element signature="e#935#973#0" />
-            <element signature="e#4497#4794#0" />
-            <element signature="e#4652#4705#0" />
-            <element signature="e#1971#2173#0" />
-            <element signature="e#1045#1101#0" />
-            <element signature="e#1041#1099#0" />
-            <element signature="e#1153#1210#0" />
-            <element signature="e#1256#1313#0" />
-            <element signature="e#1029#1125#0" />
-            <element signature="e#1684#1742#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/TabWidget/drt_tab.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="143" column="48" selection-start-line="143" selection-start-column="48" selection-end-line="143" selection-end-column="48" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#661#4272#0" />
-            <element signature="e#4296#4346#0" />
-            <element signature="e#4403#4452#0" />
-            <element signature="e#4518#4567#0" />
-            <element signature="e#4636#4686#0" />
-            <element signature="e#4753#4803#0" />
-            <element signature="e#4870#4920#0" />
-            <element signature="e#4983#5032#0" />
-            <element signature="e#5077#5110#0" />
-            <element signature="e#5152#5189#0" />
-            <element signature="e#5236#5277#0" />
-            <element signature="e#5335#5519#0" />
-            <element signature="e#5578#5764#0" />
-            <element signature="e#5823#6009#0" />
-            <element signature="e#6063#6101#0" />
-            <element signature="e#6528#6616#0" />
-            <element signature="e#6675#6719#0" />
-            <element signature="e#6227#6265#0" />
-            <element signature="e#6313#6355#0" />
-            <element signature="e#6398#6436#0" />
-            <element signature="e#6484#6526#0" />
-            <element signature="e#6560#6586#0" />
-            <element signature="e#6621#6640#0" />
-            <element signature="e#6686#6710#0" />
-            <element signature="e#7027#7413#0" />
-            <element signature="e#7191#7826#0" />
-            <element signature="e#7865#8288#0" />
-            <element signature="e#7921#8288#0" />
-            <element signature="e#7977#8164#0" />
-            <element signature="e#8199#8288#0" />
-            <element signature="e#8608#13781#1" />
-            <element signature="e#8897#9033#0" />
-            <element signature="e#9088#9283#0" />
-            <element signature="e#9336#9474#0" />
-            <element signature="e#9527#9665#0" />
-            <element signature="e#9711#10083#0" />
-            <element signature="e#11895#12104#0" />
-            <element signature="e#12140#12178#0" />
-            <element signature="e#12223#12251#0" />
-            <element signature="e#12289#12725#0" />
-            <element signature="e#12331#12725#0" />
-            <element signature="e#12491#12725#0" />
-            <element signature="e#12771#13309#0" />
-            <element signature="e#13360#13464#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/TabWidget/vog_tab.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="139" column="54" lean-forward="true" selection-start-line="139" selection-start-column="54" selection-end-line="139" selection-end-column="54" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#568#5385#0" />
-            <element signature="e#5391#5432#0" />
-            <element signature="e#5489#5535#0" />
-            <element signature="e#5600#5650#0" />
-            <element signature="e#5707#5758#0" />
-            <element signature="e#5810#5857#0" />
-            <element signature="e#5910#5958#0" />
-            <element signature="e#6020#6071#0" />
-            <element signature="e#6134#6186#0" />
-            <element signature="e#6252#6308#0" />
-            <element signature="e#6377#6438#0" />
-            <element signature="e#6659#6710#0" />
-            <element signature="e#6601#6633#0" />
-            <element signature="e#6671#6710#0" />
-            <element signature="e#6753#6796#0" />
-            <element signature="e#6850#7020#0" />
-            <element signature="e#7075#7247#0" />
-            <element signature="e#7305#7485#0" />
-            <element signature="e#7549#7596#0" />
-            <element signature="e#7634#7678#0" />
-            <element signature="e#7728#7776#0" />
-            <element signature="e#7815#7855#0" />
-            <element signature="e#7899#7943#0" />
-            <element signature="e#8008#8056#0" />
-            <element signature="e#8095#8140#0" />
-            <element signature="e#8191#8240#0" />
-            <element signature="e#8282#8326#0" />
-            <element signature="e#8373#8421#0" />
-            <element signature="e#8462#8511#0" />
-            <element signature="e#8557#8610#0" />
-            <element signature="e#8644#8662#0" />
-            <element signature="e#8697#8716#0" />
-            <element signature="e#8762#8786#0" />
-            <element signature="e#8823#9581#0" />
-            <element signature="e#9621#10783#0" />
-            <element signature="e#10822#11245#0" />
-            <element signature="e#10878#11245#0" />
-            <element signature="e#10934#11121#0" />
-            <element signature="e#11156#11245#0" />
+            <element signature="e#136#155#0" expanded="true" />
+            <element signature="e#1205#2042#0" />
+            <element signature="e#2048#2136#0" />
+            <element signature="e#2925#3013#0" />
+            <element signature="e#3169#3688#0" />
+            <element signature="e#3733#3960#0" />
+            <element signature="e#4002#4594#0" />
+            <element signature="e#4640#4814#0" />
+            <element signature="e#4820#4908#0" />
+            <element signature="e#5069#5389#0" />
+            <element signature="e#5170#5346#0" />
+            <element signature="e#5427#5614#0" />
+            <element signature="e#5649#5762#0" />
+            <element signature="e#5804#5899#0" />
+            <element signature="e#5936#6215#0" />
+            <element signature="e#6251#6459#0" />
+            <element signature="e#6511#6707#0" />
+            <element signature="e#6713#6801#0" />
+            <element signature="e#6964#7161#0" />
+            <element signature="e#7005#7120#0" />
+            <element signature="e#7209#7361#0" />
+            <element signature="e#7330#7764#0" />
+            <element signature="e#7383#7742#0" />
+            <element signature="e#7869#7900#0" />
+            <element signature="e#7959#8149#0" />
+            <element signature="e#8202#8281#0" />
+            <element signature="e#8562#8847#0" />
+            <element signature="e#9414#9541#0" />
+            <element signature="e#9454#9541#0" />
+            <element signature="e#9606#9757#0" />
+            <element signature="e#9808#9892#0" />
+            <element signature="e#9943#10390#0" />
+            <element signature="e#9978#10163#0" />
+            <element signature="e#10209#10390#0" />
+            <element signature="e#10601#10712#0" />
+            <element signature="e#10651#10739#0" />
+            <element signature="e#10921#11016#0" />
+            <element signature="e#11075#11170#0" />
+            <element signature="e#11211#11239#0" />
+            <element signature="e#11285#11942#0" />
+            <element signature="e#11455#11598#0" />
+            <element signature="e#11991#12143#0" />
+            <element signature="e#12030#12143#0" />
+            <element signature="e#12149#12237#0" />
+            <element signature="e#12822#12845#0" />
+            <element signature="e#12882#12901#0" />
+            <element signature="e#13003#13573#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/defs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#136#155#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="286">
+          <caret line="13" column="52" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
         </state>
       </provider>
     </entry>

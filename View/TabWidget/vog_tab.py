@@ -7,7 +7,7 @@
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout,\
     QCheckBox, QFrame, QLineEdit
 from PySide2.QtCore import Qt, QRect
-from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode,\
+from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min,\
     tab_line_edit_error_style, tab_line_edit_compliant_style
 
 
@@ -16,7 +16,7 @@ class VOGTab(QWidget):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setFixedHeight(400)
+        self.setFixedHeight(300)
 
         self.layout().addWidget(self.__MyFrame(True))
 
@@ -25,7 +25,6 @@ class VOGTab(QWidget):
         self.__config_label = QLabel(self.__config_frame)
         self.__config_label.setAlignment(Qt.AlignCenter)
         self.__config_horiz_layout.addWidget(self.__config_label)
-        self.__config_horiz_layout.addWidget(self.__MyFrame(True, True))
         self.__config_val = QLabel(self.__config_frame)
         self.__config_val.setAlignment(Qt.AlignCenter)
         self.__config_horiz_layout.addWidget(self.__config_val)
@@ -87,23 +86,6 @@ class VOGTab(QWidget):
         self.layout().addWidget(self.__upload_settings_button)
 
         self.layout().addWidget(self.__MyFrame(True))
-
-        compliant_text_color = "rgb(0, 0, 0)"
-        error_text_color = "rgb(255, 0, 0)"
-        selection_color = "rgb(0, 150, 255)"
-        font_size = "13px"
-        tab_line_edit_error_style = "QLineEdit { color: " \
-                           + error_text_color \
-                           + "; selection-background-color: " \
-                           + selection_color \
-                           + "; font: " \
-                           + font_size + "; }"
-        tab_line_edit_compliant_style = "QLineEdit { color: " \
-                               + compliant_text_color \
-                               + "; selection-background-color: " \
-                               + selection_color \
-                               + "; font: " \
-                               + font_size + "; }"
 
         self.__name = name
         self.__index = 0
@@ -216,7 +198,7 @@ class VOGTab(QWidget):
         self.__index = new_index
 
     def __set_texts(self):
-        self.__config_label.setText("Config")
+        self.__config_label.setText("Current configuration:")
         self.__config_val.setText("DIRECT CONTROL")
         self.__nhtsa_button.setText("NHTSA")
         self.__eblindfold_button.setText("eBlindfold")

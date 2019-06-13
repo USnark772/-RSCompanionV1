@@ -170,9 +170,9 @@ class DeviceManager:
     # TODO: Clean this up
     @staticmethod
     def __parse_drt_msg(msg, msg_dict):
+        msg_dict['values'] = {}
         if msg[0:4] == "cfg>":
             msg_dict['type'] = "settings"
-            msg_dict['values'] = {}
             # Check if this is a response to get_config
             if len(msg) > 90:
                 # Get relevant values from msg and insert into msg_dict
@@ -198,7 +198,7 @@ class DeviceManager:
                 val_ind_end = msg.find(', ', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict[drtv1_0_trial_fields[i]] = int(msg[val_ind_start:val_ind_end])
+                msg_dict['values'][drtv1_0_trial_fields[i]] = int(msg[val_ind_start:val_ind_end])
                 if val_ind_end:
                     val_ind_start = val_ind_end + 2
 
@@ -213,6 +213,7 @@ class DeviceManager:
     # TODO: Clean this up
     @staticmethod
     def __parse_vog_msg(msg, msg_dict):
+        msg_dict['values'] = {}
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
             val_ind_start = 5
@@ -220,13 +221,12 @@ class DeviceManager:
                 val_ind_end = msg.find(',', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict[vog_block_field[i]] = msg[val_ind_start:val_ind_end]
+                msg_dict['values'][vog_block_field[i]] = msg[val_ind_start:val_ind_end]
                 if val_ind_end:
                     val_ind_start = val_ind_end + 1
         elif msg[0:6] == "config":
             msg_dict['type'] = "settings"
             bar_ind = msg.find('|', 6)
-            msg_dict['values'] = {}
             if msg[6:bar_ind] == "Name":
                 msg_dict['values']['Name'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
             elif msg[6:bar_ind] == "MaxOpen":
