@@ -3,21 +3,18 @@ Updater:
     Query version
     if not latest version
 	    Direct user to download latest version
+-   Update is available, download now? if yes, don't make user go find it.
+-   figure out why with builds it's not checking for updates properly.
 
 Installer:
 -   Installer would install latest version replacing any previous versions
 -   Need to add new repo for consumer download target and place latest build version in it
 
 Etc.:
--   Change save location of output file
--   Update is available, download now? if yes, don't make user go find it.
--   Check to make sure output from drt and vog are similar to output from old version of gui.
--   figure out why with builds it's not checking for updates properly.
--   Figure out what maxvalue for vog is and fix like drt
+-   Make sure vog is outputting properly
 -   Reimplement current use of Qt.Charts for graphing. Figure out matplotlib later
+-   x axis needs to be timestamp
 
 At some point:
 -   Change to matplotlib for graphing.
 -   Possibly use numpy for internal data storage.
--   x axis label needs to be timestamp
--   Figure out what to do with buttonControl in vog

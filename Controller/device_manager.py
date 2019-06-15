@@ -35,7 +35,7 @@ class DeviceManager:
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         the_message = self.devices[d]['port'].readline().decode("utf-8")
-                        print(the_message)
+                        #print(the_message)
                         self.msg_callback({'type': "save",
                                            'msg': str(self.devices[d]['id']
                                                       + ", " + self.devices[d]['port'].name
@@ -244,3 +244,7 @@ class DeviceManager:
             bar_ind = msg.find('|')
             msg_dict['values'] = {}
             msg_dict['values']['buttonControl'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
+        elif "peek" in msg:
+            msg_dict['type'] = "settings"
+            msg_dict['values'] = {}
+            msg_dict['values']['lensState'] = msg.rstrip("\r\n")

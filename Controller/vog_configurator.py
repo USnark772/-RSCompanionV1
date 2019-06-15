@@ -20,6 +20,7 @@ class VOGConfigureController:
         self.__closed_changed = False
         self.__debounce_changed = False
         self.__mode_changed = False
+        self.__lens_open = False
         # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
         self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
         self.__set_handlers()
@@ -31,6 +32,7 @@ class VOGConfigureController:
         for key in msg:
             self.__set_val(key, msg[key])
         self.__handling_msg = False
+        print(msg)
 
     def __set_handlers(self):
         self.tab.add_nhtsa_button_handler(self.__nhtsa)
@@ -43,6 +45,7 @@ class VOGConfigureController:
         self.tab.add_close_entry_changed_handler(self.__close_entry_changed)
         self.tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
         self.tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
+        self.tab.add_manual_control_handler(self.__toggle_lens)
 
     def __open_entry_changed(self):
         if not self.__handling_msg:
@@ -168,6 +171,17 @@ class VOGConfigureController:
             self.tab.set_button_mode(val)
         elif var == "buttonControl":
             self.__current_vals[4] = int(val)
+        elif var == "lensState":
+            if val == "peekOpen":
+                self.__lens_open = True
+            else:
+                self.__lens_open = False
+
+    def __toggle_lens(self):
+        if self.__lens_open:
+            self.__send_msg({'cmd': "do_peekClose"})
+        else:
+            self.__send_msg({'cmd': "do_peekOpen"})
 
     def __nhtsa(self):
         self.tab.set_open_inf(False)
@@ -198,7 +212,7 @@ class VOGConfigureController:
         self.__set_device_open(vog_max_open_close)
         self.__set_device_close("0")
         self.__set_device_debounce("100")
-        self.__set_device_click("1")
+        self.__set_device_click("0")
         self.__set_device_button_control("1")
         self.__set_upload_button(False)
 

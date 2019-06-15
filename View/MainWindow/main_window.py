@@ -45,10 +45,12 @@ class CompanionWindow(QMainWindow):
         self.__tab_frame.layout().addWidget(widget)
 
     def show_update_available(self, is_available):
-        if is_available:
+        if is_available == 1:
             self.__help_window = HelpWindow("Update", update_available)
-        else:
+        elif is_available == 0:
             self.__help_window = HelpWindow("Update", up_to_date)
+        elif is_available == -1:
+            self.__help_window = HelpWindow("Error", "There was an unexpected error connecting to the repository")
         self.__help_window.show()
 
     '''

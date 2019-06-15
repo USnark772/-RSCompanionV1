@@ -204,7 +204,7 @@ class CompanionController:
             file.write(line)
 
     def __check_for_updates_handler(self):
-        vc = VersionChecker()
+        vc = VersionChecker(self.__save_output_msg)
         self.ui.show_update_available(vc.check_version())
 
     def __update_save(self, msg_dict):

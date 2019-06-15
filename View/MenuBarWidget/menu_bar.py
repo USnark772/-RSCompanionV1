@@ -1,3 +1,8 @@
+# Author: Phillip Riskin
+# Date: Spring 2019
+# Project: Companion App
+# Company: Red Scientific
+# https://redscientific.com/index.html
 
 from PySide2.QtWidgets import QMenuBar, QMenu, QAction
 from PySide2.QtCore import QRect

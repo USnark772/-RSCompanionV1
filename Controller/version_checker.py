@@ -4,48 +4,41 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from os.path import dirname, join, exists
-from requests import get
+from urllib3 import PoolManager
+from Model.defs import version_url, current_version
 
 
 class VersionChecker:
-    def __init__(self):
-        version_url = "https://raw.githubusercontent.com/redscientific/Companion/master/" \
-              "Version.txt?token=AH5QIBO7ADV5FWFR2AXOYSK5AAF3C"
-        self.latest_version = self.get_latest_version(version_url)
+    def __init__(self, callback):
+        self.callback = callback
+        self.latest_version = self.get_latest_version()
+        self.__callback("version_checker init() self.latest_version = " + str(self.latest_version))
 
     def check_version(self):
-        current_version = ''
-        filename = join(dirname(__file__), 'current_version')
-        if not exists(filename):
-            with open(filename, 'w+') as f:
-                # default to earliest version to prompt update
-                f.write('version:1.0')
-        f = open(filename, 'r')
-        for line in f:
-            if 'version:' in line:
-                current_version = float(line[line.index(':')+1:])
-                break
-        print("current version is:", current_version, " latest version is:", self.latest_version)
-        if current_version != self.latest_version:
-            print("New app version", self.latest_version, " available")
-            f.close()
-            return True
-        else:
-            f.close()
-            return False
+        self.__callback("version_checker, check_version() starting")
+        if not self.latest_version:
+            self.__callback("version_checker, check_version() returning -1")
+            return -1
+        elif self.latest_version > current_version:
+            self.__callback("version_checker, check_version() returning 1")
+            return 1
+        self.__callback("version_checker, check_version() returning 0")
+        return 0
 
-    def update_version(self):
-        filename = join(dirname(__file__), 'current_version')
-        f = open(filename, 'w')
-        f.write('version:' + str(self.latest_version))
-        f.close()
+    def get_latest_version(self):
+        self.__callback("version_checker, get_latest_version() starting")
+        mgr = PoolManager()
+        self.__callback("version_checker, get_latest_version() mgr = PoolManager()")
+        r = mgr.request("GET", version_url)
+        self.__callback("version_checker, get_latest_version() r = mgr.request()")
+        data = str(r.data)
+        self.__callback("version_checker, get_latest_version() data = str(r.data)")
+        if "Companion App Version:" in data:
+            self.__callback("version_checker, get_latest_version() found correct file")
+            latest_version = data[data.index(":") + 1:].rstrip("\\n'")
+            self.__callback("version_checker, get_latest_version() returning with value: " + latest_version)
+            return float(latest_version)
+        return False
 
-    @staticmethod
-    def get_latest_version(url):
-        """ Use internet to get latest version from server """
-        r = get(url)
-        if "Companion App Version:" in r.text:
-            return r.text[r.text.index(":") + 1:]
-        else:
-            print("Error getting latest version number")
+    def __callback(self, msg):
+        self.callback(msg + "\n")

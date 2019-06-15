@@ -5,13 +5,13 @@
 # https://redscientific.com/index.html
 
 import sys
-from Controller.controller import CompanionController
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
+from Controller.controller import CompanionController
 
 
 def main():
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, False)
     app = QApplication(sys.argv)
     CompanionController()
     sys.exit(app.exec_())
