@@ -11,7 +11,7 @@ from Controller.controller import CompanionController
 
 
 def main():
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, False)
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
     CompanionController()
     sys.exit(app.exec_())

@@ -79,7 +79,7 @@ class MainChartWidget(QtCharts.QChart):
     def __append_drt_point(self, device, point):
         # print("companion_main_chart_view.MainChartWidget.__append_drt_point() point = ",
         #       int(point[0]), int(point[1]))
-        self.sets[device].add_point((int(point[0]), int(point[1])))
+        self.sets[device].add_data_point((int(point[0]), int(point[1])))
         if int(point[0]) > self.num_points:
             self.num_points = int(point[0])
         if not self.scrolling:

@@ -8,9 +8,9 @@ from os import path
 from datetime import datetime
 from sys import argv
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QTimer, QDir
+from PySide2.QtCore import QTimer, QDir, QSize
 from PySide2.QtGui import QKeyEvent
-from Model.defs import vog_block_field, drtv1_0_trial_fields, drtv1_0_file_hdr, vog_file_hdr, program_output_hdr
+from Model.defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -18,26 +18,32 @@ from View.DockWidget.info_box import InfoBox
 from View.DockWidget.flag_box import FlagBox
 from View.DockWidget.note_box import NoteBox
 from View.MenuBarWidget.menu_bar import MenuBar
-from View.GraphWidget.chart_container import GraphContainer
+from View.GraphWidget.graph_container import GraphContainer
 from View.TabWidget.device_tab import TabContainer
 from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
-from Controller.drt_configurator import DRTConfigureController
-from Controller.vog_configurator import VOGConfigureController
+from Devices.DRT.Controller.drt_controller import DRTController
+from Devices.VOG.Controller.vog_controller import VOGController
 
 
 class CompanionController:
     def __init__(self):
-        self.ui = CompanionWindow()
+        ui_min_size = QSize(450, 550)
+        dock_size = QSize(850, 160)
+        button_box_size = QSize(205, 120)
+        info_box_size = QSize(230, 120)
+        flag_box_size = QSize(80, 120)
+        note_box_size = QSize(250, 120)
+        tab_box_width_range = (350, 320)
+        self.ui = CompanionWindow(ui_min_size)
         self.menu_bar = MenuBar(self.ui)
-        self.control_dock = ControlDock(self.ui)
-        self.button_box = ButtonBox(self.control_dock)
-        self.info_box = InfoBox(self.control_dock)
-        self.flag_box = FlagBox(self.control_dock)
-        self.note_box = NoteBox(self.control_dock)
+        self.control_dock = ControlDock(self.ui, dock_size)
+        self.button_box = ButtonBox(self.control_dock, button_box_size)
+        self.info_box = InfoBox(self.control_dock, info_box_size)
+        self.flag_box = FlagBox(self.control_dock, flag_box_size)
+        self.note_box = NoteBox(self.control_dock, note_box_size)
         self.graph_box = GraphContainer(self.ui)
-        self.tab_box = TabContainer(self.ui)
-        self.tabs = {}
+        self.tab_box = TabContainer(self.ui, tab_box_width_range)
         self.file_dialog = QFileDialog(self.ui)
 
         self.device_manager = DeviceManager(self.receive_msg_from_device_manager)
@@ -58,9 +64,9 @@ class CompanionController:
     def receive_msg_from_device_manager(self, msg):
         msg_type = msg['type']
         if msg_type == "data":
-            print("got data")
-            print(msg)
-            self.__update_save(msg['values'])
+            self.__update_save(msg)
+            self.devices[msg['device']]['controller'].add_data_to_graph(self.__get_current_time(time=True, mil=True),
+                                                                        msg['values'])
         elif msg_type == "settings":
             self.devices[msg['device']]['controller'].handle_msg(msg['values'])
         elif msg_type == "add":
@@ -70,7 +76,7 @@ class CompanionController:
         elif msg_type == "save":
             self.__save_output_msg(msg['msg'])
         elif msg_type == "error":
-            self.ui.raise_error(msg_type, msg['msg'])
+            self.ui.show_help_window(msg_type, msg['msg'])
 
     ########################################################################################
     # initial setup
@@ -106,6 +112,7 @@ class CompanionController:
         self.menu_bar.add_about_company_handler(self.__about_company)
         self.menu_bar.add_update_handler(self.__check_for_updates_handler)
         self.ui.keyPressEvent = self.__key_press_handler
+        self.ui.add_close_handler(self.ui_close_event_handler)
 
     def __start_update_timer(self):
         self.update_timer = QTimer()
@@ -184,19 +191,21 @@ class CompanionController:
             file.write(line)
 
     def __post_handler(self):
-        for device in self.devices:
-            self.__write_line_to_file(self.devices[device]['fn'],
-                                      "note, " + self.current_cond_name
-                                      + ", " + self.flag_box.get_flag()
-                                      + ", " + self.__get_current_time(True, True, True)
-                                      + self.__make_note_spacer(device[0])
-                                      + ", " + self.note_box.get_note())
+        note = self.note_box.get_note()
         self.note_box.clear_note()
+        flag = self.flag_box.get_flag()
+        time = self.__get_current_time(True, True, True)
+        name = self.current_cond_name
+        for device in self.devices:
+            spacer = self.__make_note_spacer(device[0])
+            self.__write_line_to_file(self.devices[device]['fn'],
+                                      "note, " + name + ", " + flag + ", " + time + spacer + ", " + note)
 
     def __get_save_dir_path(self):
         return self.file_dialog.exec_()
 
     def __write_line_to_file(self, fname, line):
+        print("Writing line", line, "to file", fname)
         line = line + "\n"
         filepath = path.join(self.file_dialog.directory().path(), fname)
         filepath += ".txt"
@@ -205,40 +214,22 @@ class CompanionController:
 
     def __check_for_updates_handler(self):
         vc = VersionChecker(self.__save_output_msg)
-        self.ui.show_update_available(vc.check_version())
+        is_available = vc.check_version()
+        if is_available == 1:
+            self.ui.show_help_window("Update", update_available)
+        elif is_available == 0:
+            self.ui.show_help_window("Update", up_to_date)
+        elif is_available == -1:
+            self.ui.show_help_window("Error", "There was an unexpected error connecting to the repository")
 
-    def __update_save(self, msg_dict):
-        if msg_dict['device'][0] == "drt":
-            print("Saving to drt file")
-            self.__format_drt_line(msg_dict)
-        elif msg_dict['device'][0] == "vog":
-            print("Saving to vog file")
-            self.__format_vog_line(msg_dict)
-
-    def __finish_line_and_write(self, device, line):
-        prepend = device[0] \
-                  + self.current_cond_name + ", " \
-                  + self.ui.get_key_flag() + ", " \
-                  + self.__get_current_time(True, True, True)
-        line = prepend + line
+    def __update_save(self, msg):
+        device = msg['device']
+        cond_name = self.current_cond_name
+        flag = self.flag_box.get_flag()
+        time = self.__get_current_time(True, True, True)
+        prepend = device[0] + ", " + cond_name + ", " + flag + ", " + time
+        line = self.devices[device]['controller'].format_output_for_save_file(prepend, msg['values'])
         self.__write_line_to_file(self.devices[device]['fn'], line)
-
-    def __format_drt_line(self, msg_dict):
-        line = ""
-        print("in __format_drt_line()")
-        for i in range(0, len(drtv1_0_trial_fields)):
-            line += ", " + msg_dict[drtv1_0_trial_fields[i]]
-        line = line[0:-2]
-        print("going to finish line and write to file")
-        print("line looks like", line)
-        self.__finish_line_and_write(msg_dict['device'], line)
-
-    def __format_vog_line(self, msg_dict):
-        line = ""
-        for i in range(len(vog_block_field)):
-            line += ", " + msg_dict[vog_block_field[i]]
-        line = line[0:-2]
-        self.__finish_line_and_write(msg_dict['device'], line)
 
     def __check_save_file_hdrs(self):
         for device in self.devices:
@@ -254,12 +245,8 @@ class CompanionController:
             self.__make_save_filename_for_device(device)
 
     def __add_hdr_to_file(self, device):
-        if device[0] == 'drt':
-            self.__write_line_to_file(self.devices[device]['fn'], drtv1_0_file_hdr)
-            self.devices[device]['hdr_bool'] = True
-        elif device[0] == 'vog':
-            self.__write_line_to_file(self.devices[device]['fn'], vog_file_hdr)
-            self.devices[device]['hdr_bool'] = True
+        self.__write_line_to_file(self.devices[device]['fn'], self.devices[device]['controller'].get_hdr())
+        self.devices[device]['hdr_bool'] = True
 
     @staticmethod
     def __setup_output_file():
@@ -272,77 +259,66 @@ class CompanionController:
 
     @staticmethod
     def __make_note_spacer(device):
-        if device[0] == "drt":
+        if device == "drt":
             return ", , "
-        elif device[1] == "vog":
+        elif device == "vog":
             return ", , , , "
 
     ########################################################################################
     # generic device handling
     ########################################################################################
 
-    def __handle_drt_request(self, device, msg):
-        msg['device'] = device
-        msg['type'] = "send"
-        self.device_manager.handle_msg(msg)
-
-    def __handle_vog_request(self, device, msg):
-        msg['device'] = device
-        msg['type'] = "send"
-        self.device_manager.handle_msg(msg)
-
     def __device_update(self):
         self.device_manager.update()
 
     def __add_device(self, device):
         if device[0] == "drt":
-            controller = DRTConfigureController(self.tab_box, device, self.device_manager.handle_msg)
+            controller = DRTController(self.tab_box, device, self.device_manager.handle_msg)
         elif device[0] == "vog":
-            controller = VOGConfigureController(self.tab_box, device, self.device_manager.handle_msg)
-            # contents = VOGTab(self.tab_box, device)
+            controller = VOGController(self.tab_box, device, self.device_manager.handle_msg)
         else:
             return
         self.devices[device] = {}
         self.devices[device]['controller'] = controller
-        self.devices[device]['controller'].tab.set_index(self.tab_box.add_tab(controller.tab))
+        controller.set_tab_index(self.tab_box.add_tab(controller.get_tab_obj()))
+        self.graph_box.add_graph(controller.get_graph_obj())
         self.__make_save_filename_for_device(device)
         if self.__dir_chosen:
             self.__add_hdr_to_file(device)
 
     def __remove_device(self, device):
         if device in self.devices:
-            self.tab_box.remove_tab(self.devices[device]['controller'].tab.get_index())
+            self.tab_box.remove_tab(self.devices[device]['controller'].get_tab_index())
             del(self.devices[device])
-
-    ########################################################################################
-    # drt specific handling
-    ########################################################################################
-
-    ########################################################################################
-    # vog specific handling
-    ########################################################################################
 
     ########################################################################################
     # Other handlers
     ########################################################################################
 
+    def ui_close_event_handler(self):
+        self.device_manager.end_block_all()
+        self.device_manager.end_exp_all()
+
     def __about_company(self):
-        self.ui.about_company()
+        self.ui.show_help_window("About Red Scientific", about_RS_text)
 
     def __about_app(self):
-        self.ui.about_app()
+        self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text)
 
     @staticmethod
-    def __get_current_time(day=False, time=False, mil=False, save=False):
+    def __get_current_time(day=False, time=False, mil=False, save=False, graph=False):
+        date_time = datetime.now()
         if day and time and mil:
-            return datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+            return date_time.strftime("%Y-%m-%d %H:%M:%S.%f")
         elif day and time and not mil:
-            return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            return date_time.strftime("%Y-%m-%d %H:%M:%S")
         elif day and not time and not mil:
-            return datetime.now().strftime("%Y-%m-%d")
+            return date_time.strftime("%Y-%m-%d")
         elif not day and time and not mil:
-            return datetime.now().strftime("%H:%M:%S")
+            return date_time.strftime("%H:%M:%S")
         elif not day and time and mil:
-            return datetime.now().strftime("%H:%M:%S.%f")
+            return date_time.strftime("%H:%M:%S.%f")
         elif save:
-            return datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+            return date_time.strftime("%Y-%m-%d-%H-%M-%S")
+        elif graph:
+            return date_time.time()

@@ -10,10 +10,10 @@ from PySide2.QtCore import Qt
 
 
 class FlagBox(QGroupBox):
-    def __init__(self, parent):
+    def __init__(self, parent, size):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
-        self.setFixedSize(80, 120)
+        self.setMaximumSize(size)
         self.__flag = QLabel(self)
         font = QFont()
         font.setPointSize(16)
@@ -31,7 +31,7 @@ class FlagBox(QGroupBox):
 
     def __set_texts(self):
         self.setTitle("Key Flag")
-        self.__flag.setText("None")
+        self.__flag.setText("")
 
     def __set_tooltips(self):
         self.__flag.setToolTip("The most recent key pressed for reference in save file")

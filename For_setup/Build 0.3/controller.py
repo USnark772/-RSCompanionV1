@@ -70,7 +70,7 @@ class CompanionController:
         elif msg_type == "save":
             self.__save_output_msg(msg['msg'])
         elif msg_type == "error":
-            self.ui.raise_error(msg_type, msg['msg'])
+            self.ui.show_help_window(msg_type, msg['msg'])
 
     ########################################################################################
     # initial setup

@@ -8,10 +8,10 @@ from PySide2.QtWidgets import QGroupBox, QGridLayout, QTextEdit, QPushButton
 
 
 class NoteBox(QGroupBox):
-    def __init__(self, parent):
+    def __init__(self, parent, size):
         super().__init__(parent)
         self.setLayout(QGridLayout())
-        self.setFixedSize(250, 120)
+        self.setMaximumSize(size)
         self.__text_edit = QTextEdit()
         self.layout().addWidget(self.__text_edit, 0, 1, 1, 1)
         self.__post_button = QPushButton()

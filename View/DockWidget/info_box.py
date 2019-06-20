@@ -9,9 +9,9 @@ from PySide2.QtCore import Qt
 
 
 class InfoBox(QGroupBox):
-    def __init__(self, parent):
+    def __init__(self, parent, size):
         super().__init__(parent)
-        self.setFixedSize(230, 120)
+        self.setMaximumSize(size)
         self.setLayout(QGridLayout())
 
         self.__start_time_label = QLabel()

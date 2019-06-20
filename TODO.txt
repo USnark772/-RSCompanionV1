@@ -3,18 +3,24 @@ Updater:
     Query version
     if not latest version
 	    Direct user to download latest version
--   Update is available, download now? if yes, don't make user go find it.
--   figure out why with builds it's not checking for updates properly.
+-   Automatically download latest version at users request
 
 Installer:
 -   Installer would install latest version replacing any previous versions
--   Need to add new repo for consumer download target and place latest build version in it
 
 Etc.:
--   Make sure vog is outputting properly
--   Reimplement current use of Qt.Charts for graphing. Figure out matplotlib later
+-   Reimplement current use of Qt.Charts for graphing.
 -   x axis needs to be timestamp
+-   Some unexplained issues with ui sizing
+-   Rewrite device_manager.__scan_ports()
 
 At some point:
 -   Change to matplotlib for graphing.
 -   Possibly use numpy for internal data storage.
+-   Implement video. Begin exp starts recording video. Device overlay is recorded with the video
+    Device output will add a frame # for when that device output came in
+    Consider OpenCV python module
+    Video output will be all one video file with possibly multiple video feeds.
+-   Automatically check for updates at startup if user selects that option
+-   Show/Hide device graphs at user request. Graphs can be overlayed or not, need future input.
+-   GPS device integration.

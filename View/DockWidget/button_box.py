@@ -10,10 +10,10 @@ from PySide2.QtCore import QSize
 
 
 class ButtonBox(QGroupBox):
-    def __init__(self, parent):
+    def __init__(self, parent, size):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
-        self.setFixedSize(205, 120)
+        self.setMaximumSize(size)
         self.__button_layout = QHBoxLayout()
 
         self.__create_button = QPushButton()

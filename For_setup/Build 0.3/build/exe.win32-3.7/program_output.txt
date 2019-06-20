@@ -1,1 +1,8 @@
 Timestamp, Author, Location, Message
+2019-06-18-11-35-03, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-06-18-11-35-03, vog, COM6, configName|DIRECT CONTROL
+2019-06-18-11-35-03, vog, COM6, configMaxOpen|2147483647
+2019-06-18-11-35-03, vog, COM6, configMaxClose|0
+2019-06-18-11-35-03, vog, COM6, configDebounce|100
+2019-06-18-11-35-03, vog, COM6, configClickMode|0
+2019-06-18-11-35-03, vog, COM6, buttonControl|1

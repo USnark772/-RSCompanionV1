@@ -25,7 +25,7 @@ class GraphContainer(QWidget):
         self.__num_devices = 0
 
     def add_data_point(self, device, data):
-        self.__list_of_graphs[device].add_point(data)
+        self.__list_of_graphs[device].add_data_point(data)
 
     def handle_msg(self, msg_dict):
         device = msg_dict['device']

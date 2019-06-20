@@ -9,9 +9,9 @@ from PySide2.QtCore import Qt
 
 
 class ControlDock(QDockWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, size):
         super().__init__(parent)
-        self.setFixedSize(850, 160)
+        self.setMaximumSize(size)
         self.setFeatures(
             QDockWidget.DockWidgetFloatable |
             QDockWidget.DockWidgetMovable |

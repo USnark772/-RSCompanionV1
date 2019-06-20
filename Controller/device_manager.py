@@ -6,7 +6,9 @@ disconnect_event flags are turned True.
 
 from serial import Serial, SerialException
 from serial.tools import list_ports
-from Model.defs import devices, drtv1_0_config_fields, drtv1_0_trial_fields, vog_block_field
+from Model.defs import devices
+from Devices.DRT.Model.defs import drtv1_0_config_fields, drtv1_0_output_fields
+from Devices.VOG.Model.defs import vog_output_field
 
 
 class DeviceManager:
@@ -109,6 +111,8 @@ class DeviceManager:
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStop"}))
 
     def __scan_ports(self):
+        # TODO: Rewrite this so it doesn't forget devices attached each time it's called.
+        # Keep track of all devices attached and check that list against a new list of attached devices each time?
         self.devices_to_add = []
         self.devices_to_remove = []
         self.devices_attached = []
@@ -176,29 +180,29 @@ class DeviceManager:
             # Check if this is a response to get_config
             if len(msg) > 90:
                 # Get relevant values from msg and insert into msg_dict
-                for i in range(0, len(drtv1_0_config_fields)):
-                    index = msg.find(drtv1_0_config_fields[i] + ":")
-                    index_len = len(drtv1_0_config_fields[i]) + 1
+                for i in drtv1_0_config_fields:
+                    index = msg.find(i + ":")
+                    index_len = len(i) + 1
                     val_len = msg.find(', ', index + index_len)
                     if val_len < 0:
                         val_len = None
                     msg_dict['values'][msg[index:index+index_len-1]] = int(msg[index+index_len:val_len])
             else:
                 # Single value update, find which value it is and insert into msg_dict
-                for i in range(0, len(drtv1_0_config_fields)):
-                    index = msg.find(drtv1_0_config_fields[i] + ":")
+                for i in drtv1_0_config_fields:
+                    index = msg.find(i + ":")
                     if index > 0:
-                        index_len = len(drtv1_0_config_fields[i])
+                        index_len = len(i)
                         val_ind = index + index_len + 1
                         msg_dict['values'][msg[index:index + index_len]] = int(msg[val_ind:])
         elif msg[0:4] == "trl>":
             msg_dict['type'] = "data"
             val_ind_start = 4
-            for i in range(0, len(drtv1_0_trial_fields)):
+            for i in drtv1_0_output_fields:
                 val_ind_end = msg.find(', ', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict['values'][drtv1_0_trial_fields[i]] = int(msg[val_ind_start:val_ind_end])
+                msg_dict['values'][i] = int(msg[val_ind_start:val_ind_end])
                 if val_ind_end:
                     val_ind_start = val_ind_end + 2
 
@@ -217,11 +221,11 @@ class DeviceManager:
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
             val_ind_start = 5
-            for i in range(len(vog_block_field)):
+            for i in range(len(vog_output_field)):
                 val_ind_end = msg.find(',', val_ind_start + 1)
                 if val_ind_end < 0:
                     val_ind_end = None
-                msg_dict['values'][vog_block_field[i]] = msg[val_ind_start:val_ind_end]
+                msg_dict['values'][vog_output_field[i]] = msg[val_ind_start:val_ind_end]
                 if val_ind_end:
                     val_ind_start = val_ind_end + 1
         elif msg[0:6] == "config":

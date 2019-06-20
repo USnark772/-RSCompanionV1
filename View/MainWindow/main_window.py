@@ -5,17 +5,16 @@
 # https://redscientific.com/index.html
 
 from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame
-from PySide2.QtCore import QSize, Qt
+from PySide2.QtCore import Qt
 from PySide2.QtGui import QFont
-from Model.defs import about_RS_text, about_RS_app_text, up_to_date, update_available
 from View.MainWindow.help_window import HelpWindow
 from View.MainWindow.central_widget import CentralWidget
 
 
 class CompanionWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, min_size):
         super().__init__()
-        self.setMinimumSize(QSize(450, 550))
+        self.setMinimumSize(min_size)
         font = QFont()
         font.setPointSize(10)
         self.setFont(font)
@@ -29,8 +28,16 @@ class CompanionWindow(QMainWindow):
         self.__graph_and_tab_layout.addWidget(self.__tab_frame)
         self.centralWidget().layout().addLayout(self.__graph_and_tab_layout)
 
+        self.close_callback = None
         self.__help_window = None
         self.__set_texts()
+
+    def closeEvent(self, event):
+        if self.close_callback:
+            self.close_callback()
+
+    def add_close_handler(self, func):
+        self.close_callback = func
 
     def add_dock_widget(self, widget):
         self.addDockWidget(Qt.DockWidgetArea(4), widget)
@@ -44,29 +51,7 @@ class CompanionWindow(QMainWindow):
     def add_tab_widget(self, widget):
         self.__tab_frame.layout().addWidget(widget)
 
-    def show_update_available(self, is_available):
-        if is_available == 1:
-            self.__help_window = HelpWindow("Update", update_available)
-        elif is_available == 0:
-            self.__help_window = HelpWindow("Update", up_to_date)
-        elif is_available == -1:
-            self.__help_window = HelpWindow("Error", "There was an unexpected error connecting to the repository")
-        self.__help_window.show()
-
-    '''
-    def add_update_handler(self, func):
-        self.menuBar().add_update_handler(func)
-    '''
-
-    def about_app(self):
-        self.__help_window = HelpWindow("About Red Scientific Companion App", about_RS_app_text)
-        self.__help_window.show()
-
-    def about_company(self):
-        self.__help_window = HelpWindow("About Red Scientific", about_RS_text)
-        self.__help_window.show()
-
-    def raise_error(self, title, msg):
+    def show_help_window(self, title, msg):
         self.__help_window = HelpWindow(title, msg)
         self.__help_window.show()
 

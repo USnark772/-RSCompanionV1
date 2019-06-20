@@ -7,8 +7,8 @@
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout,\
     QCheckBox, QFrame, QLineEdit
 from PySide2.QtCore import Qt, QRect
-from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min,\
-    tab_line_edit_error_style, tab_line_edit_compliant_style
+from Devices.VOG.Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min
+from Model.defs import tab_line_edit_error_style, tab_line_edit_compliant_style
 
 
 class VOGTab(QWidget):

@@ -5,14 +5,19 @@
 # https://redscientific.com/index.html
 
 from math import trunc, ceil
-from View.TabWidget.drt_tab import DRTTab
-from Model.defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
-    drtv1_0_ISI_min
+from View.GraphWidget.graph_obj import GraphObj
+from Devices.DRT.View.drt_tab import DRTTab
+from Devices.DRT.Model.defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
+    drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr
+from datetime import datetime
+from PySide2.QtCore import QDateTime, QDate, QTime
 
 
-class DRTConfigureController:
+class DRTController:
     def __init__(self, parent, device, msg_callback):
-        self.tab = DRTTab(parent, device[0] + " on " + device[1])
+        device_name = device[0] + " on " + device[1]
+        self.__tab = DRTTab(parent, device_name)
+        self.__graph_obj = GraphObj(device_name)
         self.__device_info = device
         self.__msg_callback = msg_callback
         self.__handling_msg = False
@@ -23,19 +28,60 @@ class DRTConfigureController:
         self.__get_vals()
         self.__set_upload_button(False)
 
+        self.__series_name = "Response Time"
+        self.reset_graph()
+        date = QDate(0, 0, 0)
+        temp_time = datetime.now().time()
+        time = QTime(temp_time.hour, temp_time.minute, temp_time.second, temp_time.microsecond)
+        self.add_data_to_graph(QDateTime(date, time).toMSecsSinceEpoch(), 5)
+        self.add_data_to_graph(QDateTime(date, time).toMSecsSinceEpoch(), 8)
+
     def handle_msg(self, msg):
         self.__handling_msg = True
         for key in msg:
             self.__set_val(key, msg[key])
         self.__handling_msg = False
 
+    def add_data_to_graph(self, timestamp, data):
+        self.__graph_obj.add_point(self.__series_name, timestamp, data)
+
+    def reset_graph(self):
+        self.__graph_obj.reset_graph()
+        self.__graph_obj.set_chart_axes("Timestamp", "Milliseconds")
+        self.__graph_obj.add_line_series(self.__series_name)
+
+    def get_graph_obj(self):
+        return self.__graph_obj
+
+    def set_tab_index(self, index):
+        self.__tab.set_index(index)
+
+    def get_tab_index(self):
+        return self.__tab.get_index()
+
+    def get_tab_obj(self):
+        return self.__tab
+
+    @staticmethod
+    def format_output_for_save_file(prepend, msg):
+        line = ""
+        for i in drtv1_0_output_fields:
+            line += ", " + str(msg['values'][i])
+        line = line.rstrip("\r\n")
+        line = line + ", "
+        return prepend + line
+
+    @staticmethod
+    def get_hdr():
+        return drtv1_0_file_hdr
+
     def __set_handlers(self):
-        self.tab.add_iso_button_handler(self.__iso)
-        self.tab.add_upload_button_handler(self.__update_device)
-        self.tab.add_stim_dur_entry_changed_handler(self.__stim_dur_entry_changed)
-        self.tab.add_stim_intens_entry_changed_handler(self.__stim_intens_entry_changed)
-        self.tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
-        self.tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
+        self.__tab.add_iso_button_handler(self.__iso)
+        self.__tab.add_upload_button_handler(self.__update_device)
+        self.__tab.add_stim_dur_entry_changed_handler(self.__stim_dur_entry_changed)
+        self.__tab.add_stim_intens_entry_changed_handler(self.__stim_intens_entry_changed)
+        self.__tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
+        self.__tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
 
     def __stim_dur_entry_changed(self):
         if not self.__handling_msg:
@@ -59,29 +105,29 @@ class DRTConfigureController:
 
     def __check_stim_dur_val(self):
         self.__errors[0] = True
-        usr_input = self.tab.get_stim_dur_val()
+        usr_input = self.__tab.get_stim_dur_val()
         if usr_input.isdigit():
             usr_input_int = int(usr_input)
             if drtv1_0_stim_dur_max >= usr_input_int >= drtv1_0_stim_dur_min:
                 self.__errors[0] = False
                 self.__changed[0] = usr_input_int != self.__current_vals[0]
-        self.tab.set_stim_dur_val_error(self.__errors[0])
+        self.__tab.set_stim_dur_val_error(self.__errors[0])
 
     def __check_stim_intens_val(self):
-        new_val_percent = self.tab.get_stim_intens_val()
-        self.tab.set_stim_intens_val_label(new_val_percent)
+        new_val_percent = self.__tab.get_stim_intens_val()
+        self.__tab.set_stim_intens_val_label(new_val_percent)
         self.__changed[1] = self.__calc_percent_to_val(new_val_percent) != self.__current_vals[1]
 
     def __check_upper_isi_val(self):
         self.__errors[1] = True
-        usr_input = self.tab.get_upper_isi_val()
-        lower = self.tab.get_lower_isi_val()
+        usr_input = self.__tab.get_upper_isi_val()
+        lower = self.__tab.get_lower_isi_val()
         if usr_input.isdigit() and lower.isdigit():
             usr_input_int = int(usr_input)
             if drtv1_0_ISI_max >= usr_input_int >= int(lower):
                 self.__errors[1] = False
                 self.__changed[2] = usr_input_int != self.__current_vals[2]
-        self.tab.set_upper_isi_val_error(self.__errors[1])
+        self.__tab.set_upper_isi_val_error(self.__errors[1])
         if not self.__errors[1] and self.__errors[2]:
             self.__check_lower_isi_val()
         elif self.__errors[1] and not self.__errors[2]:
@@ -89,14 +135,14 @@ class DRTConfigureController:
 
     def __check_lower_isi_val(self):
         self.__errors[2] = True
-        usr_input = self.tab.get_lower_isi_val()
-        upper = self.tab.get_upper_isi_val()
+        usr_input = self.__tab.get_lower_isi_val()
+        upper = self.__tab.get_upper_isi_val()
         if usr_input.isdigit() and upper.isdigit():
             usr_input_int = int(usr_input)
             if int(upper) >= usr_input_int >= drtv1_0_ISI_min:
                 self.__errors[2] = False
                 self.__changed[3] = usr_input_int != self.__current_vals[3]
-        self.tab.set_lower_isi_val_error(self.__errors[2])
+        self.__tab.set_lower_isi_val_error(self.__errors[2])
         if not self.__errors[2] and self.__errors[1]:
             self.__check_upper_isi_val()
         elif self.__errors[2] and not self.__errors[1]:
@@ -105,21 +151,21 @@ class DRTConfigureController:
     def __set_upload_button(self, is_active):
         if (self.__changed[0] or self.__changed[1] or self.__changed[2] or self.__changed[3])\
                 and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
-            self.tab.set_upload_button_activity(is_active)
+            self.__tab.set_upload_button_activity(is_active)
         else:
-            self.tab.set_upload_button_activity(False)
+            self.__tab.set_upload_button_activity(False)
 
     def __update_device(self):
         # Only send uploads if needed, then set as custom and disable upload button
         if self.__changed[0]:
-            self.__set_device_stim_duration(self.tab.get_stim_dur_val())
+            self.__set_device_stim_duration(self.__tab.get_stim_dur_val())
         if self.__changed[1]:
-            self.__set_device_stim_intensity(self.tab.get_stim_intens_val())
+            self.__set_device_stim_intensity(self.__tab.get_stim_intens_val())
         if self.__changed[2]:
-            self.__set_device_upper_isi(self.tab.get_upper_isi_val())
+            self.__set_device_upper_isi(self.__tab.get_upper_isi_val())
         if self.__changed[3]:
-            self.__set_device_lower_isi(self.tab.get_lower_isi_val())
-        self.tab.set_config_val("Custom")
+            self.__set_device_lower_isi(self.__tab.get_lower_isi_val())
+        self.__tab.set_config_val("Custom")
         self.__set_change_bools_false()
         self.__set_upload_button(False)
 
@@ -133,22 +179,22 @@ class DRTConfigureController:
     def __set_val(self, var, val):
         if var == "stimDur":
             self.__current_vals[0] = int(val)
-            self.tab.set_stim_dur_val(val)
-            self.tab.set_stim_dur_val_error(False)
+            self.__tab.set_stim_dur_val(val)
+            self.__tab.set_stim_dur_val_error(False)
         elif var == "intensity":
             self.__current_vals[1] = int(val)
-            self.tab.set_stim_intens_val(self.__calc_val_to_percent(val))
+            self.__tab.set_stim_intens_val(self.__calc_val_to_percent(val))
         elif var == "upperISI":
             self.__current_vals[2] = int(val)
-            self.tab.set_upper_isi_val(val)
-            self.tab.set_upper_isi_val_error(False)
+            self.__tab.set_upper_isi_val(val)
+            self.__tab.set_upper_isi_val_error(False)
         elif var == "lowerISI":
             self.__current_vals[3] = int(val)
-            self.tab.set_lower_isi_val(val)
-            self.tab.set_lower_isi_val_error(False)
+            self.__tab.set_lower_isi_val(val)
+            self.__tab.set_lower_isi_val_error(False)
 
     def __iso(self):
-        self.tab.set_config_val("ISO")
+        self.__tab.set_config_val("ISO")
         self.__set_device_upper_isi("5000")
         self.__set_device_lower_isi("3000")
         self.__set_device_stim_intensity(100)

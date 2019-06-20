@@ -9,10 +9,10 @@ from PySide2.QtCore import Qt
 
 
 class TabContainer(QTabWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, width_range):
         super().__init__(parent)
-        self.setMaximumWidth(350)
-        self.setMinimumWidth(320)
+        self.setMaximumWidth(width_range[0])
+        self.setMinimumWidth(width_range[1])
         size_policy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
