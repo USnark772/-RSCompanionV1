@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from random import gauss
 
 
+# TODO: Pipe data through controller to graph obj
 class DRTController:
     def __init__(self, parent, device, msg_callback):
         device_name = device[0] + " on " + device[1]

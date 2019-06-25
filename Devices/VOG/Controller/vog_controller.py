@@ -10,6 +10,7 @@ from Devices.VOG.Model.defs import vog_max_open_close, vog_min_open_close, vog_d
     vog_output_field, vog_file_hdr
 
 
+# TODO: Update to use new graph. Pipe data through controller to graph obj
 class VOGController:
     def __init__(self, parent, device, msg_callback):
         device_name = device[0] + " on " + device[1]

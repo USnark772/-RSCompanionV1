@@ -54,6 +54,7 @@ class GraphObj(QFrame):
         self.__clear_data()
         self.__refresh_plot()
 
+    # TODO: Implement
     def __move_graph(self):
         print("Implement slider handler")
 
