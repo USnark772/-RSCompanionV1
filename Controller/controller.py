@@ -205,7 +205,6 @@ class CompanionController:
         return self.file_dialog.exec_()
 
     def __write_line_to_file(self, fname, line):
-        print("Writing line", line, "to file", fname)
         line = line + "\n"
         filepath = path.join(self.file_dialog.directory().path(), fname)
         filepath += ".txt"
@@ -228,8 +227,8 @@ class CompanionController:
         flag = self.flag_box.get_flag()
         time = self.__get_current_time(True, True, True)
         prepend = device[0] + ", " + cond_name + ", " + flag + ", " + time
-        line = self.devices[device]['controller'].format_output_for_save_file(prepend, msg['values'])
-        self.__write_line_to_file(self.devices[device]['fn'], line)
+        line = self.devices[device]['controller'].format_output_for_save_file(msg['values'])
+        self.__write_line_to_file(self.devices[device]['fn'], prepend + line)
 
     def __check_save_file_hdrs(self):
         for device in self.devices:
@@ -253,7 +252,6 @@ class CompanionController:
         fname = path.dirname(argv[0]) + "\\program_output.txt"
         if path.exists(fname):
             with open(fname, "w") as temp:
-                print("writing output file hdr")
                 temp.write(program_output_hdr)
         return fname
 
@@ -289,6 +287,7 @@ class CompanionController:
     def __remove_device(self, device):
         if device in self.devices:
             self.tab_box.remove_tab(self.devices[device]['controller'].get_tab_index())
+            self.graph_box.remove_graph(self.devices[device]['controller'].get_graph_obj())
             del(self.devices[device])
 
     ########################################################################################
@@ -321,4 +320,4 @@ class CompanionController:
         elif save:
             return date_time.strftime("%Y-%m-%d-%H-%M-%S")
         elif graph:
-            return date_time.time()
+            return date_time

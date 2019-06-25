@@ -2,47 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Devices/DRT/Model/defs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Devices/DRT/README.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Devices/VOG/Model/defs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Devices/VOG/README.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/matplot_example.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/matplot_example_four.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/matplot_example_three.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/matplot_example_two.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/View/GraphWidget/graph_container.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/OldCode/new_graph_obj.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_one.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_two.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/View/GraphWidget/matplot_graph_obj.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/current_version" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/program_output.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/version_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/version_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/vog_configurator.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DRT/Controller/drt_configurator.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DRT/View/drt_tab.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.3/build/exe.win32-3.7/lib/library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/Build 0.3/build/exe.win32-3.7/lib/library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.3/build/exe.win32-3.7/program_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/Build 0.3/build/exe.win32-3.7/program_output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.3/chart_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/Build 0.3/chart_container.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.3/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/Build 0.3/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.3/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/Build 0.3/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/Build 0.3/version_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/Build 0.3/version_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/defs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/program_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/program_output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/OldCode/old_main_chart.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/OldCode/old_main_chart.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/button_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/button_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/control_dock.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/control_dock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/flag_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/flag_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/info_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/info_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/note_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/note_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/GraphWidget/chart_container.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/GraphWidget/chart_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/MainWindow/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/main_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/TabWidget/device_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/device_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/TabWidget/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/Tests/matplot_example_four.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/matplot_example_four.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/Tests/matplot_example_three.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/matplot_example_three.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/GraphWidget/graph_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/GraphWidget/graph_container.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/OldCode/graph_obj.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,113 +27,145 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/TODO.txt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="484">
-                  <caret line="22" column="64" selection-start-line="22" selection-start-column="64" selection-end-line="22" selection-end-column="64" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_container.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="66">
-                  <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
-                  <folding>
-                    <element signature="e#136#199#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Controller/controller.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="764">
-                  <caret line="323" column="35" lean-forward="true" selection-start-line="323" selection-start-column="35" selection-end-line="323" selection-end-column="35" />
-                  <folding>
-                    <element signature="n#!!doc" />
-                    <element signature="e#136#155#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="396">
-                  <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
-                  <folding>
-                    <element signature="e#0#10#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="352">
-                  <caret line="32" column="29" lean-forward="true" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
-                  <folding>
-                    <element signature="n#!!doc" />
-                    <element signature="e#136#164#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="440">
-                  <caret line="36" selection-start-line="36" selection-end-line="36" />
-                  <folding>
-                    <element signature="n#!!doc" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_obj.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="372">
-                  <caret line="39" column="22" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
-                  <folding>
-                    <element signature="n#!!doc" />
-                    <element signature="e#136#210#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Controller/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="264">
-                  <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-                  <folding>
-                    <element signature="n#!!doc" />
-                    <element signature="e#136#146#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="66">
+              <caret line="7" column="55" lean-forward="true" selection-start-line="7" selection-start-column="55" selection-end-line="7" selection-end-column="55" />
+              <folding>
+                <element signature="n#!!doc" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#136#181#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Unused/OldCode/new_graph_obj.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="8" column="11" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
+              <folding>
+                <element signature="e#1#30#0" expanded="true" />
+                <element signature="e#2953#3172#0" />
+                <element signature="e#3308#3590#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Unused/OldCode/graph_obj.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="110">
+              <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#398#1554#0" />
+                <element signature="e#1594#1622#0" />
+                <element signature="e#1659#1978#0" />
+                <element signature="e#2036#2768#0" />
+                <element signature="e#2425#2543#0" />
+                <element signature="e#2705#2768#0" />
+                <element signature="e#2815#2954#0" />
+                <element signature="e#3008#3044#0" />
+                <element signature="e#3091#3648#0" />
+                <element signature="e#3346#3632#0" />
+                <element signature="e#3388#3632#0" />
+                <element signature="e#3711#4104#0" />
+                <element signature="e#3749#4104#0" />
+                <element signature="e#4160#4750#0" />
+                <element signature="e#4206#4490#0" />
+                <element signature="e#4583#4750#0" />
+                <element signature="e#4808#4995#0" />
+                <element signature="e#5063#5278#0" />
+                <element signature="e#5340#5476#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TODO.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/View/GraphWidget/matplot_graph_obj.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="14" column="11" lean-forward="true" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
+              <folding>
+                <element signature="e#1#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Unused/Tests/matplot_example_four.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
+              <folding>
+                <element signature="e#91#106#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_one.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-440">
+              <caret line="1" column="24" lean-forward="true" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_two.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/View/MainWindow/main_window.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1056">
+              <caret line="52" selection-start-line="52" selection-end-line="52" />
+              <folding>
+                <element signature="n#!!doc" />
+                <element signature="e#136#198#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -168,25 +176,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.ui.</find>
-      <find>vog_output_field</find>
-      <find>drtv1_0_file_hdr</find>
-      <find>vog_file_hdr</find>
-      <find>program_output_hdr</find>
-      <find>drtv1_0_config_fields</find>
-      <find>update</find>
-      <find>__device_info</find>
-      <find>__name[0]</find>
-      <find>defs</find>
-      <find>__chart_view</find>
-      <find>setObjec</find>
-      <find>.super()</find>
-      <find>__set_chart</find>
-      <find>super().</find>
-      <find>super().__</find>
-      <find>self.__name</find>
-      <find>.tabs</find>
-      <find>].tab</find>
       <find>self.devices</find>
       <find>self.deviceso1</find>
       <find>todo:</find>
@@ -198,6 +187,25 @@
       <find>.now()</find>
       <find>slider</find>
       <find>time2</find>
+      <find>self.__num_points</find>
+      <find>datetime</find>
+      <find>__graph_obj</find>
+      <find>series</find>
+      <find>date</find>
+      <find>__x_end</find>
+      <find>__graph</find>
+      <find>print</find>
+      <find>self.__x_start</find>
+      <find>self.__range_x</find>
+      <find>self.__last_timestamp</find>
+      <find>`</find>
+      <find>print(</find>
+      <find>x_end</find>
+      <find>__chart.axisX</find>
+      <find>to_series</find>
+      <find>self.devices_known</find>
+      <find>Figure</find>
+      <find>figure</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -206,12 +214,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/View/TabWidget/vog_tab.py" />
-        <option value="$PROJECT_DIR$/Controller/vog_configurator.py" />
-        <option value="$PROJECT_DIR$/For_setup/Build 0.3/chart_container.py" />
-        <option value="$PROJECT_DIR$/For_setup/Build 0.3/device_manager.py" />
-        <option value="$PROJECT_DIR$/For_setup/Build 0.3/drt_configurator.py" />
-        <option value="$PROJECT_DIR$/For_setup/Build 0.3/drt_tab.py" />
         <option value="$PROJECT_DIR$/For_setup/Build 0.3/flag_box.py" />
         <option value="$PROJECT_DIR$/For_setup/Build 0.3/main_window.py" />
         <option value="$PROJECT_DIR$/For_setup/Build 0.3/menu_bar.py" />
@@ -235,148 +237,50 @@
         <option value="$PROJECT_DIR$/Devices/VOG/Model/defs.py" />
         <option value="$PROJECT_DIR$/Devices/DRT/Model/defs.py" />
         <option value="$PROJECT_DIR$/Devices/DRT/Controller/drt_configurator.py" />
-        <option value="$PROJECT_DIR$/Controller/device_manager.py" />
         <option value="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" />
         <option value="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" />
         <option value="$PROJECT_DIR$/Model/defs.py" />
         <option value="$PROJECT_DIR$/View/MainWindow/main_window.py" />
-        <option value="$PROJECT_DIR$/TODO.txt" />
         <option value="$PROJECT_DIR$/View/GraphWidget/chart_container.py" />
         <option value="$PROJECT_DIR$/View/GraphWidget/chart_obj.py" />
         <option value="$PROJECT_DIR$/Devices/VOG/Controller/vog_configurator.py" />
         <option value="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" />
         <option value="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" />
-        <option value="$PROJECT_DIR$/View/GraphWidget/graph_container.py" />
-        <option value="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" />
-        <option value="$PROJECT_DIR$/Controller/controller.py" />
-        <option value="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" />
-        <option value="$PROJECT_DIR$/Controller/main.py" />
         <option value="$PROJECT_DIR$/Unused/Tests/matplot_example.py" />
         <option value="$PROJECT_DIR$/Unused/Tests/matplot_example_two.py" />
-        <option value="$PROJECT_DIR$/Unused/Tests/matplot_example_three.py" />
-        <option value="$PROJECT_DIR$/Unused/Tests/matplot_example_four.py" />
-        <option value="$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py" />
+        <option value="$PROJECT_DIR$/View/GraphWidget/graph_container.py" />
+        <option value="$PROJECT_DIR$/Controller/controller.py" />
         <option value="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" />
+        <option value="$PROJECT_DIR$/Controller/main.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/test_scroll_graph.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py" />
+        <option value="$PROJECT_DIR$/Controller/device_manager.py" />
+        <option value="$PROJECT_DIR$/View/GraphWidget/new_graph_obj.py" />
+        <option value="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/matplot_example_three.py" />
+        <option value="$PROJECT_DIR$/View/GraphWidget/matplot_graph_obj.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/pyside2_matplot_example_one.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_two.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/matplot_example_four.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_one.py" />
+        <option value="$PROJECT_DIR$/TODO.txt" />
+        <option value="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-11" />
-    <option name="y" value="-11" />
-    <option name="width" value="3863" />
-    <option name="height" value="2142" />
+    <option name="x" value="281" />
+    <option name="y" value="98" />
+    <option name="width" value="777" />
+    <option name="height" value="541" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-              <item name="DRT" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-              <item name="DRT" type="462c0819:PsiDirectoryNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-              <item name="DRT" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-              <item name="VOG" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-              <item name="VOG" type="462c0819:PsiDirectoryNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Devices" type="462c0819:PsiDirectoryNode" />
-              <item name="VOG" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="For_setup" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="For_setup" type="462c0819:PsiDirectoryNode" />
-              <item name="Build 0.3" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Unused" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="Unused" type="462c0819:PsiDirectoryNode" />
-              <item name="Tests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-              <item name="GraphWidget" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Companion" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Companion" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-              <item name="MainWindow" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -387,15 +291,15 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\OldCode" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices\VOG\View" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices\VOG\Controller" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices\VOG" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\DRT\View" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -410,49 +314,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="graph_obj" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/View/GraphWidget" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Controller" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Controller/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.pyqt5_matplot_example_one">
     <configuration name="matplot_example_four" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -495,7 +357,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test_date_time_axis" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="pyqt5_matplot_example_one" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -507,7 +369,49 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_one.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pyqt5_matplot_example_two" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_two.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pyside2_matplot_example_one" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/pyside2_matplot_example_one.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -518,10 +422,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.graph_obj" />
-        <item itemvalue="Python.test_date_time_axis" />
+        <item itemvalue="Python.pyqt5_matplot_example_one" />
         <item itemvalue="Python.matplot_example_four" />
+        <item itemvalue="Python.pyqt5_matplot_example_two" />
+        <item itemvalue="Python.pyside2_matplot_example_one" />
         <item itemvalue="Python.matplot_example_three" />
       </list>
     </recent_temporary>
@@ -549,21 +453,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.10240252" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.087987356" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="0" weight="0.35045317" />
+      <window_info anchor="bottom" id="Terminal" order="0" weight="0.34890965" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.4491256" side_tool="true" weight="0.41786107" />
       <window_info anchor="bottom" id="GitLabIntegration" order="2" weight="0.32930514" />
       <window_info anchor="bottom" id="Python Console" order="3" weight="0.32930514" />
       <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" weight="0.3141994" />
+      <window_info anchor="bottom" id="Find" order="5" weight="0.3136033" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.32930514" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" sideWeight="0.5508744" visible="true" weight="0.2788162" />
-      <window_info anchor="bottom" id="Debug" order="8" weight="0.3942598" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.5508744" visible="true" weight="0.27829698" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.394081" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32250756" />
@@ -593,65 +496,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/drt_tab.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/flag_box.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/green_arrow.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/help_window.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/info_box.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#136#196#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/main_window.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="5" />
-          <folding>
-            <element signature="e#136#198#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/menu_bar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#1#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/MenuBarWidget/menu_bar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/note_box.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -829,17 +673,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="652">
-          <caret line="204" column="75" lean-forward="true" selection-start-line="204" selection-start-column="75" selection-end-line="204" selection-end-column="75" />
-          <folding>
-            <element signature="e#0#248#1" />
-            <element signature="e#250#292#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/View/DockWidget/button_box.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="550">
@@ -861,37 +694,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/View/MainWindow/main_window.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="52" selection-start-line="52" selection-end-line="52" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#136#198#0" expanded="true" />
-            <element signature="e#535#1266#0" />
-            <element signature="e#1309#1366#0" />
-            <element signature="e#1415#1441#0" />
-            <element signature="e#1490#1538#0" />
-            <element signature="e#1584#1607#0" />
-            <element signature="e#1660#1705#0" />
-            <element signature="e#1753#1796#0" />
-            <element signature="e#2609#2686#0" />
-            <element signature="e#2723#2762#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" />
-    <entry file="file://$PROJECT_DIR$/Devices/DRT/View/drt_graph.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Model/defs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -910,68 +713,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="n#!!doc" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/matplotlib/artist.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="379">
           <caret line="911" selection-start-line="911" selection-end-line="911" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="764">
-          <caret line="323" column="35" lean-forward="true" selection-start-line="323" selection-start-column="35" selection-end-line="323" selection-end-column="35" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#136#155#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="22" column="64" selection-start-line="22" selection-start-column="64" selection-end-line="22" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_container.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
-          <folding>
-            <element signature="e#136#199#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Unused/Tests/matplot_example_four.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Unused/Tests/matplot_example_three.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -995,13 +740,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py">
+    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/chart_obj.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="32" column="29" lean-forward="true" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
+        <state relative-caret-position="505">
+          <caret line="54" column="32" selection-start-line="54" selection-start-column="32" selection-end-line="54" selection-end-column="32" />
+          <folding>
+            <element signature="e#136#210#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" />
+    <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_container.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <folding>
+            <element signature="e#136#199#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="281" selection-start-line="281" selection-end-line="281" />
           <folding>
             <element signature="n#!!doc" />
-            <element signature="e#136#164#0" expanded="true" />
+            <element signature="e#2386#2474#0" />
+            <element signature="e#2652#3396#0" />
+            <element signature="e#2718#2946#0" />
+            <element signature="e#3402#3490#0" />
+            <element signature="e#3646#4165#0" />
+            <element signature="e#4210#4437#0" />
+            <element signature="e#4479#5134#0" />
+            <element signature="e#5180#5354#0" />
+            <element signature="e#5360#5448#0" />
+            <element signature="e#5609#5929#0" />
+            <element signature="e#5710#5886#0" />
+            <element signature="e#5967#6154#0" />
+            <element signature="e#6189#6302#0" />
+            <element signature="e#6344#6439#0" />
+            <element signature="e#6476#6755#0" />
+            <element signature="e#6791#6999#0" />
+            <element signature="e#7051#7247#0" />
+            <element signature="e#7253#7341#0" />
+            <element signature="e#7504#7701#0" />
+            <element signature="e#7545#7660#0" />
+            <element signature="e#7749#7901#0" />
+            <element signature="e#7941#8406#0" />
+            <element signature="e#8191#8406#0" />
+            <element signature="e#8451#8482#0" />
+            <element signature="e#8541#8731#0" />
+            <element signature="e#8784#9196#0" />
           </folding>
         </state>
       </provider>
@@ -1009,7 +800,7 @@
     <entry file="file://$PROJECT_DIR$/Controller/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
-          <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+          <caret line="16" column="25" lean-forward="true" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
           <folding>
             <element signature="n#!!doc" />
             <element signature="e#136#146#0" expanded="true" />
@@ -1017,33 +808,181 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.3/chart_obj.py">
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/test_scroll_graph.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1804">
-          <caret line="85" column="21" selection-start-line="85" selection-start-column="21" selection-end-line="85" selection-end-column="21" />
+        <state relative-caret-position="427">
+          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
           <folding>
-            <element signature="e#136#210#0" expanded="true" />
+            <element signature="e#1#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Unused/Tests/test_date_time_axis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+        <state relative-caret-position="22">
+          <caret line="1" column="79" selection-start-line="1" selection-start-column="79" selection-end-line="1" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="7" column="55" lean-forward="true" selection-start-line="7" selection-start-column="55" selection-end-line="7" selection-end-column="55" />
+          <folding>
+            <element signature="n#!!doc" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/matplotlib/figure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="97" selection-start-line="97" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/matplot_example_three.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="50" selection-start-column="50" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/device_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="113" selection-start-line="113" selection-end-line="113" />
+          <folding>
+            <element signature="e#0#248#1" />
+            <element signature="e#250#292#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/MainWindow/main_window.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1056">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#198#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/pyside2_matplot_example_one.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+          <folding>
+            <element signature="e#288#298#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_two.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_obj.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/site-packages/matplotlib/backends/backend_qt5.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="39" column="22" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
+        <state relative-caret-position="289">
+          <caret line="709" selection-start-line="709" selection-end-line="709" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/matplot_example_four.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#91#106#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_one.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-440">
+          <caret line="1" column="24" lean-forward="true" selection-start-line="1" selection-start-column="24" selection-end-line="1" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/View/GraphWidget/matplot_graph_obj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="11" lean-forward="true" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
+          <folding>
+            <element signature="e#1#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
           <folding>
             <element signature="n#!!doc" />
-            <element signature="e#136#210#0" expanded="true" />
+            <element signature="e#136#181#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/OldCode/new_graph_obj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="11" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
+          <folding>
+            <element signature="e#1#30#0" expanded="true" />
+            <element signature="e#2953#3172#0" />
+            <element signature="e#3308#3590#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/OldCode/graph_obj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="12" column="11" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#398#1554#0" />
+            <element signature="e#1594#1622#0" />
+            <element signature="e#1659#1978#0" />
+            <element signature="e#2036#2768#0" />
+            <element signature="e#2425#2543#0" />
+            <element signature="e#2705#2768#0" />
+            <element signature="e#2815#2954#0" />
+            <element signature="e#3008#3044#0" />
+            <element signature="e#3091#3648#0" />
+            <element signature="e#3346#3632#0" />
+            <element signature="e#3388#3632#0" />
+            <element signature="e#3711#4104#0" />
+            <element signature="e#3749#4104#0" />
+            <element signature="e#4160#4750#0" />
+            <element signature="e#4206#4490#0" />
+            <element signature="e#4583#4750#0" />
+            <element signature="e#4808#4995#0" />
+            <element signature="e#5063#5278#0" />
+            <element signature="e#5340#5476#0" />
           </folding>
         </state>
       </provider>

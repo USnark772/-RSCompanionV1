@@ -1,11 +1,3 @@
 Timestamp, Author, Location, Message
-2019-06-20-14-06-34, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
-2019-06-20-14-06-34, vog, COM6, configName|DIRECT CONTROL
-2019-06-20-14-06-34, vog, COM6, configMaxOpen|2147483647
-2019-06-20-14-06-34, vog, COM6, configMaxClose|0
-2019-06-20-14-06-34, vog, COM6, configDebounce|100
-2019-06-20-14-06-34, vog, COM6, configClickMode|0
-2019-06-20-14-06-34, vog, COM6, buttonControl|1
-2019-06-20-14-06-52, drt, COM9, trl>0, 20, 0, -1
-2019-06-20-14-06-52, vog, COM6, Initialize experiment and start trial
-2019-06-20-14-06-52, vog, COM6, expStop
+2019-06-24-18-52-33, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-06-24-18-52-34, drt, COM9, trl>0, 25, 0, -1

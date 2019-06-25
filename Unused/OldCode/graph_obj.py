@@ -34,11 +34,15 @@ class GraphObj(QFrame):
         self.__scroll_bar = self.__create_scroll_bar(self.__move_graph)
         self.layout().addWidget(self.__scroll_bar)
 
-        self.__num_points = 0
+        # TODO: Maybe make it so __x_start is set when experiment is started?
+        self.__x_axis_changed = False
         self.__x_start = QDateTime(QDate(1970, 1, 1), QTime(datetime.now().time()))
         self.__range_x = [self.__x_start, self.__x_start.addSecs(120)]
         self.__range_y = [-1, 7]
         self.__scrolling = False
+
+    def get_start_date(self):
+        return self.__x_start.date()
 
     def reset_graph(self):
         self.layout().removeWidget(self.__chart_view)
@@ -50,7 +54,6 @@ class GraphObj(QFrame):
 
     def set_chart_axes(self, x_title, y_title):
         x_axis = QtCharts.QDateTimeAxis()
-        # x_axis = QtCharts.QValueAxis()
         x_axis.setFormat("h:m:s")
         x_axis.setTitleText(x_title)
         x_axis.setRange(self.__range_x[0], self.__range_x[1])
@@ -69,31 +72,47 @@ class GraphObj(QFrame):
             series.attachAxis(y_axis)
 
     def add_line_series(self, name):
-        self.__graph.addSeries(self.create_line_series(name))
+        series = self.create_line_series(name)
+        series.pointAdded.connect(self.__point_added_handler)
+        self.__graph.addSeries(series)
+
+    def __point_added_handler(self, point):
+        print("Point was added succesfully")
 
     def add_point(self, name, x, y):
+        print("msec range start:", self.__range_x[0].toMSecsSinceEpoch())
+        print("msec for new x  :", x.toMSecsSinceEpoch())
+        print("msec range end  :", self.__range_x[1].toMSecsSinceEpoch())
         for series in self.__graph.series():
             if series.name() == name:
-                print(x, y)
-                series.append(x, y)
+                print("Appending point")
+                series.append(x.toMSecsSinceEpoch(), y)
+                print("Done appending")
+                print("Updating axes")
+                self.__update_axes(x, y)
+                print("Done updating axes")
+        print()
 
+    # TODO: Rewrite this
     def __move_graph(self):
-        self.__scrolling = True
-        if self.__num_points > 7:
+        if self.__x_axis_changed:
+            self.__scrolling = True
             temp_range_val = (self.__num_points - 7) * (self.__scroll_bar.value() / 100)
             x_range = (temp_range_val - 1, temp_range_val + 7)
             self.__graph.axisX().setRange(x_range[0], x_range[1])
-        if self.__scroll_bar.value() == self.__scroll_bar.maximum():
-            self.__scrolling = False
+            if self.__scroll_bar.value() == self.__scroll_bar.maximum():
+                self.__scrolling = False
 
-    def __update_axes(self, data, num_points):
-        if num_points > self.__range_x[1]:
-            self.__range_x[0] += 1
-            self.__range_x[1] += 1
+    def __update_axes(self, timestamp, data):
+        if timestamp > self.__range_x[1]:
+            print("Updating x axis")
+            self.__x_axis_changed = True
+            self.__range_x[0] = timestamp.addSecs(-120)
+            self.__range_x[1] = timestamp
             if not self.__scrolling:
                 self.__graph.axisX().setRange(self.__range_x[0], self.__range_x[1])
-            self.__num_points = num_points
         if data > self.__range_y[1]:  # Update y axis if new data exceeds range
+            print("Updating y axis")
             self.__range_y[1] = data + self.__range_y[1] * 0.2
             self.__graph.axisY().setRange(self.__range_y[0], self.__range_y[1])
 

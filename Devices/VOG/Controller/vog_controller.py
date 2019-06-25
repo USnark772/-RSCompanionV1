@@ -4,7 +4,7 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from View.GraphWidget.graph_obj import GraphObj
+from View.GraphWidget.matplot_graph_obj import GraphObj
 from Devices.VOG.View.vog_tab import VOGTab
 from Devices.VOG.Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
     vog_output_field, vog_file_hdr
@@ -64,13 +64,13 @@ class VOGController:
         return self.__tab
 
     @staticmethod
-    def format_output_for_save_file(prepend, msg):
+    def format_output_for_save_file(msg):
         line = ""
         for i in vog_output_field:
             line += ", " + str(msg[i])
         line = line.rstrip("\r\n")
         line = line + ", "
-        return prepend + line
+        return line
 
     @staticmethod
     def get_hdr():

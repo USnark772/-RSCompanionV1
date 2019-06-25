@@ -5,7 +5,7 @@
 # https://redscientific.com/index.html
 
 from math import trunc, ceil
-from View.GraphWidget.graph_obj import GraphObj
+from View.GraphWidget.matplot_graph_obj import GraphObj
 from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
     drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr
@@ -28,27 +28,13 @@ class DRTController:
         self.__get_vals()
         self.__set_upload_button(False)
 
-        self.__series_name = "Response Time"
-        self.reset_graph()
-        date = QDate(0, 0, 0)
-        temp_time = datetime.now().time()
-        time = QTime(temp_time.hour, temp_time.minute, temp_time.second, temp_time.microsecond)
-        self.add_data_to_graph(QDateTime(date, time).toMSecsSinceEpoch(), 5)
-        self.add_data_to_graph(QDateTime(date, time).toMSecsSinceEpoch(), 8)
+        self.__graph_obj.add_line_series("Response Time")
 
     def handle_msg(self, msg):
         self.__handling_msg = True
         for key in msg:
             self.__set_val(key, msg[key])
         self.__handling_msg = False
-
-    def add_data_to_graph(self, timestamp, data):
-        self.__graph_obj.add_point(self.__series_name, timestamp, data)
-
-    def reset_graph(self):
-        self.__graph_obj.reset_graph()
-        self.__graph_obj.set_chart_axes("Timestamp", "Milliseconds")
-        self.__graph_obj.add_line_series(self.__series_name)
 
     def get_graph_obj(self):
         return self.__graph_obj
@@ -63,13 +49,13 @@ class DRTController:
         return self.__tab
 
     @staticmethod
-    def format_output_for_save_file(prepend, msg):
+    def format_output_for_save_file(msg):
         line = ""
         for i in drtv1_0_output_fields:
             line += ", " + str(msg['values'][i])
         line = line.rstrip("\r\n")
         line = line + ", "
-        return prepend + line
+        return line
 
     @staticmethod
     def get_hdr():

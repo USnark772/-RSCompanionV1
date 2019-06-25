@@ -19,9 +19,21 @@ class GraphContainer(QWidget):
         self.__contents.setGeometry(QRect(0, 0, 335, 499))
         self.__contents.setLayout(QVBoxLayout())
         self.__scroll_area.setWidget(self.__contents)
+        self.__list_of_graphs = []
 
     def add_graph(self, graph):
-        self.__contents.layout().addWidget(graph)
+        self.__list_of_graphs.append(graph)
+        self.__refresh()
 
     def remove_graph(self, graph):
-        self.__contents.layout().removeWidget(graph)
+        if graph in self.__list_of_graphs:
+            self.__list_of_graphs.remove(graph)
+        self.__refresh()
+
+    def __refresh(self):
+        self.__contents = QWidget(self)
+        self.__contents.setGeometry(QRect(0, 0, 335, 499))
+        self.__contents.setLayout(QVBoxLayout())
+        self.__scroll_area.setWidget(self.__contents)
+        for graph in self.__list_of_graphs:
+            self.__contents.layout().addWidget(graph)

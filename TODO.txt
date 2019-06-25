@@ -9,13 +9,10 @@ Installer:
 -   Installer would install latest version replacing any previous versions
 
 Etc.:
--   Reimplement current use of Qt.Charts for graphing.
--   x axis needs to be timestamp
+-   Use pyqt5_matplot_example_one.py and implement matplotlib for graphing
 -   Some unexplained issues with ui sizing
--   Rewrite device_manager.__scan_ports()
 
 At some point:
--   Change to matplotlib for graphing.
 -   Possibly use numpy for internal data storage.
 -   Implement video. Begin exp starts recording video. Device overlay is recorded with the video
     Device output will add a frame # for when that device output came in

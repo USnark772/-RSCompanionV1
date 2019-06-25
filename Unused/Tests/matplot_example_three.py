@@ -1,6 +1,8 @@
+# This is an example of using sliders on the graph
+
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.widgets import Slider, Button, RadioButtons
+from matplotlib.widgets import Slider
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -11,7 +13,7 @@ max0 = 10
 x = np.arange(10)
 y = np.arange(10)
 im1 = plt.scatter(x,y, s=3, c=u'b', edgecolor='None',alpha=.75)
-#most examples here return something iterable
+# most examples here return something iterable
 
 plt.ylim([0,10])#initial limits
 

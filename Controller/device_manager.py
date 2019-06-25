@@ -111,8 +111,6 @@ class DeviceManager:
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStop"}))
 
     def __scan_ports(self):
-        # TODO: Rewrite this so it doesn't forget devices attached each time it's called.
-        # Keep track of all devices attached and check that list against a new list of attached devices each time?
         self.devices_to_add = []
         self.devices_to_remove = []
         self.devices_attached = []
