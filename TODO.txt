@@ -9,7 +9,9 @@ Installer:
 -   Installer would install latest version replacing any previous versions
 
 Etc.:
--   Use pyqt5_matplot_example_one.py and implement matplotlib for graphing
+-   Finish implementing graphing
+    -   Add scrollbar handler logic (see matplot_example_three.py)
+    -   Pipe data through device controllers to graph
 -   Some unexplained issues with ui sizing
 
 At some point:

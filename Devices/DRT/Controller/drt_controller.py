@@ -5,19 +5,20 @@
 # https://redscientific.com/index.html
 
 from math import trunc, ceil
-from View.GraphWidget.matplot_graph_obj import GraphObj
+from View.GraphWidget.graph_obj import GraphObj
 from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
     drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr
-from datetime import datetime
-from PySide2.QtCore import QDateTime, QDate, QTime
+
+from datetime import datetime, timedelta
+from random import gauss
 
 
 class DRTController:
     def __init__(self, parent, device, msg_callback):
         device_name = device[0] + " on " + device[1]
         self.__tab = DRTTab(parent, device_name)
-        self.__graph_obj = GraphObj(device_name)
+        self.__graph_obj = GraphObj(device_name, "Timestamp", "Milliseconds")
         self.__device_info = device
         self.__msg_callback = msg_callback
         self.__handling_msg = False
@@ -28,7 +29,26 @@ class DRTController:
         self.__get_vals()
         self.__set_upload_button(False)
 
-        self.__graph_obj.add_line_series("Response Time")
+        self.__test()
+
+    def __test(self):
+        x = [datetime.now() + timedelta(seconds=i) for i in range(10)]
+        y = [i + gauss(0, 1) for i, item in enumerate(x)]
+        name = "Response Time"
+        self.__graph_obj.add_line(name)
+        self.__graph_obj.add_data(name, x, y)
+
+        x2 = [datetime.now() + timedelta(seconds=i) for i in range(10)]
+        y2 = [i + gauss(0, 1) for i, item in enumerate(x2)]
+        name2 = "other"
+        self.__graph_obj.add_line(name2)
+        self.__graph_obj.add_data(name2, x2, y2)
+
+        x3 = [datetime.now() + timedelta(seconds=i) for i in range(10)]
+        y3 = [i + gauss(0, 1) for i, item in enumerate(x3)]
+        name3 = "again"
+        self.__graph_obj.add_line(name3)
+        self.__graph_obj.add_data(name3, x3, y3)
 
     def handle_msg(self, msg):
         self.__handling_msg = True
