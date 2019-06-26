@@ -30,9 +30,9 @@ class DRTController:
         self.__get_vals()
         self.__set_upload_button(False)
 
-        self.__test()
+        # self.__test_graph_obj()
 
-    def __test(self):
+    def __test_graph_obj(self):
         x = [datetime.now() + timedelta(seconds=i) for i in range(10)]
         y = [i + gauss(0, 1) for i, item in enumerate(x)]
         name = "Response Time"

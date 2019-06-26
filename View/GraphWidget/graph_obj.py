@@ -8,6 +8,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
 from PySide2.QtWidgets import QFrame, QVBoxLayout, QSizePolicy, QScrollBar
 from PySide2.QtCore import Qt
+from datetime import datetime, timedelta
+from CompanionLib.time_funcs import round_time
 
 
 class GraphObj(QFrame):
@@ -18,6 +20,11 @@ class GraphObj(QFrame):
         self.__y_label = y_label
         self.__data = {}
         self.__line_names = []
+        time = datetime.now()
+        self.__x_bounds = self.__get_range_on_x_val(time)
+        self.__scrolling = False
+        self.__adding_point = False
+        self.__x_vals = []
 
         size_policy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
         size_policy.setHorizontalStretch(0)
@@ -34,6 +41,7 @@ class GraphObj(QFrame):
         self.layout().addWidget(self.__graph)
 
         self.__scrollbar = QScrollBar()
+        self.__scrollbar.setRange(0, 0)
         self.__scrollbar.setOrientation(Qt.Horizontal)
         self.__scrollbar.setValue(self.__scrollbar.maximum())
         self.__scrollbar.valueChanged.connect(self.__move_graph)
@@ -44,26 +52,56 @@ class GraphObj(QFrame):
         self.__line_names.append(name)
 
     def add_data(self, name, x, y):
+        self.__adding_point = True
         for e in x:
             self.__data[name][0].append(e)
+            new_e = round_time(e, 1)
+            if new_e not in self.__x_vals:
+                self.__x_vals.append(new_e)
+                self.__update_scrollbar()
         for a in y:
             self.__data[name][1].append(a)
         self.__refresh_plot()
+        self.__adding_point = False
 
     def reset_data(self):
         self.__clear_data()
         self.__refresh_plot()
 
-    # TODO: Implement
     def __move_graph(self):
-        print("Implement slider handler")
+        if self.__adding_point:
+            return
+        if self.__scrollbar.value() != self.__scrollbar.maximum():
+            self.__scrolling = True
+            self.__x_bounds = self.__get_range_on_x_val(self.__x_vals[self.__scrollbar.value()])
+        else:
+            self.__scrolling = False
+        self.__refresh_plot()
 
     def __clear_data(self):
         for line in self.__data:
             self.__data[line] = []
+        self.__x_vals = []
+        self.__scrollbar.setRange(0, 0)
 
     def __refresh_plot(self):
-        self.__graph.plot(self.__data, self.__name, self.__x_label, self.__y_label, self.__line_names)
+        if not self.__scrolling:
+            self.__check_x_bounds()
+            self.__graph.plot(self.__data, self.__name, self.__x_label, self.__y_label, self.__line_names)
+        self.__graph.axes.set_xbound(self.__x_bounds[0], self.__x_bounds[1])
+        self.__graph.draw()
+
+    def __check_x_bounds(self):
+        self.__x_bounds = self.__get_range_on_x_val(self.__x_vals[len(self.__x_vals) - 1])
+
+    def __update_scrollbar(self):
+        self.__scrollbar.setMaximum(len(self.__x_vals) - 1)
+        if not self.__scrolling:
+            self.__scrollbar.setValue(self.__scrollbar.maximum())
+
+    @staticmethod
+    def __get_range_on_x_val(x):
+        return [x - timedelta(seconds=5), x + timedelta(seconds=5)]
 
     class PlotCanvas(Canvas):
         def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -80,7 +118,6 @@ class GraphObj(QFrame):
                     self.axes.plot(arr[0], arr[1], label=name)
             self.figure.autofmt_xdate()
             self.figure.legend(loc='upper left')
-            self.draw()
 
         def __reset_plot(self, title, xlabel, ylabel):
             self.axes.clear()

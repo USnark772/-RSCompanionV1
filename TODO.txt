@@ -10,9 +10,8 @@ Installer:
 
 Etc.:
 -   Finish implementing graphing
-    -   Add scrollbar handler logic (see matplot_example_three.py)
     -   Pipe data through device controllers to graph
--   Some unexplained issues with ui sizing
+-   Some unexplained issues with ui sizing (Has to do with screen scaling)
 
 At some point:
 -   Possibly use numpy for internal data storage.
