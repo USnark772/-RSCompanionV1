@@ -6,7 +6,7 @@
 
 from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame
 from PySide2.QtCore import Qt
-from PySide2.QtGui import QFont
+from PySide2.QtGui import QFont, QIcon
 from View.MainWindow.help_window import HelpWindow
 from View.MainWindow.central_widget import CentralWidget
 
@@ -28,6 +28,8 @@ class CompanionWindow(QMainWindow):
         self.__graph_and_tab_layout.addWidget(self.__tab_frame)
         self.centralWidget().layout().addLayout(self.__graph_and_tab_layout)
 
+        self.__icon = QIcon("../View/Images/rs_icon.png")
+        self.setWindowIcon(self.__icon)
         self.close_callback = None
         self.__help_window = None
         self.__set_texts()
@@ -53,6 +55,7 @@ class CompanionWindow(QMainWindow):
 
     def show_help_window(self, title, msg):
         self.__help_window = HelpWindow(title, msg)
+        self.__help_window.setWindowIcon(self.__icon)
         self.__help_window.show()
 
     def __set_texts(self):

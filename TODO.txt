@@ -9,8 +9,6 @@ Installer:
 -   Installer would install latest version replacing any previous versions
 
 Etc.:
--   Finish implementing graphing
-    -   Pipe data through device controllers to graph
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
 
 At some point:

@@ -6,7 +6,7 @@
 
 from View.GraphWidget.graph_obj import GraphObj
 from Devices.VOG.View.vog_tab import VOGTab
-from Devices.VOG.Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
+from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
     vog_output_field, vog_file_hdr
 
 
@@ -15,10 +15,10 @@ class VOGController:
     def __init__(self, parent, device, msg_callback):
         device_name = device[0] + " on " + device[1]
         self.__tab = VOGTab(parent, device_name)
-        self.__graph_obj = GraphObj(device_name)
+        self.__graph_obj = GraphObj(device_name, "Timestamp", "Milliseconds")
         self.__device_info = device
         self.__msg_callback = msg_callback
-        self.__handling_msg = False
+        self.__updating_config = False
         self.__errors = [False] * 3
         self.__current_vals = [0] * 5  # MaxOpen, MaxClose, Debounce, ClickMode, buttonControl
         self.__open_changed = False
@@ -31,29 +31,18 @@ class VOGController:
         self.__set_handlers()
         self.__get_vals()
         self.__set_upload_button(False)
+        self.__line_names = ["Time Open", "Time Closed"]
+        self.__setup_lines()
 
-        self.__open_series_name = "Time Open"
-        self.__closed_series_name = "Time Closed"
-        self.reset_graph()
-
-    def handle_msg(self, msg):
-        self.__handling_msg = True
+    def update_config(self, msg):
+        self.__updating_config = True
         for key in msg:
             self.__set_val(key, msg[key])
-        self.__handling_msg = False
+        self.__updating_config = False
 
     def add_data_to_graph(self, timestamp, data):
-        self.__graph_obj.add_point(self.__open_series_name, timestamp, data[0])
-        self.__graph_obj.add_point(self.__closed_series_name, timestamp, data[1])
-
-    def reset_graph(self):
-        self.__graph_obj.reset_graph()
-        self.__graph_obj.set_chart_axes("Timestamp", "Milliseconds")
-        self.__graph_obj.add_line_series(self.__open_series_name)
-        self.__graph_obj.add_line_series(self.__closed_series_name)
-
-    def get_graph_obj(self):
-        return self.__graph_obj
+        self.__graph_obj.add_data(self.__line_names[0], timestamp, int(data[vog_output_field[1]]))
+        self.__graph_obj.add_data(self.__line_names[1], timestamp, int(data[vog_output_field[2]]))
 
     def set_tab_index(self, index):
         self.__tab.set_index(index)
@@ -63,6 +52,9 @@ class VOGController:
 
     def get_tab_obj(self):
         return self.__tab
+
+    def get_graph_obj(self):
+        return self.__graph_obj
 
     @staticmethod
     def format_output_for_save_file(msg):
@@ -90,23 +82,27 @@ class VOGController:
         self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
         self.__tab.add_manual_control_handler(self.__toggle_lens)
 
+    def __setup_lines(self):
+        for name in self.__line_names:
+            self.__graph_obj.add_line(name)
+
     def __open_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_open_val()
             self.__set_upload_button(True)
 
     def __close_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_close_val()
             self.__set_upload_button(True)
 
     def __debounce_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_debounce_val()
             self.__set_upload_button(True)
 
     def __button_mode_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_button_mode_val()
             self.__set_upload_button(True)
 

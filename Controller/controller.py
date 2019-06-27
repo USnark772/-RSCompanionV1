@@ -10,7 +10,8 @@ from sys import argv
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir, QSize
 from PySide2.QtGui import QKeyEvent
-from Model.defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available
+from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
+    device_connection_error
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -65,10 +66,10 @@ class CompanionController:
         msg_type = msg['type']
         if msg_type == "data":
             self.__update_save(msg)
-            self.devices[msg['device']]['controller'].add_data_to_graph(self.__get_current_time(time=True, mil=True),
+            self.devices[msg['device']]['controller'].add_data_to_graph(self.__get_current_time(graph=True),
                                                                         msg['values'])
         elif msg_type == "settings":
-            self.devices[msg['device']]['controller'].handle_msg(msg['values'])
+            self.devices[msg['device']]['controller'].update_config(msg['values'])
         elif msg_type == "add":
             self.__add_device(msg['device'])
         elif msg_type == "remove":
@@ -76,7 +77,7 @@ class CompanionController:
         elif msg_type == "save":
             self.__save_output_msg(msg['msg'])
         elif msg_type == "error":
-            self.ui.show_help_window(msg_type, msg['msg'])
+            self.ui.show_help_window(msg_type, device_connection_error)
 
     ########################################################################################
     # initial setup
@@ -288,7 +289,7 @@ class CompanionController:
         if device in self.devices:
             self.tab_box.remove_tab(self.devices[device]['controller'].get_tab_index())
             self.graph_box.remove_graph(self.devices[device]['controller'].get_graph_obj())
-            del(self.devices[device])
+            del self.devices[device]
 
     ########################################################################################
     # Other handlers

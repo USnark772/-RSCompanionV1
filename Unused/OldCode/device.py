@@ -28,7 +28,7 @@ class RSDevice:
         self.tab_parent.setTabText(index, self.device_name)
 
     def handle_msg(self, msg):
-        self.tab_contents.handle_msg(msg)
+        self.tab_contents.update_config(msg)
 
     def remove_self(self):
         self.tab_parent.removeTab(self.tab_parent.indexOf(self.device_tab))

@@ -6,9 +6,9 @@ disconnect_event flags are turned True.
 
 from serial import Serial, SerialException
 from serial.tools import list_ports
-from Model.defs import devices
-from Devices.DRT.Model.defs import drtv1_0_config_fields, drtv1_0_output_fields
-from Devices.VOG.Model.defs import vog_output_field
+from Model.general_defs import devices
+from Devices.DRT.Model.drt_defs import drtv1_0_config_fields, drtv1_0_output_fields
+from Devices.VOG.Model.vog_defs import vog_output_field
 
 
 class DeviceManager:
@@ -37,7 +37,6 @@ class DeviceManager:
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         the_message = self.devices[d]['port'].readline().decode("utf-8")
-                        #print(the_message)
                         self.msg_callback({'type': "save",
                                            'msg': str(self.devices[d]['id']
                                                       + ", " + self.devices[d]['port'].name
@@ -134,10 +133,9 @@ class DeviceManager:
                         try:
                             the_port = Serial(port.device)
                         except SerialException:
-                            self.msg_callback({'type': "error", 'msg': "Potential connection error, "
-                                                                       "please reconnect device"})
-                            del port
-                            return
+                            self.devices[port.device] = {'id': 'unknown'}
+                            self.msg_callback({'type': "error"})
+                            break
                         self.devices[port.device] = {'port': the_port, 'id': device}
                         msg_dict = {'type': "add", 'device': (self.devices[port.device]['id'], self.devices[port.device]['port'].name)}
                         self.msg_callback(msg_dict)

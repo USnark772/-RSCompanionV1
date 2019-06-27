@@ -7,7 +7,7 @@
 from math import trunc, ceil
 from View.GraphWidget.graph_obj import GraphObj
 from Devices.DRT.View.drt_tab import DRTTab
-from Devices.DRT.Model.defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
+from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
     drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr
 
 from datetime import datetime, timedelta
@@ -22,43 +22,25 @@ class DRTController:
         self.__graph_obj = GraphObj(device_name, "Timestamp", "Milliseconds")
         self.__device_info = device
         self.__msg_callback = msg_callback
-        self.__handling_msg = False
+        self.__updating_config = False
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
         self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
         self.__current_vals = [0, 0, 0, 0]  # stimDur, stimIntens, upperISI, lowerISI
         self.__set_handlers()
         self.__get_vals()
         self.__set_upload_button(False)
+        self.__line_names = ["Clicks", "Response Time"]
+        self.__setup_lines()
 
-        # self.__test_graph_obj()
-
-    def __test_graph_obj(self):
-        x = [datetime.now() + timedelta(seconds=i) for i in range(10)]
-        y = [i + gauss(0, 1) for i, item in enumerate(x)]
-        name = "Response Time"
-        self.__graph_obj.add_line(name)
-        self.__graph_obj.add_data(name, x, y)
-
-        x2 = [datetime.now() + timedelta(seconds=i) for i in range(10)]
-        y2 = [i + gauss(0, 1) for i, item in enumerate(x2)]
-        name2 = "other"
-        self.__graph_obj.add_line(name2)
-        self.__graph_obj.add_data(name2, x2, y2)
-
-        x3 = [datetime.now() + timedelta(seconds=i) for i in range(10)]
-        y3 = [i + gauss(0, 1) for i, item in enumerate(x3)]
-        name3 = "again"
-        self.__graph_obj.add_line(name3)
-        self.__graph_obj.add_data(name3, x3, y3)
-
-    def handle_msg(self, msg):
-        self.__handling_msg = True
+    def update_config(self, msg):
+        self.__updating_config = True
         for key in msg:
             self.__set_val(key, msg[key])
-        self.__handling_msg = False
+        self.__updating_config = False
 
-    def get_graph_obj(self):
-        return self.__graph_obj
+    def add_data_to_graph(self, timestamp, data):
+        self.__graph_obj.add_data(self.__line_names[0], timestamp, data[drtv1_0_output_fields[2]])
+        self.__graph_obj.add_data(self.__line_names[1], timestamp, data[drtv1_0_output_fields[3]])
 
     def set_tab_index(self, index):
         self.__tab.set_index(index)
@@ -69,11 +51,14 @@ class DRTController:
     def get_tab_obj(self):
         return self.__tab
 
+    def get_graph_obj(self):
+        return self.__graph_obj
+
     @staticmethod
     def format_output_for_save_file(msg):
         line = ""
         for i in drtv1_0_output_fields:
-            line += ", " + str(msg['values'][i])
+            line += ", " + str(msg[i])
         line = line.rstrip("\r\n")
         line = line + ", "
         return line
@@ -90,23 +75,27 @@ class DRTController:
         self.__tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
         self.__tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
 
+    def __setup_lines(self):
+        for name in self.__line_names:
+            self.__graph_obj.add_line(name)
+
     def __stim_dur_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_stim_dur_val()
             self.__set_upload_button(True)
 
     def __stim_intens_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_stim_intens_val()
             self.__set_upload_button(True)
 
     def __upper_isi_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_upper_isi_val()
             self.__set_upload_button(True)
 
     def __lower_isi_entry_changed(self):
-        if not self.__handling_msg:
+        if not self.__updating_config:
             self.__check_lower_isi_val()
             self.__set_upload_button(True)
 

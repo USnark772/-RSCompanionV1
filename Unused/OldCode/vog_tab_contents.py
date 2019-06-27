@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QSlider, QComboBox, 
     QFrame, QLCDNumber
 from PySide2.QtCore import Qt, QSize, QRect
 from PySide2.QtGui import QFont
-from Model.defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode
+from Model.general_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, vog_button_mode
 
 
 class TabContents(QWidget):

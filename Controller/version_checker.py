@@ -6,7 +6,7 @@
 
 import traceback
 from urllib3 import PoolManager
-from Model.defs import version_url, current_version
+from Model.general_defs import version_url, current_version
 
 
 class VersionChecker:

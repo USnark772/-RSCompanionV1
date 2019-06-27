@@ -7,7 +7,7 @@
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QSlider, QHBoxLayout, QVBoxLayout, QFrame, QLCDNumber
 from PySide2.QtCore import QSize, Qt, QRect
 from PySide2.QtGui import QFont
-from Model.defs import drtv1_intensity_max, drtv1_intensity_min, drtv1_0_ISI_max, drtv1_ISI_min, drtv1_stim_dur_max, \
+from Model.general_defs import drtv1_intensity_max, drtv1_intensity_min, drtv1_0_ISI_max, drtv1_ISI_min, drtv1_stim_dur_max, \
     drtv1_stim_dur_min
 
 

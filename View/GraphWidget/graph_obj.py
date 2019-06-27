@@ -46,6 +46,7 @@ class GraphObj(QFrame):
         self.__scrollbar.setValue(self.__scrollbar.maximum())
         self.__scrollbar.valueChanged.connect(self.__move_graph)
         self.layout().addWidget(self.__scrollbar)
+        self.__refresh_plot()
 
     def add_line(self, name):
         self.__data[name] = [[], []]
@@ -53,20 +54,32 @@ class GraphObj(QFrame):
 
     def add_data(self, name, x, y):
         self.__adding_point = True
-        for e in x:
-            self.__data[name][0].append(e)
-            new_e = round_time(e, 1)
-            if new_e not in self.__x_vals:
-                self.__x_vals.append(new_e)
-                self.__update_scrollbar()
-        for a in y:
-            self.__data[name][1].append(a)
+        if type(x) == list:
+            for e in x:
+                self.__append_x(name, e)
+        else:
+            self.__append_x(name, x)
+        if type(y) == list:
+            for a in y:
+                self.__append_y(name, a)
+        else:
+            self.__append_y(name, y)
         self.__refresh_plot()
         self.__adding_point = False
 
     def reset_data(self):
         self.__clear_data()
         self.__refresh_plot()
+
+    def __append_x(self, name, x):
+        self.__data[name][0].append(x)
+        new_e = round_time(x, 1)
+        if new_e not in self.__x_vals:
+            self.__x_vals.append(new_e)
+            self.__update_scrollbar()
+
+    def __append_y(self, name, y):
+        self.__data[name][1].append(y)
 
     def __move_graph(self):
         if self.__adding_point:
@@ -86,13 +99,17 @@ class GraphObj(QFrame):
 
     def __refresh_plot(self):
         if not self.__scrolling:
-            self.__check_x_bounds()
+            if self.__scrollbar.maximum() > 0:
+                self.__check_x_bounds()
             self.__graph.plot(self.__data, self.__name, self.__x_label, self.__y_label, self.__line_names)
         self.__graph.axes.set_xbound(self.__x_bounds[0], self.__x_bounds[1])
         self.__graph.draw()
 
+    def __remake_graph_obj(self):
+        self.__graph = self.PlotCanvas(self)
+
     def __check_x_bounds(self):
-        self.__x_bounds = self.__get_range_on_x_val(self.__x_vals[len(self.__x_vals) - 1])
+        self.__x_bounds = self.__get_range_on_x_val(self.__x_vals[-1])
 
     def __update_scrollbar(self):
         self.__scrollbar.setMaximum(len(self.__x_vals) - 1)
@@ -105,7 +122,7 @@ class GraphObj(QFrame):
 
     class PlotCanvas(Canvas):
         def __init__(self, parent=None, width=5, height=4, dpi=100):
-            Canvas.__init__(self, Figure(figsize=(width, height), dpi=dpi))
+            self.canvas = Canvas.__init__(self, Figure(figsize=(width, height), dpi=dpi))
             self.setParent(parent)
             Canvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
             self.axes = self.figure.add_subplot(111)
@@ -117,7 +134,8 @@ class GraphObj(QFrame):
                 if len(arr) == 2:  # Has x and y coordinates
                     self.axes.plot(arr[0], arr[1], label=name)
             self.figure.autofmt_xdate()
-            self.figure.legend(loc='upper left')
+            if len(line_names) > 0:
+                self.figure.legend(loc='upper left')
 
         def __reset_plot(self, title, xlabel, ylabel):
             self.axes.clear()
