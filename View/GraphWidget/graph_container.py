@@ -15,10 +15,10 @@ class GraphContainer(QWidget):
         self.__scroll_area = QScrollArea(self)
         self.__scroll_area.setWidgetResizable(True)
         self.layout().addWidget(self.__scroll_area)
-        self.__contents = QWidget(self)
-        self.__contents.setGeometry(QRect(0, 0, 335, 499))
-        self.__contents.setLayout(QVBoxLayout())
-        self.__scroll_area.setWidget(self.__contents)
+        contents = QWidget(self)
+        contents.setGeometry(QRect(0, 0, 335, 499))
+        contents.setLayout(QVBoxLayout())
+        self.__scroll_area.setWidget(contents)
         self.__list_of_graphs = []
 
     def add_graph(self, graph):
@@ -31,9 +31,9 @@ class GraphContainer(QWidget):
         self.__refresh()
 
     def __refresh(self):
-        self.__contents = QWidget(self)
-        self.__contents.setGeometry(QRect(0, 0, 335, 499))
-        self.__contents.setLayout(QVBoxLayout())
-        self.__scroll_area.setWidget(self.__contents)
+        new_contents = QWidget(self)
+        new_contents.setGeometry(QRect(0, 0, 335, 499))
+        new_contents.setLayout(QVBoxLayout())
         for graph in self.__list_of_graphs:
-            self.__contents.layout().addWidget(graph)
+            new_contents.layout().addWidget(graph)
+        self.__scroll_area.setWidget(new_contents)

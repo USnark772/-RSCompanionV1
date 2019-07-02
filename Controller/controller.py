@@ -4,12 +4,16 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+from traceback import print_stack
+
+#from Unused.Tests.matplotlib_documentation_example import Plots
+
 from os import path
-from datetime import datetime
 from sys import argv
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir, QSize
 from PySide2.QtGui import QKeyEvent
+from CompanionLib.time_funcs import get_current_time
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
     device_connection_error
 from View.MainWindow.main_window import CompanionWindow
@@ -20,6 +24,10 @@ from View.DockWidget.flag_box import FlagBox
 from View.DockWidget.note_box import NoteBox
 from View.MenuBarWidget.menu_bar import MenuBar
 from View.GraphWidget.graph_container import GraphContainer
+
+#from Unused.OldCode.old_graph_obj import GraphObj
+from View.GraphWidget.new_graph_obj import GraphObj
+
 from View.TabWidget.device_tab import TabContainer
 from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
@@ -46,6 +54,7 @@ class CompanionController:
         self.graph_box = GraphContainer(self.ui)
         self.tab_box = TabContainer(self.ui, tab_box_width_range)
         self.file_dialog = QFileDialog(self.ui)
+        self.graph_obj = GraphObj()
 
         self.device_manager = DeviceManager(self.receive_msg_from_device_manager)
 
@@ -66,8 +75,7 @@ class CompanionController:
         msg_type = msg['type']
         if msg_type == "data":
             self.__update_save(msg)
-            self.devices[msg['device']]['controller'].add_data_to_graph(self.__get_current_time(graph=True),
-                                                                        msg['values'])
+            self.devices[msg['device']]['controller'].add_data_to_graph(get_current_time(graph=True), msg['values'])
         elif msg_type == "settings":
             self.devices[msg['device']]['controller'].update_config(msg['values'])
         elif msg_type == "add":
@@ -87,6 +95,7 @@ class CompanionController:
         self.__setup_file_dialog()
         self.__setup_handlers()
         self.__start_update_timer()
+        self.graph_box.add_graph(self.graph_obj)
         self.control_dock.add_widget(self.button_box)
         self.control_dock.add_widget(self.flag_box)
         self.control_dock.add_widget(self.note_box)
@@ -139,7 +148,7 @@ class CompanionController:
     def __create_exp(self):
         self.button_box.toggle_create_button()
         self.device_manager.start_exp_all()
-        self.info_box.set_start_time(self.__get_current_time(time=True))
+        self.info_box.set_start_time(get_current_time(time=True))
         self.exp_created = True
 
     def __end_exp(self):
@@ -187,7 +196,7 @@ class CompanionController:
             event.ignore()
 
     def __save_output_msg(self, msg):
-        line = str(self.__get_current_time(save=True)) + ", " + msg
+        line = str(get_current_time(save=True)) + ", " + msg
         with open(self.program_output_save_file, 'a+') as file:
             file.write(line)
 
@@ -195,7 +204,7 @@ class CompanionController:
         note = self.note_box.get_note()
         self.note_box.clear_note()
         flag = self.flag_box.get_flag()
-        time = self.__get_current_time(True, True, True)
+        time = get_current_time(True, True, True)
         name = self.current_cond_name
         for device in self.devices:
             spacer = self.__make_note_spacer(device[0])
@@ -226,7 +235,7 @@ class CompanionController:
         device = msg['device']
         cond_name = self.current_cond_name
         flag = self.flag_box.get_flag()
-        time = self.__get_current_time(True, True, True)
+        time = get_current_time(True, True, True)
         prepend = device[0] + ", " + cond_name + ", " + flag + ", " + time
         line = self.devices[device]['controller'].format_output_for_save_file(msg['values'])
         self.__write_line_to_file(self.devices[device]['fn'], prepend + line)
@@ -237,7 +246,7 @@ class CompanionController:
                 self.__add_hdr_to_file(device)
 
     def __make_save_filename_for_device(self, device):
-        self.devices[device]['fn'] = device[0] + " on " + device[1] + " " + self.__get_current_time(save=True)
+        self.devices[device]['fn'] = device[0] + " on " + device[1] + " " + get_current_time(save=True)
         self.devices[device]['hdr_bool'] = False
 
     def __update_device_filenames(self):
@@ -272,15 +281,14 @@ class CompanionController:
 
     def __add_device(self, device):
         if device[0] == "drt":
-            controller = DRTController(self.tab_box, device, self.device_manager.handle_msg)
+            device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg, self.graph_obj)
         elif device[0] == "vog":
-            controller = VOGController(self.tab_box, device, self.device_manager.handle_msg)
+            device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg, self.graph_obj)
         else:
             return
         self.devices[device] = {}
-        self.devices[device]['controller'] = controller
-        controller.set_tab_index(self.tab_box.add_tab(controller.get_tab_obj()))
-        self.graph_box.add_graph(controller.get_graph_obj())
+        self.devices[device]['controller'] = device_controller
+        device_controller.set_tab_index(self.tab_box.add_tab(device_controller.get_tab_obj()))
         self.__make_save_filename_for_device(device)
         if self.__dir_chosen:
             self.__add_hdr_to_file(device)
@@ -288,7 +296,7 @@ class CompanionController:
     def __remove_device(self, device):
         if device in self.devices:
             self.tab_box.remove_tab(self.devices[device]['controller'].get_tab_index())
-            self.graph_box.remove_graph(self.devices[device]['controller'].get_graph_obj())
+            self.graph_obj.remove_device(device)
             del self.devices[device]
 
     ########################################################################################
@@ -296,29 +304,13 @@ class CompanionController:
     ########################################################################################
 
     def ui_close_event_handler(self):
-        self.device_manager.end_block_all()
-        self.device_manager.end_exp_all()
+        if self.exp_running:
+            self.device_manager.end_block_all()
+        if self.exp_created:
+            self.device_manager.end_exp_all()
 
     def __about_company(self):
         self.ui.show_help_window("About Red Scientific", about_RS_text)
 
     def __about_app(self):
         self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text)
-
-    @staticmethod
-    def __get_current_time(day=False, time=False, mil=False, save=False, graph=False):
-        date_time = datetime.now()
-        if day and time and mil:
-            return date_time.strftime("%Y-%m-%d %H:%M:%S.%f")
-        elif day and time and not mil:
-            return date_time.strftime("%Y-%m-%d %H:%M:%S")
-        elif day and not time and not mil:
-            return date_time.strftime("%Y-%m-%d")
-        elif not day and time and not mil:
-            return date_time.strftime("%H:%M:%S")
-        elif not day and time and mil:
-            return date_time.strftime("%H:%M:%S.%f")
-        elif save:
-            return date_time.strftime("%Y-%m-%d-%H-%M-%S")
-        elif graph:
-            return date_time

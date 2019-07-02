@@ -4,18 +4,16 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from View.GraphWidget.graph_obj import GraphObj
 from Devices.VOG.View.vog_tab import VOGTab
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
     vog_output_field, vog_file_hdr
 
 
-# TODO: Update to use new graph. Pipe data through controller to graph obj
 class VOGController:
-    def __init__(self, parent, device, msg_callback):
+    def __init__(self, parent, device, msg_callback, graph):
         device_name = device[0] + " on " + device[1]
         self.__tab = VOGTab(parent, device_name)
-        self.__graph_obj = GraphObj(device_name, "Timestamp", "Milliseconds")
+        self.__graph_obj = graph
         self.__device_info = device
         self.__msg_callback = msg_callback
         self.__updating_config = False
@@ -32,7 +30,7 @@ class VOGController:
         self.__get_vals()
         self.__set_upload_button(False)
         self.__line_names = ["Time Open", "Time Closed"]
-        self.__setup_lines()
+        self.__init_graph()
 
     def update_config(self, msg):
         self.__updating_config = True
@@ -41,8 +39,8 @@ class VOGController:
         self.__updating_config = False
 
     def add_data_to_graph(self, timestamp, data):
-        self.__graph_obj.add_data(self.__line_names[0], timestamp, int(data[vog_output_field[1]]))
-        self.__graph_obj.add_data(self.__line_names[1], timestamp, int(data[vog_output_field[2]]))
+        self.__graph_obj.add_data(self.__device_info, self.__line_names[0], timestamp, int(data[vog_output_field[1]]))
+        self.__graph_obj.add_data(self.__device_info, self.__line_names[1], timestamp, int(data[vog_output_field[2]]))
 
     def set_tab_index(self, index):
         self.__tab.set_index(index)
@@ -82,9 +80,8 @@ class VOGController:
         self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
         self.__tab.add_manual_control_handler(self.__toggle_lens)
 
-    def __setup_lines(self):
-        for name in self.__line_names:
-            self.__graph_obj.add_line(name)
+    def __init_graph(self):
+        self.__graph_obj.add_device(self.__device_info, self.__line_names)
 
     def __open_entry_changed(self):
         if not self.__updating_config:

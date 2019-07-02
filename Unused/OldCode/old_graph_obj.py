@@ -4,23 +4,23 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas, NavigationToolbar2QT as NavBar
 from matplotlib.figure import Figure
-from PySide2.QtWidgets import QFrame, QVBoxLayout, QSizePolicy, QScrollBar
-from PySide2.QtCore import Qt
-from datetime import datetime, timedelta
-from CompanionLib.time_funcs import round_time
+from PySide2.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
+from datetime import timedelta
+from CompanionLib.time_funcs import round_time, get_current_time
 
 
 class GraphObj(QFrame):
-    def __init__(self, name, x_label, y_label):
+    def __init__(self, name, x_label, y_label, graph_type=111):
         super().__init__()
-        self.__name = name
+        self.name = name
+        self.__graph_type = graph_type
         self.__x_label = x_label
         self.__y_label = y_label
         self.__data = {}
         self.__line_names = []
-        time = datetime.now()
+        time = get_current_time(graph=True)
         self.__x_bounds = self.__get_range_on_x_val(time)
         self.__scrolling = False
         self.__adding_point = False
@@ -37,15 +37,12 @@ class GraphObj(QFrame):
         self.setFrameShadow(QFrame.Raised)
         self.setLayout(QVBoxLayout())
 
-        self.__graph = self.PlotCanvas(self)
+        self.__graph = self.__PlotCanvas(self, self.__graph_type)
         self.layout().addWidget(self.__graph)
 
-        self.__scrollbar = QScrollBar()
-        self.__scrollbar.setRange(0, 0)
-        self.__scrollbar.setOrientation(Qt.Horizontal)
-        self.__scrollbar.setValue(self.__scrollbar.maximum())
-        self.__scrollbar.valueChanged.connect(self.__move_graph)
-        self.layout().addWidget(self.__scrollbar)
+        self.__nav_bar = NavBar(self.__graph, self)
+        self.layout().addWidget(self.__nav_bar)
+
         self.__refresh_plot()
 
     def add_line(self, name):
@@ -76,20 +73,9 @@ class GraphObj(QFrame):
         new_e = round_time(x, 1)
         if new_e not in self.__x_vals:
             self.__x_vals.append(new_e)
-            self.__update_scrollbar()
 
     def __append_y(self, name, y):
         self.__data[name][1].append(y)
-
-    def __move_graph(self):
-        if self.__adding_point:
-            return
-        if self.__scrollbar.value() != self.__scrollbar.maximum():
-            self.__scrolling = True
-            self.__x_bounds = self.__get_range_on_x_val(self.__x_vals[self.__scrollbar.value()])
-        else:
-            self.__scrolling = False
-        self.__refresh_plot()
 
     def __clear_data(self):
         for line in self.__data:
@@ -98,34 +84,25 @@ class GraphObj(QFrame):
         self.__scrollbar.setRange(0, 0)
 
     def __refresh_plot(self):
-        if not self.__scrolling:
-            if self.__scrollbar.maximum() > 0:
-                self.__check_x_bounds()
-            self.__graph.plot(self.__data, self.__name, self.__x_label, self.__y_label, self.__line_names)
-        self.__graph.axes.set_xbound(self.__x_bounds[0], self.__x_bounds[1])
+        self.__graph.plot(self.__data, self.name, self.__x_label, self.__y_label, self.__line_names)
         self.__graph.draw()
 
     def __remake_graph_obj(self):
-        self.__graph = self.PlotCanvas(self)
-
-    def __check_x_bounds(self):
-        self.__x_bounds = self.__get_range_on_x_val(self.__x_vals[-1])
-
-    def __update_scrollbar(self):
-        self.__scrollbar.setMaximum(len(self.__x_vals) - 1)
-        if not self.__scrolling:
-            self.__scrollbar.setValue(self.__scrollbar.maximum())
+        self.__graph = self.__PlotCanvas(self, self.__graph_type)
 
     @staticmethod
     def __get_range_on_x_val(x):
-        return [x - timedelta(seconds=5), x + timedelta(seconds=5)]
+        return [x - timedelta(minutes=3), x + timedelta(minutes=1)]
 
-    class PlotCanvas(Canvas):
-        def __init__(self, parent=None, width=5, height=4, dpi=100):
+    class __PlotCanvas(Canvas):
+        def __init__(self, parent=None, width=5, height=4, dpi=100, graph_type=111):
             self.canvas = Canvas.__init__(self, Figure(figsize=(width, height), dpi=dpi))
             self.setParent(parent)
             Canvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
-            self.axes = self.figure.add_subplot(111)
+            self.axes = self.figure.add_subplot(graph_type)
+
+        def add_plot(self, name, type):
+            self.__axes[name] = self.figure.add_subplot(type)
 
         def plot(self, data, title, xlabel, ylabel, line_names):
             self.__reset_plot(title, xlabel, ylabel)

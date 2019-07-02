@@ -5,21 +5,16 @@
 # https://redscientific.com/index.html
 
 from math import trunc, ceil
-from View.GraphWidget.graph_obj import GraphObj
 from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
     drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr
 
-from datetime import datetime, timedelta
-from random import gauss
 
-
-# TODO: Pipe data through controller to graph obj
 class DRTController:
-    def __init__(self, parent, device, msg_callback):
+    def __init__(self, parent, device, msg_callback, graph):
         device_name = device[0] + " on " + device[1]
         self.__tab = DRTTab(parent, device_name)
-        self.__graph_obj = GraphObj(device_name, "Timestamp", "Milliseconds")
+        self.__graph_obj = graph
         self.__device_info = device
         self.__msg_callback = msg_callback
         self.__updating_config = False
@@ -30,7 +25,8 @@ class DRTController:
         self.__get_vals()
         self.__set_upload_button(False)
         self.__line_names = ["Clicks", "Response Time"]
-        self.__setup_lines()
+
+        self.__init_graph()
 
     def update_config(self, msg):
         self.__updating_config = True
@@ -39,8 +35,10 @@ class DRTController:
         self.__updating_config = False
 
     def add_data_to_graph(self, timestamp, data):
-        self.__graph_obj.add_data(self.__line_names[0], timestamp, data[drtv1_0_output_fields[2]])
-        self.__graph_obj.add_data(self.__line_names[1], timestamp, data[drtv1_0_output_fields[3]])
+        print()
+        print("DRTController adding data to graph:", timestamp, data)
+        self.__graph_obj.add_data(self.__device_info, self.__line_names[0], timestamp, data[drtv1_0_output_fields[2]])
+        self.__graph_obj.add_data(self.__device_info, self.__line_names[1], timestamp, data[drtv1_0_output_fields[3]])
 
     def set_tab_index(self, index):
         self.__tab.set_index(index)
@@ -75,9 +73,8 @@ class DRTController:
         self.__tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
         self.__tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
 
-    def __setup_lines(self):
-        for name in self.__line_names:
-            self.__graph_obj.add_line(name)
+    def __init_graph(self):
+        self.__graph_obj.add_device(self.__device_info, self.__line_names)
 
     def __stim_dur_entry_changed(self):
         if not self.__updating_config:
