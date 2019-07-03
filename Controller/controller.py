@@ -26,7 +26,7 @@ from View.MenuBarWidget.menu_bar import MenuBar
 from View.GraphWidget.graph_container import GraphContainer
 
 #from Unused.OldCode.old_graph_obj import GraphObj
-from View.GraphWidget.new_graph_obj import GraphObj
+from View.GraphWidget.graph_obj import GraphObj
 
 from View.TabWidget.device_tab import TabContainer
 from Controller.version_checker import VersionChecker

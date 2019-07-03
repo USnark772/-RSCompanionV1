@@ -35,8 +35,6 @@ class DRTController:
         self.__updating_config = False
 
     def add_data_to_graph(self, timestamp, data):
-        print()
-        print("DRTController adding data to graph:", timestamp, data)
         self.__graph_obj.add_data(self.__device_info, self.__line_names[0], timestamp, data[drtv1_0_output_fields[2]])
         self.__graph_obj.add_data(self.__device_info, self.__line_names[1], timestamp, data[drtv1_0_output_fields[3]])
 

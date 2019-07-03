@@ -2,28 +2,20 @@ Updater:
 -   Automatically download latest version at users request
 -   Automatically check for updates at startup if user selects that option
 
-
 Installer:
--   Make installer install over previous versions of Companion app
+-   Make sure installer installs over previous versions of Companion app
 
-Etc.:
--   Figure out bug in graphobj with having more than one device plugged in              ******** (Time consumer)
-    -   May have fixed this. in main.py CompanionApp() was not assigned to a variable which cause unwanted garbage collection\
--   Figure out why graphs wont disappear when removing them
--   Figure out why data is doubled when drawn on graph
--   Try plotting same type of devices in the same graph (All drts together, all vogs together)
-    -   when devices have multiple outputs, use as an example
-    https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/scatter_custom_symbol.html#sphx-glr-gallery-lines-bars-and-markers-scatter-custom-symbol-py
--   Figure out how to calculate the mean of each type of data and figure out a good way to display that
-    -   figure out how to let the user set the bounds of the mean
-    -   Maybe put graph controls on bottom like where the scrollbar is currently
--   Consider grouping graphs
-    https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/psd_demo.html#sphx-glr-gallery-lines-bars-and-markers-psd-demo-py
--   DRT
-    -   Refactor how clicks are being shown
-        https://matplotlib.org/3.1.0/gallery/index.html
+GraphObj
+-   Fix subplot layout issues
+-   Put same type of devices in the same graph
+    -   when devices have multiple outputs, use as examples
+        -   https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/scatter_custom_symbol.html#sphx-glr-gallery-lines-bars-and-markers-scatter-custom-symbol-py
+        -   https://matplotlib.org/3.1.0/gallery/subplots_axes_and_figures/subplot.html
+-   Design good way to calculate mean of each data type
+    -   Let user set the bounds of the mean
+    -   Put graph controls below each graph
 -   VOG
-    -   Scatterplot instead of line plot
+    -   Figure out how to plot a scatter plot. Currently showing all x values as same value
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
 
 At some point:
@@ -37,6 +29,6 @@ At some point:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
 
 
-to get debug statements
+to get stack trace
 -   from traceback import print_stack
     print_stack() where you want a stacktrace
