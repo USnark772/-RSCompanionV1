@@ -6,7 +6,7 @@ Installer:
 -   Make sure installer installs over previous versions of Companion app
 
 GraphObj
--   Fix subplot layout issues
+-   Consider using toggle_line_matplotlib_example.py to refactor how lines are toggled in the graph
 -   Put same type of devices in the same graph
     -   when devices have multiple outputs, use as examples
         -   https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/scatter_custom_symbol.html#sphx-glr-gallery-lines-bars-and-markers-scatter-custom-symbol-py
@@ -14,8 +14,6 @@ GraphObj
 -   Design good way to calculate mean of each data type
     -   Let user set the bounds of the mean
     -   Put graph controls below each graph
--   VOG
-    -   Figure out how to plot a scatter plot. Currently showing all x values as same value
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
 
 At some point:

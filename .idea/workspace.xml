@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/mlp_double_graph_example.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/toggle_line_matplotlib_example.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/program_output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/program_output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/GraphWidget/new_graph_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TODO.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret lean-forward="true" />
+            <state relative-caret-position="22">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -30,24 +30,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_obj.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="127" lean-forward="true" selection-start-line="127" selection-end-line="127" />
+            <state relative-caret-position="401">
+              <caret line="39" column="74" lean-forward="true" selection-start-line="39" selection-start-column="74" selection-end-line="39" selection-end-column="74" />
               <folding>
-                <element signature="n#!!doc" />
                 <element signature="e#136#198#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1540">
-              <caret line="74" column="69" selection-start-line="74" selection-start-column="69" selection-end-line="74" selection-end-column="69" />
-              <folding>
-                <element signature="n#!!doc" />
-                <element signature="e#136#164#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -64,8 +50,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>__check_x_bounds</find>
-      <find>__refresh_plot</find>
       <find>__PlotCanvas</find>
       <find>__graph</find>
       <find>axes</find>
@@ -94,6 +78,8 @@
       <find>self.__canvases</find>
       <find>self.__canvases[device_type]</find>
       <find>self.__canvases[device_type].</find>
+      <find>graph_buttons</find>
+      <find>#</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -102,7 +88,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Devices/VOG/Model/defs.py" />
         <option value="$PROJECT_DIR$/Devices/DRT/Model/defs.py" />
         <option value="$PROJECT_DIR$/Devices/DRT/Controller/drt_configurator.py" />
         <option value="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" />
@@ -124,7 +109,6 @@
         <option value="$PROJECT_DIR$/time_rounder.py" />
         <option value="$PROJECT_DIR$/CompanionLib/time_rounder.py" />
         <option value="$PROJECT_DIR$/View/TabWidget/device_tab.py" />
-        <option value="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" />
         <option value="$PROJECT_DIR$/Model/defs.py" />
         <option value="$PROJECT_DIR$/Controller/device_manager.py" />
         <option value="$PROJECT_DIR$/For_setup/Build 0.4/controller.py" />
@@ -149,10 +133,12 @@
         <option value="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" />
         <option value="$PROJECT_DIR$/Controller/controller.py" />
         <option value="$PROJECT_DIR$/View/GraphWidget/new_graph_obj.py" />
-        <option value="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" />
         <option value="$PROJECT_DIR$/Unused/Tests/mlp_double_graph_example.py" />
-        <option value="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" />
+        <option value="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" />
+        <option value="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" />
+        <option value="$PROJECT_DIR$/Unused/Tests/toggle_line_matplotlib_example.py" />
         <option value="$PROJECT_DIR$/TODO.txt" />
+        <option value="$PROJECT_DIR$/View/GraphWidget/graph_obj.py" />
       </list>
     </option>
   </component>
@@ -167,7 +153,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -206,6 +191,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -241,27 +227,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.main">
-    <configuration name="controller" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Controller" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Controller/controller.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="graph_obj" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -346,13 +311,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="toggle_line_matplotlib_example" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/toggle_line_matplotlib_example.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.toggle_line_matplotlib_example" />
         <item itemvalue="Python.graph_obj" />
         <item itemvalue="Python.mlp_double_graph_example" />
         <item itemvalue="Python.matplotlib_documentation_example" />
-        <item itemvalue="Python.controller" />
       </list>
     </recent_temporary>
   </component>
@@ -382,7 +368,7 @@
     <frame x="445" y="-1088" width="1936" height="1096" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" weight="0.100105375" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.100105375" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.34787124" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.4491256" side_tool="true" weight="0.41786107" />
@@ -423,13 +409,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/For_setup/Build 0.4/version_checker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/For_setup/Build 0.4/vog_controller.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -707,42 +686,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Devices/DRT/View/drt_tab.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="n#!!doc" />
-            <element signature="e#136#266#0" expanded="true" />
-            <element signature="e#566#4433#0" />
-            <element signature="e#4487#4524#0" />
-            <element signature="e#4581#4630#0" />
-            <element signature="e#4696#4745#0" />
-            <element signature="e#4814#4864#0" />
-            <element signature="e#4931#4981#0" />
-            <element signature="e#5048#5098#0" />
-            <element signature="e#5161#5210#0" />
-            <element signature="e#5255#5288#0" />
-            <element signature="e#5330#5367#0" />
-            <element signature="e#5414#5455#0" />
-            <element signature="e#5513#5697#0" />
-            <element signature="e#5756#5942#0" />
-            <element signature="e#6001#6187#0" />
-            <element signature="e#6232#6270#0" />
-            <element signature="e#6320#6406#0" />
-            <element signature="e#6462#6506#0" />
-            <element signature="e#6549#6587#0" />
-            <element signature="e#6635#6677#0" />
-            <element signature="e#6720#6758#0" />
-            <element signature="e#6806#6848#0" />
-            <element signature="e#6882#6905#0" />
-            <element signature="e#6940#6959#0" />
-            <element signature="e#7005#7029#0" />
-            <element signature="e#7066#7468#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CompanionLib/time_funcs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -909,8 +852,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1540">
-          <caret line="74" column="69" selection-start-line="74" selection-start-column="69" selection-end-line="74" selection-end-column="69" />
+        <state relative-caret-position="402">
+          <caret line="38" column="77" selection-start-line="38" selection-start-column="77" selection-end-line="38" selection-end-column="77" />
           <folding>
             <element signature="n#!!doc" />
             <element signature="e#136#164#0" expanded="true" />
@@ -918,19 +861,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Devices/DRT/View/drt_tab.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="100" column="33" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
+          <folding>
+            <element signature="n#!!doc" />
+            <element signature="e#136#266#0" expanded="true" />
+            <element signature="e#4581#4630#0" />
+            <element signature="e#4696#4745#0" />
+            <element signature="e#4814#4864#0" />
+            <element signature="e#4931#4981#0" />
+            <element signature="e#5048#5098#0" />
+            <element signature="e#5161#5210#0" />
+            <element signature="e#5255#5288#0" />
+            <element signature="e#5330#5367#0" />
+            <element signature="e#5414#5455#0" />
+            <element signature="e#5513#5697#0" />
+            <element signature="e#5756#5942#0" />
+            <element signature="e#6001#6187#0" />
+            <element signature="e#6232#6270#0" />
+            <element signature="e#6320#6406#0" />
+            <element signature="e#6462#6506#0" />
+            <element signature="e#6549#6587#0" />
+            <element signature="e#6635#6677#0" />
+            <element signature="e#6720#6758#0" />
+            <element signature="e#6806#6848#0" />
+            <element signature="e#6882#6905#0" />
+            <element signature="e#6940#6959#0" />
+            <element signature="e#7005#7029#0" />
+            <element signature="e#7066#7468#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Unused/Tests/toggle_line_matplotlib_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+          <folding>
+            <element signature="e#76#94#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/TODO.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
+        <state relative-caret-position="22">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/View/GraphWidget/graph_obj.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="127" lean-forward="true" selection-start-line="127" selection-end-line="127" />
+        <state relative-caret-position="401">
+          <caret line="39" column="74" lean-forward="true" selection-start-line="39" selection-start-column="74" selection-end-line="39" selection-end-column="74" />
           <folding>
-            <element signature="n#!!doc" />
             <element signature="e#136#198#0" expanded="true" />
           </folding>
         </state>

@@ -21,12 +21,12 @@ class DRTController:
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
         self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
         self.__current_vals = [0, 0, 0, 0]  # stimDur, stimIntens, upperISI, lowerISI
-        self.__set_handlers()
         self.__get_vals()
         self.__set_upload_button(False)
-        self.__line_names = ["Clicks", "Response Time"]
-
+        self.__data_types = [["Response Time", 0, True], ["Clicks", 0, True]]
+        self.__add_graph_data_type_buttons()
         self.__init_graph()
+        self.__set_handlers()
 
     def update_config(self, msg):
         self.__updating_config = True
@@ -35,8 +35,8 @@ class DRTController:
         self.__updating_config = False
 
     def add_data_to_graph(self, timestamp, data):
-        self.__graph_obj.add_data(self.__device_info, self.__line_names[0], timestamp, data[drtv1_0_output_fields[2]])
-        self.__graph_obj.add_data(self.__device_info, self.__line_names[1], timestamp, data[drtv1_0_output_fields[3]])
+        self.__graph_obj.add_data(self.__device_info, self.__data_types[1][0], timestamp, data[drtv1_0_output_fields[2]])
+        self.__graph_obj.add_data(self.__device_info, self.__data_types[0][0], timestamp, data[drtv1_0_output_fields[3]])
 
     def set_tab_index(self, index):
         self.__tab.set_index(index)
@@ -70,9 +70,30 @@ class DRTController:
         self.__tab.add_stim_intens_entry_changed_handler(self.__stim_intens_entry_changed)
         self.__tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
         self.__tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
+        self.__tab.add_graph_button_handler(self.__data_types[0][1], self.__rt_graph_button_handler)
+        self.__tab.add_graph_button_handler(self.__data_types[1][1], self.__clicks_graph_button_handler)
+
+    def __add_graph_data_type_buttons(self):
+        for i in range(len(self.__data_types)):
+            self.__data_types[i][1] = self.__tab.add_graph_button(self.__data_types[i][0])
 
     def __init_graph(self):
-        self.__graph_obj.add_device(self.__device_info, self.__line_names)
+        the_list = []
+        for data_type in self.__data_types:
+            the_list.append(data_type[0])
+        self.__graph_obj.add_device(self.__device_info, the_list)
+
+    def __rt_graph_button_handler(self):
+        self.__data_types[0][2] = not self.__data_types[0][2]
+        self.__graph_obj.set_device_data_type_activity(self.__device_info, self.__data_types[0][0],
+                                                       self.__data_types[0][2])
+        self.__tab.toggle_graph_button(self.__data_types[0][1])
+
+    def __clicks_graph_button_handler(self):
+        self.__data_types[1][2] = not self.__data_types[1][2]
+        self.__graph_obj.set_device_data_type_activity(self.__device_info, self.__data_types[1][0],
+                                                       self.__data_types[1][2])
+        self.__tab.toggle_graph_button(self.__data_types[1][1])
 
     def __stim_dur_entry_changed(self):
         if not self.__updating_config:

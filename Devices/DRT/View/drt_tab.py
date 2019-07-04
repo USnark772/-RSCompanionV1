@@ -90,10 +90,27 @@ class DRTTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(True))
 
+        self.__graph_buttons = []
         self.device_info = device
         self.__index = 0
         self.__set_texts()
         self.__set_tooltips()
+
+    def add_graph_button(self, name):
+        new_button = QPushButton()
+        new_button.setText("Hide " + name)
+        self.__graph_buttons.append([new_button, name])
+        self.layout().addWidget(new_button)
+        return len(self.__graph_buttons) - 1
+
+    def add_graph_button_handler(self, index, func):
+        self.__graph_buttons[index][0].clicked.connect(func)
+
+    def toggle_graph_button(self, index):
+        if "Hide" in self.__graph_buttons[index][0].text():
+            self.__graph_buttons[index][0].setText("Show " + self.__graph_buttons[index][1])
+        else:
+            self.__graph_buttons[index][0].setText("Hide " + self.__graph_buttons[index][1])
 
     def add_iso_button_handler(self, func):
         self.iso_button.clicked.connect(func)
