@@ -4,6 +4,8 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+""" Definitions specific to the DRT device """
+
 drtv1_0_file_hdr = "Type, Condition, Key Flag, Timestamp, Millisecond counter, Trial counter, Clicks, Response Time,"\
                    " Note"
 

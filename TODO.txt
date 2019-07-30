@@ -5,15 +5,70 @@ Updater:
 Installer:
 -   Make sure installer installs over previous versions of Companion app
 
-GraphObj
--   Consider using toggle_line_matplotlib_example.py to refactor how lines are toggled in the graph
--   Put same type of devices in the same graph
-    -   when devices have multiple outputs, use as examples
-        -   https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/scatter_custom_symbol.html#sphx-glr-gallery-lines-bars-and-markers-scatter-custom-symbol-py
-        -   https://matplotlib.org/3.1.0/gallery/subplots_axes_and_figures/subplot.html
+Comments:
+-   CompanionLib
+    -   time_funcs.py DONE
+-   Controller
+    -   controller.py
+    -   device_manager.py
+    -   main.py
+    -   version_checker.py
+-   Devices
+    -   DRT
+        -   Controller
+            -   drt_controller.py
+        -   Model
+            -   drt_defs.py DONE
+        -   View
+            -   drt_graph.py
+            -   drt_tab.py
+    -   VOG
+        -   Controller
+            -   vog_controller.py
+        -   Model
+            - vog_defs.py DONE
+        -   View
+            -   vog_graph.py
+            -   vog_tab.py
+-   Model
+    -   general_defs.py
+-   View
+    -   DisplayWidget
+        -   display_container.py
+        -   graph.py
+        -   graph_frame.py
+        -   graph_nav_bar.py (Maybe get rid of this one)
+    -   DockWidget
+        -   button_box.py
+        -   control_dock.py
+        -   flag_box.py
+        -   info_box.py
+        -   note_box.py
+    -   MainWindow
+        -   central_widget.py
+        -   help_window.py
+        -   main_window.py
+    -   MenuBarWidget
+        -   menu_bar.py
+    -   TabWidget
+        -   device_tab.py
+
+
+Devices:
+-   Check device/program output
+
+Graphing:
+-   Show/Hide device data in each graph at user request. DONE
+-   Show/Hide device graphs at user request. DONE
 -   Design good way to calculate mean of each data type
     -   Let user set the bounds of the mean
     -   Put graph controls below each graph
+
+TODO: fix these issues
+-   Error when attaching a device where in device_manager.py __attach_devices() a SerialException is raised
+    -   FIXED WITH A TIMER AND RETRYING CONNECTION
+-   When the tab indices get mixed up and removing devices sometimes the wrong tab gets deleted
+    -   FIXED BY USING COM PORT AS IDENTITY FOR DEVICES IN TAB CONTAINER
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
 
 At some point:
@@ -22,10 +77,8 @@ At some point:
     Device output will add a frame # for when that device output came in
     Consider OpenCV python module
     Video output will be all one video file with possibly multiple video feeds.
--   Show/Hide device graphs at user request. Graphs can be overlayed or not, need future input.
 -   GPS device integration.
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
-
 
 to get stack trace
 -   from traceback import print_stack

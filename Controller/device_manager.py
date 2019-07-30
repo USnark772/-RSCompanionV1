@@ -4,6 +4,7 @@ When the target device is plugged in or removed the connect_event or
 disconnect_event flags are turned True.
 """
 
+from time import sleep
 from serial import Serial, SerialException
 from serial.tools import list_ports
 from Model.general_defs import devices
@@ -24,7 +25,6 @@ class DeviceManager:
         self.devices = dict()
 
     def update(self):
-        self.devices_known = list(self.devices.keys())
         self.__scan_ports()  # probe plug/unplug events
 
         if len(self.devices_to_add) != 0:
@@ -110,6 +110,7 @@ class DeviceManager:
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStop"}))
 
     def __scan_ports(self):
+        devices_known = list(self.devices.keys())
         self.devices_to_add = []
         self.devices_to_remove = []
         self.devices_attached = []
@@ -118,32 +119,41 @@ class DeviceManager:
             for i in list_ports.comports():
                 self.devices_attached.append(i.device)
 
-        if len(self.devices_known) == 0:
+        if len(devices_known) == 0:
             self.devices_to_add = self.devices_attached
-        elif len(self.devices_known) < len(self.devices_attached):
-            self.devices_to_add = list(set(self.devices_attached) - set(self.devices_known))
-        elif len(self.devices_known) > len(self.devices_attached):
-            self.devices_to_remove = list(set(self.devices_known) - set(self.devices_attached))
+        elif len(devices_known) < len(self.devices_attached):
+            self.devices_to_add = list(set(self.devices_attached) - set(devices_known))
+        elif len(devices_known) > len(self.devices_attached):
+            self.devices_to_remove = list(set(devices_known) - set(self.devices_attached))
 
     def __attach_devices(self):
         for port in list_ports.comports():
             if port.device in self.devices_to_add:
                 for device in self.profiles:
                     if port.vid == self.profiles[device]['vid'] and port.pid == self.profiles[device]['pid']:
-                        try:
-                            the_port = Serial(port.device)
-                        except SerialException:
+                        the_port = Serial()
+                        the_port.port = port.device
+                        i = 0
+                        while not the_port.is_open and i < 5:
+                            i += 1
+                            try:
+                                the_port.open()
+                            except SerialException as e:
+                                print("in device_manager.py __attach_devices(): SerialException", e)
+                                sleep(1)
+                        if not the_port.is_open:
+                            print()
                             self.devices[port.device] = {'id': 'unknown'}
                             self.msg_callback({'type': "error"})
                             break
+                        else:
+                            print()
                         self.devices[port.device] = {'port': the_port, 'id': device}
                         msg_dict = {'type': "add", 'device': (self.devices[port.device]['id'], self.devices[port.device]['port'].name)}
                         self.msg_callback(msg_dict)
                         break
                     else:
                         self.devices[port.device] = {'id': 'unknown'}
-
-        self.devices_known = list(self.devices.keys())
 
     def __remove_devices(self):
         for e in self.devices_to_remove:
@@ -152,8 +162,6 @@ class DeviceManager:
                 msg_dict = {'type': "remove", 'device': (self.devices[e]['id'], self.devices[e]['port'].name)}
                 self.msg_callback(msg_dict)
             del self.devices[e]
-
-        self.devices_known = list(self.devices.keys())
 
     @staticmethod
     def __send_msg_on_port(port, msg_to_send):

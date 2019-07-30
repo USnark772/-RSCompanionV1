@@ -280,7 +280,7 @@ class CompanionController:
         self.devices[device] = {}
         self.devices[device]['controller'] = controller
         controller.set_tab_index(self.tab_box.add_tab(controller.get_tab_obj()))
-        self.graph_box.add_graph(controller.get_graph_obj())
+        self.graph_box.add_display(controller.get_graph_obj())
         self.__make_save_filename_for_device(device)
         if self.__dir_chosen:
             self.__add_hdr_to_file(device)

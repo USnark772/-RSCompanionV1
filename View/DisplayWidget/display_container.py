@@ -8,7 +8,7 @@ from PySide2.QtWidgets import QVBoxLayout, QWidget, QScrollArea
 from PySide2.QtCore import QRect
 
 
-class GraphContainer(QWidget):
+class DisplayContainer(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
@@ -19,21 +19,21 @@ class GraphContainer(QWidget):
         contents.setGeometry(QRect(0, 0, 335, 499))
         contents.setLayout(QVBoxLayout())
         self.__scroll_area.setWidget(contents)
-        self.__list_of_graphs = []
+        self.__list_of_displays = []
 
-    def add_graph(self, graph):
-        self.__list_of_graphs.append(graph)
+    def add_display(self, display):
+        self.__list_of_displays.append(display)
         self.__refresh()
 
-    def remove_graph(self, graph):
-        if graph in self.__list_of_graphs:
-            self.__list_of_graphs.remove(graph)
+    def remove_display(self, display):
+        if display in self.__list_of_displays:
+            self.__list_of_displays.remove(display)
         self.__refresh()
 
     def __refresh(self):
         new_contents = QWidget(self)
         new_contents.setGeometry(QRect(0, 0, 335, 499))
         new_contents.setLayout(QVBoxLayout())
-        for graph in self.__list_of_graphs:
-            new_contents.layout().addWidget(graph)
+        for display in self.__list_of_displays:
+            new_contents.layout().addWidget(display)
         self.__scroll_area.setWidget(new_contents)

@@ -43,7 +43,7 @@ class PlotCanvas(FigureCanvas):
         self.axes = self.figure.add_subplot(111)
         self.figure.autofmt_xdate()
         # self.axes.plot(data, 'r-')
-        self.axes.plot(x, y)
+        self.axes.draw(x, y)
         self.axes.set_title('PyQt Matplotlib Example')
         self.draw()
 

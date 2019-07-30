@@ -24,7 +24,7 @@ class main_window(QTabWidget):
     def plot(self):
         data = [random.random() for i in range(10)]
         ax = self.figure.add_subplot(111)
-        ax.plot(data, '*-')
+        ax.draw(data, '*-')
         self.canvas.draw()
 
 

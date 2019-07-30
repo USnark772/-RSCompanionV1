@@ -185,12 +185,6 @@ class DRTTab(QWidget):
     def get_name(self):
         return self.device_info
 
-    def get_index(self):
-        return self.__index
-
-    def set_index(self, new_index):
-        self.__index = new_index
-
     def __set_texts(self):
         self.config_label.setText("Current configuration:")
         self.config_val.setText("ISO")

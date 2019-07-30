@@ -10,10 +10,10 @@ from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, v
 
 
 class VOGController:
-    def __init__(self, parent, device, msg_callback, graph):
+    def __init__(self, parent, device, msg_callback, graph_callback):
         device_name = device[0] + " on " + device[1]
         self.__tab = VOGTab(parent, device_name)
-        self.__graph_obj = graph
+        self.__graph_callback = graph_callback
         self.__device_info = device
         self.__msg_callback = msg_callback
         self.__updating_config = False
@@ -26,11 +26,12 @@ class VOGController:
         self.__lens_open = False
         # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
         self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
-        self.__set_handlers()
         self.__get_vals()
         self.__set_upload_button(False)
-        self.__line_names = ["Time Open", "Time Closed"]
-        self.__init_graph()
+        self.__data_types = [["Time Open", 0, True], ["Time Closed", 0, True]]
+        #self.__add_graph_data_type_buttons()
+        #self.__init_graph()
+        self.__set_handlers()
 
     def update_config(self, msg):
         self.__updating_config = True
@@ -39,20 +40,11 @@ class VOGController:
         self.__updating_config = False
 
     def add_data_to_graph(self, timestamp, data):
-        self.__graph_obj.add_data(self.__device_info, self.__line_names[0], timestamp, int(data[vog_output_field[1]]))
-        self.__graph_obj.add_data(self.__device_info, self.__line_names[1], timestamp, int(data[vog_output_field[2]]))
-
-    def set_tab_index(self, index):
-        self.__tab.set_index(index)
-
-    def get_tab_index(self):
-        return self.__tab.get_index()
+        print("vog_controller.py add_data_to_graph()")
+        self.__graph_callback(self.__device_info, (timestamp, int(data[vog_output_field[1]]), int(data[vog_output_field[2]])))
 
     def get_tab_obj(self):
         return self.__tab
-
-    def get_graph_obj(self):
-        return self.__graph_obj
 
     @staticmethod
     def format_output_for_save_file(msg):
@@ -79,9 +71,30 @@ class VOGController:
         self.__tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
         self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
         self.__tab.add_manual_control_handler(self.__toggle_lens)
+        #self.__tab.add_graph_button_handler(self.__data_types[0][1], self.__time_open_graph_button_handler)
+        #self.__tab.add_graph_button_handler(self.__data_types[1][1], self.__time_closed_graph_button_handler)
+
+    def __add_graph_data_type_buttons(self):
+        for i in range(len(self.__data_types)):
+            self.__data_types[i][1] = self.__tab.add_graph_button(self.__data_types[i][0])
 
     def __init_graph(self):
-        self.__graph_obj.add_device(self.__device_info, self.__line_names)
+        the_list = []
+        for data_type in self.__data_types:
+            the_list.append(data_type[0])
+        self.__graph_obj.add_device(self.__device_info, the_list)
+
+    def __time_open_graph_button_handler(self):
+        self.__data_types[0][2] = not self.__data_types[0][2]
+        self.__graph_obj.set_device_data_type_activity(self.__device_info, self.__data_types[0][0],
+                                                       self.__data_types[0][2])
+        self.__tab.toggle_graph_button(self.__data_types[0][1])
+
+    def __time_closed_graph_button_handler(self):
+        self.__data_types[1][2] = not self.__data_types[1][2]
+        self.__graph_obj.set_device_data_type_activity(self.__device_info, self.__data_types[1][0],
+                                                       self.__data_types[1][2])
+        self.__tab.toggle_graph_button(self.__data_types[1][1])
 
     def __open_entry_changed(self):
         if not self.__updating_config:

@@ -4,6 +4,8 @@
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+""" Definitions specific to the VOG device """
+
 vog_about = "The Visual Occlusion Glasses have a few different settings available.\n" \
             "-NHTSA\n" \
             "\tWhen NHTSA is applied, the vog will "\

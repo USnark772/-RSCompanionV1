@@ -20,18 +20,19 @@ class TabContainer(QTabWidget):
         self.setSizePolicy(size_policy)
         self.__tabs = {}
 
-    def add_tab(self, contents):
+    def add_tab(self, contents, port):
         new_tab = self.__Tab()
         new_tab.add_contents(contents)
         self.setUpdatesEnabled(False)
         index = self.addTab(new_tab, "")
-        self.__tabs[index] = new_tab
+        self.__tabs[port] = new_tab
         self.setTabText(index, contents.get_name())
         self.setUpdatesEnabled(True)
-        return index
 
-    def remove_tab(self, index):
-        self.removeTab(index)
+    def remove_tab(self, port):
+        the_tab = self.__tabs[port]
+        self.removeTab(QTabWidget.indexOf(self, the_tab))
+        del self.__tabs[port]
 
     class __Tab(QWidget):
         def __init__(self):

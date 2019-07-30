@@ -12,11 +12,11 @@ from Model.general_defs import tab_line_edit_error_style, tab_line_edit_complian
 
 
 class VOGTab(QWidget):
-    def __init__(self, parent, name):
+    def __init__(self, parent, device):
         super().__init__(parent)
         self.setLayout(QVBoxLayout(self))
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setMaximumHeight(450)
+        self.setMaximumHeight(500)
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
@@ -92,10 +92,27 @@ class VOGTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
-        self.__name = name
+        self.__graph_buttons = []
+        self.device_info = device
         self.__index = 0
         self.__set_texts()
         self.__set_tooltips()
+
+    def add_graph_button(self, name):
+        new_button = QPushButton()
+        new_button.setText("Hide " + name)
+        self.__graph_buttons.append([new_button, name])
+        self.layout().addWidget(new_button)
+        return len(self.__graph_buttons) - 1
+
+    def add_graph_button_handler(self, index, func):
+        self.__graph_buttons[index][0].clicked.connect(func)
+
+    def toggle_graph_button(self, index):
+        if "Hide" in self.__graph_buttons[index][0].text():
+            self.__graph_buttons[index][0].setText("Show " + self.__graph_buttons[index][1])
+        else:
+            self.__graph_buttons[index][0].setText("Hide " + self.__graph_buttons[index][1])
 
     def add_manual_control_handler(self, func):
         self.__manual_control_button.clicked.connect(func)
@@ -197,13 +214,7 @@ class VOGTab(QWidget):
         self.__button_mode_selector.setCurrentIndex(int(val))
 
     def get_name(self):
-        return self.__name
-
-    def get_index(self):
-        return self.__index
-
-    def set_index(self, new_index):
-        self.__index = new_index
+        return self.device_info
 
     def __set_texts(self):
         self.__config_label.setText("Current configuration:")

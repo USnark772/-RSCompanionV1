@@ -1,8 +1,8 @@
 Timestamp, Author, Location, Message
-2019-07-03-21-03-28, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
-2019-07-03-21-03-28, vog, COM6, configName|NHTSA
-2019-07-03-21-03-29, vog, COM6, configMaxOpen|1500
-2019-07-03-21-03-29, vog, COM6, configMaxClose|1500
-2019-07-03-21-03-29, vog, COM6, configDebounce|20
-2019-07-03-21-03-29, vog, COM6, configClickMode|1
-2019-07-03-21-03-29, vog, COM6, buttonControl|0
+2019-07-29-19-04-25, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-07-29-19-04-25, vog, COM6, configName|NHTSA
+2019-07-29-19-04-25, vog, COM6, configMaxOpen|1500
+2019-07-29-19-04-25, vog, COM6, configMaxClose|1500
+2019-07-29-19-04-25, vog, COM6, configDebounce|20
+2019-07-29-19-04-25, vog, COM6, configClickMode|1
+2019-07-29-19-04-25, vog, COM6, buttonControl|0

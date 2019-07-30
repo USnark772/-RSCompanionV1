@@ -135,7 +135,7 @@ class GraphObj(QFrame):
             for name in line_names:
                 arr = data[name]
                 if len(arr) == 2:  # Has x and y coordinates
-                    self.axes.plot(arr[0], arr[1], label=name)
+                    self.axes.draw_canvas(arr[0], arr[1], label=name)
             self.figure.autofmt_xdate()
             if len(line_names) > 0:
                 self.figure.legend(loc='upper left')
