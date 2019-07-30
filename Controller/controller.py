@@ -47,7 +47,7 @@ class CompanionController:
         self.info_box = InfoBox(self.control_dock, info_box_size)
         self.flag_box = FlagBox(self.control_dock, flag_box_size)
         self.note_box = NoteBox(self.control_dock, note_box_size)
-        self.graph_box = DisplayContainer(self.ui)
+        self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs)
         self.tab_box = TabContainer(self.ui, tab_box_width_range)
         self.file_dialog = QFileDialog(self.ui)
 
@@ -330,7 +330,7 @@ class CompanionController:
             self.__add_hdr_to_file(device)
 
     def __remove_device(self, device):
-        """ """
+        """ Removes device tab, graph link and device information """
         if device in self.devices:
             self.tab_box.remove_tab(device[1])
             self.__graphs[device[0]].get_graph().remove_device(device[1])
@@ -368,11 +368,16 @@ class CompanionController:
     def __make_vog_graph(self):
         graph = VOGGraph(self.graph_box)
         graph_frame = GraphFrame(self.graph_box, graph)
+        graph_frame.set_graph_height(500)
         self.__graphs["vog"] = graph_frame
         self.graph_box.add_display(graph_frame)
 
     def __destroy_vog_graph(self):
         self.graph_box.remove_display(self.__graphs["vog"])
+
+    def __refresh_all_graphs(self):
+        for graph in self.__graphs:
+            self.__graphs[graph].get_graph().refresh_self()
 
     def add_data_to_graph(self, device, data):
         self.__graphs[device[0]].get_graph().add_data(device[1], data)

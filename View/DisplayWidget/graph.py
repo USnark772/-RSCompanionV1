@@ -28,9 +28,16 @@ class CanvasObj(Canvas):
         #self.figure.canvas.mpl_connect('button_press_event', self.__onclick)
         self.figure.canvas.mpl_connect('pick_event', self.__onpick)
         self.plot(new=True)
+        self.__new = True
+
+    def refresh_self(self):
+        self.figure.canvas.draw()
 
     def get_title(self):
         return self.__title
+
+    def set_new(self, is_new):
+        self.__new = is_new
 
     def __set_plot_names(self, names):
         for name in names:

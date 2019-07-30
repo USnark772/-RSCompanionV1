@@ -9,10 +9,12 @@ from PySide2.QtCore import QRect
 
 
 class DisplayContainer(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, callback):
         super().__init__(parent)
+        self.__callback = callback
         self.setLayout(QVBoxLayout())
         self.__scroll_area = QScrollArea(self)
+        self.__scroll_area.verticalScrollBar().valueChanged.connect(self.__slider_changed_notifier)
         self.__scroll_area.setWidgetResizable(True)
         self.layout().addWidget(self.__scroll_area)
         contents = QWidget(self)
@@ -37,3 +39,6 @@ class DisplayContainer(QWidget):
         for display in self.__list_of_displays:
             new_contents.layout().addWidget(display)
         self.__scroll_area.setWidget(new_contents)
+
+    def __slider_changed_notifier(self):
+        self.__callback()

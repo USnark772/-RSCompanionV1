@@ -1,8 +1,82 @@
 Timestamp, Author, Location, Message
-2019-07-29-19-04-25, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
-2019-07-29-19-04-25, vog, COM6, configName|NHTSA
-2019-07-29-19-04-25, vog, COM6, configMaxOpen|1500
-2019-07-29-19-04-25, vog, COM6, configMaxClose|1500
-2019-07-29-19-04-25, vog, COM6, configDebounce|20
-2019-07-29-19-04-25, vog, COM6, configClickMode|1
-2019-07-29-19-04-25, vog, COM6, buttonControl|0
+2019-07-30-16-15-21, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-07-30-16-15-21, vog, COM6, configName|NHTSA
+2019-07-30-16-15-21, drt, COM3, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-07-30-16-15-21, drt, COM4, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
+2019-07-30-16-15-21, vog, COM6, configMaxOpen|1500
+2019-07-30-16-15-21, vog, COM6, configMaxClose|1500
+2019-07-30-16-15-21, vog, COM6, configDebounce|20
+2019-07-30-16-15-21, vog, COM6, configClickMode|1
+2019-07-30-16-15-21, vog, COM6, buttonControl|0
+2019-07-30-16-16-39, vog, COM6, expStart
+2019-07-30-16-16-51, vog, COM6, trialStart
+2019-07-30-16-16-58, drt, COM9, trl>3098, 1, 2, 1159
+2019-07-30-16-16-58, drt, COM3, trl>3137, 1, 2, 998
+2019-07-30-16-16-59, drt, COM4, trl>4986, 1, 1, 970
+2019-07-30-16-17-01, drt, COM3, trl>7090, 2, 1, 277
+2019-07-30-16-17-02, drt, COM9, trl>6442, 2, 1, 489
+2019-07-30-16-17-03, drt, COM4, trl>8270, 2, 1, 348
+2019-07-30-16-17-05, drt, COM3, trl>10105, 3, 1, 252
+2019-07-30-16-17-06, drt, COM9, trl>10935, 3, 1, 378
+2019-07-30-16-17-07, drt, COM4, trl>12301, 3, 1, 3023
+2019-07-30-16-17-08, drt, COM3, trl>13386, 4, 2, 1549
+2019-07-30-16-17-09, drt, COM9, trl>14563, 4, 0, -1
+2019-07-30-16-17-10, drt, COM4, trl>15956, 4, 1, 1672
+2019-07-30-16-17-12, vog, COM6, Click
+2019-07-30-16-17-12, vog, COM6, data|1,10697,10500
+2019-07-30-16-17-12, drt, COM3, trl>16918, 5, 1, 1029
+2019-07-30-16-17-14, drt, COM9, trl>18285, 5, 0, -1
+2019-07-30-16-17-14, drt, COM4, trl>19129, 5, 1, 2331
+2019-07-30-16-17-15, vog, COM6, Click
+2019-07-30-16-17-15, vog, COM6, trialStart
+2019-07-30-16-17-17, drt, COM3, trl>21268, 6, 2, 2093
+2019-07-30-16-17-17, vog, COM6, Click
+2019-07-30-16-17-17, vog, COM6, data|2,1500,585
+2019-07-30-16-17-17, vog, COM6, Click
+2019-07-30-16-17-17, vog, COM6, trialStart
+2019-07-30-16-17-18, vog, COM6, Click
+2019-07-30-16-17-18, vog, COM6, data|3,300,0
+2019-07-30-16-17-18, vog, COM6, Click
+2019-07-30-16-17-18, vog, COM6, trialStart
+2019-07-30-16-17-18, drt, COM9, trl>22599, 6, 0, -1
+2019-07-30-16-17-18, vog, COM6, Click
+2019-07-30-16-17-18, vog, COM6, data|4,266,0
+2019-07-30-16-17-19, vog, COM6, Click
+2019-07-30-16-17-19, vog, COM6, trialStart
+2019-07-30-16-17-19, drt, COM4, trl>23072, 6, 6, 1467
+2019-07-30-16-17-20, vog, COM6, Click
+2019-07-30-16-17-20, vog, COM6, data|5,1199,0
+2019-07-30-16-17-20, drt, COM3, trl>25629, 7, 5, 464
+2019-07-30-16-17-21, vog, COM6, Click
+2019-07-30-16-17-21, vog, COM6, trialStart
+2019-07-30-16-17-22, drt, COM9, trl>26956, 7, 0, -1
+2019-07-30-16-17-24, drt, COM4, trl>27797, 7, 3, 833
+2019-07-30-16-17-25, vog, COM6, Click
+2019-07-30-16-17-25, vog, COM6, data|6,1719,1500
+2019-07-30-16-17-25, drt, COM3, trl>29003, 8, 1, 2932
+2019-07-30-16-17-26, drt, COM9, trl>31310, 8, 0, -1
+2019-07-30-16-17-26, vog, COM6, Click
+2019-07-30-16-17-26, vog, COM6, trialStart
+2019-07-30-16-17-27, drt, COM4, trl>32428, 8, 2, 1962
+2019-07-30-16-17-27, vog, COM6, Click
+2019-07-30-16-17-27, vog, COM6, data|7,1288,0
+2019-07-30-16-17-28, vog, COM6, Click
+2019-07-30-16-17-28, vog, COM6, trialStart
+2019-07-30-16-17-29, vog, COM6, Click
+2019-07-30-16-17-29, vog, COM6, data|8,1167,0
+2019-07-30-16-17-30, drt, COM3, trl>33933, 9, 4, 114
+2019-07-30-16-17-30, drt, COM9, trl>34423, 9, 0, -1
+2019-07-30-16-17-31, vog, COM6, Click
+2019-07-30-16-17-31, vog, COM6, trialStart
+2019-07-30-16-17-31, drt, COM4, trl>35731, 9, 3, 988
+2019-07-30-16-17-32, vog, COM6, Click
+2019-07-30-16-17-32, vog, COM6, data|9,1168,0
+2019-07-30-16-17-33, vog, COM6, Click
+2019-07-30-16-17-33, vog, COM6, trialStart
+2019-07-30-16-17-34, drt, COM3, trl>38406, 10, 4, 342
+2019-07-30-16-17-34, drt, COM9, trl>38610, 10, 0, -1
+2019-07-30-16-17-35, drt, COM9, trl>43289, 11, 0, -1
+2019-07-30-16-17-36, vog, COM6, data|10,1500,993
+2019-07-30-16-17-36, drt, COM3, trl>42596, 11, 0, -1
+2019-07-30-16-17-36, drt, COM4, trl>39611, 10, 3, 574
+2019-07-30-16-24-30, vog, COM6, expStop

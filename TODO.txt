@@ -1,3 +1,14 @@
+TODO:
+-   Check device output
+-   Package and link github to team
+-   Bug check with team
+-   Document code
+-   Ship it
+
+After launch:
+-   Video integration
+-   GPS integration
+
 Updater:
 -   Automatically download latest version at users request
 -   Automatically check for updates at startup if user selects that option
@@ -57,26 +68,23 @@ Comments:
 Devices:
 -   Check device/program output
 
+Video:
+-   Begin exp starts recording video. Device overlay is recorded with the video
+    Device output will add a frame # for when that device output came in
+    Consider OpenCV python module
+    Video output will be all one video file with possibly multiple video feeds.
+
 Graphing:
--   Show/Hide device data in each graph at user request. DONE
--   Show/Hide device graphs at user request. DONE
--   Design good way to calculate mean of each data type
+-   Design good way to calculate mean of each data type (don't worry about this for now)
     -   Let user set the bounds of the mean
     -   Put graph controls below each graph
 
 TODO: fix these issues
--   Error when attaching a device where in device_manager.py __attach_devices() a SerialException is raised
-    -   FIXED WITH A TIMER AND RETRYING CONNECTION
--   When the tab indices get mixed up and removing devices sometimes the wrong tab gets deleted
-    -   FIXED BY USING COM PORT AS IDENTITY FOR DEVICES IN TAB CONTAINER
--   Some unexplained issues with ui sizing (Has to do with screen scaling)
+-   When scrolling, the graphs move in their canvasas (don't worry about this for now)
+-   Some unexplained issues with ui sizing (Has to do with screen scaling) (don't worry about this for now)
 
 At some point:
--   Possibly use numpy for internal data storage.
--   Implement video. Begin exp starts recording video. Device overlay is recorded with the video
-    Device output will add a frame # for when that device output came in
-    Consider OpenCV python module
-    Video output will be all one video file with possibly multiple video feeds.
+-   Possibly use numpy for internal data storage. (don't worry about this for now)
 -   GPS device integration.
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
 
