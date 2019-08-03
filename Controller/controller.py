@@ -156,15 +156,15 @@ class CompanionController:
             self.__end_exp()
 
     def __create_exp(self):
+        self.exp_created = True
         self.button_box.toggle_create_button()
         self.device_manager.start_exp_all()
         self.info_box.set_start_time(get_current_time(time=True))
-        self.exp_created = True
 
     def __end_exp(self):
+        self.exp_created = False
         self.button_box.toggle_create_button()
         self.device_manager.end_exp_all()
-        self.exp_created = False
 
     def __start_stop_exp(self):
         if self.exp_running:
@@ -173,22 +173,23 @@ class CompanionController:
             self.__start_exp()
 
     def __start_exp(self):
+        self.exp_running = True
         self.device_manager.start_block_all()
         self.current_cond_name = self.button_box.get_condition_name()
         self.__check_toggle_post_button()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
-        self.exp_running = True
 
     def __stop_exp(self):
+        self.exp_running = False
         self.device_manager.end_block_all()
         self.__check_toggle_post_button()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
-        self.exp_running = False
 
     def __check_toggle_post_button(self):
         """ If an experiment is created and running and there is a note then allow user access to post button. """
+        print("Checking post button")
         if self.exp_created and self.exp_running and len(self.note_box.get_note()) > 0:
             self.note_box.toggle_post_button(True)
         else:
@@ -230,6 +231,7 @@ class CompanionController:
 
     def __write_line_to_file(self, fname, line):
         """ Write the given line to the given file using the save dir selected by user. """
+        print("Writing line:", line, "to file:", fname)
         line = line + "\n"
         filepath = path.join(self.file_dialog.directory().path(), fname)
         filepath += ".txt"
@@ -275,6 +277,7 @@ class CompanionController:
 
     def __add_hdr_to_file(self, device):
         """ Add device specific header to given device's output file. """
+        print("Adding hdr to file for device:", device)
         self.__write_line_to_file(self.devices[device]['fn'], self.devices[device]['controller'].get_hdr())
         self.devices[device]['hdr_bool'] = True
 

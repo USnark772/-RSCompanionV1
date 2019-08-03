@@ -50,7 +50,6 @@ class GraphObj(QFrame):
         if device_type in self.__canvases:
             self.__canvases[device_type].add_data(data_type, device_port, x, y)
 
-    # TODO: Move this logic into elsewhere
     def set_device_data_type_activity(self, device, data_type, is_active):
         device_type = device[0]
         device_port = device[1]
@@ -237,14 +236,12 @@ class CanvasObj(Canvas):
                 return result
         return None
 
-    # TODO: NEW DEVICE ADDITION. Add reference to new device plot function in this if else statement
     def __plot_device_type(self, axes, data_type, draw_label=True):
         if self.__title == "drt":
             self.__plot_drt(axes, data_type, draw_label)
         elif self.__title == "vog":
             self.__plot_vog(axes, data_type, draw_label)
 
-    # TODO: NEW DEVICE ADDITION. Add new device plot function below this line
     def __plot_drt(self, axes, data_type, draw_label):
         for key in self.__data[data_type]:
             if not draw_label:

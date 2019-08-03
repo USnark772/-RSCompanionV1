@@ -14,17 +14,33 @@ current_version = 1.0
 
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
 
-# TODO: Change this
 program_output_hdr = "Timestamp, Author, Location, Message\n"
 
-about_RS_text = "CHANGEME Red Scientific is an awesome company that will do great things in the years to come and " \
-                "keep Phillip really happy by paying him lots of money because RS is rich from selling all those " \
-                "awesome devices which are made even awesomer by the View that Phillip was instrumental in making " \
-                "work. boom."
+about_RS_text = "Red Scientific Inc was founded in 2015 by Joel Cooper PhD\n\n" \
+                "Contact Information:\n" \
+                "joel@redscientific.com\n" \
+                "1-801-520-5408"
 
-about_RS_app_text = "CHANGEME The RS Companion App was designed by Joel Cooper and brought to life by Phillip " \
-                    "Riskin. It has many functionalities that you might not be aware of so play around with it and " \
-                    "see what's going on! Have fun :)"
+about_RS_app_text = "- Most things in this app have tooltips. Mouse over different parts to see respective tooltips" \
+                    " for more information\n\n" \
+                    "Along the top of the app you will find a detachable control bar containing the following:\n" \
+                    "- Create button: Create an experiment and choose a location folder for the app to save device" \
+                    " data.\n" \
+                    "- Play/Pause button: Begin/resume or pause an experiment in progress.\n" \
+                    "- Optional condition name: An optional name that will be associated with the newly created" \
+                    " experiment.\n\n" \
+                    "- Key Flag: Press a letter key at any time to make a quick reference key that will be associated" \
+                    " with the data coming in from the devices during an experiment.\n\n" \
+                    "- Note: Enter a note into the box and press Post to apply that note to all device data files" \
+                    " within the current experiment.\n\n" \
+                    "- Information: Displays information in regards to the current experiment.\n\n" \
+                    "The lower left section contains the Display area with the following features:\n" \
+                    "- Displays data coming in from devices associated with the latest experiment.\n" \
+                    "- Clicking on the legend will show/hide device specific data in each graph.\n" \
+                    "- Using the control bar under each graph you will be able manipulate the graphs.\n\n" \
+                    "The lower right section contains the Device config area where each device will display a" \
+                    " configuration menu. In each menu you can alter the settings of how the respective device acts" \
+                    " during an experiment.\n"
 
 update_available = "An update is available."
 

@@ -1,5 +1,4 @@
 TODO:
--   Check device output
 -   Package and link github to team
 -   Bug check with team
 -   Document code
@@ -13,7 +12,7 @@ Updater:
 -   Automatically download latest version at users request
 -   Automatically check for updates at startup if user selects that option
 
-Installer:
+Installer: Inno Setup
 -   Make sure installer installs over previous versions of Companion app
 
 Comments:

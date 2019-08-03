@@ -99,7 +99,12 @@ class CanvasObj(Canvas):
     def __onpick(self, event):
         """ show or hide lines in subplots based on which marker in legend was clicked """
         legend_line = event.artist
-        plot_lines = self.__legend_plot_links[legend_line]
+        print("Legend_line:", legend_line)
+        print("legend_plot_links:", self.__legend_plot_links)
+        if legend_line in self.__legend_plot_links:
+            plot_lines = self.__legend_plot_links[legend_line]
+        else:
+            return
         for line in plot_lines:
             visible = not line.get_visible()
             line.set_visible(visible)
