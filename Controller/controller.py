@@ -247,7 +247,9 @@ class CompanionController:
         elif is_available == 0:
             self.ui.show_help_window("Update", up_to_date)
         elif is_available == -1:
-            self.ui.show_help_window("Error", "There was an unexpected error connecting to the repository")
+            self.ui.show_help_window("Error", "There was an unexpected error connecting to the repository."
+                                              " Please check https://github.com/redscientific/CompanionApp manually"
+                                              " or contact Red Scientific directly.")
 
     def __update_save(self, msg):
         """ Save device output to file 'fn'. msg is expected to be a dictionary. """

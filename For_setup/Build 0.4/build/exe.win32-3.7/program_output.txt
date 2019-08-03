@@ -1,8 +1,0 @@
-Timestamp, Author, Location, Message
-2019-06-27-14-43-47, drt, COM9, cfg>name:sDRT, buildDate:10/10/2018, version:1.0, lowerISI:3000, upperISI:5000, stimDur:1000, intensity:255
-2019-06-27-14-44-03, drt, COM9, trl>4267, 1, 1, 411
-2019-06-27-14-44-05, drt, COM9, trl>7913, 2, 1, 288
-2019-06-27-14-44-48, drt, COM9, trl>3190, 1, 1, 349
-2019-06-27-14-44-52, drt, COM9, trl>8103, 2, 1, 347
-2019-06-27-14-44-52, drt, COM9, trl>11674, 3, 0, -1
-2019-06-27-14-45-11, drt, COM9, trl>11674, 4, 0, -1

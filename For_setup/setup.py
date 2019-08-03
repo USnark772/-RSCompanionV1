@@ -27,7 +27,7 @@ if sys.platform == 'win32':
         build_exe_options['include_files'].append(file)
 
 setup(name='RS Companion App',
-      version='0.4',
-      description='The companion to all RS Devices',
+      version='0.5',
+      description='The companion app to rule all RS Devices',
       options={'build_exe': build_exe_options},
-      executables=[Executable('main.py', targetName='Companion.exe', base=base, icon='rs_icon.ico')])
+      executables=[Executable('main.py', targetName='Companion.exe', base=base, icon='Images/rs_icon.ico')])
