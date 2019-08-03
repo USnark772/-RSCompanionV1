@@ -9,6 +9,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QFont, QIcon
 from View.MainWindow.help_window import HelpWindow
 from View.MainWindow.central_widget import CentralWidget
+from Model.general_defs import image_file_path
 
 
 class CompanionWindow(QMainWindow):
@@ -28,7 +29,7 @@ class CompanionWindow(QMainWindow):
         self.__graph_and_tab_layout.addWidget(self.__tab_frame)
         self.centralWidget().layout().addLayout(self.__graph_and_tab_layout)
 
-        self.__icon = QIcon("../View/Images/rs_icon.png")
+        self.__icon = QIcon(image_file_path + "rs_icon.png")
         self.setWindowIcon(self.__icon)
         self.close_callback = None
         self.__help_window = None

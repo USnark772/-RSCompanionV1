@@ -7,6 +7,7 @@
 from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QSize
+from Model.general_defs import image_file_path
 
 
 class ButtonBox(QGroupBox):
@@ -27,9 +28,9 @@ class ButtonBox(QGroupBox):
         self.layout().addWidget(self.__text_entry)
 
         self.__play_icon = QIcon()
-        self.__play_icon.addPixmap(QPixmap("../View/Images/green_arrow.png"))
+        self.__play_icon.addPixmap(QPixmap(image_file_path + "green_arrow.png"))
         self.__pause_icon = QIcon()
-        self.__pause_icon.addPixmap(QPixmap('../View/Images/red_vertical_bars.png'))
+        self.__pause_icon.addPixmap(QPixmap(image_file_path + "red_vertical_bars.png"))
         self.__playing = False
 
         self.__set_texts()

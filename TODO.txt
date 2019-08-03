@@ -1,5 +1,4 @@
 TODO:
--   Package and link github to team
 -   Bug check with team
 -   Document code
 -   Ship it
@@ -79,6 +78,7 @@ Graphing:
     -   Put graph controls below each graph
 
 TODO: fix these issues
+-   Check for updates is not working again. Possibly due to repository being private
 -   When scrolling, the graphs move in their canvasas (don't worry about this for now)
 -   Some unexplained issues with ui sizing (Has to do with screen scaling) (don't worry about this for now)
 
