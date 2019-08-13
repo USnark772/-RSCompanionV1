@@ -12,7 +12,8 @@ build_exe_options = {'packages': ['os',
                                   'numpy',
                                   'matplotlib'],
                      'excludes': ['tkinter'],
-                     'include_files': ['C:/Users/phill/PycharmProjects/RedScientific/Companion/View/Images/']}
+                     'include_files': ['C:/Users/phill/PycharmProjects/RedScientific/Companion/View/Images/'],
+                     'include_msvcr': True}
 
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
 include_files = [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'libcrypto-1_1.dll'),

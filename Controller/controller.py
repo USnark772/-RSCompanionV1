@@ -6,6 +6,7 @@
 
 from os import path
 from sys import argv
+from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir, QSize
 from PySide2.QtGui import QKeyEvent
@@ -189,7 +190,6 @@ class CompanionController:
 
     def __check_toggle_post_button(self):
         """ If an experiment is created and running and there is a note then allow user access to post button. """
-        print("Checking post button")
         if self.exp_created and self.exp_running and len(self.note_box.get_note()) > 0:
             self.note_box.toggle_post_button(True)
         else:
@@ -231,7 +231,6 @@ class CompanionController:
 
     def __write_line_to_file(self, fname, line):
         """ Write the given line to the given file using the save dir selected by user. """
-        print("Writing line:", line, "to file:", fname)
         line = line + "\n"
         filepath = path.join(self.file_dialog.directory().path(), fname)
         filepath += ".txt"
@@ -279,17 +278,15 @@ class CompanionController:
 
     def __add_hdr_to_file(self, device):
         """ Add device specific header to given device's output file. """
-        print("Adding hdr to file for device:", device)
         self.__write_line_to_file(self.devices[device]['fn'], self.devices[device]['controller'].get_hdr())
         self.devices[device]['hdr_bool'] = True
 
     @staticmethod
     def __setup_output_file():
         """ Create program output file to save log. """
-        fname = path.dirname(argv[0]) + "\\program_output.txt"
-        if path.exists(fname):
-            with open(fname, "w") as temp:
-                temp.write(program_output_hdr)
+        fname = gettempdir() + "\\companion_app_console_output.txt"
+        with open(fname, "w") as temp:
+            temp.write(program_output_hdr)
         return fname
 
     @staticmethod
