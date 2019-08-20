@@ -1,3 +1,21 @@
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
 # Author: Phillip Riskin
 # Date: Spring 2019
 # Project: Companion App
@@ -343,15 +361,18 @@ class CompanionController:
     ########################################################################################
 
     def ui_close_event_handler(self):
+        """ Shut down all devices before closing the app. """
         if self.exp_running:
             self.device_manager.end_block_all()
         if self.exp_created:
             self.device_manager.end_exp_all()
 
     def __about_company(self):
+        """ Display company information. """
         self.ui.show_help_window("About Red Scientific", about_RS_text)
 
     def __about_app(self):
+        """ Display app information. """
         self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text)
 
     ########################################################################################
@@ -359,15 +380,18 @@ class CompanionController:
     ########################################################################################
 
     def __make_drt_graph(self):
+        """ Create a drt type graph and add it to the display area. """
         graph = DRTGraph(self.graph_box)
         graph_frame = GraphFrame(self.graph_box, graph)
         self.__graphs["drt"] = graph_frame
         self.graph_box.add_display(graph_frame)
 
     def __destroy_drt_graph(self):
+        """ Remove the drt graph. Typically called when all drt devices have been disconnected. """
         self.graph_box.remove_display(self.__graphs["drt"])
 
     def __make_vog_graph(self):
+        """ Create a vog type graph and add it to the display area. """
         graph = VOGGraph(self.graph_box)
         graph_frame = GraphFrame(self.graph_box, graph)
         graph_frame.set_graph_height(500)
@@ -375,6 +399,7 @@ class CompanionController:
         self.graph_box.add_display(graph_frame)
 
     def __destroy_vog_graph(self):
+        """ Remove the vog graph. Typically called when all vog devices have been disconnected. """
         self.graph_box.remove_display(self.__graphs["vog"])
 
     def __refresh_all_graphs(self):
@@ -382,4 +407,5 @@ class CompanionController:
             self.__graphs[graph].get_graph().refresh_self()
 
     def add_data_to_graph(self, device, data):
+        """ Pass data to device type graph along with specific device id. """
         self.__graphs[device[0]].get_graph().add_data(device[1], data)

@@ -1,3 +1,21 @@
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
 # Author: Phillip Riskin
 # Date: Spring 2019
 # Project: Companion App
@@ -13,6 +31,7 @@ from Model.general_defs import image_file_path
 
 
 class CompanionWindow(QMainWindow):
+    """ The main window the app will be displayed in. """
     def __init__(self, min_size):
         super().__init__()
         self.setMinimumSize(min_size)
@@ -36,6 +55,7 @@ class CompanionWindow(QMainWindow):
         self.__set_texts()
 
     def closeEvent(self, event):
+        """ Alert controller if desired to the app closing event"""
         if self.close_callback:
             self.close_callback()
 
@@ -55,6 +75,7 @@ class CompanionWindow(QMainWindow):
         self.__tab_frame.layout().addWidget(widget)
 
     def show_help_window(self, title, msg):
+        """ Show msg in a help window with the title. """
         self.__help_window = HelpWindow(title, msg)
         self.__help_window.setWindowIcon(self.__icon)
         self.__help_window.show()

@@ -1,3 +1,21 @@
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
 # Author: Phillip Riskin
 # Date: Spring 2019
 # Project: Companion App
@@ -12,6 +30,7 @@ from Model.general_defs import tab_line_edit_error_style, tab_line_edit_complian
 
 
 class VOGTab(QWidget):
+    """ This code is for helping the user interact with the configurations of the VOG device. """
     def __init__(self, parent, device):
         super().__init__(parent)
         self.setLayout(QVBoxLayout(self))
@@ -20,6 +39,7 @@ class VOGTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
+        """ Set configuration value display area"""
         self.__config_frame = self.__MyFrame(self)
         self.__config_horiz_layout = QHBoxLayout(self.__config_frame)
         self.__config_label = QLabel(self.__config_frame)
@@ -32,6 +52,7 @@ class VOGTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
+        """ Set preset button selection area. """
         self.__presets_frame = self.__MyFrame(self)
         self.__presets_vert_layout = QVBoxLayout(self.__presets_frame)
         self.__nhtsa_button = QPushButton(self.__presets_frame)
@@ -44,6 +65,7 @@ class VOGTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
+        """ Set open duration, close duration, and debounce time settings display area. """
         self.__input_box_frame = self.__MyFrame(self)
         self.__input_box_grid_layout = QGridLayout(self.__input_box_frame)
         self.__input_box_grid_layout.setContentsMargins(0, 6, 0, 6)
@@ -70,6 +92,7 @@ class VOGTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
+        """ Set button mode setting display area. """
         self.__button_mode_frame = self.__MyFrame()
         self.__button_mode_horiz_layout = QHBoxLayout(self.__button_mode_frame)
         self.__button_mode_label = QLabel(self.__button_mode_frame)
@@ -82,11 +105,13 @@ class VOGTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
+        """ Set upload button selection area. """
         self.__upload_settings_button = QPushButton()
         self.layout().addWidget(self.__upload_settings_button)
 
         self.layout().addWidget(self.__MyFrame(self, line=True))
 
+        """ Set manual control selection area. """
         self.__manual_control_button = QPushButton()
         self.layout().addWidget(self.__manual_control_button)
 
@@ -99,6 +124,7 @@ class VOGTab(QWidget):
         self.__set_tooltips()
 
     def add_graph_button(self, name):
+        """ Depriciated. """
         new_button = QPushButton()
         new_button.setText("Hide " + name)
         self.__graph_buttons.append([new_button, name])
@@ -106,9 +132,11 @@ class VOGTab(QWidget):
         return len(self.__graph_buttons) - 1
 
     def add_graph_button_handler(self, index, func):
+        """ Depriciated. """
         self.__graph_buttons[index][0].clicked.connect(func)
 
     def toggle_graph_button(self, index):
+        """ Depriciated. """
         if "Hide" in self.__graph_buttons[index][0].text():
             self.__graph_buttons[index][0].setText("Show " + self.__graph_buttons[index][1])
         else:
@@ -148,69 +176,82 @@ class VOGTab(QWidget):
         self.__button_mode_selector.currentIndexChanged.connect(func)
 
     def set_upload_button_activity(self, is_active):
+        """ Set upload button to enabled or disabled depending on is_active bool. """
         self.__upload_settings_button.setEnabled(is_active)
 
     def set_config_value(self, value):
+        """ Set display value of config. """
         self.__config_val.setText(value)
 
     def get_open_val(self):
         return self.__open_dur_line_edit.text()
 
     def set_open_val(self, val):
+        """ Set display value of open duration. """
         self.__open_dur_line_edit.setText(str(val))
 
     def set_open_val_error(self, is_error):
+        """ Set display of error in open duration line edit. """
         if is_error:
             self.__open_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.__open_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
 
     def set_close_val_error(self, is_error):
+        """ Set display of error in close duration line edit. """
         if is_error:
             self.__close_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.__close_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
 
     def set_debounce_val_error(self, is_error):
+        """ Set display of error in debounce line edit. """
         if is_error:
             self.__debounce_time_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.__debounce_time_line_edit.setStyleSheet(tab_line_edit_compliant_style)
 
     def set_open_val_entry_activity(self, is_active):
+        """ Set open value line edit to enabled or disabled depending on is_active bool. """
         self.__open_dur_line_edit.setEnabled(is_active)
 
     def get_open_inf(self):
         return self.__open_inf_check_box.isChecked()
 
     def set_open_inf(self, is_checked):
+        """ Set open infinity checkbox state to is_checked. """
         self.__open_inf_check_box.setChecked(is_checked)
 
     def get_close_val(self):
         return self.__close_dur_line_edit.text()
 
     def set_close_val(self, val):
+        """ Set display value of close duration. """
         self.__close_dur_line_edit.setText(str(val))
 
     def set_close_val_entry_activity(self, is_active):
+        """ Set close value line edit to enabled or disabled depending on is_active bool. """
         self.__close_dur_line_edit.setEnabled(is_active)
 
     def get_close_inf(self):
         return self.__close_inf_check_box.isChecked()
 
     def set_close_inf(self, is_checked):
+        """ Set close infinity checkbox state to is_checked. """
         self.__close_inf_check_box.setChecked(is_checked)
 
     def get_debounce_val(self):
         return self.__debounce_time_line_edit.text()
 
     def set_debounce_val(self, val):
+        """ Set debounce display value. """
         self.__debounce_time_line_edit.setText(str(val))
 
     def get_button_mode(self):
         return self.__button_mode_selector.currentIndex()
 
     def set_button_mode(self, val):
+        """ Set display value of button mode. """
         self.__button_mode_selector.setCurrentIndex(int(val))
 
     def get_name(self):
@@ -254,6 +295,7 @@ class VOGTab(QWidget):
         self.__manual_control_button.setToolTip("Manually open or close the lens")
 
     class __MyFrame(QFrame):
+        """ Creates a frame for display purposes depending on bools. """
         def __init__(self, parent=None, line=False, vert=False):
             super().__init__(parent)
             if line:

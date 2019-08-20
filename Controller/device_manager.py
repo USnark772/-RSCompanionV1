@@ -1,4 +1,29 @@
-""" Contains a class for detecting changes on the serial/usb port
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
+# Author: Phillip Riskin
+# Date: Spring 2019
+# Project: Companion App
+# Company: Red Scientific
+# https://redscientific.com/index.html
+
+""" 
+Contains a class for detecting changes on the serial/usb port
 This class requires that a separate thread be created to call update.
 When the target device is plugged in or removed the connect_event or
 disconnect_event flags are turned True.
@@ -25,6 +50,11 @@ class DeviceManager:
         self.devices = dict()
 
     def update(self):
+        """
+        Check for any changes with any current devices such as plug or unplug events.
+        Check for any messages from any current devices.
+        Pass any messages to the controller for further handling.
+        """
         self.__scan_ports()  # probe plug/unplug events
 
         if len(self.devices_to_add) != 0:
@@ -54,6 +84,7 @@ class DeviceManager:
                     pass
 
     def handle_msg(self, msg_dict):
+        """ Parse message from controller and attempt to pass to device specified in dictionary. If error do nothing."""
         msg_type = msg_dict['type']
         if msg_type == "send":
             port = None
@@ -74,42 +105,51 @@ class DeviceManager:
             self.msg_callback({'type': "save", 'msg': "Debug, DeviceManager.handle_msg(), Unknown command"})
 
     def start_exp_all(self):
+        """ Send start experiment messages to all devices. """
         for d in self.devices:
             self.__start_exp(self.devices[d]['id'], self.devices[d]['port'])
 
     def end_exp_all(self):
+        """ Send end experiment messages to all devices. """
         for d in self.devices:
             self.__end_exp(self.devices[d]['id'], self.devices[d]['port'])
 
     def start_block_all(self):
+        """ Send start block messages to all devices. """
         for d in self.devices:
             self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
 
     def end_block_all(self):
+        """ Send end block messages to all devices. """
         for d in self.devices:
             self.__end_block(self.devices[d]['id'], self.devices[d]['port'])
 
     def __start_exp(self, device, port):
+        """ If device needs a start experiment message, send it. """
         if device == "vog":
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_expStart"}))
 
     def __end_exp(self, device, port):
+        """ If device needs a stop experiment message, send it. """
         if device == "vog":
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_expStop"}))
 
     def __start_block(self, device, port):
+        """ If device needs a start block message, send it. """
         if device == "drt":
             self.__send_msg_on_port(port, self.__prepare_drt_msg({'cmd': "exp_start"}))
         elif device == "vog":
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStart"}))
 
     def __end_block(self, device, port):
+        """ If device needs a stop block message, send it. """
         if device == "drt":
             self.__send_msg_on_port(port, self.__prepare_drt_msg({'cmd': "exp_stop"}))
         elif device == "vog":
             self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStop"}))
 
     def __scan_ports(self):
+        """ Go through list of ports and get set of attached devices. """
         devices_known = list(self.devices.keys())
         self.devices_to_add = []
         self.devices_to_remove = []
@@ -127,6 +167,7 @@ class DeviceManager:
             self.devices_to_remove = list(set(devices_known) - set(self.devices_attached))
 
     def __attach_devices(self):
+        """ Go through list of attached devices and attach each device to app if it is a known. """
         for port in list_ports.comports():
             if port.device in self.devices_to_add:
                 for device in self.profiles:
@@ -134,20 +175,16 @@ class DeviceManager:
                         the_port = Serial()
                         the_port.port = port.device
                         i = 0
-                        while not the_port.is_open and i < 5:
+                        while not the_port.is_open and i < 5:  # Make multiple attempts in case device is busy
                             i += 1
                             try:
                                 the_port.open()
                             except SerialException as e:
-                                print("in device_manager.py __attach_devices(): SerialException", e)
                                 sleep(1)
                         if not the_port.is_open:
-                            print()
                             self.devices[port.device] = {'id': 'unknown'}
                             self.msg_callback({'type': "error"})
                             break
-                        else:
-                            print()
                         self.devices[port.device] = {'port': the_port, 'id': device}
                         msg_dict = {'type': "add", 'device': (self.devices[port.device]['id'], self.devices[port.device]['port'].name)}
                         self.msg_callback(msg_dict)
@@ -156,6 +193,7 @@ class DeviceManager:
                         self.devices[port.device] = {'id': 'unknown'}
 
     def __remove_devices(self):
+        """ Go through list of attached devices and alert controller of devices that have been unplugged. """
         for e in self.devices_to_remove:
             if not self.devices[e]['id'] == "unknown":
                 self.devices[e]['port'].close()
@@ -169,6 +207,7 @@ class DeviceManager:
 
     @staticmethod
     def __prepare_drt_msg(msg_dict):
+        """ Create string using drt syntax. """
         if 'arg' in msg_dict.keys():
             msg_to_send = msg_dict['cmd'] + " " + str(msg_dict['arg']) + "\n"
         else:
@@ -212,6 +251,7 @@ class DeviceManager:
 
     @staticmethod
     def __prepare_vog_msg(msg_dict):
+        """ Create string using vog syntax. """
         if 'arg' in msg_dict.keys():
             msg_to_send = ">" + msg_dict['cmd'] + "|" + str(msg_dict['arg']) + "<<\n"
         else:

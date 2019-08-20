@@ -1,3 +1,21 @@
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
 # Author: Phillip Riskin
 # Date: Spring 2019
 # Project: Companion App
@@ -10,6 +28,7 @@ from matplotlib.figure import Figure
 
 
 class CanvasObj(Canvas):
+    """ This code is for graphing data from devices. """
     def __init__(self, parent, title, plot_names, plotter):
         super().__init__(Figure(figsize=(5, 5)))
         self.setToolTip("Click on legend to show/hide lines. Drag legend to move it")
@@ -31,15 +50,18 @@ class CanvasObj(Canvas):
         self.__new = True
 
     def refresh_self(self):
+        """ Redraw the canvas. """
         self.figure.canvas.draw()
 
     def get_title(self):
         return self.__title
 
     def set_new(self, is_new):
+        """ If graph is new then there is no data to display. """
         self.__new = is_new
 
     def __set_plot_names(self, names):
+        """ Each plot name will be used to create a graph for a specific data type. """
         for name in names:
             self.__plot_names.append(name)
 

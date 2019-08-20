@@ -1,3 +1,21 @@
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
 # Author: Phillip Riskin
 # Date: Spring 2019
 # Project: Companion App
@@ -12,6 +30,7 @@ from Model.general_defs import tab_line_edit_compliant_style, tab_line_edit_erro
 
 
 class DRTTab(QWidget):
+    """ This code is for helping the user interact with the configurations of the DRT device. """
     def __init__(self, parent, device):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
@@ -22,6 +41,7 @@ class DRTTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(True))
 
+        """ Set configuration value display area"""
         self.config_frame = self.__MyFrame()
         self.config_layout = QHBoxLayout(self.config_frame)
         self.config_label = QLabel(self.config_frame)
@@ -34,6 +54,7 @@ class DRTTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(True))
 
+        """ Set preset button selection area. """
         self.presets_frame = self.__MyFrame()
         self.presets_layout = QVBoxLayout(self.presets_frame)
         self.iso_button = QPushButton(self.presets_frame)
@@ -42,6 +63,7 @@ class DRTTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(True))
 
+        """ Set stim intensity settings display area. """
         self.slider_frame = self.__MyFrame()
         self.slider_layout = QVBoxLayout(self.slider_frame)
         self.slider_label_layout = QHBoxLayout(self.slider_frame)
@@ -64,6 +86,7 @@ class DRTTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(True))
 
+        """ Set stim duration, upper isi and lower isi settings display area. """
         self.input_box_frame = self.__MyFrame()
         self.input_box_layout = QGridLayout(self.input_box_frame)
         self.stim_dur_line_edit = QLineEdit(self.input_box_frame)
@@ -85,6 +108,7 @@ class DRTTab(QWidget):
 
         self.layout().addWidget(self.__MyFrame(True))
 
+        """ Set upload button selection area. """
         self.upload_settings_button = QPushButton()
         self.layout().addWidget(self.upload_settings_button)
 
@@ -97,6 +121,7 @@ class DRTTab(QWidget):
         self.__set_tooltips()
 
     def add_graph_button(self, name):
+        """ Depriciated. """
         new_button = QPushButton()
         new_button.setText("Hide " + name)
         self.__graph_buttons.append([new_button, name])
@@ -104,9 +129,11 @@ class DRTTab(QWidget):
         return len(self.__graph_buttons) - 1
 
     def add_graph_button_handler(self, index, func):
+        """ Depriciated. """
         self.__graph_buttons[index][0].clicked.connect(func)
 
     def toggle_graph_button(self, index):
+        """ Depriciated. """
         if "Hide" in self.__graph_buttons[index][0].text():
             self.__graph_buttons[index][0].setText("Show " + self.__graph_buttons[index][1])
         else:
@@ -134,27 +161,32 @@ class DRTTab(QWidget):
         self.upload_settings_button.setEnabled(is_active)
 
     def set_config_val(self, val):
+        """ Set display value of config. """
         self.config_val.setText(str(val))
 
     def get_stim_dur_val(self):
         return self.stim_dur_line_edit.text()
 
     def set_stim_dur_val(self, val):
+        """ Set display value of stim duration. """
         self.stim_dur_line_edit.setText(str(val))
 
     def set_stim_dur_val_error(self, is_error):
+        """ Set display of error in stim duration line edit. """
         if is_error:
             self.stim_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.stim_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
 
     def set_upper_isi_val_error(self, is_error):
+        """ Set display of error in upper isi line edit. """
         if is_error:
             self.upper_isi_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.upper_isi_line_edit.setStyleSheet(tab_line_edit_compliant_style)
 
     def set_lower_isi_val_error(self, is_error):
+        """ Set display of error in lower isi line edit. """
         if is_error:
             self.lower_isi_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
@@ -164,22 +196,26 @@ class DRTTab(QWidget):
         return self.stim_intens_slider.value()
 
     def set_stim_intens_val(self, val):
+        """ Set display value of stim intensity. """
         self.stim_intens_slider.setValue(int(val))
         self.set_stim_intens_val_label(val)
 
     def set_stim_intens_val_label(self, val):
+        """ Set display value of stim intensity label. """
         self.stim_intens_val.setText(str(val) + "%")
 
     def get_upper_isi_val(self):
         return self.upper_isi_line_edit.text()
 
     def set_upper_isi_val(self, val):
+        """ Set display value of upper isi. """
         self.upper_isi_line_edit.setText(str(val))
 
     def get_lower_isi_val(self):
         return self.lower_isi_line_edit.text()
 
     def set_lower_isi_val(self, val):
+        """ Set display value of lower isi. """
         self.lower_isi_line_edit.setText(str(val))
 
     def get_name(self):
@@ -206,6 +242,7 @@ class DRTTab(QWidget):
         self.stim_intens_slider.setToolTip(str(self.stim_intens_slider.value()) + "%")
 
     class __MyFrame(QFrame):
+        """ Creates a frame for display purposes depending on bools. """
         def __init__(self, line=False, vert=False):
             super().__init__()
             if line:
