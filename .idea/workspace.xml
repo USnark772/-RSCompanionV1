@@ -2,45 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/COPYING" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/webcam_tester.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CompanionLib/time_funcs.py" beforeDir="false" afterPath="$PROJECT_DIR$/CompanionLib/time_funcs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/program_output.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/version_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/version_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/DRT/Model/drt_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Model/drt_defs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/VOG/Model/vog_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Model/vog_defs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/For_setup/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/general_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/general_defs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/matplotlib_documentation_example.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/mlp_double_graph_example.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_one.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/pyqt5_matplot_example_two.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/test_mean_matplotlib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/toggle_line_matplotlib_example.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/display_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/display_container.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_nav_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_nav_bar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/button_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/button_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/control_dock.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/control_dock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/flag_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/flag_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/info_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/info_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/note_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/note_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/MainWindow/central_widget.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/central_widget.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/MainWindow/help_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/help_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/MainWindow/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/main_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/MenuBarWidget/menu_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MenuBarWidget/menu_bar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/TabWidget/device_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/device_tab.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -92,7 +57,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.webcam_tester">
     <configuration name="drt_plot" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -156,8 +121,52 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="webcam_controller" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Devices/Webcam/Controller" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="webcam_tester" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/webcam_tester.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.webcam_tester" />
+        <item itemvalue="Python.webcam_controller" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.toggle_line_matplotlib_example" />
         <item itemvalue="Python.drt_plot" />
