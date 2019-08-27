@@ -27,6 +27,7 @@ from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboB
 from PySide2.QtCore import Qt, QRect
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min
 from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
+# TODO: Change __MyFrame to CompanionLib/view_helpers.py MyFrame
 
 
 class VOGTab(QWidget):

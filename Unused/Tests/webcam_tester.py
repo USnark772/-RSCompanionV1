@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtMultimedia import *
-from PyQt5.QtMultimediaWidgets import *
+from PySide2.QtWidgets import *
+from PySide2.QtMultimedia import *
+from PySide2.QtMultimediaWidgets import *
 
 import sys
 
@@ -18,9 +18,26 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.exist)
 
         # set the default webcam.
-        self.get_webcam(0)
+        self.current_cam_index = 0
+        self.get_webcam(self.current_cam_index)
         self.setWindowTitle("WebCam")
         self.show()
+
+    def keyPressEvent(self, event):
+        if event.key() == 0x4e:
+            self.change_webcam(True)
+        elif event.key() == 0x50:
+            self.change_webcam()
+
+    def change_webcam(self, increment=False):
+        if increment:
+            if self.current_cam_index + 1 < len(self.online_webcams):
+                self.current_cam_index += 1
+                self.get_webcam(self.current_cam_index)
+        else:
+            if self.current_cam_index - 1 >= 0:
+                self.current_cam_index -= 1
+                self.get_webcam(self.current_cam_index)
 
     def get_webcam(self, i):
         self.my_webcam = QCamera(self.online_webcams[i])

@@ -6,6 +6,8 @@ After launch:
 -   Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
     Seems to have trouble accessing USB camera. Uses builtin webcams just fine. Need to do more searching.
+    It seems Qt5 has a good implementation so far. Preliminary research shows there is a way to overlay. Consider using
+    https://developer.ridgerun.com/wiki/index.php?title=Gstreamer_QT_Overlay for overlay but do more research.
 -   GPS integration
 
 Updater:

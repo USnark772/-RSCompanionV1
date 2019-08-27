@@ -77,6 +77,8 @@ class CompanionController:
         self.exp_created = False
         self.exp_running = False
         self.__dir_chosen = False
+        self.__num_drts = 0
+        self.__num_vogs = 0
         self.current_cond_name = ""
         self.program_output_save_file = self.__setup_output_file()
         self.devices = {}
@@ -330,11 +332,13 @@ class CompanionController:
         device manager to let device controller handle device specific messages. Each device gets its own configure tab.
         """
         if device[0] == "drt":
+            self.__num_drts += 1
             if not device[0] in self.__graphs:
                 self.__make_drt_graph()
             device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg,
                                               self.add_data_to_graph)
         elif device[0] == "vog":
+            self.__num_vogs += 1
             if not device[0] in self.__graphs:
                 self.__make_vog_graph()
             device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg,
@@ -352,9 +356,14 @@ class CompanionController:
     def __remove_device(self, device):
         """ Removes device tab, graph link and device information """
         if device in self.devices:
+            if device[0] == "drt":
+                self.__num_drts -= 1
+            elif device[0] == "vog":
+                self.__num_vogs -= 1
             self.tab_box.remove_tab(device[1])
             self.__graphs[device[0]].get_graph().remove_device(device[1])
             del self.devices[device]
+            self.__check_num_devices()
 
     ########################################################################################
     # Other handlers
@@ -379,6 +388,12 @@ class CompanionController:
     # graph handling
     ########################################################################################
 
+    def __check_num_devices(self):
+        if self.__num_drts == 0:
+            self.__destroy_drt_graph()
+        if self.__num_vogs == 0:
+            self.__destroy_vog_graph()
+
     def __make_drt_graph(self):
         """ Create a drt type graph and add it to the display area. """
         graph = DRTGraph(self.graph_box)
@@ -388,7 +403,9 @@ class CompanionController:
 
     def __destroy_drt_graph(self):
         """ Remove the drt graph. Typically called when all drt devices have been disconnected. """
-        self.graph_box.remove_display(self.__graphs["drt"])
+        if "drt" in self.__graphs.keys():
+            self.graph_box.remove_display(self.__graphs["drt"])
+            del self.__graphs["drt"]
 
     def __make_vog_graph(self):
         """ Create a vog type graph and add it to the display area. """
@@ -400,7 +417,9 @@ class CompanionController:
 
     def __destroy_vog_graph(self):
         """ Remove the vog graph. Typically called when all vog devices have been disconnected. """
-        self.graph_box.remove_display(self.__graphs["vog"])
+        if "vog" in self.__graphs.keys():
+            self.graph_box.remove_display(self.__graphs["vog"])
+            del self.__graphs["vog"]
 
     def __refresh_all_graphs(self):
         for graph in self.__graphs:

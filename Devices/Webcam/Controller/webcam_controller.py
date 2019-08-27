@@ -27,71 +27,50 @@ Simply display the contents of the webcam with optional mirroring using OpenCV
 via the new Pythonic cv2 interface.  Press <esc> to quit.
 """
 
-import cv2
-from PySide2.QtMultimedia import QCameraInfo, QCamera
-from PySide2.QtMultimediaWidgets import QCameraViewfinder
+from PySide2.QtWidgets import *
+from PySide2.QtMultimedia import *
+from PySide2.QtMultimediaWidgets import *
 
 
-def QCheckCameras():
-    info_obj = QCameraInfo.availableCameras()
-    return info_obj
+class WebcamController(QWidget):
+    def __init__(self):
+        self.online_webcams = QCameraInfo.availableCameras()
+        if not self.online_webcams:
+            pass
 
+        self.my_webcam = None
+        self.cam_view = QCameraViewfinder()
+        self.cam_view.show()
 
-# Just takes some time for the usb webcam for some reason.
-def show_webcam(cam, mirror=False):
-    try:
-        cam = cv2.VideoCapture(cam)
-        ret_val, img = cam.read()
-    except Exception as e:
-        print(e)
-        cam.release()
-        cv2.destroyAllWindows()
-        return False
-    # Must use ret_val to know if cam is still responding. If cam stops responding then don't try doing anything with
-    # image img.
-    while ret_val:
-        if mirror:
-            img = cv2.flip(img, 1)
-        cv2.imshow('my webcam', img)
-        if cv2.waitKey(1) == 27:
-            break  # esc to quit
-        try:
-            ret_val, img = cam.read()
-        except Exception as e:
-            print(e)
-            cam.release()
-            cv2.destroyAllWindows()
-            return False
-    cam.release()
-    cv2.destroyAllWindows()
-    return True
+        self.current_cam_index = 0
+        self.get_webcam(self.current_cam_index)
 
+    def keyPressEvent(self, event):
+        if event.key() == 0x4e:
+            self.change_webcam(True)
+        elif event.key() == 0x50:
+            self.change_webcam()
 
-def find_cams():
-    arr = []
-    tests = 100
-    for i in range(0, tests):
-        print("Trying index:", i)
-        cap = cv2.VideoCapture(i)
-        print("cap is successful")
-        if cap.read()[0]:
-            arr.append(i)
-            cap.release()
+    def change_webcam(self, increment=False):
+        if increment:
+            if self.current_cam_index + 1 < len(self.online_webcams):
+                self.current_cam_index += 1
+                self.get_webcam(self.current_cam_index)
         else:
-            break
-    return arr
+            if self.current_cam_index - 1 >= 0:
+                self.current_cam_index -= 1
+                self.get_webcam(self.current_cam_index)
 
+    def get_webcam(self, i):
+        self.my_webcam = QCamera(self.online_webcams[i])
+        self.my_webcam.setViewfinder(self.exist)
+        self.my_webcam.setCaptureMode(QCamera.CaptureStillImage)
+        self.my_webcam.error.connect(lambda: self.alert(self.my_webcam.errorString()))
+        self.my_webcam.start()
 
-def main():
-    num_cams = QCheckCameras()
-    cams = []
-    for cam in num_cams:
-        camera = QCamera(cam)
-        cams.append(QCamera(cam))
-    print(cams)
-
-
-
-
-if __name__ == '__main__':
-    main()
+    def alert(self, s):
+        """
+        This handles errors and displays alerts.
+        """
+        err = QErrorMessage(self)
+        err.showMessage(s)

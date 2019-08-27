@@ -27,7 +27,7 @@ from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton
 from PySide2.QtCore import Qt, QRect, QSize
 from Devices.DRT.Model.drt_defs import drtv1_0_ISI_min, drtv1_0_stim_dur_min, drtv1_0_max_val
 from Model.general_defs import tab_line_edit_compliant_style, tab_line_edit_error_style
-
+# TODO: Change __MyFrame to CompanionLib/view_helpers.py MyFrame
 
 class DRTTab(QWidget):
     """ This code is for helping the user interact with the configurations of the DRT device. """
