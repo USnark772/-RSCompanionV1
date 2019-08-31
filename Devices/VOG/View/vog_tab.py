@@ -27,7 +27,7 @@ from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboB
 from PySide2.QtCore import Qt, QRect
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min
 from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
-# TODO: Change __MyFrame to CompanionLib/view_helpers.py MyFrame
+from CompanionLib.view_helpers import MyFrame
 
 
 class VOGTab(QWidget):
@@ -38,10 +38,10 @@ class VOGTab(QWidget):
         self.setGeometry(QRect(0, 0, 200, 500))
         self.setMaximumHeight(500)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         """ Set configuration value display area"""
-        self.__config_frame = self.__MyFrame(self)
+        self.__config_frame = MyFrame()
         self.__config_horiz_layout = QHBoxLayout(self.__config_frame)
         self.__config_label = QLabel(self.__config_frame)
         self.__config_label.setAlignment(Qt.AlignCenter)
@@ -51,10 +51,10 @@ class VOGTab(QWidget):
         self.__config_horiz_layout.addWidget(self.__config_val)
         self.layout().addWidget(self.__config_frame)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         """ Set preset button selection area. """
-        self.__presets_frame = self.__MyFrame(self)
+        self.__presets_frame = MyFrame()
         self.__presets_vert_layout = QVBoxLayout(self.__presets_frame)
         self.__nhtsa_button = QPushButton(self.__presets_frame)
         self.__presets_vert_layout.addWidget(self.__nhtsa_button)
@@ -64,10 +64,10 @@ class VOGTab(QWidget):
         self.__presets_vert_layout.addWidget(self.__direct_control_button)
         self.layout().addWidget(self.__presets_frame)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         """ Set open duration, close duration, and debounce time settings display area. """
-        self.__input_box_frame = self.__MyFrame(self)
+        self.__input_box_frame = MyFrame()
         self.__input_box_grid_layout = QGridLayout(self.__input_box_frame)
         self.__input_box_grid_layout.setContentsMargins(0, 6, 0, 6)
         self.__open_dur_label = QLabel(self.__input_box_frame)
@@ -91,10 +91,10 @@ class VOGTab(QWidget):
         self.__input_box_grid_layout.addWidget(self.__debounce_time_line_edit, 2, 1, 1, 1)
         self.layout().addWidget(self.__input_box_frame)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         """ Set button mode setting display area. """
-        self.__button_mode_frame = self.__MyFrame()
+        self.__button_mode_frame = MyFrame()
         self.__button_mode_horiz_layout = QHBoxLayout(self.__button_mode_frame)
         self.__button_mode_label = QLabel(self.__button_mode_frame)
         self.__button_mode_horiz_layout.addWidget(self.__button_mode_label)
@@ -104,19 +104,19 @@ class VOGTab(QWidget):
         self.__button_mode_horiz_layout.addWidget(self.__button_mode_selector)
         self.layout().addWidget(self.__button_mode_frame)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         """ Set upload button selection area. """
         self.__upload_settings_button = QPushButton()
         self.layout().addWidget(self.__upload_settings_button)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         """ Set manual control selection area. """
         self.__manual_control_button = QPushButton()
         self.layout().addWidget(self.__manual_control_button)
 
-        self.layout().addWidget(self.__MyFrame(self, line=True))
+        self.layout().addWidget(MyFrame(line=True))
 
         self.__graph_buttons = []
         self.device_info = device

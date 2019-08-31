@@ -22,15 +22,20 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QFrame
+"""
+Simply display the contents of the webcam with optional mirroring using OpenCV 
+via the new Pythonic cv2 interface.  Press <esc> to quit.
+"""
+
+from PySide2.QtWidgets import QWidget
+from PySide2.QtMultimediaWidgets import QCameraViewfinder
 
 
-class CentralWidget(QWidget):
-    """ This code is the overall frame inside the app main window. All other parts will go inside this. """
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.setLayout(QVBoxLayout())
-        #self.__sep_line = QFrame()
-        #self.__sep_line.setFrameShape(QFrame.HLine)
-        #self.__sep_line.setFrameShadow(QFrame.Sunken)
-        #self.layout().addWidget(self.__sep_line)
+class CamViewer(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.cam_view = QCameraViewfinder()
+        self.cam_view.show()
+
+    def get_viewfinder(self):
+        return self.cam_view

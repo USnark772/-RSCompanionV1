@@ -1,0 +1,4 @@
+V1.01
+    -Graphs now disappear when unplugging all devices of that graph type.
+v1.02
+    -Fixed an issue with trying to read from known devices while having unknown devices plugged in

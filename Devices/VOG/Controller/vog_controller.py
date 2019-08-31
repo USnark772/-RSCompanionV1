@@ -28,9 +28,9 @@ from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, v
 
 
 class VOGController:
-    def __init__(self, parent, device, msg_callback, graph_callback):
+    def __init__(self, tab_parent, device, msg_callback, graph_callback):
         device_name = device[0] + " on " + device[1]
-        self.__tab = VOGTab(parent, device_name)
+        self.__tab = VOGTab(tab_parent, device_name)
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__msg_callback = msg_callback
@@ -360,3 +360,7 @@ class VOGController:
         msg['type'] = "send"
         msg['device'] = self.__device_info
         self.__msg_callback(msg)
+
+    def __send_output_msg(self, msg):
+        pass
+        #self.__msg_callback("From vog_controller.py. msg: " + msg)

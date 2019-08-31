@@ -38,8 +38,9 @@ from Devices.VOG.Model.vog_defs import vog_output_field
 
 
 class DeviceManager:
-    def __init__(self, msg_handler):
+    def __init__(self, msg_handler, output_file):
         self.msg_callback = msg_handler
+        self.output_file = output_file
 
         self.devices_known = []
         self.devices_attached = []
@@ -83,15 +84,21 @@ class DeviceManager:
                 except:
                     pass
 
+    # TODO: Ensure msg_dict is a dictionary else throw exception? Do things like this everywhere
     def handle_msg(self, msg_dict):
         """ Parse message from controller and attempt to pass to device specified in dictionary. If error do nothing."""
+        # print("in device_manager.py __attach_devices() ", msg_dict)
         msg_type = msg_dict['type']
         if msg_type == "send":
             port = None
             msg_to_send = None
             for d in self.devices:
-                if msg_dict['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
+                # print("in device_manager.py __attach_devices() ", self.devices[d])
+                if self.devices[d]['id'] == 'unknown':
+                    continue
+                elif msg_dict['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
                     port = self.devices[d]['port']
+                    self.msg_callback({'type': "save", 'msg': "Debug, DeviceManager.handle_msg(), Have port"})
             if not port:
                 self.msg_callback({'type': "save", 'msg': "Debug, DeviceManager.handle_msg(), Device not found"})
                 pass
@@ -100,6 +107,7 @@ class DeviceManager:
                     msg_to_send = self.__prepare_drt_msg(msg_dict)
                 elif msg_dict['device'][0] == "vog":
                     msg_to_send = self.__prepare_vog_msg(msg_dict)
+                self.msg_callback({'type': "save", 'msg': "Debug, DeviceManager.handle_msg(), Sending message " + msg_to_send})
                 self.__send_msg_on_port(port, msg_to_send)
         else:
             self.msg_callback({'type': "save", 'msg': "Debug, DeviceManager.handle_msg(), Unknown command"})
@@ -167,7 +175,7 @@ class DeviceManager:
             self.devices_to_remove = list(set(devices_known) - set(self.devices_attached))
 
     def __attach_devices(self):
-        """ Go through list of attached devices and attach each device to app if it is a known. """
+        """ Go through list of attached devices and attach each device to app if it is known. """
         for port in list_ports.comports():
             if port.device in self.devices_to_add:
                 for device in self.profiles:
@@ -182,14 +190,16 @@ class DeviceManager:
                             except SerialException as e:
                                 sleep(1)
                         if not the_port.is_open:
-                            self.devices[port.device] = {'id': 'unknown'}
+                            #self.devices[port.device] = {'id': 'unknown'}
                             self.msg_callback({'type': "error"})
                             break
+                        # print("in device_manager.py __attach_devices() adding device to self.devices", the_port, device)
                         self.devices[port.device] = {'port': the_port, 'id': device}
                         msg_dict = {'type': "add", 'device': (self.devices[port.device]['id'], self.devices[port.device]['port'].name)}
                         self.msg_callback(msg_dict)
                         break
                     else:
+                        # print("in device_manager.py __attach_devices() setting device to unknown", port.device)
                         self.devices[port.device] = {'id': 'unknown'}
 
     def __remove_devices(self):

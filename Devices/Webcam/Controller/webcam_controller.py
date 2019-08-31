@@ -30,26 +30,23 @@ via the new Pythonic cv2 interface.  Press <esc> to quit.
 from PySide2.QtWidgets import *
 from PySide2.QtMultimedia import *
 from PySide2.QtMultimediaWidgets import *
+from Devices.Webcam.View.webcam_viewer import CamViewer
 
 
-class WebcamController(QWidget):
-    def __init__(self):
-        self.online_webcams = QCameraInfo.availableCameras()
+class WebcamController:
+    def __init__(self, parent):
+        self.online_webcams = self.__check_for_cams()
         if not self.online_webcams:
-            pass
+            pass  # TODO: Handle this better
 
+        self.viewer = CamViewer()
         self.my_webcam = None
-        self.cam_view = QCameraViewfinder()
-        self.cam_view.show()
 
         self.current_cam_index = 0
         self.get_webcam(self.current_cam_index)
 
-    def keyPressEvent(self, event):
-        if event.key() == 0x4e:
-            self.change_webcam(True)
-        elif event.key() == 0x50:
-            self.change_webcam()
+    def __check_for_cams(self):
+        return QCameraInfo.availableCameras()
 
     def change_webcam(self, increment=False):
         if increment:
@@ -63,7 +60,7 @@ class WebcamController(QWidget):
 
     def get_webcam(self, i):
         self.my_webcam = QCamera(self.online_webcams[i])
-        self.my_webcam.setViewfinder(self.exist)
+        self.my_webcam.setViewfinder(self.viewer.get_viewfinder())
         self.my_webcam.setCaptureMode(QCamera.CaptureStillImage)
         self.my_webcam.error.connect(lambda: self.alert(self.my_webcam.errorString()))
         self.my_webcam.start()

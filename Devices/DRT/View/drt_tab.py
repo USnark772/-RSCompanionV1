@@ -27,7 +27,8 @@ from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton
 from PySide2.QtCore import Qt, QRect, QSize
 from Devices.DRT.Model.drt_defs import drtv1_0_ISI_min, drtv1_0_stim_dur_min, drtv1_0_max_val
 from Model.general_defs import tab_line_edit_compliant_style, tab_line_edit_error_style
-# TODO: Change __MyFrame to CompanionLib/view_helpers.py MyFrame
+from CompanionLib.view_helpers import MyFrame
+
 
 class DRTTab(QWidget):
     """ This code is for helping the user interact with the configurations of the DRT device. """
@@ -39,10 +40,10 @@ class DRTTab(QWidget):
 
         self.config_horizontal_layout = QHBoxLayout()
 
-        self.layout().addWidget(self.__MyFrame(True))
+        self.layout().addWidget(MyFrame(True))
 
         """ Set configuration value display area"""
-        self.config_frame = self.__MyFrame()
+        self.config_frame = MyFrame()
         self.config_layout = QHBoxLayout(self.config_frame)
         self.config_label = QLabel(self.config_frame)
         self.config_label.setAlignment(Qt.AlignCenter)
@@ -52,19 +53,19 @@ class DRTTab(QWidget):
         self.config_layout.addWidget(self.config_val)
         self.layout().addWidget(self.config_frame)
 
-        self.layout().addWidget(self.__MyFrame(True))
+        self.layout().addWidget(MyFrame(True))
 
         """ Set preset button selection area. """
-        self.presets_frame = self.__MyFrame()
+        self.presets_frame = MyFrame()
         self.presets_layout = QVBoxLayout(self.presets_frame)
         self.iso_button = QPushButton(self.presets_frame)
         self.presets_layout.addWidget(self.iso_button)
         self.layout().addWidget(self.presets_frame)
 
-        self.layout().addWidget(self.__MyFrame(True))
+        self.layout().addWidget(MyFrame(True))
 
         """ Set stim intensity settings display area. """
-        self.slider_frame = self.__MyFrame()
+        self.slider_frame = MyFrame()
         self.slider_layout = QVBoxLayout(self.slider_frame)
         self.slider_label_layout = QHBoxLayout(self.slider_frame)
         self.stim_intens_label = QLabel(self.slider_frame)
@@ -84,10 +85,10 @@ class DRTTab(QWidget):
         self.slider_layout.addWidget(self.stim_intens_slider)
         self.layout().addWidget(self.slider_frame)
 
-        self.layout().addWidget(self.__MyFrame(True))
+        self.layout().addWidget(MyFrame(True))
 
         """ Set stim duration, upper isi and lower isi settings display area. """
-        self.input_box_frame = self.__MyFrame()
+        self.input_box_frame = MyFrame()
         self.input_box_layout = QGridLayout(self.input_box_frame)
         self.stim_dur_line_edit = QLineEdit(self.input_box_frame)
         self.stim_dur_line_edit.setMaximumSize(QSize(100, 16777215))
@@ -106,13 +107,13 @@ class DRTTab(QWidget):
         self.input_box_layout.addWidget(self.lower_isi_label, 2, 0, 1, 1)
         self.layout().addWidget(self.input_box_frame)
 
-        self.layout().addWidget(self.__MyFrame(True))
+        self.layout().addWidget(MyFrame(True))
 
         """ Set upload button selection area. """
         self.upload_settings_button = QPushButton()
         self.layout().addWidget(self.upload_settings_button)
 
-        self.layout().addWidget(self.__MyFrame(True))
+        self.layout().addWidget(MyFrame(True))
 
         self.__graph_buttons = []
         self.device_info = device
@@ -240,17 +241,3 @@ class DRTTab(QWidget):
         self.stim_intens_label.setToolTip("Intensity of the stimulus")
         self.upload_settings_button.setToolTip("Upload current configuration to device")
         self.stim_intens_slider.setToolTip(str(self.stim_intens_slider.value()) + "%")
-
-    class __MyFrame(QFrame):
-        """ Creates a frame for display purposes depending on bools. """
-        def __init__(self, line=False, vert=False):
-            super().__init__()
-            if line:
-                if vert:
-                    self.setFrameShape(QFrame.VLine)
-                else:
-                    self.setFrameShape(QFrame.HLine)
-                self.setFrameShadow(QFrame.Sunken)
-            else:
-                self.setFrameShape(QFrame.StyledPanel)
-                self.setFrameShadow(QFrame.Raised)

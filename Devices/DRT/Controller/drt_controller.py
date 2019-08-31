@@ -29,9 +29,9 @@ from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_m
 
 
 class DRTController:
-    def __init__(self, parent, device, msg_callback, graph_callback):
+    def __init__(self, tab_parent, device, msg_callback, graph_callback):
         device_name = device[0] + " on " + device[1]
-        self.__tab = DRTTab(parent, device_name)
+        self.__tab = DRTTab(tab_parent, device_name)
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__msg_callback = msg_callback
@@ -45,13 +45,16 @@ class DRTController:
         #self.__add_graph_data_type_buttons()
         #self.__init_graph()
         self.__set_handlers()
+        self.__send_output_msg("done with __init__()")
 
     def update_config(self, msg):
+        self.__send_output_msg("update_config()")
         """ Update device configuration display. """
         self.__updating_config = True
         for key in msg:
             self.__set_val(key, msg[key])
         self.__updating_config = False
+        self.__send_output_msg("done with update_config()")
 
     def add_data_to_graph(self, timestamp, data):
         """ Send data from device to graph for display. Separate data types into their own calls. """
@@ -76,12 +79,14 @@ class DRTController:
         return drtv1_0_file_hdr
 
     def __set_handlers(self):
+        self.__send_output_msg("__set_handlers()")
         self.__tab.add_iso_button_handler(self.__iso)
         self.__tab.add_upload_button_handler(self.__update_device)
         self.__tab.add_stim_dur_entry_changed_handler(self.__stim_dur_entry_changed)
         self.__tab.add_stim_intens_entry_changed_handler(self.__stim_intens_entry_changed)
         self.__tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
         self.__tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
+        self.__send_output_msg("done with __set_handlers()")
         #self.__tab.add_graph_button_handler(self.__data_types[0][1], self.__rt_graph_button_handler)
         #self.__tab.add_graph_button_handler(self.__data_types[1][1], self.__clicks_graph_button_handler)
 
@@ -227,11 +232,14 @@ class DRTController:
             self.__changed[i] = False
 
     def __get_vals(self):
+        self.__send_output_msg("__get_vals()")
         """ Request current device settings. """
         self.__send_msg({'cmd': "get_config"})
+        self.__send_output_msg("done with __get_vals()")
 
     def __set_val(self, var, val):
         """ Set display value of var to val. """
+        self.__send_output_msg("__set_vals()")
         if var == "stimDur":
             self.__current_vals[0] = int(val)
             self.__tab.set_stim_dur_val(val)
@@ -247,6 +255,7 @@ class DRTController:
             self.__current_vals[3] = int(val)
             self.__tab.set_lower_isi_val(val)
             self.__tab.set_lower_isi_val_error(False)
+        self.__send_output_msg("done with __set_vals()")
 
     def __iso(self):
         """ Upload ISO Standards to device. """
@@ -279,6 +288,10 @@ class DRTController:
         msg['device'] = self.__device_info
         self.__msg_callback(msg)
 
+    def __send_output_msg(self, msg):
+        pass
+        #self.__msg_callback("From drt_controller.py. msg: " + msg)
+
     @staticmethod
     def __calc_val_to_percent(val):
         """ Calculate the value of stim intensity from device. """
@@ -288,3 +301,4 @@ class DRTController:
     def __calc_percent_to_val(val):
         """ Calculate the value of stim intensity for device"""
         return ceil(val / 100 * drtv1_0_intensity_max)
+

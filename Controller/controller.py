@@ -24,6 +24,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 from os import path
 from sys import argv
+import logging
+from CompanionLib.logger import MakeLogger
 from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir, QSize
@@ -48,10 +50,16 @@ from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
 
+from Devices.Webcam.View.webcam_tab import WebcamViewer
+from Devices.Webcam.Controller.webcam_controller import WebcamController
 
 class CompanionController:
     def __init__(self):
         """ Creates the different element objects of the View and Controller """
+        logging.basicConfig(filename=self.__setup_output_file("companion_app_log.txt"), filemode='w', level=logging.info)
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Initializing CompanionController")
+        self.program_output_save_file = self.__setup_output_file("companion_app_console_output.txt")
         ui_min_size = QSize(450, 550)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
@@ -69,8 +77,7 @@ class CompanionController:
         self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs)
         self.tab_box = TabContainer(self.ui, tab_box_width_range)
         self.file_dialog = QFileDialog(self.ui)
-
-        self.device_manager = DeviceManager(self.receive_msg_from_device_manager)
+        self.device_manager = DeviceManager(self.receive_msg_from_device_manager, self.program_output_save_file)
 
         # Initialize storage and state
         self.__graphs = {}
@@ -80,15 +87,20 @@ class CompanionController:
         self.__num_drts = 0
         self.__num_vogs = 0
         self.current_cond_name = ""
-        self.program_output_save_file = self.__setup_output_file()
         self.devices = {}
 
         # Assemble View objects
         self.__initialize_view()
 
+        self.logger.info("Initialized CompanionController")
+        # self.__add_webcam_tab()
+
     ########################################################################################
     # public functions
     ########################################################################################
+
+    def __output_msg_from_controller(self, msg):
+        self.__save_output_msg("From controller.py. msg: " + msg + "\n")
 
     def receive_msg_from_device_manager(self, msg):
         """
@@ -302,9 +314,9 @@ class CompanionController:
         self.devices[device]['hdr_bool'] = True
 
     @staticmethod
-    def __setup_output_file():
+    def __setup_output_file(filename):
         """ Create program output file to save log. """
-        fname = gettempdir() + "\\companion_app_console_output.txt"
+        fname = gettempdir() + "\\" + filename
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
         return fname
@@ -332,17 +344,33 @@ class CompanionController:
         device manager to let device controller handle device specific messages. Each device gets its own configure tab.
         """
         if device[0] == "drt":
+            self.__output_msg_from_controller("Got " + device[0] + " " + device[1])
             self.__num_drts += 1
             if not device[0] in self.__graphs:
+                self.__output_msg_from_controller("Making graph for drt")
                 self.__make_drt_graph()
-            device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg,
-                                              self.add_data_to_graph)
+            self.__output_msg_from_controller("Making controller for drt")
+            try:
+                device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg,
+                                                  self.add_data_to_graph)
+            except Exception as e:
+                self.logger.exception("failed to make device_controller")
+                return
+            self.__output_msg_from_controller("Made controller for drt")
         elif device[0] == "vog":
+            self.__output_msg_from_controller("Got " + device[0] + " " + device[1])
             self.__num_vogs += 1
             if not device[0] in self.__graphs:
+                self.__output_msg_from_controller("Making graph for vog")
                 self.__make_vog_graph()
-            device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg,
-                                              self.add_data_to_graph)
+            self.__output_msg_from_controller("Making controller for vog")
+            try:
+                device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg,
+                                                  self.add_data_to_graph)
+            except Exception as e:
+                self.logger.exception("failed to make device_controller")
+                return
+            self.__output_msg_from_controller("Made controller for vog")
         else:
             return
         self.__graphs[device[0]].get_graph().add_device(device[1])
@@ -355,6 +383,7 @@ class CompanionController:
 
     def __remove_device(self, device):
         """ Removes device tab, graph link and device information """
+        self.__output_msg_from_controller("Removing " + device[0] + " " + device[1])
         if device in self.devices:
             if device[0] == "drt":
                 self.__num_drts -= 1
@@ -364,6 +393,10 @@ class CompanionController:
             self.__graphs[device[0]].get_graph().remove_device(device[1])
             del self.devices[device]
             self.__check_num_devices()
+
+    def __add_webcam_tab(self):
+        controller = WebcamController(self.tab_box)
+        self.devices["webcams"]["controller"] = controller
 
     ########################################################################################
     # Other handlers
