@@ -5,8 +5,12 @@
 -   Edit version number in setup.py to build version
 -   in cmd go to build version directory
 -   command: python setup.py build
+-   add inno setup script to build directory
+-   inno setup compile
+-   Output folder has the installer
 
-
-Things to change for build:
+Things to check for each build:
 -   All imports
--   general_defs.py image_file_path
+-   general_defs.py filepaths
+-   setup.py version number
+-   inno setup version number and filepaths

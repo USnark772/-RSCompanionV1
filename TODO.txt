@@ -1,3 +1,9 @@
+TODO:
+-   Comments everywhere
+-   Logging everywhere
+    -   Lots of error checking
+    -   Debug everywhere
+
 After launch:
 -   Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
@@ -12,54 +18,6 @@ Updater:
 
 Installer: Inno Setup
 -   Make sure installer installs over previous versions of Companion app
-
-Comments:
--   CompanionLib
-    -   time_funcs.py DONE
--   Controller
-    -   controller.py DONE
-    -   device_manager.py DONE
-    -   main.py DONE
-    -   version_checker.py DONE
--   Devices
-    -   DRT
-        -   Controller
-            -   drt_controller.py DONE
-        -   Model
-            -   drt_defs.py DONE
-        -   View
-            -   drt_graph.py DONE
-            -   drt_tab.py DONE
-    -   VOG
-        -   Controller
-            -   vog_controller.py DONE
-        -   Model
-            - vog_defs.py DONE
-        -   View
-            -   vog_graph.py DONE
-            -   vog_tab.py DONE
--   Model
-    -   general_defs.py DONE
--   View
-    -   DisplayWidget
-        -   display_container.py DONE
-        -   graph.py DONE
-        -   graph_frame.py DONE
-        -   graph_nav_bar.py DONE (Maybe get rid of this one)
-    -   DockWidget
-        -   button_box.py DONE
-        -   control_dock.py DONE
-        -   flag_box.py DONE
-        -   info_box.py DONE
-        -   note_box.py DONE
-    -   MainWindow
-        -   central_widget.py DONE
-        -   help_window.py DONE
-        -   main_window.py DONE
-    -   MenuBarWidget
-        -   menu_bar.py DONE
-    -   TabWidget
-        -   device_tab.py DONE
 
 Devices:
 -   Check device/program output
