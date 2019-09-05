@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QSizePolicy, QAbstractScrollArea, QTabWidget
 from PySide2.QtCore import Qt
 
@@ -29,6 +30,8 @@ from PySide2.QtCore import Qt
 class TabContainer(QTabWidget):
     """ This code will contain __Tab objects for display to the user. """
     def __init__(self, parent, width_range):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(parent)
         self.setMaximumWidth(width_range[0])
         self.setMinimumWidth(width_range[1])
@@ -38,8 +41,10 @@ class TabContainer(QTabWidget):
         size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(size_policy)
         self.__tabs = {}
+        self.logger.debug("Initialized")
 
     def add_tab(self, contents, port):
+        self.logger.debug("running")
         new_tab = self.__Tab()
         new_tab.add_contents(contents)
         self.setUpdatesEnabled(False)
@@ -47,15 +52,20 @@ class TabContainer(QTabWidget):
         self.__tabs[port] = new_tab
         self.setTabText(index, contents.get_name())
         self.setUpdatesEnabled(True)
+        self.logger.debug("done")
 
     def remove_tab(self, port):
+        self.logger.debug("running")
         the_tab = self.__tabs[port]
         self.removeTab(QTabWidget.indexOf(self, the_tab))
         del self.__tabs[port]
+        self.logger.debug("done")
 
     class __Tab(QWidget):
         """ This code is for showing device specific items. This is just a scrollable display area. """
         def __init__(self):
+            self.logger = logging.getLogger(__name__)
+            self.logger.debug("Initializing")
             super().__init__()
             self.setLayout(QVBoxLayout())
             self.__scroll_area = QScrollArea(self)
@@ -69,6 +79,9 @@ class TabContainer(QTabWidget):
             self.__scroll_area.setSizePolicy(size_policy)
             self.__scroll_area.setWidgetResizable(True)
             self.layout().addWidget(self.__scroll_area)
+            self.logger.debug("Initialized")
 
         def add_contents(self, contents):
+            self.logger.debug("running")
             self.__scroll_area.setWidget(contents)
+            self.logger.debug("done")

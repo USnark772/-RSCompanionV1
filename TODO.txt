@@ -1,10 +1,3 @@
-TODO:
--   Figure out why it could be crashing when making the device controllers if the devices are unable to talk with the
-    program.
--   Implement error handling on everything and make it output to an error log.
--   Bug check with team
--   Ship it
-
 After launch:
 -   Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
@@ -68,7 +61,6 @@ Comments:
     -   TabWidget
         -   device_tab.py DONE
 
-
 Devices:
 -   Check device/program output
 
@@ -85,14 +77,14 @@ Graphing:
     -   Put graph controls below each graph
 
 TODO: fix these issues
--   Check for updates is not working again. Possibly due to repository being private
+-   Check for updates is not working again. Possibly due to repository being private (fixed, repo was private)
 -   When scrolling, the graphs move in their canvasas (don't worry about this for now)
 -   Some unexplained issues with ui sizing (Has to do with screen scaling) (don't worry about this for now)
 
 At some point:
 -   Possibly use numpy for internal data storage. (don't worry about this for now)
--   GPS device integration.
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
+    Using GPL 3.0 or later at this time.
 
 to get stack trace
 -   from traceback import print_stack

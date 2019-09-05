@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QFrame,\
     QLineEdit
 from PySide2.QtCore import Qt, QRect, QSize
@@ -33,7 +34,13 @@ from CompanionLib.view_helpers import MyFrame
 class DRTTab(QWidget):
     """ This code is for helping the user interact with the configurations of the DRT device. """
     def __init__(self, parent, device):
-        super().__init__(parent)
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
+        try:
+            super().__init__(parent)
+        except Exception as e:
+            self.logger.exception("Error making DRTTab, passed in parent is invalid")
+            return
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
         self.setMaximumHeight(400)
@@ -120,109 +127,124 @@ class DRTTab(QWidget):
         self.__index = 0
         self.__set_texts()
         self.__set_tooltips()
-
-    def add_graph_button(self, name):
-        """ Depriciated. """
-        new_button = QPushButton()
-        new_button.setText("Hide " + name)
-        self.__graph_buttons.append([new_button, name])
-        self.layout().addWidget(new_button)
-        return len(self.__graph_buttons) - 1
-
-    def add_graph_button_handler(self, index, func):
-        """ Depriciated. """
-        self.__graph_buttons[index][0].clicked.connect(func)
-
-    def toggle_graph_button(self, index):
-        """ Depriciated. """
-        if "Hide" in self.__graph_buttons[index][0].text():
-            self.__graph_buttons[index][0].setText("Show " + self.__graph_buttons[index][1])
-        else:
-            self.__graph_buttons[index][0].setText("Hide " + self.__graph_buttons[index][1])
+        self.logger.debug("Initialized")
 
     def add_iso_button_handler(self, func):
+        self.logger.debug("running")
         self.iso_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_upload_button_handler(self, func):
+        self.logger.debug("running")
         self.upload_settings_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_stim_dur_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.stim_dur_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
 
     def add_stim_intens_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.stim_intens_slider.valueChanged.connect(func)
+        self.logger.debug("done")
 
     def add_upper_isi_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.upper_isi_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
 
     def add_lower_isi_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.lower_isi_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
 
     def set_upload_button_activity(self, is_active):
+        self.logger.debug("running")
         self.upload_settings_button.setEnabled(is_active)
+        self.logger.debug("done")
 
     def set_config_val(self, val):
-        """ Set display value of config. """
+        """ Set display value of config.txt. """
+        self.logger.debug("running")
         self.config_val.setText(str(val))
+        self.logger.debug("done")
 
     def get_stim_dur_val(self):
         return self.stim_dur_line_edit.text()
 
     def set_stim_dur_val(self, val):
         """ Set display value of stim duration. """
+        self.logger.debug("running")
         self.stim_dur_line_edit.setText(str(val))
+        self.logger.debug("done")
 
     def set_stim_dur_val_error(self, is_error):
         """ Set display of error in stim duration line edit. """
+        self.logger.debug("running")
         if is_error:
             self.stim_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.stim_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+        self.logger.debug("done")
 
     def set_upper_isi_val_error(self, is_error):
         """ Set display of error in upper isi line edit. """
+        self.logger.debug("running")
         if is_error:
             self.upper_isi_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.upper_isi_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+        self.logger.debug("done")
 
     def set_lower_isi_val_error(self, is_error):
         """ Set display of error in lower isi line edit. """
+        self.logger.debug("running")
         if is_error:
             self.lower_isi_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.lower_isi_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+        self.logger.debug("done")
 
     def get_stim_intens_val(self):
         return self.stim_intens_slider.value()
 
     def set_stim_intens_val(self, val):
         """ Set display value of stim intensity. """
+        self.logger.debug("running")
         self.stim_intens_slider.setValue(int(val))
         self.set_stim_intens_val_label(val)
+        self.logger.debug("done")
 
     def set_stim_intens_val_label(self, val):
         """ Set display value of stim intensity label. """
+        self.logger.debug("running")
         self.stim_intens_val.setText(str(val) + "%")
+        self.logger.debug("done")
 
     def get_upper_isi_val(self):
         return self.upper_isi_line_edit.text()
 
     def set_upper_isi_val(self, val):
         """ Set display value of upper isi. """
+        self.logger.debug("running")
         self.upper_isi_line_edit.setText(str(val))
+        self.logger.debug("done")
 
     def get_lower_isi_val(self):
         return self.lower_isi_line_edit.text()
 
     def set_lower_isi_val(self, val):
         """ Set display value of lower isi. """
+        self.logger.debug("running")
         self.lower_isi_line_edit.setText(str(val))
+        self.logger.debug("done")
 
     def get_name(self):
         return self.device_info
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.config_label.setText("Current configuration:")
         self.config_val.setText("ISO")
         self.iso_button.setText("ISO")
@@ -231,8 +253,10 @@ class DRTTab(QWidget):
         self.upper_isi_label.setText("Upper ISI")
         self.lower_isi_label.setText("Lower ISI")
         self.upload_settings_button.setText("Upload settings")
+        self.logger.debug("done")
 
     def __set_tooltips(self):
+        self.logger.debug("running")
         self.config_label.setToolTip("Current device configuration")
         self.iso_button.setToolTip("Set device to ISO standard")
         self.upper_isi_label.setToolTip("Milliseconds. Range: Lower ISI-" + str(drtv1_0_max_val))
@@ -241,3 +265,4 @@ class DRTTab(QWidget):
         self.stim_intens_label.setToolTip("Intensity of the stimulus")
         self.upload_settings_button.setToolTip("Upload current configuration to device")
         self.stim_intens_slider.setToolTip(str(self.stim_intens_slider.value()) + "%")
+        self.logger.debug("done")

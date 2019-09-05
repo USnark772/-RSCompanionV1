@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from Devices.VOG.View.vog_tab import VOGTab
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
     vog_output_field, vog_file_hdr
@@ -29,6 +30,8 @@ from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, v
 
 class VOGController:
     def __init__(self, tab_parent, device, msg_callback, graph_callback):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         device_name = device[0] + " on " + device[1]
         self.__tab = VOGTab(tab_parent, device_name)
         self.__graph_callback = graph_callback
@@ -47,21 +50,24 @@ class VOGController:
         self.__get_vals()
         self.__set_upload_button(False)
         self.__data_types = [["Time Open", 0, True], ["Time Closed", 0, True]]
-        #self.__add_graph_data_type_buttons()
-        #self.__init_graph()
         self.__set_handlers()
+        self.logger.debug("Initialized")
 
     def update_config(self, msg):
         """ Update device configuration display. """
+        self.logger.debug("running")
+        print(msg)
         self.__updating_config = True
         for key in msg:
             self.__set_val(key, msg[key])
         self.__updating_config = False
+        self.logger.debug("done")
 
     def add_data_to_graph(self, timestamp, data):
         """ Send data from device to graph for display. """
-        print("vog_controller.py add_data_to_graph()")
+        self.logger.debug("running")
         self.__graph_callback(self.__device_info, (timestamp, int(data[vog_output_field[1]]), int(data[vog_output_field[2]])))
+        self.logger.debug("done")
 
     def get_tab_obj(self):
         return self.__tab
@@ -81,6 +87,7 @@ class VOGController:
         return vog_file_hdr
 
     def __set_handlers(self):
+        self.logger.debug("running")
         self.__tab.add_nhtsa_button_handler(self.__nhtsa)
         self.__tab.add_eblind_button_handler(self.__eblind)
         self.__tab.add_direct_control_button_handler(self.__direct_control)
@@ -92,34 +99,7 @@ class VOGController:
         self.__tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
         self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
         self.__tab.add_manual_control_handler(self.__toggle_lens)
-        #self.__tab.add_graph_button_handler(self.__data_types[0][1], self.__time_open_graph_button_handler)
-        #self.__tab.add_graph_button_handler(self.__data_types[1][1], self.__time_closed_graph_button_handler)
-
-    def __add_graph_data_type_buttons(self):
-        """ Depriciated. """
-        for i in range(len(self.__data_types)):
-            self.__data_types[i][1] = self.__tab.add_graph_button(self.__data_types[i][0])
-
-    def __init_graph(self):
-        """ Depriciated. """
-        the_list = []
-        for data_type in self.__data_types:
-            the_list.append(data_type[0])
-        self.__graph_obj.add_device(self.__device_info, the_list)
-
-    def __time_open_graph_button_handler(self):
-        """ Depriciated. """
-        self.__data_types[0][2] = not self.__data_types[0][2]
-        self.__graph_obj.set_device_data_type_activity(self.__device_info, self.__data_types[0][0],
-                                                       self.__data_types[0][2])
-        self.__tab.toggle_graph_button(self.__data_types[0][1])
-
-    def __time_closed_graph_button_handler(self):
-        """ Depriciated. """
-        self.__data_types[1][2] = not self.__data_types[1][2]
-        self.__graph_obj.set_device_data_type_activity(self.__device_info, self.__data_types[1][0],
-                                                       self.__data_types[1][2])
-        self.__tab.toggle_graph_button(self.__data_types[1][1])
+        self.logger.debug("done")
 
     def __open_entry_changed(self):
         """
@@ -127,9 +107,11 @@ class VOGController:
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
         """
+        self.logger.debug("running")
         if not self.__updating_config:
             self.__check_open_val()
             self.__set_upload_button(True)
+        self.logger.debug("done")
 
     def __close_entry_changed(self):
         """
@@ -137,9 +119,11 @@ class VOGController:
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
         """
+        self.logger.debug("running")
         if not self.__updating_config:
             self.__check_close_val()
             self.__set_upload_button(True)
+        self.logger.debug("done")
 
     def __debounce_entry_changed(self):
         """
@@ -147,9 +131,11 @@ class VOGController:
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
         """
+        self.logger.debug("running")
         if not self.__updating_config:
             self.__check_debounce_val()
             self.__set_upload_button(True)
+        self.logger.debug("done")
 
     def __button_mode_entry_changed(self):
         """
@@ -157,9 +143,11 @@ class VOGController:
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
         """
+        self.logger.debug("running")
         if not self.__updating_config:
             self.__check_button_mode_val()
             self.__set_upload_button(True)
+        self.logger.debug("done")
 
     def __toggle_open_inf(self, is_checked):
         """
@@ -167,12 +155,14 @@ class VOGController:
         Save value of time open field and change display to reflect new setting.
         Else: replace with previously saved value.
         """
+        self.logger.debug("running")
         if is_checked:
             self.__prev_vals[0] = self.__tab.get_open_val()
             self.__tab.set_open_val(str(vog_max_open_close))
         else:
             self.__tab.set_open_val(self.__prev_vals[0])
         self.__tab.set_open_val_entry_activity(not is_checked)
+        self.logger.debug("done")
 
     def __toggle_close_inf(self, is_checked):
         """
@@ -180,15 +170,18 @@ class VOGController:
         Save value of time open field and change display to reflect new setting.
         Else: replace with previously saved value.
         """
+        self.logger.debug("running")
         if is_checked:
             self.__prev_vals[1] = self.__tab.get_close_val()
             self.__tab.set_close_val(str(vog_max_open_close))
         else:
             self.__tab.set_close_val(self.__prev_vals[1])
         self.__tab.set_close_val_entry_activity(not is_checked)
+        self.logger.debug("done")
 
     def __update_device(self):
         """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
+        self.logger.debug("running")
         if self.__open_changed:
             self.__set_device_open(self.__tab.get_open_val())
         if self.__closed_changed:
@@ -200,32 +193,40 @@ class VOGController:
         self.__tab.set_config_value("Custom")
         self.__set_changed_bools_false()
         self.__set_upload_button(False)
+        self.logger.debug("done")
 
     def __set_changed_bools_false(self):
+        self.logger.debug("running")
         self.__open_changed = False
         self.__closed_changed = False
         self.__debounce_changed = False
         self.__mode_changed = False
+        self.logger.debug("done")
 
     def __get_vals(self):
         """ Request current device settings. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "get_configName"})
         self.__send_msg({'cmd': 'get_configMaxOpen'})
         self.__send_msg({'cmd': 'get_configMaxClose'})
         self.__send_msg({'cmd': 'get_configDebounce'})
         self.__send_msg({'cmd': 'get_configClickMode'})
         self.__send_msg({'cmd': 'get_configButtonControl'})
+        self.logger.debug("done")
 
     def __set_upload_button(self, is_active):
         """ Check to make sure no errors are set and that there are changes to be made. Activate button if needed. """
+        self.logger.debug("running")
         if (self.__open_changed or self.__closed_changed or self.__debounce_changed or self.__mode_changed)\
                 and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
             self.__tab.set_upload_button_activity(is_active)
         else:
             self.__tab.set_upload_button_activity(False)
+        self.logger.debug("done")
 
     def __check_open_val(self):
         """ Check validity of value, if not valid then set error bool and set visual cue. """
+        self.logger.debug("running")
         self.__errors[0] = True
         usr_input = self.__tab.get_open_val()
         if usr_input.isdigit():
@@ -234,9 +235,11 @@ class VOGController:
                 self.__errors[0] = False
                 self.__open_changed = usr_input_int != self.__current_vals[0]
         self.__tab.set_open_val_error(self.__errors[0])
+        self.logger.debug("done")
 
     def __check_close_val(self):
         """ Check validity of value, if not valid then set error bool and set visual cue. """
+        self.logger.debug("running")
         self.__errors[1] = True
         usr_input = self.__tab.get_close_val()
         if usr_input.isdigit():
@@ -245,9 +248,11 @@ class VOGController:
                 self.__errors[1] = False
                 self.__closed_changed = usr_input_int != self.__current_vals[1]
         self.__tab.set_close_val_error(self.__errors[1])
+        self.logger.debug("done")
 
     def __check_debounce_val(self):
         """ Check validity of value, if not valid then set error bool and set visual cue. """
+        self.logger.debug("running")
         self.__errors[2] = True
         usr_input = self.__tab.get_debounce_val()
         if usr_input.isdigit():
@@ -256,13 +261,17 @@ class VOGController:
                 self.__errors[2] = False
                 self.__debounce_changed = usr_input_int != self.__current_vals[2]
         self.__tab.set_debounce_val_error(self.__errors[2])
+        self.logger.debug("done")
 
     def __check_button_mode_val(self):
         """ Set button mode changed bool. """
+        self.logger.debug("running")
         self.__mode_changed = self.__tab.get_button_mode() != self.__current_vals[3]
+        self.logger.debug("done")
 
     def __set_val(self, var, val):
         """ Set display value of var to val. """
+        self.logger.debug("running")
         if var == "Name":
             self.__tab.set_config_value(val)
         elif var == "MaxOpen":
@@ -287,16 +296,20 @@ class VOGController:
                 self.__lens_open = True
             else:
                 self.__lens_open = False
+        self.logger.debug("done")
 
     def __toggle_lens(self):
         """ Tell device to toggle lens. """
+        self.logger.debug("running")
         if self.__lens_open:
             self.__send_msg({'cmd': "do_peekClose"})
         else:
             self.__send_msg({'cmd': "do_peekOpen"})
+        self.logger.debug("done")
 
     def __nhtsa(self):
         """ Set device and display to nhtsa defaults. """
+        self.logger.debug("running")
         self.__tab.set_open_inf(False)
         self.__tab.set_close_inf(False)
         self.__set_device_config("NHTSA")
@@ -306,9 +319,11 @@ class VOGController:
         self.__set_device_click("1")
         self.__set_device_button_control("0")
         self.__set_upload_button(False)
+        self.logger.debug("done")
 
     def __eblind(self):
         """ Set device and display to eblind mode. """
+        self.logger.debug("running")
         self.__tab.set_open_inf(True)
         self.__tab.set_close_inf(False)
         self.__set_device_config("eBlindfold")
@@ -318,9 +333,11 @@ class VOGController:
         self.__set_device_click("1")
         self.__set_device_button_control("0")
         self.__set_upload_button(False)
+        self.logger.debug("done")
 
     def __direct_control(self):
         """ Set device and display to direct control mode. """
+        self.logger.debug("running")
         self.__tab.set_open_inf(True)
         self.__tab.set_close_inf(True)
         self.__set_device_config("DIRECT CONTROL")
@@ -330,37 +347,48 @@ class VOGController:
         self.__set_device_click("0")
         self.__set_device_button_control("1")
         self.__set_upload_button(False)
+        self.logger.debug("done")
 
     def __set_device_config(self, val):
-        """ Set device config setting. """
+        """ Set device config.txt setting. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "set_configName", 'arg': str(val)})
+        self.logger.debug("done")
 
     def __set_device_open(self, val):
         """ Set device time open setting. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "set_configMaxOpen", 'arg': str(val)})
+        self.logger.debug("done")
 
     def __set_device_close(self, val):
         """ Set device time close setting. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "set_configMaxClose", 'arg': str(val)})
+        self.logger.debug("done")
 
     def __set_device_debounce(self, val):
         """ Set device debounce setting. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "set_configDebounce", 'arg': str(val)})
+        self.logger.debug("done")
 
     def __set_device_click(self, val):
         """ Set device click mode setting. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "set_configClickMode", 'arg': str(val)})
+        self.logger.debug("done")
 
     def __set_device_button_control(self, val):
         """ Set device button control setting. """
+        self.logger.debug("running")
         self.__send_msg({'cmd': "set_configButtonControl", 'arg': str(val)})
+        self.logger.debug("done")
 
     def __send_msg(self, msg):
         """ Send message to device. """
+        self.logger.debug("running")
         msg['type'] = "send"
         msg['device'] = self.__device_info
         self.__msg_callback(msg)
-
-    def __send_output_msg(self, msg):
-        pass
-        #self.__msg_callback("From vog_controller.py. msg: " + msg)
+        self.logger.debug("done")

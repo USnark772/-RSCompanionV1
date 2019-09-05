@@ -17,23 +17,27 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
 # A collection of datetime helper functions
 
+import logging
 from datetime import datetime, timedelta
 
+logger = logging.getLogger(__name__)
 
-# Function from https://kite.com/python/examples/4653/datetime-round-datetime-to-any-time-interval-in-seconds
+
 def round_time(dt=None, round_to=60):
     """ Rounds a datetime object to the nearest round_to interval. Default round_to rounds to the nearest second"""
+    logger.debug("running")
     if dt is None:
         dt = datetime.now()
     seconds = (dt - dt.min).seconds
     rounding = (seconds+round_to/2) // round_to * round_to
+    logger.debug("done")
     return dt + timedelta(0, rounding-seconds, -dt.microsecond)
 
 
@@ -42,18 +46,26 @@ def get_current_time(day=False, time=False, mil=False, save=False, graph=False):
     Returns a datetime string with day, time, and milliseconds options. Also available, save is formatted for when
     colons are not acceptable and graph is for the graphing utility which requires a datetime object
     """
+    logger.debug("running")
     date_time = datetime.now()
     if day and time and mil:
+        logger.debug("day, time, mil. done")
         return date_time.strftime("%Y-%m-%d %H:%M:%S.%f")
     elif day and time and not mil:
+        logger.debug("day, time. done")
         return date_time.strftime("%Y-%m-%d %H:%M:%S")
     elif day and not time and not mil:
+        logger.debug("day. done")
         return date_time.strftime("%Y-%m-%d")
     elif not day and time and not mil:
+        logger.debug("time, done")
         return date_time.strftime("%H:%M:%S")
     elif not day and time and mil:
+        logger.debug("time, mil. done")
         return date_time.strftime("%H:%M:%S.%f")
     elif save:
+        logger.debug("save. done")
         return date_time.strftime("%Y-%m-%d-%H-%M-%S")
     elif graph:
+        logger.debug("graph. done")
         return date_time

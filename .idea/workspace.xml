@@ -2,22 +2,46 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/CompanionLib/logger.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/readme/README.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/readme/changelog.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CompanionLib/checkers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/config.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/COPYING" beforeDir="false" afterPath="$PROJECT_DIR$/readme/COPYING.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanionLib/logger.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanionLib/time_funcs.py" beforeDir="false" afterPath="$PROJECT_DIR$/CompanionLib/time_funcs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanionLib/view_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CompanionLib/view_helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/version_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/version_checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/Model/drt_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Model/drt_defs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/Model/vog_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Model/vog_defs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/For_setup/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/general_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/general_defs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/display_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/display_container.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_nav_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_nav_bar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/button_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/button_box.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/control_dock.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/control_dock.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/flag_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/flag_box.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/info_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/info_box.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/note_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/note_box.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/View/MainWindow/central_widget.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/central_widget.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/MainWindow/help_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/help_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/MainWindow/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/MenuBarWidget/menu_bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MenuBarWidget/menu_bar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/TabWidget/device_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/device_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme/changelog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme/changelog.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,17 +68,17 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\config" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Controller" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\readme" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\OldCode" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup\Build 0.5" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup\Build 0.4" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\readme" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\OldCode" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\View\Images" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\CompanionLib" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices\VOG\View" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -70,7 +94,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.main">
-    <configuration name="drt_plot" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="config_creator" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -78,11 +102,32 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Devices/DRT/View" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices\DRT\View\drt_graph.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/config_creator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="logger_tester" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/logger_tester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -112,7 +157,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="toggle_line_matplotlib_example" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="test_typer" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -124,7 +169,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/toggle_line_matplotlib_example.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/test_typer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -133,28 +178,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="webcam_controller" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Devices/Webcam/Controller" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="webcam_tester" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="tester1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -166,7 +190,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/webcam_tester.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/tester1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -178,10 +202,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.webcam_tester" />
-        <item itemvalue="Python.webcam_controller" />
-        <item itemvalue="Python.toggle_line_matplotlib_example" />
-        <item itemvalue="Python.drt_plot" />
+        <item itemvalue="Python.tester1" />
+        <item itemvalue="Python.test_typer" />
+        <item itemvalue="Python.config_creator" />
+        <item itemvalue="Python.logger_tester" />
       </list>
     </recent_temporary>
   </component>
@@ -210,5 +234,31 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/logging/config.py</url>
+          <line>62</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/logging/config.py</url>
+          <line>64</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/logging/config.py</url>
+          <line>66</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/logging/config.py</url>
+          <line>68</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

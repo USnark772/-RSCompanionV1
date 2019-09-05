@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QMenuBar, QMenu, QAction
 from PySide2.QtCore import QRect
 
@@ -29,6 +30,8 @@ from PySide2.QtCore import QRect
 class MenuBar(QMenuBar):
     """ This code is for the menu bar at the top of the main window. File, help, etc. """
     def __init__(self, parent):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(parent)
         self.setGeometry(QRect(0, 0, 840, 22))
 
@@ -45,18 +48,27 @@ class MenuBar(QMenuBar):
         self.__help.addAction(self.__update)
 
         self.__set_texts()
+        self.logger.debug("Initialized")
 
     def add_about_app_handler(self, func):
+        self.logger.debug("running")
         self.__about_app.triggered.connect(func)
+        self.logger.debug("done")
 
     def add_about_company_handler(self, func):
+        self.logger.debug("running")
         self.__about_company.triggered.connect(func)
+        self.logger.debug("done")
 
     def add_update_handler(self, func):
+        self.logger.debug("running")
         self.__update.triggered.connect(func)
+        self.logger.debug("done")
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.__help.setTitle("Help")
         self.__about_app.setText("About RS Companion")
         self.__about_company.setText("About Red Scientific")
         self.__update.setText("Check For Updates")
+        self.logger.debug("done")

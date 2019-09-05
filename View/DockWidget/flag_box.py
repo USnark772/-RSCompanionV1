@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QLabel
 from PySide2.QtGui import QFont
 from PySide2.QtCore import Qt
@@ -30,6 +31,8 @@ from PySide2.QtCore import Qt
 class FlagBox(QGroupBox):
     """ This code is for showing and storing the keyflag which in this case is the last letter key the user pressed. """
     def __init__(self, parent, size):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
         self.setMaximumSize(size)
@@ -41,16 +44,23 @@ class FlagBox(QGroupBox):
 
         self.__set_texts()
         self.__set_tooltips()
+        self.logger.debug("Initialized")
 
     def set_flag(self, text):
+        self.logger.debug("running")
         self.__flag.setText(text)
+        self.logger.debug("done")
 
     def get_flag(self):
         return self.__flag.text()
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.setTitle("Key Flag")
         self.__flag.setText("")
+        self.logger.debug("done")
 
     def __set_tooltips(self):
+        self.logger.debug("running")
         self.__flag.setToolTip("The most recent key pressed for reference in save file")
+        self.logger.debug("done")

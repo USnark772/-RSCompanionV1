@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QDockWidget, QHBoxLayout, QWidget
 from PySide2.QtCore import Qt
 
@@ -32,6 +33,8 @@ class ControlDock(QDockWidget):
     Typically this will be used for overall app control and feedback.
     """
     def __init__(self, parent, size):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(parent)
         self.setMaximumSize(size)
         self.setFeatures(
@@ -43,9 +46,14 @@ class ControlDock(QDockWidget):
         self.widget().setLayout(QHBoxLayout())
 
         self.__set_texts()
+        self.logger.debug("Initialized")
 
     def add_widget(self, widget):
+        self.logger.debug("running")
         self.widget().layout().addWidget(widget)
+        self.logger.debug("done")
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.setWindowTitle("Control")
+        self.logger.debug("done")

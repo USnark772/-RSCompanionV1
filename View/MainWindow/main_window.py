@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QFont, QIcon
@@ -33,6 +34,8 @@ from Model.general_defs import image_file_path
 class CompanionWindow(QMainWindow):
     """ The main window the app will be displayed in. """
     def __init__(self, min_size):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__()
         self.setMinimumSize(min_size)
         font = QFont()
@@ -53,32 +56,49 @@ class CompanionWindow(QMainWindow):
         self.close_callback = None
         self.__help_window = None
         self.__set_texts()
+        self.logger.debug("Initialized")
 
     def closeEvent(self, event):
         """ Alert controller if desired to the app closing event"""
+        self.logger.debug("running")
         if self.close_callback:
             self.close_callback()
+        self.logger.debug("done")
 
     def add_close_handler(self, func):
+        self.logger.debug("running")
         self.close_callback = func
+        self.logger.debug("done")
 
     def add_dock_widget(self, widget):
+        self.logger.debug("running")
         self.addDockWidget(Qt.DockWidgetArea(4), widget)
+        self.logger.debug("done")
 
     def add_menu_bar(self, widget):
+        self.logger.debug("running")
         self.setMenuBar(widget)
+        self.logger.debug("done")
 
     def add_graph_container(self, widget):
+        self.logger.debug("running")
         self.__graph_frame.layout().addWidget(widget)
+        self.logger.debug("done")
 
     def add_tab_widget(self, widget):
+        self.logger.debug("running")
         self.__tab_frame.layout().addWidget(widget)
+        self.logger.debug("done")
 
     def show_help_window(self, title, msg):
         """ Show msg in a help window with the title. """
+        self.logger.debug("running")
         self.__help_window = HelpWindow(title, msg)
         self.__help_window.setWindowIcon(self.__icon)
         self.__help_window.show()
+        self.logger.debug("done")
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.setWindowTitle("RS Companion App")
+        self.logger.debug("done")

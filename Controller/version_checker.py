@@ -17,44 +17,49 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
 import traceback
+import logging
 from urllib3 import PoolManager
 from Model.general_defs import version_url, current_version
 
 
 class VersionChecker:
-    def __init__(self, callback):
-        self.callback = callback
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         self.latest_version = self.get_latest_version()
+        self.logger.debug("Initialized")
 
     def check_version(self):
         """ Compare version numbers. """
+        self.logger.debug("running")
         if not self.latest_version:
+            self.logger.debug("done")
             return -1
         elif self.latest_version > current_version:
+            self.logger.debug("done")
             return 1
+        self.logger.debug("done")
         return 0
 
-    def __callback(self, msg):
-        self.callback(msg + "\n")
-
-    @staticmethod
-    def get_latest_version():
+    def get_latest_version(self):
         """ Connect to site at version_url and retrieve latest version number. """
+        self.logger.debug("running")
         mgr = PoolManager()
         try:
             r = mgr.request("GET", version_url)
         except Exception:
-            with open('logfile.txt', 'w') as f:
-                traceback.print_exc(file=f)
+            self.logger.exception("failed, could not connect to url")
             return False
         data = str(r.data)
         if "Companion App Version:" in data:
             latest_version = data[data.index(":") + 1:].rstrip("\\n'")
+            self.logger.debug("done, found version")
             return float(latest_version)
+        self.logger.debug("done, didn't find version")
         return False

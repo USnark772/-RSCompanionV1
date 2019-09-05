@@ -22,19 +22,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import logging
-from PySide2.QtWidgets import QMessageBox
+""" A collection of checkers to help ensure code is running smoothly """
 
 
-class HelpWindow(QMessageBox):
-    """ This is to display small messages to the user. """
-    def __init__(self, name, text):
-        self.logger = logging.getLogger(__name__)
-        self.logger.debug("Initializing")
-        super().__init__()
-        self.setWindowTitle(name)
-        self.setText(text)
-        self.setStandardButtons(QMessageBox.Close)
-        self.setDefaultButton(QMessageBox.Close)
-        self.setEscapeButton(QMessageBox.Close)
-        self.logger.debug("Initialized")
+def check_device_tuple(device):
+    return type(device[0]) == str and type(device[1]) == str
+
+
+def check_dict(msg):
+    return type(msg) == dict

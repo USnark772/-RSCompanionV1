@@ -16,12 +16,20 @@ You should have received a copy of the GNU General Public License
 along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+# Author: Phillip Riskin
+# Date: 2019
+# Project: Companion App
+# Company: Red Scientific
+# https://redscientific.com/index.html
+
+
 import sys
 import os
 from cx_Freeze import setup, Executable
 
+redist_filepath = 'C:/Users/phill/PycharmProjects/RedScientific'
+app_filepath = redist_filepath + "/Companion/"
 
-# Dependencies are automatically detected, but it might need fine tuning.
 build_exe_options = {'packages': ['os',
                                   'requests',
                                   'queue',
@@ -30,24 +38,23 @@ build_exe_options = {'packages': ['os',
                                   'numpy',
                                   'matplotlib'],
                      'excludes': ['tkinter'],
-                     'include_files': ['C:/Users/phill/PycharmProjects/RedScientific/Companion/View/Images/',
-                                       'C:/Users/phill/PycharmProjects/RedScientific/redist/']}
-                     # 'include_msvcr': True}
+                     'include_files': [redist_filepath + '/redist/',
+                                       app_filepath + 'config/',
+                                       app_filepath + 'View/Images/',
+                                       app_filepath + 'readme/']}
 
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
 include_files = [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'libcrypto-1_1.dll'),
                  os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'libssl-1_1.dll')]
 
-# GUI applications require a different base on Windows (the default is for a
-# console application).
 base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
     for file in include_files:
         build_exe_options['include_files'].append(file)
 
-setup(name='RS Companion App',
-      version='1.0',
+setup(name='RS Companion',
+      version='1.03',
       description='The companion app to rule all RS Devices',
       options={'build_exe': build_exe_options},
       executables=[Executable('main.py', targetName='Companion.exe', base=base, icon='Images/rs_icon.ico')])

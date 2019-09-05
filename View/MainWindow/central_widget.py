@@ -17,20 +17,24 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QFrame
 
 
 class CentralWidget(QWidget):
     """ This code is the overall frame inside the app main window. All other parts will go inside this. """
     def __init__(self, parent):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
         #self.__sep_line = QFrame()
         #self.__sep_line.setFrameShape(QFrame.HLine)
         #self.__sep_line.setFrameShadow(QFrame.Sunken)
         #self.layout().addWidget(self.__sep_line)
+        self.logger.debug("Initialized")

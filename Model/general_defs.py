@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-# Author: Phillip Riskin & Joel Cooper
-# Date: Spring 2019
+# Author: Phillip Riskin
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
@@ -31,6 +31,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 current_version = 1.0
 
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
+# TODO: Change this URL to new location once we have a place to upload the app
 
 program_output_hdr = "Timestamp, Author, Location, Message\n"
 
@@ -56,7 +57,7 @@ about_RS_app_text = "- Most things in this app have tooltips. Mouse over differe
                     "- Displays data coming in from devices associated with the latest experiment.\n" \
                     "- Clicking on the legend will show/hide device specific data in each graph.\n" \
                     "- Using the control bar under each graph you will be able manipulate the graphs.\n\n" \
-                    "The lower right section contains the Device config area where each device will display a" \
+                    "The lower right section contains the Device config.txt area where each device will display a" \
                     " configuration menu. In each menu you can alter the settings of how the respective device acts" \
                     " during an experiment.\n"
 

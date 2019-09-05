@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from numpy import mean
 from View.DisplayWidget.graph import CanvasObj
 
@@ -34,18 +35,22 @@ class DRTGraph(CanvasObj):
     """
     def __init__(self, parent):
         """ Superclass requires reference to parent, title of graph, plot names (types of data) """
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         self.__plot_names = ["Response Time", "Clicks"]
         super().__init__(parent, "drt", self.__plot_names, self.plot_data)
         self.__data = {}
         for name in self.__plot_names:
             self.__data[name] = {}
         # self.__add_mean()
+        self.logger.debug("Initialized")
 
     def plot_data(self, axes, plot_name, show_in_legend):
         """
         Plot data on given axes according to which plot_name.
         show_in_legend determines if adding a legend line for specific data set
         """
+        self.logger.debug("running")
         data = self.__data[plot_name]
         # mean = self.__data[plot_name]['mean']
         lines = []
@@ -58,30 +63,39 @@ class DRTGraph(CanvasObj):
             lines.append((port, line))
         # line, = axes.plot(mean[0], mean[1], label='mean')
         # lines.append(("mean", line))
+        self.logger.debug("done")
         return lines
 
     def add_device(self, device_port):
         """ Create slots for data associated with device_port """
+        self.logger.debug("running")
         for name in self.__plot_names:
             self.__data[name][device_port] = [[], []]
+        self.logger.debug("done")
 
     def remove_device(self, device_port):
         """ Remove data associated with device_port """
+        self.logger.debug("running")
         for name in self.__plot_names:
             del self.__data[name][device_port]
+        self.logger.debug("done")
 
     def add_data(self, port, port_data):
         """ Ensure data comes in as type, x, y """
+        self.logger.debug("running")
         self.set_new(False)
         self.__data[port_data[0]][port][0].append(port_data[1])
         self.__data[port_data[0]][port][1].append(port_data[2])
         # self.__calc_mean(self.__data[port_data[0]])
         self.plot()
+        self.logger.debug("done")
 
     def __add_mean(self):
         """ Add new line to represent mean of data. """
+        self.logger.debug("running")
         for name in self.__plot_names:
             self.__data[name]['mean'] = [[], []]
+        self.logger.debug("done")
 
     def __calc_mean(self, d, level=0):  # x_range_start, x_range_end, level=0):
         """ Calculate the mean of all data points in data storage. """

@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QLabel, QGridLayout, QGroupBox
 from PySide2.QtCore import Qt
 
@@ -29,6 +30,8 @@ from PySide2.QtCore import Qt
 class InfoBox(QGroupBox):
     """ This code is for displaying information about the current experiment. """
     def __init__(self, parent, size):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(parent)
         self.setMaximumSize(size)
         self.setLayout(QGridLayout())
@@ -42,14 +45,21 @@ class InfoBox(QGroupBox):
         self.layout().addWidget(self.__start_time_val, 1, 1, 1, 1)
 
         self.__set_texts()
+        self.logger.debug("Initialized")
 
     def set_start_time(self, time):
+        self.logger.debug("running")
         self.__start_time_val.setText(time)
+        self.logger.debug("done")
 
     def reset_start_time(self):
+        self.logger.debug("running")
         self.__start_time_val.setText("00:00:00")
+        self.logger.debug("done")
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.setTitle("Information")
         self.__start_time_label.setText("Experiment start time:")
         self.reset_start_time()
+        self.logger.debug("done")

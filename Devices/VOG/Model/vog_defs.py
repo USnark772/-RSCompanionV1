@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-# Author: Phillip Riskin & Joel Cooper
-# Date: Spring 2019
+# Author: Phillip Riskin
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html

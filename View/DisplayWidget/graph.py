@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from View.DisplayWidget.graph_nav_bar import MyNavBar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 from matplotlib.figure import Figure
@@ -30,6 +31,8 @@ from matplotlib.figure import Figure
 class CanvasObj(Canvas):
     """ This code is for graphing data from devices. """
     def __init__(self, parent, title, plot_names, plotter):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
         super().__init__(Figure(figsize=(5, 5)))
         self.setToolTip("Click on legend to show/hide lines. Drag legend to move it")
         self.setToolTipDuration(3000)
@@ -48,28 +51,36 @@ class CanvasObj(Canvas):
         self.figure.canvas.mpl_connect('pick_event', self.__onpick)
         self.plot(new=True)
         self.__new = True
+        self.logger.debug("Initialized")
 
     def refresh_self(self):
         """ Redraw the canvas. """
+        self.logger.debug("running")
         self.figure.canvas.draw()
+        self.logger.debug("done")
 
     def get_title(self):
         return self.__title
 
     def set_new(self, is_new):
         """ If graph is new then there is no data to display. """
+        self.logger.debug("running")
         self.__new = is_new
+        self.logger.debug("done")
 
     def __set_plot_names(self, names):
         """ Each plot name will be used to create a graph for a specific data type. """
+        self.logger.debug("running")
         for name in names:
             self.__plot_names.append(name)
+        self.logger.debug("done")
 
     def get_nav_bar(self):
         return self.__nav_bar
 
     def plot(self, new=False):
         """ Reset all subplots to empty then call subclass's plot function for each subplot """
+        self.logger.debug("running")
         lines = {}
         self.__legend_plot_links = {}
         self.figure.clear()
@@ -98,9 +109,11 @@ class CanvasObj(Canvas):
             legend.set_draggable(True)
             self.__match_legend_plot_lines(legend, lines)
         self.figure.canvas.draw()
+        self.logger.debug("done")
 
     def __match_legend_plot_lines(self, legend, lines):
         """ Attach lines in all subplots to appropriate marker in legend """
+        self.logger.debug("running")
         for legend_line in legend.get_lines():
             self.__legend_plot_links[legend_line] = []
             legend_line.set_picker(5)
@@ -108,24 +121,27 @@ class CanvasObj(Canvas):
                 for line in lines[plot]:
                     if line[0] == legend_line.get_label():
                         self.__legend_plot_links[legend_line].append(line[1])
+        self.logger.debug("done")
 
     def __set_subplots(self):
         """ Set coords and names of subplots. Must be called after self.__plot_names is set to a list of strings """
+        self.logger.debug("running")
         if len(self.__plot_names) < 1:
             return
         r = len(self.__plot_names)
         c = 1
         for i in range(0, r):
             self.__plots[self.__plot_names[i]] = [(r, c, i + 1), self.__plot_names[i], True]
+        self.logger.debug("done")
 
     def __onpick(self, event):
         """ show or hide lines in subplots based on which marker in legend was clicked """
+        self.logger.debug("running")
         legend_line = event.artist
-        print("Legend_line:", legend_line)
-        print("legend_plot_links:", self.__legend_plot_links)
         if legend_line in self.__legend_plot_links:
             plot_lines = self.__legend_plot_links[legend_line]
         else:
+            self.logger.debug("done, no matched lines")
             return
         for line in plot_lines:
             visible = not line.get_visible()
@@ -135,3 +151,4 @@ class CanvasObj(Canvas):
         else:
             legend_line.set_alpha(0.2)
         self.figure.canvas.draw()
+        self.logger.debug("done")

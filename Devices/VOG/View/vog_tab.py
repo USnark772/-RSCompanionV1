@@ -17,11 +17,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: Spring 2019
+# Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import logging
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout,\
     QCheckBox, QFrame, QLineEdit
 from PySide2.QtCore import Qt, QRect
@@ -33,7 +34,13 @@ from CompanionLib.view_helpers import MyFrame
 class VOGTab(QWidget):
     """ This code is for helping the user interact with the configurations of the VOG device. """
     def __init__(self, parent, device):
-        super().__init__(parent)
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
+        try:
+            super().__init__(parent)
+        except Exception as e:
+            self.logger.exception("Error making VOGTab, passed parent is invalid")
+            return
         self.setLayout(QVBoxLayout(self))
         self.setGeometry(QRect(0, 0, 200, 500))
         self.setMaximumHeight(500)
@@ -123,142 +130,173 @@ class VOGTab(QWidget):
         self.__index = 0
         self.__set_texts()
         self.__set_tooltips()
-
-    def add_graph_button(self, name):
-        """ Depriciated. """
-        new_button = QPushButton()
-        new_button.setText("Hide " + name)
-        self.__graph_buttons.append([new_button, name])
-        self.layout().addWidget(new_button)
-        return len(self.__graph_buttons) - 1
-
-    def add_graph_button_handler(self, index, func):
-        """ Depriciated. """
-        self.__graph_buttons[index][0].clicked.connect(func)
-
-    def toggle_graph_button(self, index):
-        """ Depriciated. """
-        if "Hide" in self.__graph_buttons[index][0].text():
-            self.__graph_buttons[index][0].setText("Show " + self.__graph_buttons[index][1])
-        else:
-            self.__graph_buttons[index][0].setText("Hide " + self.__graph_buttons[index][1])
+        self.logger.debug("Initialized")
 
     def add_manual_control_handler(self, func):
+        self.logger.debug("running")
         self.__manual_control_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_nhtsa_button_handler(self, func):
+        self.logger.debug("running")
         self.__nhtsa_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_eblind_button_handler(self, func):
+        self.logger.debug("running")
         self.__eblindfold_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_direct_control_button_handler(self, func):
+        self.logger.debug("running")
         self.__direct_control_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_upload_button_handler(self, func):
+        self.logger.debug("running")
         self.__upload_settings_button.clicked.connect(func)
+        self.logger.debug("done")
 
     def add_open_inf_handler(self, func):
+        self.logger.debug("running")
         self.__open_inf_check_box.toggled.connect(func)
+        self.logger.debug("done")
 
     def add_close_inf_handler(self, func):
+        self.logger.debug("running")
         self.__close_inf_check_box.toggled.connect(func)
+        self.logger.debug("done")
 
     def add_open_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.__open_dur_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
 
     def add_close_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.__close_dur_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
 
     def add_debounce_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.__debounce_time_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
 
     def add_button_mode_entry_changed_handler(self, func):
+        self.logger.debug("running")
         self.__button_mode_selector.currentIndexChanged.connect(func)
+        self.logger.debug("done")
 
     def set_upload_button_activity(self, is_active):
         """ Set upload button to enabled or disabled depending on is_active bool. """
+        self.logger.debug("running")
         self.__upload_settings_button.setEnabled(is_active)
+        self.logger.debug("done")
 
     def set_config_value(self, value):
-        """ Set display value of config. """
+        """ Set display value of config.txt. """
+        self.logger.debug("running")
         self.__config_val.setText(value)
+        self.logger.debug("done")
 
     def get_open_val(self):
         return self.__open_dur_line_edit.text()
 
     def set_open_val(self, val):
         """ Set display value of open duration. """
+        self.logger.debug("running")
         self.__open_dur_line_edit.setText(str(val))
+        self.logger.debug("done")
 
     def set_open_val_error(self, is_error):
         """ Set display of error in open duration line edit. """
+        self.logger.debug("running")
         if is_error:
             self.__open_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.__open_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+        self.logger.debug("done")
 
     def set_close_val_error(self, is_error):
         """ Set display of error in close duration line edit. """
+        self.logger.debug("running")
         if is_error:
             self.__close_dur_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.__close_dur_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+        self.logger.debug("done")
 
     def set_debounce_val_error(self, is_error):
         """ Set display of error in debounce line edit. """
+        self.logger.debug("running")
         if is_error:
             self.__debounce_time_line_edit.setStyleSheet(tab_line_edit_error_style)
         else:
             self.__debounce_time_line_edit.setStyleSheet(tab_line_edit_compliant_style)
+        self.logger.debug("done")
 
     def set_open_val_entry_activity(self, is_active):
         """ Set open value line edit to enabled or disabled depending on is_active bool. """
+        self.logger.debug("running")
         self.__open_dur_line_edit.setEnabled(is_active)
+        self.logger.debug("done")
 
     def get_open_inf(self):
         return self.__open_inf_check_box.isChecked()
 
     def set_open_inf(self, is_checked):
         """ Set open infinity checkbox state to is_checked. """
+        self.logger.debug("running")
         self.__open_inf_check_box.setChecked(is_checked)
+        self.logger.debug("done")
 
     def get_close_val(self):
         return self.__close_dur_line_edit.text()
 
     def set_close_val(self, val):
         """ Set display value of close duration. """
+        self.logger.debug("running")
         self.__close_dur_line_edit.setText(str(val))
+        self.logger.debug("done")
 
     def set_close_val_entry_activity(self, is_active):
         """ Set close value line edit to enabled or disabled depending on is_active bool. """
+        self.logger.debug("running")
         self.__close_dur_line_edit.setEnabled(is_active)
+        self.logger.debug("done")
 
     def get_close_inf(self):
         return self.__close_inf_check_box.isChecked()
 
     def set_close_inf(self, is_checked):
         """ Set close infinity checkbox state to is_checked. """
+        self.logger.debug("running")
         self.__close_inf_check_box.setChecked(is_checked)
+        self.logger.debug("done")
 
     def get_debounce_val(self):
         return self.__debounce_time_line_edit.text()
 
     def set_debounce_val(self, val):
         """ Set debounce display value. """
+        self.logger.debug("running")
         self.__debounce_time_line_edit.setText(str(val))
+        self.logger.debug("done")
 
     def get_button_mode(self):
         return self.__button_mode_selector.currentIndex()
 
     def set_button_mode(self, val):
         """ Set display value of button mode. """
+        self.logger.debug("running")
         self.__button_mode_selector.setCurrentIndex(int(val))
+        self.logger.debug("done")
 
     def get_name(self):
         return self.device_info
 
     def __set_texts(self):
+        self.logger.debug("running")
         self.__config_label.setText("Current configuration:")
         self.__config_val.setText("DIRECT CONTROL")
         self.__nhtsa_button.setText("NHTSA")
@@ -274,8 +312,10 @@ class VOGTab(QWidget):
         self.__button_mode_selector.setItemText(1, "Click")
         self.__upload_settings_button.setText("Upload settings")
         self.__manual_control_button.setText("Toggle Lens")
+        self.logger.debug("done")
 
     def __set_tooltips(self):
+        self.logger.debug("running")
         self.__config_label.setToolTip("Current device configuration")
         self.__nhtsa_button.setToolTip("Set Device to NHTSA standard")
         self.__eblindfold_button.setToolTip("Set Device to eBlindfold mode")
@@ -294,17 +334,4 @@ class VOGTab(QWidget):
         self.__close_inf_check_box.setToolTip("Set to manual switching")
         self.__upload_settings_button.setToolTip("Upload current configuration to device")
         self.__manual_control_button.setToolTip("Manually open or close the lens")
-
-    class __MyFrame(QFrame):
-        """ Creates a frame for display purposes depending on bools. """
-        def __init__(self, parent=None, line=False, vert=False):
-            super().__init__(parent)
-            if line:
-                if vert:
-                    self.setFrameShape(QFrame.VLine)
-                else:
-                    self.setFrameShape(QFrame.HLine)
-                self.setFrameShadow(QFrame.Sunken)
-            else:
-                self.setFrameShape(QFrame.StyledPanel)
-                self.setFrameShadow(QFrame.Raised)
+        self.logger.debug("done")
