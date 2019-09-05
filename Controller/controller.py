@@ -33,7 +33,7 @@ from PySide2.QtGui import QKeyEvent
 from CompanionLib.time_funcs import get_current_time
 import CompanionLib.checkers as checker
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    device_connection_error
+    device_connection_error, config_file_path
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -50,8 +50,8 @@ from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
-from Devices.Webcam.View.webcam_tab import WebcamViewer
 from Devices.Webcam.Controller.webcam_controller import WebcamController
+from Devices.Webcam.View.webcam_tab import WebcamViewer
 
 
 class CompanionController:
@@ -59,7 +59,7 @@ class CompanionController:
         """ Creates the different element objects of the View and Controller """
         config = configparser.ConfigParser()
         try:
-            config.read('../config/config.ini')  # TODO: Change this filepath?
+            config.read(config_file_path)
             logginglevel = eval('logging.' + config.get('logging', 'level'))
             inierror = False
         except configparser.NoSectionError as e:

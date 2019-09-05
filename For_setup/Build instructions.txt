@@ -1,6 +1,6 @@
 -   Add new folder for build version (ex. Build 1.1) in RedScientific/CompanionApp
 -   Add all needed modules to folder and rewrite all imports to point to same level
--   Add Images folder
+-   Edit filepaths in general_defs.py to match new locations
 -   copy setup.py to build version directory
 -   Edit version number in setup.py to build version
 -   in cmd go to build version directory
