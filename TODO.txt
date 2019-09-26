@@ -4,11 +4,10 @@ TODO:
     -   Lots of error checking
     -   Debug everywhere
 -   Threading (some issues with UI lag)
--   Fix most recent error with com ports (see error output)
-    hasattr does not return true when checking for 'port'
 
 At some point
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
+    Would we need to pass a reference to the device controller's respective function in?
 
 After launch:
 -   Should we add a way to see app version under the help option?

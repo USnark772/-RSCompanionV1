@@ -70,25 +70,28 @@ class DeviceManager:
             self.__remove_devices()
 
         for d in self.devices:
-            if self.devices[d]['id'] != 'unknown':
+            havemsg = False
+            if 'port' in self.devices[d].keys():
                 try:
                     if self.devices[d]['port'].in_waiting > 0:
                         the_message = self.devices[d]['port'].readline().decode("utf-8")
+                        havemsg = True
                         self.logger.info(str(self.devices[d]['id'] + ", " + self.devices[d]['port'].name + ", "
                                              + the_message))
                         msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
-                        print(the_message)
-                        if self.devices[d]['id'] == "drt":
-                            self.__parse_drt_msg(the_message, msg_dict)
-                        elif self.devices[d]['id'] == "vog":
-                            self.__parse_vog_msg(the_message, msg_dict)
-                        else:
-                            self.logger.info("couldn't match up device" + str(self.devices[d]['id']))
-                        self.logger.debug("msg_callback(msg_dict) msg_dict: " + str(msg_dict))
-                        self.msg_callback(msg_dict)
                 except Exception as e:
                     self.logger.exception("Failed try catch in update() for loop.")
-                    print("Failed in try catch in update() for loop. exception message: ", str(e))
+                    #print("Failed in try catch in update() for loop. exception message: ", e)
+                    continue
+                if havemsg:
+                    if self.devices[d]['id'] == "drt":
+                        self.__parse_drt_msg(the_message, msg_dict)
+                    elif self.devices[d]['id'] == "vog":
+                        self.__parse_vog_msg(the_message, msg_dict)
+                    else:
+                        self.logger.info("couldn't match up device" + str(self.devices[d]['id']))
+                    self.logger.debug("msg_callback(msg_dict) msg_dict: " + str(msg_dict))
+                    self.msg_callback(msg_dict)
         self.logger.debug("done")
 
     def handle_msg(self, msg_dict):
@@ -108,9 +111,8 @@ class DeviceManager:
             port = None
             msg_to_send = None
             for d in self.devices:
-                if self.devices[d]['id'] == 'unknown':
-                    continue
-                elif msg_dict['device'] == (self.devices[d]['id'], self.devices[d]['port'].name):
+                if 'port' in self.devices[d].keys() and msg_dict['device'] == \
+                        (self.devices[d]['id'], self.devices[d]['port'].name):
                     port = self.devices[d]['port']
                     self.logger.debug("Have port")
             if not port:
@@ -152,9 +154,9 @@ class DeviceManager:
         """ Send start block messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            print("Checking device: ", self.devices[d]['id'])
+            #print("Checking device: ", self.devices[d]['id'])
             if 'port' in self.devices[d].keys():
-                print("calling start block for: ", self.devices[d]['id'])
+                #print("calling start block for: ", self.devices[d]['id'])
                 self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 
@@ -322,7 +324,7 @@ class DeviceManager:
     # TODO: Clean this up
     def __parse_vog_msg(self, msg, msg_dict):
         self.logger.debug("running")
-        print("in parse_vog_msg", msg, msg_dict)
+        #print("in parse_vog_msg", msg, msg_dict)
         msg_dict['values'] = {}
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
@@ -358,5 +360,5 @@ class DeviceManager:
             msg_dict['type'] = "settings"
             msg_dict['values'] = {}
             msg_dict['values']['lensState'] = msg.rstrip("\r\n")
-        print("at end of parse_vog_msg.", msg_dict, "\n")
+        #print("at end of parse_vog_msg.", msg_dict, "\n")
         self.logger.debug("done")

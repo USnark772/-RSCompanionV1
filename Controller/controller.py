@@ -120,6 +120,9 @@ class CompanionController:
         if not checker.check_dict(msg):
             self.logger.warning("expected dictionary, got: " + str(type(msg)))
             return
+        if 'type' not in msg:
+            self.logger.warning("Error in dictionary format from device manager, 'type' not found.")
+            return
         msg_type = msg['type']
         if msg_type == "data":
             self.logger.debug("type was data")
@@ -254,19 +257,19 @@ class CompanionController:
         self.logger.debug("done")
 
     def __start_exp(self):
-        print("start exp")
+        #print("start exp")
         self.logger.debug("running")
         self.exp_running = True
         try:
-            print("Start block all()")
+            #print("Start block all()")
             self.device_manager.start_block_all()
         except Exception as e:
-            print("caught exception")
+            #print("caught exception")
             self.logger.exception("Failed trying to start_block_all")
-            print(str(e))
+            #print(str(e))
             self.exp_running = False
             return
-        print("updating other stuff")
+        #print("updating other stuff")
         self.current_cond_name = self.button_box.get_condition_name()
         self.__check_toggle_post_button()
         self.button_box.toggle_start_button()

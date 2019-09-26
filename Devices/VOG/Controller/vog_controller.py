@@ -56,7 +56,7 @@ class VOGController:
     def update_config(self, msg):
         """ Update device configuration display. """
         self.logger.debug("running")
-        print(msg)
+        #print(msg)
         self.__updating_config = True
         for key in msg:
             self.__set_val(key, msg[key])
