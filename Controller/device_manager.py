@@ -129,28 +129,37 @@ class DeviceManager:
         """ Send start experiment messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            self.__start_exp(self.devices[d]['id'], self.devices[d]['port'])
+
+            # Com1 has no device attribute 'port' - This error fails
+            # Rather than asking if the device is a VOG, each device should have an experiment start command.
+            # If there is no experiment start command then nothing should happen
+            if hasattr(self.devices[d], 'port'):
+                self.__start_exp(self.devices[d]['id'], self.devices[d]['port'])
+
         self.logger.debug("done")
 
     def end_exp_all(self):
         """ Send end experiment messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            self.__end_exp(self.devices[d]['id'], self.devices[d]['port'])
+            if hasattr(self.devices[d], 'port'):
+                self.__end_exp(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 
     def start_block_all(self):
         """ Send start block messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
+            if hasattr(self.devices[d], 'port'):
+                self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 
     def end_block_all(self):
         """ Send end block messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            self.__end_block(self.devices[d]['id'], self.devices[d]['port'])
+            if hasattr(self.devices[d], 'port'):
+                self.__end_block(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 
     def __start_exp(self, device, port):

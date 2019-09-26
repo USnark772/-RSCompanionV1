@@ -81,7 +81,9 @@ class ButtonBox(QGroupBox):
     def toggle_create_button(self):
         """ Set create button to either create or end depending on what state any current experiment is in. """
         self.logger.debug("running")
-        if self.__create_button.text() == "Create":
+        state = self.__create_button.text()
+        # print(self.state == "Create")
+        if state == "Create":
             self.__create_button.setText("End")
             self.__create_button.setToolTip("End experiment")
             self.__start_button.setEnabled(True)
