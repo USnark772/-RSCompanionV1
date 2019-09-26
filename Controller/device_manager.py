@@ -85,8 +85,9 @@ class DeviceManager:
                             self.logger.info("couldn't match up device" + str(self.devices[d]['id']))
                         self.logger.debug("msg_callback(msg_dict) msg_dict: " + str(msg_dict))
                         self.msg_callback(msg_dict)
-                except:
-                    pass
+                except Exception as e:
+                    self.logger.exception("Failed try catch in update() for loop.")
+                    print("Failed in try catch in update() for loop. exception message: ", str(e))
         self.logger.debug("done")
 
     def handle_msg(self, msg_dict):

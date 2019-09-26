@@ -192,7 +192,7 @@ class CompanionController:
         self.update_timer = QTimer()
         self.update_timer.setSingleShot(False)
         self.update_timer.timeout.connect(self.__device_update)
-        self.update_timer.start(1)
+        self.update_timer.start(5000)
         self.logger.debug("done")
 
     ########################################################################################
@@ -223,13 +223,13 @@ class CompanionController:
         self.logger.debug("running")
         self.exp_created = True
         self.button_box.toggle_create_button()
-        #try:
-        self.device_manager.start_exp_all()
-        #except Exception as e:
-            #self.logger.exception("Failed trying to start_exp_all")
-            #self.button_box.toggle_create_button()
-            #self.exp_created = False
-            #return
+        try:
+            self.device_manager.start_exp_all()
+        except Exception as e:
+            self.logger.exception("Failed trying to start_exp_all")
+            self.button_box.toggle_create_button()
+            self.exp_created = False
+            return
         self.info_box.set_start_time(get_current_time(time=True))
         self.logger.debug("done")
 
