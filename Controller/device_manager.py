@@ -77,6 +77,7 @@ class DeviceManager:
                         self.logger.info(str(self.devices[d]['id'] + ", " + self.devices[d]['port'].name + ", "
                                              + the_message))
                         msg_dict = {'device': (self.devices[d]['id'], self.devices[d]['port'].name)}
+                        print(the_message)
                         if self.devices[d]['id'] == "drt":
                             self.__parse_drt_msg(the_message, msg_dict)
                         elif self.devices[d]['id'] == "vog":
@@ -134,7 +135,7 @@ class DeviceManager:
             # Com1 has no device attribute 'port' - This error fails
             # Rather than asking if the device is a VOG, each device should have an experiment start command.
             # If there is no experiment start command then nothing should happen
-            if hasattr(self.devices[d], 'port'):
+            if 'port' in self.devices[d].keys():
                 self.__start_exp(self.devices[d]['id'], self.devices[d]['port'])
 
         self.logger.debug("done")
@@ -143,7 +144,7 @@ class DeviceManager:
         """ Send end experiment messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            if hasattr(self.devices[d], 'port'):
+            if 'port' in self.devices[d].keys():
                 self.__end_exp(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 
@@ -151,7 +152,9 @@ class DeviceManager:
         """ Send start block messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            if hasattr(self.devices[d], 'port'):
+            print("Checking device: ", self.devices[d]['id'])
+            if 'port' in self.devices[d].keys():
+                print("calling start block for: ", self.devices[d]['id'])
                 self.__start_block(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 
@@ -159,7 +162,7 @@ class DeviceManager:
         """ Send end block messages to all devices. """
         self.logger.debug("running")
         for d in self.devices:
-            if hasattr(self.devices[d], 'port'):
+            if 'port' in self.devices[d].keys():
                 self.__end_block(self.devices[d]['id'], self.devices[d]['port'])
         self.logger.debug("done")
 

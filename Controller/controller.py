@@ -192,7 +192,7 @@ class CompanionController:
         self.update_timer = QTimer()
         self.update_timer.setSingleShot(False)
         self.update_timer.timeout.connect(self.__device_update)
-        self.update_timer.start(5000)
+        self.update_timer.start(1000)
         self.logger.debug("done")
 
     ########################################################################################
@@ -254,14 +254,19 @@ class CompanionController:
         self.logger.debug("done")
 
     def __start_exp(self):
+        print("start exp")
         self.logger.debug("running")
         self.exp_running = True
         try:
+            print("Start block all()")
             self.device_manager.start_block_all()
         except Exception as e:
+            print("caught exception")
             self.logger.exception("Failed trying to start_block_all")
+            print(str(e))
             self.exp_running = False
             return
+        print("updating other stuff")
         self.current_cond_name = self.button_box.get_condition_name()
         self.__check_toggle_post_button()
         self.button_box.toggle_start_button()
