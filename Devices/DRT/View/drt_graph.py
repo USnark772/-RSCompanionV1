@@ -33,9 +33,10 @@ class DRTGraph(CanvasObj):
     Parent class is CanvasObj which handles the basic graphing utility.
     This class handles how to store and interpret data for the graph
     """
-    def __init__(self, parent):
+    def __init__(self, parent, ch):
         """ Superclass requires reference to parent, title of graph, plot names (types of data) """
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.__plot_names = ["Response Time", "Clicks"]
         super().__init__(parent, "drt", self.__plot_names, self.plot_data)

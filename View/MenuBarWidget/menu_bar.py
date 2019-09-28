@@ -29,8 +29,9 @@ from PySide2.QtCore import QRect
 
 class MenuBar(QMenuBar):
     """ This code is for the menu bar at the top of the main window. File, help, etc. """
-    def __init__(self, parent):
+    def __init__(self, parent, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setGeometry(QRect(0, 0, 840, 22))

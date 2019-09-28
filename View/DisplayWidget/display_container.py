@@ -29,8 +29,9 @@ from PySide2.QtCore import QRect
 
 class DisplayContainer(QWidget):
     """ This code is to create an area for display widgets such as graphs to be shown to the user. """
-    def __init__(self, parent, callback):
+    def __init__(self, parent, callback, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.__callback = callback

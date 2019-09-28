@@ -30,8 +30,9 @@ from PySide2.QtCore import Qt
 
 class FlagBox(QGroupBox):
     """ This code is for showing and storing the keyflag which in this case is the last letter key the user pressed. """
-    def __init__(self, parent, size):
+    def __init__(self, parent, size, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setLayout(QVBoxLayout())

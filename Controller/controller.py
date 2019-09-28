@@ -1,4 +1,6 @@
 """ Licensed under GNU GPL-3.0-or-later """
+from abc import ABC
+
 """
 This file is part of RS Companion.
 
@@ -33,7 +35,7 @@ from PySide2.QtGui import QKeyEvent
 from CompanionLib.time_funcs import get_current_time
 import CompanionLib.checkers as checker
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    device_connection_error, config_file_path
+    device_connection_error, config_file_path, current_version
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -44,6 +46,7 @@ from View.MenuBarWidget.menu_bar import MenuBar
 from View.DisplayWidget.display_container import DisplayContainer
 from View.DisplayWidget.graph_frame import GraphFrame
 from View.TabWidget.device_tab import TabContainer
+from View.OutputLog.output_window import OutputWindow
 from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
 from Devices.DRT.Controller.drt_controller import DRTController
@@ -57,6 +60,8 @@ from Devices.Webcam.View.webcam_tab import WebcamViewer
 class CompanionController:
     def __init__(self):
         """ Creates the different element objects of the View and Controller """
+        self.log_output = OutputWindow()
+
         config = configparser.ConfigParser()
         try:
             config.read(config_file_path)
@@ -68,10 +73,20 @@ class CompanionController:
         logging.basicConfig(filename=self.__setup_output_file("companion_app_log.txt"), filemode='w',
                             level=logginglevel, format='%(levelname)s - %(name)s - %(funcName)s: %(message)s')
         self.logger = logging.getLogger(__name__)
+
+        self.formatter = logging.Formatter('%(levelname)s - %(name)s - %(funcName)s: %(message)s')
+        self.ch = logging.StreamHandler(self.log_output)
+        self.ch.setLevel(logging.INFO)
+        self.ch.setFormatter(self.formatter)
+
+        self.logger.addHandler(self.ch)
+
+        self.log_output.show()
+
+        self.logger.info("RS Compaion app version: " + str(current_version))
         if inierror:
             self.logger.debug("Error reading config.ini, logging level set to debug")
         self.logger.debug("Initializing")
-        # self.program_output_save_file = self.__setup_output_file("companion_app_console_output.txt")
         ui_min_size = QSize(450, 550)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
@@ -79,17 +94,17 @@ class CompanionController:
         flag_box_size = QSize(80, 120)
         note_box_size = QSize(250, 120)
         tab_box_width_range = (350, 320)
-        self.ui = CompanionWindow(ui_min_size)
-        self.menu_bar = MenuBar(self.ui)
-        self.control_dock = ControlDock(self.ui, dock_size)
-        self.button_box = ButtonBox(self.control_dock, button_box_size)
-        self.info_box = InfoBox(self.control_dock, info_box_size)
-        self.flag_box = FlagBox(self.control_dock, flag_box_size)
-        self.note_box = NoteBox(self.control_dock, note_box_size)
-        self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs)
-        self.tab_box = TabContainer(self.ui, tab_box_width_range)
+        self.ui = CompanionWindow(ui_min_size, self.ch)
+        self.menu_bar = MenuBar(self.ui, self.ch)
+        self.control_dock = ControlDock(self.ui, dock_size, self.ch)
+        self.button_box = ButtonBox(self.control_dock, button_box_size, self.ch)
+        self.info_box = InfoBox(self.control_dock, info_box_size, self.ch)
+        self.flag_box = FlagBox(self.control_dock, flag_box_size, self.ch)
+        self.note_box = NoteBox(self.control_dock, note_box_size, self.ch)
+        self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs, self.ch)
+        self.tab_box = TabContainer(self.ui, tab_box_width_range, self.ch)
         self.file_dialog = QFileDialog(self.ui)
-        self.device_manager = DeviceManager(self.receive_msg_from_device_manager)
+        self.device_manager = DeviceManager(self.receive_msg_from_device_manager, self.ch)
 
         # Initialize storage and state
         self.__graphs = {}
@@ -151,6 +166,7 @@ class CompanionController:
         self.logger.debug("running")
         self.__setup_file_dialog()
         self.__setup_handlers()
+        #self.device_manager_thread.start()
         self.__start_update_timer()
         self.control_dock.add_widget(self.button_box)
         self.control_dock.add_widget(self.flag_box)
@@ -190,13 +206,14 @@ class CompanionController:
         self.logger.debug("done")
 
     def __start_update_timer(self):
-        """ A timer to trigger device manager to check for updates """
-        self.logger.debug("running")
-        self.update_timer = QTimer()
-        self.update_timer.setSingleShot(False)
-        self.update_timer.timeout.connect(self.__device_update)
-        self.update_timer.start(1000)
-        self.logger.debug("done")
+        self.__msg_timer = QTimer()
+        self.__msg_timer.setSingleShot(False)
+        self.__msg_timer.timeout.connect(self.device_manager.check_for_msgs)
+        self.__msg_timer.start(1)
+        self.__device_timer = QTimer()
+        self.__device_timer.setSingleShot(False)
+        self.__device_timer.timeout.connect(self.device_manager.update_devices)
+        self.__device_timer.start(500)
 
     ########################################################################################
     # Experiment handling
@@ -474,7 +491,7 @@ class CompanionController:
             self.logger.debug("Making controller for drt")
             try:
                 device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg,
-                                                  self.add_data_to_graph)
+                                                  self.add_data_to_graph, self.ch)
             except Exception as e:
                 self.logger.exception("failed to make device_controller for drt" + str(device))
                 self.__num_drts -= 1
@@ -493,7 +510,7 @@ class CompanionController:
             self.logger.debug("Making controller for vog")
             try:
                 device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg,
-                                                  self.add_data_to_graph)
+                                                  self.add_data_to_graph, self.ch)
             except Exception as e:
                 self.logger.exception("failed to make device_controller for vog" + str(device))
                 self.__num_vogs -= 1
@@ -559,6 +576,8 @@ class CompanionController:
                 self.device_manager.end_exp_all()
             except Exception as e:
                 self.logger.exception("Failed to end_exp_all")
+        self.log_output.close()
+        #self.device_manager_thread.terminate()
         self.logger.debug("done")
 
     def __about_company(self):
@@ -589,7 +608,7 @@ class CompanionController:
         """ Create a drt type graph and add it to the display area. """
         self.logger.debug("running")
         try:
-            graph = DRTGraph(self.graph_box)
+            graph = DRTGraph(self.graph_box, self.ch)
         except Exception as e:
             self.logger.exception("Failed to make DRTGraph")
             return False
@@ -611,7 +630,7 @@ class CompanionController:
         """ Create a vog type graph and add it to the display area. """
         self.logger.debug("running")
         try:
-            graph = VOGGraph(self.graph_box)
+            graph = VOGGraph(self.graph_box, self.ch)
         except Exception as e:
             self.logger.exception("Failed to make VOGGraph")
             return False

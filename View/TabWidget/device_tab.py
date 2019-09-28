@@ -29,8 +29,9 @@ from PySide2.QtCore import Qt
 
 class TabContainer(QTabWidget):
     """ This code will contain __Tab objects for display to the user. """
-    def __init__(self, parent, width_range):
+    def __init__(self, parent, width_range, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setMaximumWidth(width_range[0])

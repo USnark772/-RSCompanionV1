@@ -31,8 +31,9 @@ from Model.general_defs import image_file_path
 
 class ButtonBox(QGroupBox):
     """ This code is to contain the overall controls which govern running experiments. """
-    def __init__(self, parent, size):
+    def __init__(self, parent, size, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setLayout(QVBoxLayout())

@@ -29,8 +29,9 @@ from PySide2.QtCore import Qt
 
 class InfoBox(QGroupBox):
     """ This code is for displaying information about the current experiment. """
-    def __init__(self, parent, size):
+    def __init__(self, parent, size, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setMaximumSize(size)
