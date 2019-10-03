@@ -132,6 +132,7 @@ class DeviceManager:
 
     def check_for_msgs(self):
         #self.logger.debug("running")
+        need_update = False
         the_message = None
         msg_dict = None
         for d in self.devices_map:
@@ -142,7 +143,8 @@ class DeviceManager:
                     self.logger.info(str(device['id'] + ", " + device['port'].name + ", " + the_message))
                     msg_dict = {'device': (device['id'], device['port'].name)}
             except SerialException as se:
-                self.logger.exception("Trouble with port")
+                # self.logger.exception("Trouble with port")
+                need_update = True
                 continue
             except Exception as e:
                 self.logger.exception("Failed try catch in update() for loop.")
@@ -157,6 +159,8 @@ class DeviceManager:
                     self.logger.info("couldn't match up device" + str(self.devices_map[d]['id']))
                 self.logger.debug("msg_callback(msg_dict) msg_dict: " + str(msg_dict))
                 self.msg_callback(msg_dict)
+        if need_update:
+            self.update_devices()
         #self.logger.debug("done")
 
     def update_devices(self):
