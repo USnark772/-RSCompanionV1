@@ -22,7 +22,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QTextEdit
-
+from PySide2.QtGui import QTextCursor
 
 class OutputWindow(QWidget):
     """ This is to display small messages to the user. """
@@ -38,5 +38,7 @@ class OutputWindow(QWidget):
         self.textBox.setReadOnly(True)
 
     def write(self, message):
-        self.text = self.text + message
-        self.textBox.setText(self.text)
+        # cursor = QTextCursor(self.textBox)
+        self.textBox.moveCursor(QTextCursor.End)
+        self.textBox.insertPlainText(message)
+        self.textBox.moveCursor(QTextCursor.End)

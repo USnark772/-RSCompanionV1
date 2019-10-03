@@ -76,7 +76,7 @@ class CompanionController:
 
         self.formatter = logging.Formatter('%(levelname)s - %(name)s - %(funcName)s: %(message)s')
         self.ch = logging.StreamHandler(self.log_output)
-        self.ch.setLevel(logging.INFO)
+        self.ch.setLevel(logginglevel)
         self.ch.setFormatter(self.formatter)
 
         self.logger.addHandler(self.ch)

@@ -127,7 +127,7 @@ class DeviceManager:
         self.num_comports = 0
         self.profiles = devices
         self.devices_map = dict()
-        self.rs_devices = dict()
+        self.check_for_updates = True
         self.logger.debug("Initialized")
 
     def check_for_msgs(self):
@@ -165,6 +165,8 @@ class DeviceManager:
 
     def update_devices(self):
         #self.logger.debug("running")
+        if not self.check_for_updates:
+            return
         self.__scan_ports()
 
         if len(self.devices_to_add) != 0:
@@ -211,6 +213,7 @@ class DeviceManager:
     def start_exp_all(self):
         """ Send start experiment messages to all devices. """
         self.logger.debug("running")
+        self.check_for_updates = False
         for d in self.devices_map:
 
             # Com1 has no device attribute 'port' - This error fails
@@ -224,6 +227,7 @@ class DeviceManager:
     def end_exp_all(self):
         """ Send end experiment messages to all devices. """
         self.logger.debug("running")
+        self.check_for_updates = True
         for d in self.devices_map:
             if 'port' in self.devices_map[d].keys():
                 self.__end_exp(self.devices_map[d]['id'], self.devices_map[d]['port'])
