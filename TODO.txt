@@ -13,6 +13,7 @@ After launch:
 -   Fix time on charts and output files so that it matches the time shown in users computers.
 -   Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
 -   Experiments blocks should have lines that connect the dots in the charts. That will provide a meaningful continuation of chart data within an experiment
+-   When the program is launched twice there is a bad error.
 -   Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
     Seems to have trouble accessing USB camera. Uses builtin webcams just fine. Need to do more searching.
