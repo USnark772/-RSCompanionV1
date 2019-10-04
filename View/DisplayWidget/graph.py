@@ -56,7 +56,10 @@ class CanvasObj(Canvas):
     def refresh_self(self):
         """ Redraw the canvas. """
         self.logger.debug("running")
-        self.figure.canvas.draw()
+        try:
+            self.figure.canvas.draw()
+        except Exception as e:
+            self.logger.exception("issue with drawing canvas.")
         self.logger.debug("done")
 
     def get_title(self):

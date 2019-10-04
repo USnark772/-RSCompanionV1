@@ -1,5 +1,4 @@
 """ Licensed under GNU GPL-3.0-or-later """
-from abc import ABC
 
 """
 This file is part of RS Companion.
@@ -81,8 +80,6 @@ class CompanionController:
 
         self.logger.addHandler(self.ch)
 
-        self.log_output.show()
-
         self.logger.info("RS Compaion app version: " + str(current_version))
         if inierror:
             self.logger.debug("Error reading config.ini, logging level set to debug")
@@ -110,7 +107,6 @@ class CompanionController:
         self.__graphs = {}
         self.exp_created = False
         self.exp_running = False
-        self.__dir_chosen = False
         self.__num_drts = 0
         self.__num_vogs = 0
         self.current_cond_name = ""
@@ -140,6 +136,7 @@ class CompanionController:
             return
         msg_type = msg['type']
         if msg_type == "data":
+            logging.warning("Data being handled")
             self.logger.debug("type was data")
             self.__update_save(msg)
             self.devices[msg['device']]['controller'].add_data_to_graph(get_current_time(graph=True), msg['values'])
@@ -201,6 +198,7 @@ class CompanionController:
         self.menu_bar.add_about_app_handler(self.__about_app)
         self.menu_bar.add_about_company_handler(self.__about_company)
         self.menu_bar.add_update_handler(self.__check_for_updates_handler)
+        self.menu_bar.add_log_window_handler(self.__log_window_handler)
         self.ui.keyPressEvent = self.__key_press_handler
         self.ui.add_close_handler(self.ui_close_event_handler)
         self.logger.debug("done")
@@ -213,7 +211,7 @@ class CompanionController:
         self.__device_timer = QTimer()
         self.__device_timer.setSingleShot(False)
         self.__device_timer.timeout.connect(self.device_manager.update_devices)
-        self.__device_timer.start(500)
+        self.__device_timer.start(200)
 
     ########################################################################################
     # Experiment handling
@@ -379,6 +377,9 @@ class CompanionController:
                                               " or contact Red Scientific directly.")
         self.logger.debug("done")
 
+    def __log_window_handler(self):
+        self.log_output.show()
+
     def __update_save(self, msg):
         """ Save device output to file 'fn'. msg is expected to be a dictionary. """
         self.logger.debug("running")
@@ -399,6 +400,7 @@ class CompanionController:
         else:
             self.logger.warning("key error, device not in self.devices")
             return
+        print("Controller.py: ", prepend, line)
         self.__write_line_to_file(self.devices[device]['fn'], prepend + line)
         self.logger.debug("done")
 
@@ -525,8 +527,6 @@ class CompanionController:
         self.devices[device]['controller'] = device_controller
         self.tab_box.add_tab(device_controller.get_tab_obj(), device[1])
         self.__make_save_filename_for_device(device)
-        if self.__dir_chosen:  # TODO: Is this ever used?
-            self.__add_hdr_to_file(device)
         self.logger.debug("done")
 
     def __remove_device(self, device):
@@ -589,7 +589,7 @@ class CompanionController:
     def __about_app(self):
         """ Display app information. """
         self.logger.debug("running")
-        self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text)
+        self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: " + str(current_version))
         self.logger.debug("done")
 
     ########################################################################################

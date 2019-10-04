@@ -48,6 +48,9 @@ class MenuBar(QMenuBar):
         self.__update = QAction(self)
         self.__help.addAction(self.__update)
 
+        self.__log_window = QAction(self)
+        self.__help.addAction(self.__log_window)
+
         self.__set_texts()
         self.logger.debug("Initialized")
 
@@ -66,10 +69,16 @@ class MenuBar(QMenuBar):
         self.__update.triggered.connect(func)
         self.logger.debug("done")
 
+    def add_log_window_handler(self, func):
+        self.logger.debug("running")
+        self.__log_window.triggered.connect(func)
+        self.logger.debug("done")
+
     def __set_texts(self):
         self.logger.debug("running")
         self.__help.setTitle("Help")
         self.__about_app.setText("About RS Companion")
         self.__about_company.setText("About Red Scientific")
         self.__update.setText("Check For Updates")
+        self.__log_window.setText("Show log window")
         self.logger.debug("done")

@@ -29,6 +29,7 @@ When the target device is plugged in or removed the connect_event or
 disconnect_event flags are turned True.
 """
 
+import queue
 from time import sleep
 import logging
 import threading
@@ -112,6 +113,19 @@ class PortMap:
         del self.devices[key]
 
 
+class PortScanner(threading.Thread):
+    def __init__(self, the_queue):
+        threading.Thread.__init__(self, daemon=True)
+        self.queue = the_queue
+
+    def run(self):
+        while True:
+            #print("Getting comports in thread")
+            x = list_ports.comports()
+            self.queue.put(x)
+            #print("Now going to sleep\n")
+
+
 class DeviceManager:
     def __init__(self, msg_handler, ch):
         self.logger = logging.getLogger(__name__)
@@ -129,16 +143,19 @@ class DeviceManager:
         self.devices_map = dict()
         self.check_for_updates = True
         self.logger.debug("Initialized")
+        self.comports_queue = queue.Queue(maxsize=1)
+        self.scanner_thread = PortScanner(self.comports_queue)
+        self.scanner_thread.start()
 
     def check_for_msgs(self):
         #self.logger.debug("running")
         need_update = False
-        the_message = None
-        msg_dict = None
         for d in self.devices_map:
+            the_message = None
+            msg_dict = None
             device = self.devices_map[d]
             try:
-                if device['port'].in_waiting > 0:
+                if 'port' in self.devices_map[d].keys() and device['port'].in_waiting > 0:
                     the_message = device['port'].readline().decode("utf-8")
                     self.logger.info(str(device['id'] + ", " + device['port'].name + ", " + the_message))
                     msg_dict = {'device': (device['id'], device['port'].name)}
@@ -147,10 +164,11 @@ class DeviceManager:
                 need_update = True
                 continue
             except Exception as e:
-                self.logger.exception("Failed try catch in update() for loop.")
+                self.logger.exception("Failed try catch in check_for_msgs() for loop.")
                 continue
 
             if the_message:
+                #print("the_message: ", the_message)
                 if self.devices_map[d]['id'] == "drt":
                     self.__parse_drt_msg(the_message, msg_dict)
                 elif self.devices_map[d]['id'] == "vog":
@@ -158,14 +176,16 @@ class DeviceManager:
                 else:
                     self.logger.info("couldn't match up device" + str(self.devices_map[d]['id']))
                 self.logger.debug("msg_callback(msg_dict) msg_dict: " + str(msg_dict))
+                #print("msg_dict: ", msg_dict)
                 self.msg_callback(msg_dict)
         if need_update:
-            self.update_devices()
+            self.update_devices(True)
+            sleep(.1)
         #self.logger.debug("done")
 
-    def update_devices(self):
+    def update_devices(self, override=False):
         #self.logger.debug("running")
-        if not self.check_for_updates:
+        if not override and not self.check_for_updates:
             return
         self.__scan_ports()
 
@@ -237,9 +257,9 @@ class DeviceManager:
         """ Send start block messages to all devices. """
         self.logger.debug("running")
         for d in self.devices_map:
-            #print("Checking device: ", self.devices[d]['id'])
+            #"Checking device: ", self.devices[d]['id'])
             if 'port' in self.devices_map[d].keys():
-                #print("calling start block for: ", self.devices[d]['id'])
+                #"calling start block for: ", self.devices[d]['id'])
                 self.__start_block(self.devices_map[d]['id'], self.devices_map[d]['port'])
         self.logger.debug("done")
 
@@ -287,11 +307,16 @@ class DeviceManager:
         """ Go through list of ports and get set of attached devices. """
         #self.logger.debug("running")
         devices_known = list(self.devices_map.keys())
+
         self.devices_to_add = []
         self.devices_to_remove = []
         self.devices_attached = []
 
-        for port in list_ports.comports():
+        try:
+            x = self.comports_queue.get(block=False)
+        except Exception as e:
+            x = []
+        for port in x:
             self.devices_attached.append(port.device)
 
         if len(devices_known) == 0:
@@ -313,6 +338,7 @@ class DeviceManager:
                         the_port.port = port.device
                         i = 0
                         while not the_port.is_open and i < 5:  # Make multiple attempts in case device is busy
+                            self.logger.debug("Attempt " + str(i + 1) + " of 5 to connect to device: " + device)
                             i += 1
                             try:
                                 the_port.open()
@@ -406,7 +432,7 @@ class DeviceManager:
     # TODO: Clean this up
     def __parse_vog_msg(self, msg, msg_dict):
         self.logger.debug("running")
-        #print("in parse_vog_msg", msg, msg_dict)
+        #"in parse_vog_msg", msg, msg_dict)
         msg_dict['values'] = {}
         if msg[0:5] == "data|":
             msg_dict['type'] = "data"
@@ -442,5 +468,5 @@ class DeviceManager:
             msg_dict['type'] = "settings"
             msg_dict['values'] = {}
             msg_dict['values']['lensState'] = msg.rstrip("\r\n")
-        #print("at end of parse_vog_msg.", msg_dict, "\n")
+        #"at end of parse_vog_msg.", msg_dict, "\n")
         self.logger.debug("done")
