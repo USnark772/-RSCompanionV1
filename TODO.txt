@@ -10,6 +10,7 @@ At some point
     Would we need to pass a reference to the device controller's respective function in?
 
 After launch:
+-   Notes entered into the output files do not populate the correct column. Need more commas, 2 I believe
 -   Fix time on charts and output files so that it matches the time shown in users computers.
 -   Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
 -   Experiments blocks should have lines that connect the dots in the charts. That will provide a meaningful continuation of chart data within an experiment
