@@ -354,7 +354,7 @@ class DeviceManager:
                         self.msg_callback(msg_dict)
                         break
                     else:
-                        self.logger.debug("done, unkown device")
+                        self.logger.debug("done, unknown device")
                         self.devices_map[port.device] = {'id': 'unknown'}
         self.logger.debug("done")
 

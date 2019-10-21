@@ -8,9 +8,17 @@ TODO:
 At some point
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
     Would we need to pass a reference to the device controller's respective function in?
+-   Change output path to fixed and user can change it if desired but doesn't need to.
+-   Give program a folder in user space instead of program files space and place config file in there.
 
 After launch:
--   Should we add a way to see app version under the help option?
+-   DONE Notes entered into the output files do not populate the correct column. Need more commas, 2 I believe
+-   IGNORE Fix time on charts and output files so that it matches the time shown in users computers.
+-   IGNORE Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
+-   DONE Experiments blocks should have lines that connect the dots in the charts. That will provide a meaningful continuation of chart data within an experiment
+-   IGNORE Need to add a configuration name field to VOG and DRT for custom configuration uploads
+-   DONE When the program is launched twice there is a bad error.
+-   DONE Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
     Seems to have trouble accessing USB camera. Uses builtin webcams just fine. Need to do more searching.
     It seems Qt5 has a good implementation so far. Preliminary research shows there is a way to overlay. Consider using
@@ -22,7 +30,7 @@ Updater:
 -   Automatically check for updates at startup if user selects that option
 
 Installer: Inno Setup
--   Make sure installer installs over previous versions of Companion app
+-   DONE Make sure installer installs over previous versions of Companion app
 
 Devices:
 -   Check device/program output

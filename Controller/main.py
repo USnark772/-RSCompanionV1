@@ -23,12 +23,14 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import sys
+from tendo import singleton
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
 from Controller.controller import CompanionController
 
 
 def main():
+    me = singleton.SingleInstance()
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
     controller = CompanionController()  # Need reference else garbage collector has too much fun

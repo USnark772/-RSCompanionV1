@@ -87,6 +87,15 @@ class VOGGraph(CanvasObj):
         self.plot()
         self.logger.debug("done")
 
+    def add_empty_point(self, timestamp):
+        if self.get_new():
+            return
+        for port in self.__data.values():
+            port[0].append(timestamp)
+            port[1].append(None)
+            port[2].append(None)
+        self.refresh_self()
+
     def __add_mean(self):
         """ Add new line to represent mean of data. """
         self.logger.debug("running")

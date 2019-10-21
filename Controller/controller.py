@@ -50,8 +50,10 @@ from Controller.version_checker import VersionChecker
 from Controller.device_manager import DeviceManager
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
+from Devices.DRT.Model.drt_defs import drtv1_0_note_spacer
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
+from Devices.VOG.Model.vog_defs import vog_note_spacer
 from Devices.Webcam.Controller.webcam_controller import WebcamController
 from Devices.Webcam.View.webcam_tab import WebcamViewer
 
@@ -287,8 +289,10 @@ class CompanionController:
         #print("updating other stuff")
         self.current_cond_name = self.button_box.get_condition_name()
         self.__check_toggle_post_button()
+        self.__add_break_in_graph_lines()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
+        self.__add_vert_lines_to_graphs()
         self.logger.debug("done")
 
     def __stop_exp(self):
@@ -302,6 +306,16 @@ class CompanionController:
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
+
+    def __add_vert_lines_to_graphs(self):
+        time = get_current_time(graph=True)
+        for graph_frame in self.__graphs.values():
+            graph_frame.get_graph().add_vert_lines(time)
+
+    def __add_break_in_graph_lines(self):
+        time = get_current_time(graph=True)
+        for graph_frame in self.__graphs.values():
+            graph_frame.get_graph().add_empty_point(time)
 
     def __check_toggle_post_button(self):
         """ If an experiment is created and running and there is a note then allow user access to post button. """
@@ -457,9 +471,9 @@ class CompanionController:
     def __make_note_spacer(device):
         """ For formatting save files when certain data slots are empty. """
         if device == "drt":
-            return ", , "
+            return drtv1_0_note_spacer
         elif device == "vog":
-            return ", , , , "
+            return vog_note_spacer
 
     ########################################################################################
     # generic device handling
