@@ -32,8 +32,9 @@ class ControlDock(QDockWidget):
     A detachable area for other widgets such as frames.
     Typically this will be used for overall app control and feedback.
     """
-    def __init__(self, parent, size):
+    def __init__(self, parent, size, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setMaximumSize(size)

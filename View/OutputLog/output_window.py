@@ -15,27 +15,30 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
-
 # Author: Phillip Riskin
 # Date: 2019
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import sys
-from tendo import singleton
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QApplication
-from Controller.controller import CompanionController
+from PySide2.QtWidgets import QWidget, QVBoxLayout, QTextEdit
+from PySide2.QtGui import QTextCursor
 
+class OutputWindow(QWidget):
+    """ This is to display small messages to the user. """
+    def __init__(self):
+        super().__init__()
+        self.resize(400, 200)
+        self.move(100, 100)
+        self.setWindowTitle('Program Output')
+        self.setLayout(QVBoxLayout())
+        self.textBox = QTextEdit()
+        self.layout().addWidget(self.textBox)
+        self.text = ""
+        self.textBox.setReadOnly(True)
 
-def main():
-    me = singleton.SingleInstance()
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-    app = QApplication(sys.argv)
-    controller = CompanionController()  # Need reference else garbage collector has too much fun
-    sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()
+    def write(self, message):
+        # cursor = QTextCursor(self.textBox)
+        self.textBox.moveCursor(QTextCursor.End)
+        self.textBox.insertPlainText(message)
+        self.textBox.moveCursor(QTextCursor.End)

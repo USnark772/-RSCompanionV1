@@ -33,8 +33,9 @@ from CompanionLib.view_helpers import MyFrame
 
 class DRTTab(QWidget):
     """ This code is for helping the user interact with the configurations of the DRT device. """
-    def __init__(self, parent, device):
+    def __init__(self, parent, device, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         try:
             super().__init__(parent)

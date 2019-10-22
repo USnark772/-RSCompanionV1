@@ -28,8 +28,9 @@ from PySide2.QtWidgets import QGroupBox, QGridLayout, QTextEdit, QPushButton
 
 class NoteBox(QGroupBox):
     """ This code is for the user to input notes as desired. """
-    def __init__(self, parent, size):
+    def __init__(self, parent, size, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__(parent)
         self.setLayout(QGridLayout())

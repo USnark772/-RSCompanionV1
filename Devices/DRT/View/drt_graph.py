@@ -33,9 +33,10 @@ class DRTGraph(CanvasObj):
     Parent class is CanvasObj which handles the basic graphing utility.
     This class handles how to store and interpret data for the graph
     """
-    def __init__(self, parent):
+    def __init__(self, parent, ch):
         """ Superclass requires reference to parent, title of graph, plot names (types of data) """
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.__plot_names = ["Response Time", "Clicks"]
         super().__init__(parent, "drt", self.__plot_names, self.plot_data)
@@ -89,6 +90,15 @@ class DRTGraph(CanvasObj):
         # self.__calc_mean(self.__data[port_data[0]])
         self.plot()
         self.logger.debug("done")
+
+    def add_empty_point(self, timestamp):
+        if self.get_new():
+            return
+        for port_data in self.__data.values():
+            for port in port_data.values():
+                port[0].append(timestamp)
+                port[1].append(None)
+        self.refresh_self()
 
     def __add_mean(self):
         """ Add new line to represent mean of data. """

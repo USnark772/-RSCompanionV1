@@ -33,8 +33,9 @@ from Model.general_defs import image_file_path
 
 class CompanionWindow(QMainWindow):
     """ The main window the app will be displayed in. """
-    def __init__(self, min_size):
+    def __init__(self, min_size, ch):
         self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__()
         self.setMinimumSize(min_size)

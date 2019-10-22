@@ -27,8 +27,7 @@ import sys
 import os
 from cx_Freeze import setup, Executable
 
-redist_filepath = 'C:/Users/phill/PycharmProjects/RedScientific'
-app_filepath = redist_filepath + "/Companion/"
+filepath = 'C:/Users/phill/PycharmProjects/RedScientific'
 
 build_exe_options = {'packages': ['os',
                                   'requests',
@@ -38,10 +37,10 @@ build_exe_options = {'packages': ['os',
                                   'numpy',
                                   'matplotlib'],
                      'excludes': ['tkinter'],
-                     'include_files': [redist_filepath + '/redist/',
-                                       app_filepath + 'config/',
-                                       app_filepath + 'View/Images/',
-                                       app_filepath + 'readme/']}
+                     'include_files': [filepath + '/redist/',
+                                       filepath + '/Companion/View/Images/',
+                                       filepath + '/Companion/readme/',
+                                       filepath + '/Companion/config/']}
 
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
 include_files = [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'libcrypto-1_1.dll'),
@@ -54,7 +53,8 @@ if sys.platform == 'win32':
         build_exe_options['include_files'].append(file)
 
 setup(name='RS Companion',
-      version='1.03',
+      version='1.04',
       description='The companion app to rule all RS Devices',
       options={'build_exe': build_exe_options},
-      executables=[Executable('main.py', targetName='Companion.exe', base=base, icon='Images/rs_icon.ico')])
+      executables=[Executable('main.py', targetName='Companion.exe', base=base,
+                              icon=filepath + '/Companion/View/Images/rs_icon.ico')])

@@ -47,6 +47,7 @@ class CanvasObj(Canvas):
         self.__legend_plot_links = {}
         self.__plots = {}  # plot_name: coords, name, active
         self.__set_subplots()
+        self.__vlines = []
         #self.figure.canvas.mpl_connect('button_press_event', self.__onclick)
         self.figure.canvas.mpl_connect('pick_event', self.__onpick)
         self.plot(new=True)
@@ -56,7 +57,10 @@ class CanvasObj(Canvas):
     def refresh_self(self):
         """ Redraw the canvas. """
         self.logger.debug("running")
-        self.figure.canvas.draw()
+        try:
+            self.figure.canvas.draw()
+        except Exception as e:
+            self.logger.exception("issue with drawing canvas.")
         self.logger.debug("done")
 
     def get_title(self):
@@ -67,6 +71,9 @@ class CanvasObj(Canvas):
         self.logger.debug("running")
         self.__new = is_new
         self.logger.debug("done")
+
+    def get_new(self):
+        return self.__new
 
     def __set_plot_names(self, names):
         """ Each plot name will be used to create a graph for a specific data type. """
@@ -108,8 +115,19 @@ class CanvasObj(Canvas):
             legend = self.figure.legend(loc='upper left', framealpha=0.4)
             legend.set_draggable(True)
             self.__match_legend_plot_lines(legend, lines)
+            self.add_vert_lines()
         self.figure.canvas.draw()
         self.logger.debug("done")
+
+    def add_vert_lines(self, timestamp=None):
+        for axes in self.figure.get_axes():
+            if timestamp:
+                self.__vlines.append(timestamp)
+                axes.axvline(timestamp)
+                self.refresh_self()
+            else:
+                for line in self.__vlines:
+                    axes.axvline(line)
 
     def __match_legend_plot_lines(self, legend, lines):
         """ Attach lines in all subplots to appropriate marker in legend """

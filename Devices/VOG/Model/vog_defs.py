@@ -30,6 +30,8 @@ vog_about = "The Visual Occlusion Glasses have a few different settings availabl
             "-eBlindfold\n" \
             "-Direct Control\n"
 
+vog_note_spacer = ", , , , "
+
 vog_file_hdr = "Type, Condition, Key Flag, Timestamp, Trial counter, Millis Open, Millis Closed, Note"
 
 vog_config_fields = []
