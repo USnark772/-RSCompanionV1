@@ -66,6 +66,10 @@ update_available = "An update is available."
 
 up_to_date = "Your program is up to date."
 
+error_checking_for_update = "There was an unexpected error connecting to the repository. Please check" \
+                            " https://github.com/redscientific/CompanionApp manually" \
+                            " or contact Red Scientific directly."
+
 device_connection_error = "There was a problem connecting the device, please retry connection."
 
 __compliant_text_color = "rgb(0, 0, 0)"

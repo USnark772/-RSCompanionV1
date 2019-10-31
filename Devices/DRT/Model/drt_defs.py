@@ -24,7 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 """ Definitions specific to the DRT device """
 
-drtv1_0_note_spacer = ", , , , "
+drtv1_0_note_spacer = ", , , , , "
 
 drtv1_0_file_hdr = "Type, Condition, Key Flag, Timestamp, Millisecond counter, Trial counter, Clicks, Response Time,"\
                    " Note"

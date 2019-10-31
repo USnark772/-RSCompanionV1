@@ -24,9 +24,11 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 from math import trunc, ceil
 import logging
+from CompanionLib.companion_helpers import write_line_to_file
 from Devices.DRT.View.drt_tab import DRTTab
-from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, drtv1_0_ISI_max,\
-    drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr
+from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, \
+    drtv1_0_ISI_max, drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr, drtv1_0_config_fields, \
+    drtv1_0_note_spacer
 
 
 class DRTController:
@@ -46,10 +48,61 @@ class DRTController:
         self.__get_vals()
         self.__set_upload_button(False)
         self.__data_types = [["Response Time", 0, True], ["Clicks", 0, True]]
+        self.save_file = str()
         self.__set_handlers()
         self.logger.debug("Initialized")
 
-    def update_config(self, msg):
+    def get_tab_obj(self):
+        return self.__tab
+
+    def handle_msg(self, msg_string, ui_info):
+        msg_dict = self.__parse_msg(msg_string)
+        msg_type = msg_dict['type']
+        if msg_type == "data":
+            self.__add_data_to_graph(msg_dict['values'], ui_info[2])
+            self.__save_data(msg_dict['values'], ui_info)
+        elif msg_type == "settings":
+            self.__update_config(msg_dict['values'])
+
+    def create_new_save_file(self, new_filename):
+        self.save_file = new_filename
+        self.add_save_file_hdr()
+
+    def add_save_file_hdr(self):
+        write_line_to_file(self.save_file, drtv1_0_file_hdr)
+
+    def start_exp(self):
+        """ Required function for all device controllers. """
+        pass
+
+    def end_exp(self):
+        """ Required function for all device controllers. """
+        pass
+
+    def start_block(self):
+        self.__send_msg(self.__prepare_msg("exp_start"))
+
+    def end_block(self):
+        self.__send_msg(self.__prepare_msg("exp_stop"))
+
+    def write_note_to_file(self, note, ui_info):
+        line = "note, " + ui_info[0] + ", " + ui_info[1] + ", " + ui_info[2] + drtv1_0_note_spacer + note
+        write_line_to_file(self.save_file, line)
+
+    def __save_data(self, values, ui_info):
+        prepend = self.__device_info[0] + ", " + ui_info[1] + ", " + ui_info[2] + ", " + \
+                  ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")
+        line = self.__format_output_for_save_file(values)
+        write_line_to_file(self.save_file, prepend + line)
+
+    def __add_data_to_graph(self, data, timestamp):
+        """ Send data from device to graph for display. Separate data types into their own calls. """
+        self.logger.debug("running")
+        self.__graph_callback(self.__device_info, (self.__data_types[0][0], timestamp, data[drtv1_0_output_fields[3]]))
+        self.__graph_callback(self.__device_info, (self.__data_types[1][0], timestamp, data[drtv1_0_output_fields[2]]))
+        self.logger.debug("done")
+
+    def __update_config(self, msg):
         self.logger.debug("running")
         """ Update device configuration display. """
         self.__updating_config = True
@@ -57,30 +110,6 @@ class DRTController:
             self.__set_val(key, msg[key])
         self.__updating_config = False
         self.logger.debug("done")
-
-    def add_data_to_graph(self, timestamp, data):
-        """ Send data from device to graph for display. Separate data types into their own calls. """
-        self.logger.debug("running")
-        self.__graph_callback(self.__device_info, (self.__data_types[0][0], timestamp, data[drtv1_0_output_fields[3]]))
-        self.__graph_callback(self.__device_info, (self.__data_types[1][0], timestamp, data[drtv1_0_output_fields[2]]))
-        self.logger.debug("done")
-
-    def get_tab_obj(self):
-        return self.__tab
-
-    @staticmethod
-    def format_output_for_save_file(msg):
-        """ Format and return device output. Typically used for saving data to file. """
-        line = ""
-        for i in drtv1_0_output_fields:
-            line += ", " + str(msg[i])
-        line = line.rstrip("\r\n")
-        line = line + ", "
-        return line
-
-    @staticmethod
-    def get_hdr():
-        return drtv1_0_file_hdr
 
     def __set_handlers(self):
         self.logger.debug("running")
@@ -232,7 +261,7 @@ class DRTController:
     def __get_vals(self):
         self.logger.debug("running")
         """ Request current device settings. """
-        self.__send_msg({'cmd': "get_config"})
+        self.__send_msg(self.__prepare_msg("get_config"))
         self.logger.debug("done")
 
     def __set_val(self, var, val):
@@ -269,33 +298,31 @@ class DRTController:
     def __set_device_stim_duration(self, val):
         """ Upload current setting from user to device. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_stimDur", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_stimDur", str(val)))
         self.logger.debug("done")
 
     def __set_device_stim_intensity(self, val):
         """ Upload current setting from user to device. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_intensity", 'arg': str(self.__calc_percent_to_val(val))})
+        self.__send_msg(self.__prepare_msg("set_intensity", str(self.__calc_percent_to_val(val))))
         self.logger.debug("done")
 
     def __set_device_upper_isi(self, val):
         """ Upload current setting from user to device. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_upperISI", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_upperISI", str(val)))
         self.logger.debug("done")
 
     def __set_device_lower_isi(self, val):
         """ Upload current setting from user to device. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_lowerISI", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_lowerISI", str(val)))
         self.logger.debug("done")
 
     def __send_msg(self, msg):
         """ Send message to device. """
         self.logger.debug("running")
-        msg['type'] = "send"
-        msg['device'] = self.__device_info
-        self.__msg_callback(msg)
+        self.__msg_callback(self.__device_info, msg)
         self.logger.debug("done")
 
     @staticmethod
@@ -308,3 +335,57 @@ class DRTController:
         """ Calculate the value of stim intensity for device"""
         return ceil(val / 100 * drtv1_0_intensity_max)
 
+    @staticmethod
+    def __parse_msg(msg_string):
+        ret = dict()
+        ret['values'] = {}
+        if msg_string[0:4] == "cfg>":
+            ret['type'] = "settings"
+            # Check if this is a response to get_config
+            if len(msg_string) > 90:
+                # Get relevant values from msg and insert into ret
+                for i in drtv1_0_config_fields:
+                    index = msg_string.find(i + ":")
+                    index_len = len(i) + 1
+                    val_len = msg_string.find(', ', index + index_len)
+                    if val_len < 0:
+                        val_len = None
+                    ret['values'][msg_string[index:index+index_len-1]] = int(msg_string[index+index_len:val_len])
+            else:
+                # Single value update, find which value it is and insert into ret
+                for i in drtv1_0_config_fields:
+                    index = msg_string.find(i + ":")
+                    if index > 0:
+                        index_len = len(i)
+                        val_ind = index + index_len + 1
+                        ret['values'][msg_string[index:index + index_len]] = int(msg_string[val_ind:])
+        elif msg_string[0:4] == "trl>":
+            ret['type'] = "data"
+            val_ind_start = 4
+            for i in drtv1_0_output_fields:
+                val_ind_end = msg_string.find(', ', val_ind_start + 1)
+                if val_ind_end < 0:
+                    val_ind_end = None
+                ret['values'][i] = int(msg_string[val_ind_start:val_ind_end])
+                if val_ind_end:
+                    val_ind_start = val_ind_end + 2
+        return ret
+
+    @staticmethod
+    def __prepare_msg(cmd, arg=None):
+        """ Create string using drt syntax. """
+        if arg:
+            msg_to_send = cmd + " " + arg + "\n"
+        else:
+            msg_to_send = cmd + "\n"
+        return msg_to_send
+
+    @staticmethod
+    def __format_output_for_save_file(msg):
+        """ Format and return device output. Typically used for saving data to file. """
+        line = ""
+        for i in drtv1_0_output_fields:
+            line += ", " + str(msg[i])
+        line = line.rstrip("\r\n")
+        line = line + ", "
+        return line

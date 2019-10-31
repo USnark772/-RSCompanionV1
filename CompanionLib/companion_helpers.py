@@ -1,4 +1,5 @@
 """ Licensed under GNU GPL-3.0-or-later """
+
 """
 This file is part of RS Companion.
 
@@ -22,12 +23,28 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-# A collection of datetime helper functions
-
 import logging
 from datetime import datetime, timedelta
+from PySide2.QtWidgets import QFrame
 
 logger = logging.getLogger(__name__)
+
+
+def write_line_to_file(fname, line):
+    logger.debug("running")
+    if not line.endswith("\n"):
+        line = line + "\n"
+    with open(fname, 'a+') as file:
+        file.write(line)
+    logger.debug("done")
+
+
+def check_device_tuple(device):
+    return type(device[0]) == str and type(device[1]) == str
+
+
+def check_dict(msg):
+    return type(msg) == dict
 
 
 def round_time(dt=None, round_to=60):
@@ -69,3 +86,21 @@ def get_current_time(day=False, time=False, mil=False, save=False, graph=False):
     elif graph:
         logger.debug("graph. done")
         return date_time
+
+
+class MyFrame(QFrame):
+    """ Creates a frame for display purposes depending on bools. """
+    def __init__(self, line=False, vert=False):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
+        super().__init__()
+        if line:
+            if vert:
+                self.setFrameShape(QFrame.VLine)
+            else:
+                self.setFrameShape(QFrame.HLine)
+            self.setFrameShadow(QFrame.Sunken)
+        else:
+            self.setFrameShape(QFrame.StyledPanel)
+            self.setFrameShadow(QFrame.Raised)
+        self.logger.debug("Initialized")
