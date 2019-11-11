@@ -54,9 +54,9 @@ class VOGTab(QWidget):
         self.__config_label = QLabel(self.__config_frame)
         self.__config_label.setAlignment(Qt.AlignCenter)
         self.__config_horiz_layout.addWidget(self.__config_label)
-        self.__config_val = QLabel(self.__config_frame)
-        self.__config_val.setAlignment(Qt.AlignCenter)
-        self.__config_horiz_layout.addWidget(self.__config_val)
+        self.__config_val_line_edit = QLineEdit(self.__config_frame)
+        self.__config_val_line_edit.setAlignment(Qt.AlignCenter)
+        self.__config_horiz_layout.addWidget(self.__config_val_line_edit)
         self.layout().addWidget(self.__config_frame)
 
         self.layout().addWidget(MyFrame(line=True))
@@ -188,6 +188,11 @@ class VOGTab(QWidget):
         self.__button_mode_selector.currentIndexChanged.connect(func)
         self.logger.debug("done")
 
+    def add_config_val_changed_handler(self, func):
+        self.logger.debug("running")
+        self.__config_val_line_edit.textChanged.connect(func)
+        self.logger.debug("done")
+
     def set_upload_button_activity(self, is_active):
         """ Set upload button to enabled or disabled depending on is_active bool. """
         self.logger.debug("running")
@@ -197,8 +202,11 @@ class VOGTab(QWidget):
     def set_config_value(self, value):
         """ Set display value of config.txt. """
         self.logger.debug("running")
-        self.__config_val.setText(value)
+        self.__config_val_line_edit.setText(value)
         self.logger.debug("done")
+
+    def get_config_value(self):
+        return self.__config_val_line_edit.text()
 
     def get_open_val(self):
         return self.__open_dur_line_edit.text()
@@ -299,7 +307,7 @@ class VOGTab(QWidget):
     def __set_texts(self):
         self.logger.debug("running")
         self.__config_label.setText("Current configuration:")
-        self.__config_val.setText("DIRECT CONTROL")
+        self.__config_val_line_edit.setText("DIRECT CONTROL")
         self.__nhtsa_button.setText("NHTSA")
         self.__eblindfold_button.setText("eBlindfold")
         self.__direct_control_button.setText("Direct Control")
@@ -318,6 +326,8 @@ class VOGTab(QWidget):
     def __set_tooltips(self):
         self.logger.debug("running")
         self.__config_label.setToolTip("Current device configuration")
+        self.__config_val_line_edit.setToolTip("Enter custom config name here")
+        self.__config_val_line_edit.setPlaceholderText("Custom config name")
         self.__nhtsa_button.setToolTip("Set Device to NHTSA standard")
         self.__eblindfold_button.setToolTip("Set Device to eBlindfold mode")
         self.__direct_control_button.setToolTip("Set Device to Direct Control mode")

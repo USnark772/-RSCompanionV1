@@ -46,6 +46,7 @@ class VOGController:
         self.__closed_changed = False
         self.__debounce_changed = False
         self.__mode_changed = False
+        self.__config_val_changed = False
         self.__lens_open = False
         # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
         self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
@@ -121,6 +122,7 @@ class VOGController:
         self.__tab.add_close_entry_changed_handler(self.__close_entry_changed)
         self.__tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
         self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
+        self.__tab.add_config_val_changed_handler(self.__config_val_entry_changed)
         self.__tab.add_manual_control_handler(self.__toggle_lens)
         self.logger.debug("done")
 
@@ -172,6 +174,18 @@ class VOGController:
             self.__set_upload_button(True)
         self.logger.debug("done")
 
+    def __config_val_entry_changed(self):
+        """
+        Handle when user changes the value in the time open field.
+        Make sure it was user that changed the value that it was not changed programmatically.
+        If changed by user, check validity of value and then allow user to commit change.
+        """
+        self.logger.debug("running")
+        if not self.__updating_config:
+            self.__config_val_changed = True
+            self.__set_upload_button(True)
+        self.logger.debug("done")
+
     def __toggle_open_inf(self, is_checked):
         """
         Handle when open inf checkbox is checked.
@@ -202,6 +216,7 @@ class VOGController:
         self.__tab.set_close_val_entry_activity(not is_checked)
         self.logger.debug("done")
 
+    # TODO: Check that config value is working properly
     def __update_device(self):
         """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
         self.logger.debug("running")
@@ -213,7 +228,8 @@ class VOGController:
             self.__set_device_debounce(self.__tab.get_debounce_val())
         if self.__mode_changed:
             self.__set_device_click(self.__tab.get_button_mode())
-        self.__tab.set_config_value("Custom")
+        if self.__config_val_changed:
+            self.__set_device_config(self.__tab.get_config_value())
         self.__set_changed_bools_false()
         self.__set_upload_button(False)
         self.logger.debug("done")
@@ -224,6 +240,7 @@ class VOGController:
         self.__closed_changed = False
         self.__debounce_changed = False
         self.__mode_changed = False
+        self.__config_val_changed = False
         self.logger.debug("done")
 
     def __get_vals(self):
