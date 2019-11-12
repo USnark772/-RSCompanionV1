@@ -89,8 +89,13 @@ class VOGController:
     def end_block(self):
         self.__send_msg(self.__prepare_msg("do_trialStop"))
 
+    def write_note_to_file(self, note, ui_info):
+        line = "note, " + ui_info[0] + ", " + ui_info[1] + ", " + ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")\
+               + vog_note_spacer + note
+        write_line_to_file(self.save_file, line)
+
     def __save_data(self, values, ui_info):
-        prepend = self.__device_info[0] + ", " + ui_info[1] + ", " + ui_info[2] + ", " + \
+        prepend = self.__device_info[0] + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
                   ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")
         line = self.__format_output_for_save_file(values)
         write_line_to_file(self.save_file, prepend + line)

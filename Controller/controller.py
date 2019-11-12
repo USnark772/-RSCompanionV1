@@ -27,6 +27,7 @@ from os import path
 import logging
 import logging.config
 import configparser
+from datetime import datetime
 from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir, QSize
@@ -314,13 +315,13 @@ class CompanionController:
 
     def __add_vert_lines_to_graphs(self):
         time = get_current_time(graph=True)
-        for graph_frame in self.__graphs.values():
-            graph_frame.get_graph().add_vert_lines(time)
+        for device_type in self.__graphs.values():
+            device_type['frame'].get_graph().add_vert_lines(time)
 
     def __add_break_in_graph_lines(self):
         time = get_current_time(graph=True)
-        for graph_frame in self.__graphs.values():
-            graph_frame.get_graph().add_empty_point(time)
+        for device_type in self.__graphs.values():
+            device_type['frame'].get_graph().add_empty_point(time)
 
     def __check_toggle_post_button(self):
         """ If an experiment is created and running and there is a note then allow user access to post button. """
@@ -351,9 +352,10 @@ class CompanionController:
     def __post_handler(self):
         """ Write a given user note to all device output files. """
         self.logger.debug("running")
+        print("hey")
         note = self.note_box.get_note()
         self.note_box.clear_note()
-        ui_info = (self.__current_cond_name, self.flag_box.get_flag(), get_current_time(True, True, True))
+        ui_info = (self.__current_cond_name, self.flag_box.get_flag(), datetime.now())
         for device in self.__device_controllers:
             self.logger.debug("writing to: " + device[0] + " " + device[1])
             try:
