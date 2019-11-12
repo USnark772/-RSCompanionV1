@@ -247,15 +247,17 @@ class CompanionController:
         self.__exp_created = True
         self.button_box.toggle_create_button()
         self.device_manager.set_check_for_updates(False)
+        devices_running = list()
         try:
-            # TODO: if this starts some devices and then fails do we need to do cleanup on some devices that might
-            #  be running experiments?
             for controller in self.__device_controllers.values():
                 controller.start_exp()
+                devices_running.append(controller)
         except Exception as e:
             self.logger.exception("Failed trying to start_exp_all")
             self.button_box.toggle_create_button()
             self.__exp_created = False
+            for controller in devices_running:
+                controller.end_exp()
             return
         self.info_box.set_start_time(get_current_time(time=True))
         self.logger.debug("done")
@@ -355,7 +357,7 @@ class CompanionController:
         print("hey")
         note = self.note_box.get_note()
         self.note_box.clear_note()
-        ui_info = (self.__current_cond_name, self.flag_box.get_flag(), datetime.now())
+        ui_info = (self.__current_cond_name, self.flag_box.get_flag(), get_current_time(device=True))
         for device in self.__device_controllers:
             self.logger.debug("writing to: " + device[0] + " " + device[1])
             try:

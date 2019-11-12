@@ -58,7 +58,7 @@ def round_time(dt=None, round_to=60):
     return dt + timedelta(0, rounding-seconds, -dt.microsecond)
 
 
-def get_current_time(day=False, time=False, mil=False, save=False, graph=False):
+def get_current_time(day=False, time=False, mil=False, save=False, graph=False, device=False):
     """
     Returns a datetime string with day, time, and milliseconds options. Also available, save is formatted for when
     colons are not acceptable and graph is for the graphing utility which requires a datetime object
@@ -83,8 +83,8 @@ def get_current_time(day=False, time=False, mil=False, save=False, graph=False):
     elif save:
         logger.debug("save. done")
         return date_time.strftime("%Y-%m-%d-%H-%M-%S")
-    elif graph:
-        logger.debug("graph. done")
+    elif graph or device:
+        logger.debug("graph or device. done")
         return date_time
 
 

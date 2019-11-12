@@ -138,38 +138,6 @@ class DeviceManager:
     def handle_msg(self, device=None, msg=None):
         """ Parse message from controller and attempt to pass to device specified in dictionary. If error do nothing."""
         self.logger.debug("running")
-        '''
-        if not checker.check_dict(msg_dict):
-            self.logger.warning("expected dictionary, got: " + str(type(msg_dict)))
-            return
-        if 'type' not in msg_dict.keys():
-            self.logger.warning("'type' not found in keys")
-            return
-        if 'device' not in msg_dict.keys():
-            self.logger.warning("'device' not found in keys")
-            return
-        msg_type = msg_dict['type']
-        if msg_type == "send":
-            port = None
-            msg_to_send = None
-            for d in self.devices_map:
-                if 'port' in self.devices_map[d].keys() and msg_dict['device'] == \
-                        (self.devices_map[d]['id'], self.devices_map[d]['port'].name):
-                    port = self.devices_map[d]['port']
-                    self.logger.debug("Have port")
-            if not port:
-                self.logger.debug("Device not found")
-                pass
-            else:
-                if msg_dict['device'][0] == "drt":
-                    msg_to_send = self.__prepare_drt_msg(msg_dict)
-                elif msg_dict['device'][0] == "vog":
-                    msg_to_send = self.__prepare_vog_msg(msg_dict)
-                self.logger.info("Sending message " + msg_to_send)
-                self.__send_msg_on_port(port, msg_to_send)
-        else:
-            self.logger.debug("Unknown command")
-        '''
         port = None
         if not type(device) == tuple or not type(msg) == str:
             self.logger.error("function called without proper args. type(device): " + str(type(device))
