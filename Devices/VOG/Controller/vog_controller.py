@@ -428,9 +428,7 @@ class VOGController:
     def __send_msg(self, msg):
         """ Send message to device. """
         self.logger.debug("running")
-        msg['type'] = "send"
-        msg['device'] = self.__device_info
-        self.__msg_callback(msg)
+        self.__msg_callback(self.__device_info, msg)
         self.logger.debug("done")
 
     @staticmethod

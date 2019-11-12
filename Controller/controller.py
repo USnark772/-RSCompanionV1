@@ -168,7 +168,12 @@ class CompanionController:
         self.ui.show()
         self.logger.debug("done")
 
+    # TODO: Add device controller destructors?
     def __populate_func_dicts(self):
+        self.__controller_inits['drt'] = dict()
+        self.__controller_inits['vog'] = dict()
+        self.__graph_inits['drt'] = dict()
+        self.__graph_inits['vog'] = dict()
         self.__controller_inits['drt']['creator'] = self.__create_drt_controller
         self.__controller_inits['vog']['creator'] = self.__create_vog_controller
         self.__graph_inits['drt']['creator'] = self.__make_drt_graph
@@ -411,7 +416,7 @@ class CompanionController:
         if device[0] not in self.__controller_inits.keys():
             self.logger.warning("Unknown device")
             return
-        if not self.__controller_inits[device[0]](device):
+        if not self.__controller_inits[device[0]]['creator'](device):
             self.logger.debug("Failed to make controller")
             return
         self.__graphs[device[0]]['frame'].get_graph().add_device(device[1])
@@ -532,9 +537,12 @@ class CompanionController:
 
     def __check_num_devices(self):
         self.logger.debug("running")
+        to_remove = list()
         for device_type in self.__graphs:
             if self.__graphs[device_type]['num_devices'] == 0:
-                self.__graph_inits[device_type]['destructor']()
+                to_remove.append(device_type)
+        for item in to_remove:
+            self.__graph_inits[item]['destructor']()
         self.logger.debug("done")
 
     def __make_drt_graph(self):
