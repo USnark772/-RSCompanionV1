@@ -84,7 +84,7 @@ class CompanionController:
         if inierror:
             self.logger.debug("Error reading config.ini, logging level set to debug")
         self.logger.debug("Initializing")
-        ui_min_size = QSize(450, 550)
+        ui_min_size = QSize(950, 550)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
         info_box_size = QSize(230, 120)

@@ -24,11 +24,11 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout,\
-    QCheckBox, QFrame, QLineEdit
+    QCheckBox, QLineEdit
 from PySide2.QtCore import Qt, QRect
+from CompanionLib.companion_helpers import MyButton, MyFrame
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min
 from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
-from CompanionLib.companion_helpers import MyFrame
 
 
 class VOGTab(QWidget):
@@ -64,11 +64,11 @@ class VOGTab(QWidget):
         """ Set preset button selection area. """
         self.__presets_frame = MyFrame()
         self.__presets_vert_layout = QVBoxLayout(self.__presets_frame)
-        self.__nhtsa_button = QPushButton(self.__presets_frame)
+        self.__nhtsa_button = MyButton(self.__presets_frame)
         self.__presets_vert_layout.addWidget(self.__nhtsa_button)
-        self.__eblindfold_button = QPushButton(self.__presets_frame)
+        self.__eblindfold_button = MyButton(self.__presets_frame)
         self.__presets_vert_layout.addWidget(self.__eblindfold_button)
-        self.__direct_control_button = QPushButton(self.__presets_frame)
+        self.__direct_control_button = MyButton(self.__presets_frame)
         self.__presets_vert_layout.addWidget(self.__direct_control_button)
         self.layout().addWidget(self.__presets_frame)
 
@@ -115,13 +115,13 @@ class VOGTab(QWidget):
         self.layout().addWidget(MyFrame(line=True))
 
         """ Set upload button selection area. """
-        self.__upload_settings_button = QPushButton()
+        self.__upload_settings_button = MyButton()
         self.layout().addWidget(self.__upload_settings_button)
 
         self.layout().addWidget(MyFrame(line=True))
 
         """ Set manual control selection area. """
-        self.__manual_control_button = QPushButton()
+        self.__manual_control_button = MyButton()
         self.layout().addWidget(self.__manual_control_button)
 
         self.layout().addWidget(MyFrame(line=True))

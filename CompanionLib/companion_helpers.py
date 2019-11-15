@@ -25,7 +25,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 from datetime import datetime, timedelta
-from PySide2.QtWidgets import QFrame
+from PySide2.QtWidgets import QFrame, QPushButton
+from Model.general_defs import button_pressed_style, button_normal_style
 
 logger = logging.getLogger(__name__)
 
@@ -104,3 +105,20 @@ class MyFrame(QFrame):
             self.setFrameShape(QFrame.StyledPanel)
             self.setFrameShadow(QFrame.Raised)
         self.logger.debug("Initialized")
+
+
+class MyButton(QPushButton):
+    def __init__(self, parent=None):
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Initializing")
+        super().__init__(parent)
+        self.pressed.connect(self.pressed_color)
+        self.released.connect(self.released_state)
+        self.setStyleSheet(button_normal_style)
+        self.logger.debug("Initialized")
+
+    def pressed_color(self):
+        self.setStyleSheet(button_pressed_style)
+
+    def released_state(self):
+        self.setStyleSheet(button_normal_style)

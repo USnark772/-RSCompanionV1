@@ -5,6 +5,14 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CompanionLib/companion_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CompanionLib/companion_helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/general_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/general_defs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/button_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/button_box.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/note_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/note_box.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

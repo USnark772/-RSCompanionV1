@@ -24,6 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 from PySide2.QtWidgets import QGroupBox, QGridLayout, QTextEdit, QPushButton
+from CompanionLib.companion_helpers import MyButton
 
 
 class NoteBox(QGroupBox):
@@ -37,7 +38,7 @@ class NoteBox(QGroupBox):
         self.setMaximumSize(size)
         self.__text_edit = QTextEdit()
         self.layout().addWidget(self.__text_edit, 0, 1, 1, 1)
-        self.__post_button = QPushButton()
+        self.__post_button = MyButton()
         self.layout().addWidget(self.__post_button, 1, 1, 1, 1)
 
         self.__set_texts()

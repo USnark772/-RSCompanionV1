@@ -28,7 +28,7 @@ from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton
 from PySide2.QtCore import Qt, QRect, QSize
 from Devices.DRT.Model.drt_defs import drtv1_0_ISI_min, drtv1_0_stim_dur_min, drtv1_0_max_val
 from Model.general_defs import tab_line_edit_compliant_style, tab_line_edit_error_style
-from CompanionLib.companion_helpers import MyFrame
+from CompanionLib.companion_helpers import MyFrame, MyButton
 
 
 class DRTTab(QWidget):
@@ -66,7 +66,7 @@ class DRTTab(QWidget):
         """ Set preset button selection area. """
         self.presets_frame = MyFrame()
         self.presets_layout = QVBoxLayout(self.presets_frame)
-        self.iso_button = QPushButton(self.presets_frame)
+        self.iso_button = MyButton(self.presets_frame)
         self.presets_layout.addWidget(self.iso_button)
         self.layout().addWidget(self.presets_frame)
 
@@ -118,7 +118,7 @@ class DRTTab(QWidget):
         self.layout().addWidget(MyFrame(True))
 
         """ Set upload button selection area. """
-        self.upload_settings_button = QPushButton()
+        self.upload_settings_button = MyButton()
         self.layout().addWidget(self.upload_settings_button)
 
         self.layout().addWidget(MyFrame(True))
