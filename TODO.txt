@@ -12,13 +12,8 @@ At some point
 -   Give program a folder in user space instead of program files space and place config file in there.
 
 After launch:
--   DONE Notes entered into the output files do not populate the correct column. Need more commas, 2 I believe
 -   IGNORE Fix time on charts and output files so that it matches the time shown in users computers.
 -   IGNORE Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
--   DONE Experiments blocks should have lines that connect the dots in the charts. That will provide a meaningful continuation of chart data within an experiment
--   DONE Need to add a configuration name field to VOG for custom configuration uploads
--   DONE When the program is launched twice there is a bad error.
--   DONE Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
     Seems to have trouble accessing USB camera. Uses builtin webcams just fine. Need to do more searching.
     It seems Qt5 has a good implementation so far. Preliminary research shows there is a way to overlay. Consider using
