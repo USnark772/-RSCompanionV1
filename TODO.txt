@@ -16,7 +16,7 @@ After launch:
 -   IGNORE Fix time on charts and output files so that it matches the time shown in users computers.
 -   IGNORE Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
 -   DONE Experiments blocks should have lines that connect the dots in the charts. That will provide a meaningful continuation of chart data within an experiment
--   IGNORE Need to add a configuration name field to VOG and DRT for custom configuration uploads
+-   DONE Need to add a configuration name field to VOG for custom configuration uploads
 -   DONE When the program is launched twice there is a bad error.
 -   DONE Should we add a way to see app version under the help option?
 -   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)

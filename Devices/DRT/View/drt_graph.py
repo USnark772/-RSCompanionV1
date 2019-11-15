@@ -39,7 +39,7 @@ class DRTGraph(CanvasObj):
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.__plot_names = ["Response Time", "Clicks"]
-        super().__init__(parent, "drt", self.__plot_names, self.plot_data)
+        super().__init__(parent, "DRT", self.__plot_names, self.plot_data)
         self.__data = {}
         for name in self.__plot_names:
             self.__data[name] = {}

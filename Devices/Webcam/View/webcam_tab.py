@@ -26,7 +26,7 @@ from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLa
 from PySide2.QtCore import Qt, QRect
 from PySide2.QtMultimedia import *
 from PySide2.QtMultimediaWidgets import *
-from CompanionLib.view_helpers import MyFrame
+from CompanionLib.companion_helpers import MyFrame
 
 
 class WebcamViewer(QWidget):

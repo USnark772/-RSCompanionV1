@@ -66,6 +66,10 @@ update_available = "An update is available."
 
 up_to_date = "Your program is up to date."
 
+error_checking_for_update = "There was an unexpected error connecting to the repository. Please check" \
+                            " https://github.com/redscientific/CompanionApp manually" \
+                            " or contact Red Scientific directly."
+
 device_connection_error = "There was a problem connecting the device, please retry connection."
 
 __compliant_text_color = "rgb(0, 0, 0)"
@@ -84,6 +88,16 @@ tab_line_edit_error_style = "QLineEdit { color: " \
                             + __selection_color \
                             + "; font: " \
                             + __font_size + "; }"
+
+# "QPushButton:pressed { background-color: rgb(150, 180, 200);
+button_pressed_style = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); " \
+                       "font: " + __font_size + "; }"
+
+# "background-color: rgb(230, 230, 230); " \
+button_normal_style = "QPushButton { border: 1px solid #8f8f91; " \
+                      "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f6f7fa, stop: 1 #dadbde); " \
+                      "min-height: 22px; " \
+                      "font: " + __font_size + "; }"
 
 #################################################################################################################
 # device list for usb port detection

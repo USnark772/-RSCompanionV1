@@ -38,7 +38,7 @@ class VOGGraph(CanvasObj):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
-        super().__init__(parent, "vog", ["Time Open/Closed"], self.plot_data)
+        super().__init__(parent, "VOG", ["Time Open/Closed"], self.plot_data)
         self.__data = {}
         # self.__add_mean()
         self.logger.debug("Initialized")

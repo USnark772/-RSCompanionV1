@@ -31,55 +31,16 @@ disconnect_event flags are turned True.
 
 import queue
 from time import sleep
+from datetime import datetime
 import logging
 import threading
 from PySide2.QtCore import QTimer
-import CompanionLib.checkers as checker
 from serial import Serial, SerialException
 from serial.tools import list_ports
 from Model.general_defs import devices
-from Devices.DRT.Model.drt_defs import drtv1_0_config_fields, drtv1_0_output_fields
-from Devices.VOG.Model.vog_defs import vog_output_field
 
 
-class ReadWriteLock:
-    """ A lock object that allows many simultaneous "read locks", but
-    only one "write lock." """
-    def __init__(self):
-        self._read_ready = threading.Condition(threading.Lock())
-        self._readers = 0
-
-    def acquire_read(self):
-        """ Acquire a read lock. Blocks only if a thread has
-        acquired the write lock. """
-        self._read_ready.acquire()
-        try:
-            self._readers += 1
-        finally:
-            self._read_ready.release()
-
-    def release_read(self):
-        """ Release a read lock. """
-        self._read_ready.acquire()
-        try:
-            self._readers -= 1
-            if not self._readers:
-                self._read_ready.notifyAll()
-        finally:
-            self._read_ready.release()
-
-    def acquire_write(self):
-        """ Acquire a write lock. Blocks until there are no
-        acquired read or write locks. """
-        self._read_ready.acquire()
-        while self._readers > 0:
-            self._read_ready.wait()
-
-    def release_write(self):
-        """ Release a write lock. """
-        self._read_ready.release()
-
-
+# TODO: Try threading each device connection.
 class PortMonitor(threading.Thread):
     def __init__(self, port, devices_list, lock):
         threading.Thread.__init__(self, daemon=True)
@@ -102,17 +63,6 @@ class PortMonitor(threading.Thread):
             self.going = False
 
 
-class PortMap:
-    def __init__(self):
-        self.devices = dict()
-
-    def add_device(self, key, port):
-        self.devices[key] = port
-
-    def remove_device(self, key, port):
-        del self.devices[key]
-
-
 class PortScanner(threading.Thread):
     def __init__(self, the_queue):
         threading.Thread.__init__(self, daemon=True)
@@ -120,10 +70,8 @@ class PortScanner(threading.Thread):
 
     def run(self):
         while True:
-            #print("Getting comports in thread")
             x = list_ports.comports()
             self.queue.put(x)
-            #print("Now going to sleep\n")
 
 
 class DeviceManager:
@@ -152,13 +100,13 @@ class DeviceManager:
         need_update = False
         for d in self.devices_map:
             the_message = None
-            msg_dict = None
+            device_info = None
             device = self.devices_map[d]
             try:
                 if 'port' in self.devices_map[d].keys() and device['port'].in_waiting > 0:
                     the_message = device['port'].readline().decode("utf-8")
                     self.logger.info(str(device['id'] + ", " + device['port'].name + ", " + the_message))
-                    msg_dict = {'device': (device['id'], device['port'].name)}
+                    device_info = (device['id'], device['port'].name)
             except SerialException as se:
                 # self.logger.exception("Trouble with port")
                 need_update = True
@@ -167,17 +115,9 @@ class DeviceManager:
                 self.logger.exception("Failed try catch in check_for_msgs() for loop.")
                 continue
 
-            if the_message:
-                #print("the_message: ", the_message)
-                if self.devices_map[d]['id'] == "drt":
-                    self.__parse_drt_msg(the_message, msg_dict)
-                elif self.devices_map[d]['id'] == "vog":
-                    self.__parse_vog_msg(the_message, msg_dict)
-                else:
-                    self.logger.info("couldn't match up device" + str(self.devices_map[d]['id']))
-                self.logger.debug("msg_callback(msg_dict) msg_dict: " + str(msg_dict))
-                #print("msg_dict: ", msg_dict)
-                self.msg_callback(msg_dict)
+            if the_message and device_info:
+                self.logger.debug("msg_callback(1, the_message, device_info) msg_dict: " + the_message)
+                self.msg_callback(1, the_message, datetime.now(), device_info)
         if need_update:
             self.update_devices(True)
             sleep(.1)
@@ -195,113 +135,27 @@ class DeviceManager:
             self.__remove_devices()
         #self.logger.debug("done")
 
-    def handle_msg(self, msg_dict):
+    def handle_msg(self, device=None, msg=None):
         """ Parse message from controller and attempt to pass to device specified in dictionary. If error do nothing."""
         self.logger.debug("running")
-        if not checker.check_dict(msg_dict):
-            self.logger.warning("expected dictionary, got: " + str(type(msg_dict)))
-            return
-        if 'type' not in msg_dict.keys():
-            self.logger.warning("'type' not found in keys")
-            return
-        if 'device' not in msg_dict.keys():
-            self.logger.warning("'device' not found in keys")
-            return
-        msg_type = msg_dict['type']
-        if msg_type == "send":
-            port = None
-            msg_to_send = None
+        port = None
+        if not type(device) == tuple or not type(msg) == str:
+            self.logger.error("function called without proper args. type(device): " + str(type(device))
+                              + " expected tuple. type(msg): " + str(type(msg)) + " expected string")
+        else:
             for d in self.devices_map:
-                if 'port' in self.devices_map[d].keys() and msg_dict['device'] == \
+                if 'port' in self.devices_map[d].keys() and device == \
                         (self.devices_map[d]['id'], self.devices_map[d]['port'].name):
                     port = self.devices_map[d]['port']
                     self.logger.debug("Have port")
             if not port:
                 self.logger.debug("Device not found")
-                pass
             else:
-                if msg_dict['device'][0] == "drt":
-                    msg_to_send = self.__prepare_drt_msg(msg_dict)
-                elif msg_dict['device'][0] == "vog":
-                    msg_to_send = self.__prepare_vog_msg(msg_dict)
-                self.logger.info("Sending message " + msg_to_send)
-                self.__send_msg_on_port(port, msg_to_send)
-        else:
-            self.logger.debug("Unknown command")
+                self.__send_msg_on_port(port, msg)
         self.logger.debug("done")
 
-    def start_exp_all(self):
-        """ Send start experiment messages to all devices. """
-        self.logger.debug("running")
-        self.check_for_updates = False
-        for d in self.devices_map:
-
-            # Com1 has no device attribute 'port' - This error fails
-            # Rather than asking if the device is a VOG, each device should have an experiment start command.
-            # If there is no experiment start command then nothing should happen
-            if 'port' in self.devices_map[d].keys():
-                self.__start_exp(self.devices_map[d]['id'], self.devices_map[d]['port'])
-
-        self.logger.debug("done")
-
-    def end_exp_all(self):
-        """ Send end experiment messages to all devices. """
-        self.logger.debug("running")
-        self.check_for_updates = True
-        for d in self.devices_map:
-            if 'port' in self.devices_map[d].keys():
-                self.__end_exp(self.devices_map[d]['id'], self.devices_map[d]['port'])
-        self.logger.debug("done")
-
-    def start_block_all(self):
-        """ Send start block messages to all devices. """
-        self.logger.debug("running")
-        for d in self.devices_map:
-            #"Checking device: ", self.devices[d]['id'])
-            if 'port' in self.devices_map[d].keys():
-                #"calling start block for: ", self.devices[d]['id'])
-                self.__start_block(self.devices_map[d]['id'], self.devices_map[d]['port'])
-        self.logger.debug("done")
-
-    def end_block_all(self):
-        """ Send end block messages to all devices. """
-        self.logger.debug("running")
-        for d in self.devices_map:
-            if 'port' in self.devices_map[d].keys():
-                self.__end_block(self.devices_map[d]['id'], self.devices_map[d]['port'])
-        self.logger.debug("done")
-
-    def __start_exp(self, device, port):
-        """ If device needs a start experiment message, send it. """
-        self.logger.debug("running")
-        if device == "vog":
-            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_expStart"}))
-        self.logger.debug("done")
-
-    def __end_exp(self, device, port):
-        """ If device needs a stop experiment message, send it. """
-        self.logger.debug("running")
-        if device == "vog":
-            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_expStop"}))
-        self.logger.debug("done")
-
-    def __start_block(self, device, port):
-        """ If device needs a start block message, send it. """
-        self.logger.debug("running")
-        if device == "drt":
-            self.__send_msg_on_port(port, self.__prepare_drt_msg({'cmd': "exp_start"}))
-        elif device == "vog":
-            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStart"}))
-        self.logger.debug("done")
-
-    def __end_block(self, device, port):
-        """ If device needs a stop block message, send it. """
-        self.logger.debug("running")
-        if device == "drt":
-            self.__send_msg_on_port(port, self.__prepare_drt_msg({'cmd': "exp_stop"}))
-        elif device == "vog":
-            self.__send_msg_on_port(port, self.__prepare_vog_msg({'cmd': "do_trialStop"}))
-        self.logger.debug("done")
+    def set_check_for_updates(self, check_bool):
+        self.check_for_updates = check_bool
 
     def __scan_ports(self):
         """ Go through list of ports and get set of attached devices. """
@@ -346,12 +200,12 @@ class DeviceManager:
                                 sleep(1)
                         if not the_port.is_open:
                             self.logger.debug("Failed to connect to device")
-                            self.msg_callback({'type': "error"})
+                            self.msg_callback(4)
                             break
                         self.devices_map[port.device] = {'port': the_port, 'id': device}
-                        msg_dict = {'type': "add", 'device': (self.devices_map[port.device]['id'], self.devices_map[port.device]['port'].name)}
+                        #msg_dict = {'type': "add", 'device': (self.devices_map[port.device]['id'], self.devices_map[port.device]['port'].name)}
                         self.logger.debug("done, known device")
-                        self.msg_callback(msg_dict)
+                        self.msg_callback(2, device=(self.devices_map[port.device]['id'], self.devices_map[port.device]['port'].name))
                         break
                     else:
                         self.logger.debug("done, unknown device")
@@ -364,109 +218,12 @@ class DeviceManager:
         for e in self.devices_to_remove:
             if not self.devices_map[e]['id'] == "unknown":
                 self.devices_map[e]['port'].close()
-                msg_dict = {'type': "remove", 'device': (self.devices_map[e]['id'], self.devices_map[e]['port'].name)}
-                self.msg_callback(msg_dict)
+                #msg_dict = {'type': "remove", 'device': (self.devices_map[e]['id'], self.devices_map[e]['port'].name)}
+                self.msg_callback(3, device=(self.devices_map[e]['id'], self.devices_map[e]['port'].name))
             del self.devices_map[e]
         self.logger.debug("done")
 
     def __send_msg_on_port(self, port, msg_to_send):
         self.logger.debug("running")
         port.write(str.encode(msg_to_send))
-        self.logger.debug("done")
-
-    def __prepare_drt_msg(self, msg_dict):
-        """ Create string using drt syntax. """
-        self.logger.debug("running")
-        if 'arg' in msg_dict.keys():
-            msg_to_send = msg_dict['cmd'] + " " + str(msg_dict['arg']) + "\n"
-        else:
-            msg_to_send = msg_dict['cmd'] + "\n"
-        self.logger.debug("done, returning: " + msg_to_send)
-        return msg_to_send
-
-    # TODO: Clean this up
-    def __parse_drt_msg(self, msg, msg_dict):
-        self.logger.debug("running")
-        msg_dict['values'] = {}
-        if msg[0:4] == "cfg>":
-            msg_dict['type'] = "settings"
-            # Check if this is a response to get_config
-            if len(msg) > 90:
-                # Get relevant values from msg and insert into msg_dict
-                for i in drtv1_0_config_fields:
-                    index = msg.find(i + ":")
-                    index_len = len(i) + 1
-                    val_len = msg.find(', ', index + index_len)
-                    if val_len < 0:
-                        val_len = None
-                    msg_dict['values'][msg[index:index+index_len-1]] = int(msg[index+index_len:val_len])
-            else:
-                # Single value update, find which value it is and insert into msg_dict
-                for i in drtv1_0_config_fields:
-                    index = msg.find(i + ":")
-                    if index > 0:
-                        index_len = len(i)
-                        val_ind = index + index_len + 1
-                        msg_dict['values'][msg[index:index + index_len]] = int(msg[val_ind:])
-        elif msg[0:4] == "trl>":
-            msg_dict['type'] = "data"
-            val_ind_start = 4
-            for i in drtv1_0_output_fields:
-                val_ind_end = msg.find(', ', val_ind_start + 1)
-                if val_ind_end < 0:
-                    val_ind_end = None
-                msg_dict['values'][i] = int(msg[val_ind_start:val_ind_end])
-                if val_ind_end:
-                    val_ind_start = val_ind_end + 2
-        self.logger.debug("done")
-
-    def __prepare_vog_msg(self, msg_dict):
-        """ Create string using vog syntax. """
-        if 'arg' in msg_dict.keys():
-            msg_to_send = ">" + msg_dict['cmd'] + "|" + str(msg_dict['arg']) + "<<\n"
-        else:
-            msg_to_send = ">" + msg_dict['cmd'] + "|" + "<<\n"
-        self.logger.debug("done, returning: " + msg_to_send)
-        return msg_to_send
-
-    # TODO: Clean this up
-    def __parse_vog_msg(self, msg, msg_dict):
-        self.logger.debug("running")
-        #"in parse_vog_msg", msg, msg_dict)
-        msg_dict['values'] = {}
-        if msg[0:5] == "data|":
-            msg_dict['type'] = "data"
-            val_ind_start = 5
-            for i in range(len(vog_output_field)):
-                val_ind_end = msg.find(',', val_ind_start + 1)
-                if val_ind_end < 0:
-                    val_ind_end = None
-                msg_dict['values'][vog_output_field[i]] = msg[val_ind_start:val_ind_end]
-                if val_ind_end:
-                    val_ind_start = val_ind_end + 1
-        elif "config" in msg:
-            msg_dict['type'] = "settings"
-            bar_ind = msg.find('|', 6)
-            if msg[6:bar_ind] == "Name":
-                msg_dict['values']['Name'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
-            elif msg[6:bar_ind] == "MaxOpen":
-                msg_dict['values']['MaxOpen'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
-            elif msg[6:bar_ind] == "MaxClose":
-                msg_dict['values']['MaxClose'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
-            elif msg[6:bar_ind] == "Debounce":
-                msg_dict['values']['Debounce'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
-            elif msg[6:bar_ind] == "ClickMode":
-                msg_dict['values']['ClickMode'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
-        elif "Click" in msg:
-            msg_dict['action'] = "Click"
-        elif "buttonControl" in msg:
-            msg_dict['type'] = "settings"
-            bar_ind = msg.find('|')
-            msg_dict['values'] = {}
-            msg_dict['values']['buttonControl'] = msg[bar_ind + 1: len(msg)].rstrip("\r\n")
-        elif "peek" in msg:
-            msg_dict['type'] = "settings"
-            msg_dict['values'] = {}
-            msg_dict['values']['lensState'] = msg.rstrip("\r\n")
-        #"at end of parse_vog_msg.", msg_dict, "\n")
         self.logger.debug("done")

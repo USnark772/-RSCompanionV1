@@ -23,9 +23,10 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+from CompanionLib.companion_helpers import write_line_to_file
 from Devices.VOG.View.vog_tab import VOGTab
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
-    vog_output_field, vog_file_hdr
+    vog_output_field, vog_file_hdr, vog_note_spacer
 
 
 class VOGController:
@@ -45,47 +46,74 @@ class VOGController:
         self.__closed_changed = False
         self.__debounce_changed = False
         self.__mode_changed = False
+        self.__config_val_changed = False
         self.__lens_open = False
         # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
         self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
         self.__get_vals()
         self.__set_upload_button(False)
         self.__data_types = [["Time Open", 0, True], ["Time Closed", 0, True]]
+        self.save_file = str()
         self.__set_handlers()
         self.logger.debug("Initialized")
 
-    def update_config(self, msg):
-        """ Update device configuration display. """
-        self.logger.debug("running")
-        #print(msg)
-        self.__updating_config = True
-        for key in msg:
-            self.__set_val(key, msg[key])
-        self.__updating_config = False
-        self.logger.debug("done")
+    def get_tab_obj(self):
+        return self.__tab
 
-    def add_data_to_graph(self, timestamp, data):
+    def handle_msg(self, msg_string, ui_info):
+        msg_dict = self.__parse_msg(msg_string)
+        if 'type' in msg_dict.keys():
+            msg_type = msg_dict['type']
+            if msg_type == "data":
+                self.__add_data_to_graph(msg_dict['values'], ui_info[2])
+                self.__save_data(msg_dict['values'], ui_info)
+            elif msg_type == "settings":
+                self.__update_config(msg_dict['values'])
+
+    def create_new_save_file(self, new_filename):
+        self.save_file = new_filename
+        self.add_save_file_hdr()
+
+    def add_save_file_hdr(self):
+        write_line_to_file(self.save_file, vog_file_hdr)
+
+    def start_exp(self):
+        self.__send_msg(self.__prepare_msg("do_expStart"))
+
+    def end_exp(self):
+        self.__send_msg(self.__prepare_msg("do_expStop"))
+
+    def start_block(self):
+        self.__send_msg(self.__prepare_msg("do_trialStart"))
+
+    def end_block(self):
+        self.__send_msg(self.__prepare_msg("do_trialStop"))
+
+    def write_note_to_file(self, note, ui_info):
+        line = "note, " + ui_info[0] + ", " + ui_info[1] + ", " + ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")\
+               + vog_note_spacer + note
+        write_line_to_file(self.save_file, line)
+
+    def __save_data(self, values, ui_info):
+        prepend = self.__device_info[0] + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
+                  ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")
+        line = self.__format_output_for_save_file(values)
+        write_line_to_file(self.save_file, prepend + line)
+
+    def __add_data_to_graph(self, data, timestamp):
         """ Send data from device to graph for display. """
         self.logger.debug("running")
         self.__graph_callback(self.__device_info, (timestamp, int(data[vog_output_field[1]]), int(data[vog_output_field[2]])))
         self.logger.debug("done")
 
-    def get_tab_obj(self):
-        return self.__tab
-
-    @staticmethod
-    def format_output_for_save_file(msg):
-        """ Format and return device output. Typically used for saving data to file. """
-        line = ""
-        for i in vog_output_field:
-            line += ", " + str(msg[i])
-        line = line.rstrip("\r\n")
-        line = line + ", "
-        return line
-
-    @staticmethod
-    def get_hdr():
-        return vog_file_hdr
+    def __update_config(self, msg):
+        """ Update device configuration display. """
+        self.logger.debug("running")
+        self.__updating_config = True
+        for key in msg:
+            self.__set_val(key, msg[key])
+        self.__updating_config = False
+        self.logger.debug("done")
 
     def __set_handlers(self):
         self.logger.debug("running")
@@ -99,6 +127,7 @@ class VOGController:
         self.__tab.add_close_entry_changed_handler(self.__close_entry_changed)
         self.__tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
         self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
+        self.__tab.add_config_val_changed_handler(self.__config_val_entry_changed)
         self.__tab.add_manual_control_handler(self.__toggle_lens)
         self.logger.debug("done")
 
@@ -150,6 +179,18 @@ class VOGController:
             self.__set_upload_button(True)
         self.logger.debug("done")
 
+    def __config_val_entry_changed(self):
+        """
+        Handle when user changes the value in the time open field.
+        Make sure it was user that changed the value that it was not changed programmatically.
+        If changed by user, check validity of value and then allow user to commit change.
+        """
+        self.logger.debug("running")
+        if not self.__updating_config:
+            self.__config_val_changed = True
+            self.__set_upload_button(True)
+        self.logger.debug("done")
+
     def __toggle_open_inf(self, is_checked):
         """
         Handle when open inf checkbox is checked.
@@ -180,6 +221,7 @@ class VOGController:
         self.__tab.set_close_val_entry_activity(not is_checked)
         self.logger.debug("done")
 
+    # TODO: Check that config value is working properly
     def __update_device(self):
         """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
         self.logger.debug("running")
@@ -191,7 +233,8 @@ class VOGController:
             self.__set_device_debounce(self.__tab.get_debounce_val())
         if self.__mode_changed:
             self.__set_device_click(self.__tab.get_button_mode())
-        self.__tab.set_config_value("Custom")
+        if self.__config_val_changed:
+            self.__set_device_config(self.__tab.get_config_value())
         self.__set_changed_bools_false()
         self.__set_upload_button(False)
         self.logger.debug("done")
@@ -202,17 +245,18 @@ class VOGController:
         self.__closed_changed = False
         self.__debounce_changed = False
         self.__mode_changed = False
+        self.__config_val_changed = False
         self.logger.debug("done")
 
     def __get_vals(self):
         """ Request current device settings. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "get_configName"})
-        self.__send_msg({'cmd': 'get_configMaxOpen'})
-        self.__send_msg({'cmd': 'get_configMaxClose'})
-        self.__send_msg({'cmd': 'get_configDebounce'})
-        self.__send_msg({'cmd': 'get_configClickMode'})
-        self.__send_msg({'cmd': 'get_configButtonControl'})
+        self.__send_msg(self.__prepare_msg("get_configName"))
+        self.__send_msg(self.__prepare_msg("get_configMaxOpen"))
+        self.__send_msg(self.__prepare_msg("get_configMaxClose"))
+        self.__send_msg(self.__prepare_msg("get_configDebounce"))
+        self.__send_msg(self.__prepare_msg("get_configClickMode"))
+        self.__send_msg(self.__prepare_msg("get_configButtonControl"))
         self.logger.debug("done")
 
     def __set_upload_button(self, is_active):
@@ -303,9 +347,9 @@ class VOGController:
         """ Tell device to toggle lens. """
         self.logger.debug("running")
         if self.__lens_open:
-            self.__send_msg({'cmd': "do_peekClose"})
+            self.__send_msg(self.__prepare_msg("do_peekClose"))
         else:
-            self.__send_msg({'cmd': "do_peekOpen"})
+            self.__send_msg(self.__prepare_msg("do_peekOpen"))
         self.logger.debug("done")
 
     def __nhtsa(self):
@@ -353,43 +397,100 @@ class VOGController:
     def __set_device_config(self, val):
         """ Set device config.txt setting. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_configName", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_configName", str(val)))
         self.logger.debug("done")
 
     def __set_device_open(self, val):
         """ Set device time open setting. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_configMaxOpen", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_configMaxOpen", str(val)))
         self.logger.debug("done")
 
     def __set_device_close(self, val):
         """ Set device time close setting. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_configMaxClose", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_configMaxClose", str(val)))
         self.logger.debug("done")
 
     def __set_device_debounce(self, val):
         """ Set device debounce setting. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_configDebounce", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_configDebounce", str(val)))
         self.logger.debug("done")
 
     def __set_device_click(self, val):
         """ Set device click mode setting. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_configClickMode", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_configClickMode", str(val)))
         self.logger.debug("done")
 
     def __set_device_button_control(self, val):
         """ Set device button control setting. """
         self.logger.debug("running")
-        self.__send_msg({'cmd': "set_configButtonControl", 'arg': str(val)})
+        self.__send_msg(self.__prepare_msg("set_configButtonControl", str(val)))
         self.logger.debug("done")
 
     def __send_msg(self, msg):
         """ Send message to device. """
         self.logger.debug("running")
-        msg['type'] = "send"
-        msg['device'] = self.__device_info
-        self.__msg_callback(msg)
+        self.__msg_callback(self.__device_info, msg)
         self.logger.debug("done")
+
+    @staticmethod
+    def __parse_msg(msg_string):
+        ret = dict()
+        ret['values'] = {}
+        if msg_string[0:5] == "data|":
+            ret['type'] = "data"
+            val_ind_start = 5
+            for i in range(len(vog_output_field)):
+                val_ind_end = msg_string.find(',', val_ind_start + 1)
+                if val_ind_end < 0:
+                    val_ind_end = None
+                ret['values'][vog_output_field[i]] = msg_string[val_ind_start:val_ind_end]
+                if val_ind_end:
+                    val_ind_start = val_ind_end + 1
+        elif "config" in msg_string:
+            ret['type'] = "settings"
+            bar_ind = msg_string.find('|', 6)
+            if msg_string[6:bar_ind] == "Name":
+                ret['values']['Name'] = msg_string[bar_ind + 1: len(msg_string)].rstrip("\r\n")
+            elif msg_string[6:bar_ind] == "MaxOpen":
+                ret['values']['MaxOpen'] = msg_string[bar_ind + 1: len(msg_string)].rstrip("\r\n")
+            elif msg_string[6:bar_ind] == "MaxClose":
+                ret['values']['MaxClose'] = msg_string[bar_ind + 1: len(msg_string)].rstrip("\r\n")
+            elif msg_string[6:bar_ind] == "Debounce":
+                ret['values']['Debounce'] = msg_string[bar_ind + 1: len(msg_string)].rstrip("\r\n")
+            elif msg_string[6:bar_ind] == "ClickMode":
+                ret['values']['ClickMode'] = msg_string[bar_ind + 1: len(msg_string)].rstrip("\r\n")
+        elif "Click" in msg_string:
+            ret['action'] = "Click"
+        elif "buttonControl" in msg_string:
+            ret['type'] = "settings"
+            bar_ind = msg_string.find('|')
+            ret['values'] = {}
+            ret['values']['buttonControl'] = msg_string[bar_ind + 1: len(msg_string)].rstrip("\r\n")
+        elif "peek" in msg_string:
+            ret['type'] = "settings"
+            ret['values'] = {}
+            ret['values']['lensState'] = msg_string.rstrip("\r\n")
+        return ret
+
+    @staticmethod
+    def __prepare_msg(cmd, arg=None):
+        """ Create string using vog syntax. """
+        if arg:
+            msg_to_send = ">" + cmd + "|" + arg + "<<\n"
+        else:
+            msg_to_send = ">" + cmd + "|" + "<<\n"
+        return msg_to_send
+
+    @staticmethod
+    def __format_output_for_save_file(msg):
+        """ Format and return device output. Typically used for saving data to file. """
+        line = ""
+        for i in vog_output_field:
+            line += ", " + str(msg[i])
+        line = line.rstrip("\r\n")
+        line = line + ", "
+        return line
