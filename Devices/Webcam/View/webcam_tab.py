@@ -29,7 +29,7 @@ from PySide2.QtMultimediaWidgets import *
 from CompanionLib.companion_helpers import EasyFrame
 
 
-class WebcamViewer(QWidget):
+class WebcamTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
@@ -62,7 +62,7 @@ class WebcamViewer(QWidget):
         self.__button_mode_label.setText("Select Cam")
 
     def get_name(self):
-        return "webcam"
+        return "Webcams"
 
     def add_cam(self, cam_index):
         self.__button_mode_selector.addItem(cam_index, text=cam_index)

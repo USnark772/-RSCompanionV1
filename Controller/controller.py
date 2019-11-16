@@ -53,7 +53,7 @@ from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
 from Devices.Webcam.Controller.webcam_controller import WebcamController
-from Devices.Webcam.View.webcam_tab import WebcamViewer
+from Devices.Webcam.View.webcam_tab import WebcamTab
 
 
 class CompanionController:
@@ -117,7 +117,7 @@ class CompanionController:
         # Assemble View objects
         self.__initialize_view()
 
-        # self.__add_webcam_tab()
+        self.__add_webcam_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -497,6 +497,8 @@ class CompanionController:
             self.logger.exception("Failed to make webcam_controller")
             return
         self.__device_controllers["webcams"] = controller
+        self.tab_box.add_tab(self.__device_controllers["webcams"].get_tab_obj(), "webcams")
+        self.graph_box.add_display(self.__device_controllers["webcams"].get_viewer())
         self.logger.debug("done")
 
     ########################################################################################

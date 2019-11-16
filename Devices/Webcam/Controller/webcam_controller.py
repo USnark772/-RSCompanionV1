@@ -31,10 +31,11 @@ from PySide2.QtWidgets import *
 from PySide2.QtMultimedia import *
 from PySide2.QtMultimediaWidgets import *
 from Devices.Webcam.View.webcam_viewer import CamViewer
+from Devices.Webcam.View.webcam_tab import WebcamTab
 
 
 class WebcamController:
-    def __init__(self, parent):
+    def __init__(self, tab_parent):
         self.online_webcams = self.__check_for_cams()
         if not self.online_webcams:
             pass  # TODO: Handle this better
@@ -44,9 +45,13 @@ class WebcamController:
 
         self.current_cam_index = 0
         self.get_webcam(self.current_cam_index)
+        self.__tab = WebcamTab(tab_parent)
+
+    def get_tab_obj(self):
+        return self.__tab
 
     def get_viewer(self):
-        return self.viewer
+        return self.viewer.get_viewfinder()
 
     def change_webcam(self, increment=False):
         if increment:

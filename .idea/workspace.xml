@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="" />
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +59,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.webcam_tester">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -161,8 +167,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.webcam_tester" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.webcam_tester" />
         <item itemvalue="Python.testdictionary" />
         <item itemvalue="Python.profiler" />
         <item itemvalue="Python.tester1" />
@@ -194,7 +200,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573922055658</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Testing Pycharm Version Control.">
+      <created>1573922236120</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1573922236120</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

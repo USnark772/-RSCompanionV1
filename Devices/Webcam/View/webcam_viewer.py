@@ -31,11 +31,12 @@ from PySide2.QtWidgets import QWidget
 from PySide2.QtMultimediaWidgets import QCameraViewfinder
 
 
+# TODO: Turn this into a framed widget for placement into graph_box
 class CamViewer(QWidget):
     def __init__(self):
         super().__init__()
         self.cam_view = QCameraViewfinder()
-        self.cam_view.show()
+        #self.cam_view.show()
 
     def get_viewfinder(self):
         return self.cam_view
