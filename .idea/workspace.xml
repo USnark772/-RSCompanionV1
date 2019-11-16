@@ -220,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573923440213</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Finalize replacing all usages of QPushButton in code with custom QPushButton">
+      <created>1573930092548</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1573930092548</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -241,7 +248,8 @@
     <MESSAGE value="Added a check to the comport message to only talk to official ports" />
     <MESSAGE value="Testing Pycharm Version Control." />
     <MESSAGE value="Begin webcam implementation. Have viewer in UI but not pretty yet. Have non functional tab in tab box but not pretty yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Begin webcam implementation. Have viewer in UI but not pretty yet. Have non functional tab in tab box but not pretty yet." />
+    <MESSAGE value="Finalize replacing all usages of QPushButton in code with custom QPushButton" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finalize replacing all usages of QPushButton in code with custom QPushButton" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
