@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Added a check to the comport message to only talk to official ports">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CompanionLib/companion_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CompanionLib/companion_helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/general_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/general_defs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/button_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/button_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/View/DockWidget/note_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/note_box.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme/changelog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme/changelog.txt" afterDir="false" />
-    </list>
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569533812492</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Testing Pycharm Version Control.">
+      <created>1573922055657</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1573922055658</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -220,7 +212,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added a check to the comport message to only talk to official ports" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a check to the comport message to only talk to official ports" />
+    <MESSAGE value="Testing Pycharm Version Control." />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing Pycharm Version Control." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
