@@ -23,8 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout,\
-    QCheckBox, QLineEdit
+from PySide2.QtWidgets import QWidget, QLabel, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout, QCheckBox, QLineEdit
 from PySide2.QtCore import Qt, QRect
 from CompanionLib.companion_helpers import ClickAnimationButton, EasyFrame
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min

@@ -23,8 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QFrame,\
-    QLineEdit
+from PySide2.QtWidgets import QWidget, QGridLayout, QSlider, QLabel, QHBoxLayout, QVBoxLayout, QLineEdit
 from PySide2.QtCore import Qt, QRect, QSize
 from Devices.DRT.Model.drt_defs import drtv1_0_ISI_min, drtv1_0_stim_dur_min, drtv1_0_max_val
 from Model.general_defs import tab_line_edit_compliant_style, tab_line_edit_error_style

@@ -22,11 +22,9 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QComboBox
-from PySide2.QtCore import Qt, QRect
-from PySide2.QtMultimedia import *
-from PySide2.QtMultimediaWidgets import *
-from CompanionLib.companion_helpers import EasyFrame
+from PySide2.QtWidgets import QWidget, QLabel, QHBoxLayout, QVBoxLayout, QComboBox
+from PySide2.QtCore import QRect
+from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
 
 class WebcamTab(QWidget):
@@ -40,30 +38,38 @@ class WebcamTab(QWidget):
 
         self.layout().addWidget(EasyFrame(True))
 
-        self.__button_mode_frame = EasyFrame()
-        self.__button_mode_horiz_layout = QHBoxLayout(self.__button_mode_frame)
-        self.__button_mode_label = QLabel(self.__button_mode_frame)
-        self.__button_mode_horiz_layout.addWidget(self.__button_mode_label)
-        self.__button_mode_selector = QComboBox(self.__button_mode_frame)
-        self.__button_mode_horiz_layout.addWidget(self.__button_mode_selector)
-        self.layout().addWidget(self.__button_mode_frame)
+        self.__cam_selector_frame = EasyFrame()
+        self.__cam_selector_horiz_layout = QHBoxLayout(self.__cam_selector_frame)
+        self.__cam_selector_label = QLabel(self.__cam_selector_frame)
+        self.__cam_selector_horiz_layout.addWidget(self.__cam_selector_label)
+        self.__cam_selector = QComboBox(self.__cam_selector_frame)
+        self.__cam_selector_horiz_layout.addWidget(self.__cam_selector)
+        self.layout().addWidget(self.__cam_selector_frame)
 
         self.layout().addWidget(EasyFrame(line=True))
 
         """ Set upload button selection area. """
-        self.__upload_settings_button = QPushButton()
+        # TODO: Replace cam_selector_button with this.
+        self.__upload_settings_button = ClickAnimationButton()
         self.layout().addWidget(self.__upload_settings_button)
 
         self.layout().addWidget(EasyFrame(True))
 
         self.__set_texts()
 
-    def __set_texts(self):
-        self.__button_mode_label.setText("Select Cam")
+    def add_cam_selector_button_handler(self, func):
+        self.__upload_settings_button.clicked.connect(func)
 
     def get_name(self):
         return "Webcams"
 
     def add_cam(self, cam_index):
-        self.__button_mode_selector.addItem(cam_index, text=cam_index)
+        self.__cam_selector.addItem("")
+        self.__cam_selector.setItemText(cam_index, str(cam_index))
 
+    def get_cam_index(self):
+        return self.__cam_selector.currentIndex()
+
+    def __set_texts(self):
+        self.__cam_selector_label.setText("Select Cam")
+        self.__upload_settings_button.setText("Upload Settings")

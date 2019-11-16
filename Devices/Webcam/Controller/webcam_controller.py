@@ -27,6 +27,7 @@ Simply display the contents of the webcam with optional mirroring using OpenCV
 via the new Pythonic cv2 interface.  Press <esc> to quit.
 """
 
+import logging
 from PySide2.QtWidgets import *
 from PySide2.QtMultimedia import *
 from PySide2.QtMultimediaWidgets import *
@@ -35,7 +36,10 @@ from Devices.Webcam.View.webcam_tab import WebcamTab
 
 
 class WebcamController:
-    def __init__(self, tab_parent):
+    def __init__(self, tab_parent, ch):
+        self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
+        self.logger.debug("Initializing")
         self.online_webcams = self.__check_for_cams()
         if not self.online_webcams:
             pass  # TODO: Handle this better
@@ -44,8 +48,11 @@ class WebcamController:
         self.my_webcam = None
 
         self.current_cam_index = 0
-        self.get_webcam(self.current_cam_index)
+        self.__get_webcam(self.current_cam_index)
         self.__tab = WebcamTab(tab_parent)
+        self.__update_tab_cam_list()
+        self.__set_handlers()
+        self.logger.debug("Initialized")
 
     def get_tab_obj(self):
         return self.__tab
@@ -53,22 +60,12 @@ class WebcamController:
     def get_viewer(self):
         return self.viewer.get_viewfinder()
 
-    def change_webcam(self, increment=False):
-        if increment:
-            if self.current_cam_index + 1 < len(self.online_webcams):
-                self.current_cam_index += 1
-                self.get_webcam(self.current_cam_index)
-        else:
-            if self.current_cam_index - 1 >= 0:
-                self.current_cam_index -= 1
-                self.get_webcam(self.current_cam_index)
-
-    def get_webcam(self, i):
-        self.my_webcam = QCamera(self.online_webcams[i])
-        self.my_webcam.setViewfinder(self.viewer.get_viewfinder())
-        self.my_webcam.setCaptureMode(QCamera.CaptureStillImage)
-        self.my_webcam.error.connect(lambda: self.alert(self.my_webcam.errorString()))
-        self.my_webcam.start()
+    def change_webcam(self):
+        print("Boom")
+        self.logger.debug("running")
+        index = self.__tab.get_cam_index()
+        self.__get_webcam(index)
+        self.logger.debug("done")
 
     def alert(self, s):
         """
@@ -76,6 +73,24 @@ class WebcamController:
         """
         err = QErrorMessage(self)
         err.showMessage(s)
+
+    def __update_tab_cam_list(self):
+        for i in range(len(self.online_webcams)):
+            self.__tab.add_cam(i)
+
+    def __set_handlers(self):
+        self.logger.debug("running")
+        self.__tab.add_cam_selector_button_handler(self.change_webcam)
+        self.logger.debug("done")
+
+    def __get_webcam(self, i):
+        self.logger.debug("running")
+        self.my_webcam = QCamera(self.online_webcams[i])
+        self.my_webcam.setViewfinder(self.viewer.get_viewfinder())
+        self.my_webcam.setCaptureMode(QCamera.CaptureStillImage)
+        self.my_webcam.error.connect(lambda: self.alert(self.my_webcam.errorString()))
+        self.my_webcam.start()
+        self.logger.debug("done")
 
     @staticmethod
     def __check_for_cams():

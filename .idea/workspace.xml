@@ -4,9 +4,15 @@
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/Controller/webcam_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_tab.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Webcam/View/webcam_viewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/OldCode/graph_obj.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/OldCode/saved_file_tab_contents.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph_frame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/button_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/button_box.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DockWidget/note_box.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DockWidget/note_box.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -207,7 +213,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573922236120</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Begin webcam implementation. Have viewer in UI but not pretty yet. Have non functional tab in tab box but not pretty yet.">
+      <created>1573923440213</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1573923440213</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -224,9 +237,11 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Added a check to the comport message to only talk to official ports" />
     <MESSAGE value="Testing Pycharm Version Control." />
-    <option name="LAST_COMMIT_MESSAGE" value="Testing Pycharm Version Control." />
+    <MESSAGE value="Begin webcam implementation. Have viewer in UI but not pretty yet. Have non functional tab in tab box but not pretty yet." />
+    <option name="LAST_COMMIT_MESSAGE" value="Begin webcam implementation. Have viewer in UI but not pretty yet. Have non functional tab in tab box but not pretty yet." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

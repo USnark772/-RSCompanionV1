@@ -492,7 +492,7 @@ class CompanionController:
     def __add_webcam_tab(self):
         self.logger.debug("running")
         try:
-            controller = WebcamController(self.tab_box)
+            controller = WebcamController(self.tab_box, self.ch)
         except Exception as e:
             self.logger.exception("Failed to make webcam_controller")
             return

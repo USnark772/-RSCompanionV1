@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QFrame, QVBoxLayout, QSizePolicy, QPushButton
+from PySide2.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 from CompanionLib.companion_helpers import ClickAnimationButton
 
 

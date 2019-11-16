@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit
+from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLineEdit
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QSize
 from Model.general_defs import image_file_path
