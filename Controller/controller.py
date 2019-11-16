@@ -488,7 +488,7 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    # TODO: Unfinished
+    # TODO: Unfinished.
     def __add_webcam_tab(self):
         self.logger.debug("running")
         try:
