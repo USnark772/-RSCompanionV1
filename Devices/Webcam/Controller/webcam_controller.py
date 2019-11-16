@@ -45,8 +45,8 @@ class WebcamController:
         self.current_cam_index = 0
         self.get_webcam(self.current_cam_index)
 
-    def __check_for_cams(self):
-        return QCameraInfo.availableCameras()
+    def get_viewer(self):
+        return self.viewer
 
     def change_webcam(self, increment=False):
         if increment:
@@ -71,3 +71,7 @@ class WebcamController:
         """
         err = QErrorMessage(self)
         err.showMessage(s)
+
+    @staticmethod
+    def __check_for_cams():
+        return QCameraInfo.availableCameras()

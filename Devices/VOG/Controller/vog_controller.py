@@ -221,7 +221,6 @@ class VOGController:
         self.__tab.set_close_val_entry_activity(not is_checked)
         self.logger.debug("done")
 
-    # TODO: Check that config value is working properly
     def __update_device(self):
         """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
         self.logger.debug("running")

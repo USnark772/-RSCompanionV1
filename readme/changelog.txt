@@ -1,11 +1,14 @@
 V1.01
     -Graphs now disappear when unplugging all devices of that graph type.
 v1.02
-    -Fixed an issue with trying to read from known devices while having unknown devices plugged in
+    -Fixed an issue with trying to read from known devices while having unknown devices plugged in.
 v1.03
-    -Added logging functionality to app
+    -Added logging functionality to app.
 v1.04
-    -Fixed an issue with the UI lag
+    -Fixed an issue with the UI lag.
 v1.05
     -Some changes to the graphing utility allowing the user to see when breaks in experiments are.
-    -Bug fixes
+    -Bug fixes.
+v1.06
+    -Buttons now appear to be clicked when clicked on.
+    -Bug fixes.

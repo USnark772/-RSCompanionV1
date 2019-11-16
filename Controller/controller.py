@@ -77,7 +77,6 @@ class CompanionController:
         self.ch = logging.StreamHandler(self.log_output)
         self.ch.setLevel(logginglevel)
         self.ch.setFormatter(self.formatter)
-
         self.logger.addHandler(self.ch)
 
         self.logger.info("RS Companion app version: " + str(current_version))
@@ -497,7 +496,7 @@ class CompanionController:
         except Exception as e:
             self.logger.exception("Failed to make webcam_controller")
             return
-        self.__device_controllers["webcams"]["controller"] = controller
+        self.__device_controllers["webcams"] = controller
         self.logger.debug("done")
 
     ########################################################################################

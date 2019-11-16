@@ -26,7 +26,7 @@ from PySide2.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLa
 from PySide2.QtCore import Qt, QRect
 from PySide2.QtMultimedia import *
 from PySide2.QtMultimediaWidgets import *
-from CompanionLib.companion_helpers import MyFrame
+from CompanionLib.companion_helpers import EasyFrame
 
 
 class WebcamViewer(QWidget):
@@ -38,9 +38,9 @@ class WebcamViewer(QWidget):
 
         self.config_horizontal_layout = QHBoxLayout()
 
-        self.layout().addWidget(MyFrame(True))
+        self.layout().addWidget(EasyFrame(True))
 
-        self.__button_mode_frame = MyFrame()
+        self.__button_mode_frame = EasyFrame()
         self.__button_mode_horiz_layout = QHBoxLayout(self.__button_mode_frame)
         self.__button_mode_label = QLabel(self.__button_mode_frame)
         self.__button_mode_horiz_layout.addWidget(self.__button_mode_label)
@@ -48,13 +48,13 @@ class WebcamViewer(QWidget):
         self.__button_mode_horiz_layout.addWidget(self.__button_mode_selector)
         self.layout().addWidget(self.__button_mode_frame)
 
-        self.layout().addWidget(MyFrame(line=True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set upload button selection area. """
         self.__upload_settings_button = QPushButton()
         self.layout().addWidget(self.__upload_settings_button)
 
-        self.layout().addWidget(MyFrame(True))
+        self.layout().addWidget(EasyFrame(True))
 
         self.__set_texts()
 

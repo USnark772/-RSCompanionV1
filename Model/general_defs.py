@@ -28,7 +28,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 image_file_path = '../View/Images/'  # new path should be 'Images/'
 config_file_path = '../config/config.ini'  # new path should be 'config/config.ini'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
-current_version = 1.04
+current_version = 1.06  # New version should be incremented.
 
 #################################################################################################################
 # general
@@ -58,7 +58,7 @@ about_RS_app_text = "- Most things in this app have tooltips. Mouse over differe
                     "- Displays data coming in from devices associated with the latest experiment.\n" \
                     "- Clicking on the legend will show/hide device specific data in each graph.\n" \
                     "- Using the control bar under each graph you will be able manipulate the graphs.\n\n" \
-                    "The lower right section contains the Device config.txt area where each device will display a" \
+                    "The lower right section contains the Device config area where each device will display a" \
                     " configuration menu. In each menu you can alter the settings of how the respective device acts" \
                     " during an experiment.\n"
 

@@ -27,9 +27,6 @@ Updater:
 Installer: Inno Setup
 -   DONE Make sure installer installs over previous versions of Companion app
 
-Devices:
--   Check device/program output
-
 Video:
 -   Begin exp starts recording video. Device overlay is recorded with the video
     Device output will add a frame # for when that device output came in

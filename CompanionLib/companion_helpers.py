@@ -89,7 +89,7 @@ def get_current_time(day=False, time=False, mil=False, save=False, graph=False, 
         return date_time
 
 
-class MyFrame(QFrame):
+class EasyFrame(QFrame):
     """ Creates a frame for display purposes depending on bools. """
     def __init__(self, line=False, vert=False):
         self.logger = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ class MyFrame(QFrame):
         self.logger.debug("Initialized")
 
 
-class MyButton(QPushButton):
+class ClickAnimationButton(QPushButton):
     def __init__(self, parent=None):
         self.logger = logging.getLogger(__name__)
         self.logger.debug("Initializing")

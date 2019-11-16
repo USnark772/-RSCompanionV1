@@ -27,7 +27,7 @@ from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QPushButton, 
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QSize
 from Model.general_defs import image_file_path
-from CompanionLib.companion_helpers import MyButton
+from CompanionLib.companion_helpers import ClickAnimationButton
 
 
 class ButtonBox(QGroupBox):
@@ -41,9 +41,9 @@ class ButtonBox(QGroupBox):
         self.setMaximumSize(size)
         self.__button_layout = QHBoxLayout()
 
-        self.__create_button = MyButton()
+        self.__create_button = ClickAnimationButton()
         self.__create_button.setFixedSize(60, 40)
-        self.__start_button = MyButton()
+        self.__start_button = ClickAnimationButton()
         self.__start_button.setFixedSize(120, 40)
         self.__button_layout.addWidget(self.__create_button)
         self.__button_layout.addWidget(self.__start_button)

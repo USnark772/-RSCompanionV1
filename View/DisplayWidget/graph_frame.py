@@ -24,7 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 from PySide2.QtWidgets import QFrame, QVBoxLayout, QSizePolicy, QPushButton
-from CompanionLib.companion_helpers import MyButton
+from CompanionLib.companion_helpers import ClickAnimationButton
 
 
 class GraphFrame(QFrame):
@@ -44,7 +44,7 @@ class GraphFrame(QFrame):
         self.setLayout(QVBoxLayout(self))
         self.__visible = True
         self.__canvas = canvas
-        self.__show_hide_button = MyButton(self)
+        self.__show_hide_button = ClickAnimationButton(self)
         self.__show_hide_button.setFixedSize(150, 30)
         self.__show_hide_button.clicked.connect(self.__set_graph_visibility)
         self.layout().addWidget(self.__show_hide_button)
