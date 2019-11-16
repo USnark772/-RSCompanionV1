@@ -27,7 +27,7 @@ from PySide2.QtCore import QRect
 from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
 
-class WebcamTab(QWidget):
+class CameraTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setLayout(QVBoxLayout())
@@ -61,7 +61,7 @@ class WebcamTab(QWidget):
         self.__upload_settings_button.clicked.connect(func)
 
     def get_name(self):
-        return "Webcams"
+        return "Cameras"
 
     def add_cam(self, cam_index):
         self.__cam_selector.addItem("")
@@ -71,5 +71,5 @@ class WebcamTab(QWidget):
         return self.__cam_selector.currentIndex()
 
     def __set_texts(self):
-        self.__cam_selector_label.setText("Select Cam")
+        self.__cam_selector_label.setText("Select Camera")
         self.__upload_settings_button.setText("Upload Settings")

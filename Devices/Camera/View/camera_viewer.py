@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 """
-Simply display the contents of the webcam with optional mirroring using OpenCV 
+Simply display the contents of the camera with optional mirroring using OpenCV 
 via the new Pythonic cv2 interface.  Press <esc> to quit.
 """
 

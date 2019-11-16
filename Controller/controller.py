@@ -52,8 +52,7 @@ from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
-from Devices.Webcam.Controller.webcam_controller import WebcamController
-from Devices.Webcam.View.webcam_tab import WebcamTab
+from Devices.Camera.Controller.camera_controller import CameraController
 
 
 class CompanionController:
@@ -117,7 +116,7 @@ class CompanionController:
         # Assemble View objects
         self.__initialize_view()
 
-        self.__add_webcam_tab()
+        self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -489,16 +488,16 @@ class CompanionController:
         return True
 
     # TODO: Unfinished.
-    def __add_webcam_tab(self):
+    def __add_camera_tab(self):
         self.logger.debug("running")
         try:
-            controller = WebcamController(self.tab_box, self.ch)
+            controller = CameraController(self.tab_box, self.ch)
         except Exception as e:
-            self.logger.exception("Failed to make webcam_controller")
+            self.logger.exception("Failed to make camera_controller")
             return
-        self.__device_controllers["webcams"] = controller
-        self.tab_box.add_tab(self.__device_controllers["webcams"].get_tab_obj(), "webcams")
-        self.graph_box.add_display(self.__device_controllers["webcams"].get_viewer())
+        self.__device_controllers["cameras"] = controller
+        self.tab_box.add_tab(self.__device_controllers["cameras"].get_tab_obj(), "cameras")
+        self.graph_box.add_display(self.__device_controllers["cameras"].get_viewer())
         self.logger.debug("done")
 
     ########################################################################################
