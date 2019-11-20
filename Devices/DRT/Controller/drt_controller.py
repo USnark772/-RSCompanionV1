@@ -36,8 +36,8 @@ class DRTController:
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
-        device_name = device[0] + " on " + device[1]
-        self.__tab = DRTTab(tab_parent, device_name, ch)
+        self.device_name = device[0].upper() + "_" + device[1][3:]
+        self.__tab = DRTTab(tab_parent, self.device_name, ch)
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__msg_callback = msg_callback
@@ -55,12 +55,12 @@ class DRTController:
     def get_tab_obj(self):
         return self.__tab
 
-    def handle_msg(self, msg_string, ui_info):
+    def handle_msg(self, msg_string, timestamp):
         msg_dict = self.__parse_msg(msg_string)
         msg_type = msg_dict['type']
         if msg_type == "data":
-            self.__add_data_to_graph(msg_dict['values'], ui_info[2])
-            self.__save_data(msg_dict['values'], ui_info)
+            self.__add_data_to_graph(msg_dict['values'], timestamp)
+            self.__save_data(msg_dict['values'], timestamp)
         elif msg_type == "settings":
             self.__update_config(msg_dict['values'])
 
@@ -90,8 +90,8 @@ class DRTController:
                + drtv1_0_note_spacer + note
         write_line_to_file(self.save_file, line)
 
-    def __save_data(self, values, ui_info):
-        prepend = self.__device_info[0] + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
+    def __save_data(self, values, timestamp):
+        prepend = self.device_name + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
                   ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")
         line = self.__format_output_for_save_file(values)
         write_line_to_file(self.save_file, prepend + line)

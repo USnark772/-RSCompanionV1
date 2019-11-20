@@ -34,8 +34,8 @@ class VOGController:
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
-        device_name = device[0] + " on " + device[1]
-        self.__tab = VOGTab(tab_parent, device_name, ch)
+        self.device_name = device[0].upper() + "_" + device[1][3:]
+        self.__tab = VOGTab(tab_parent, self.device_name, ch)
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__msg_callback = msg_callback
@@ -95,7 +95,7 @@ class VOGController:
         write_line_to_file(self.save_file, line)
 
     def __save_data(self, values, ui_info):
-        prepend = self.__device_info[0] + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
+        prepend = self.device_name + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
                   ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")
         line = self.__format_output_for_save_file(values)
         write_line_to_file(self.save_file, prepend + line)

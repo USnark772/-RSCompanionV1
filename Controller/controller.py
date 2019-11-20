@@ -27,12 +27,11 @@ from os import path
 import logging
 import logging.config
 import configparser
-from datetime import datetime
 from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QTimer, QDir, QSize
 from PySide2.QtGui import QKeyEvent
-from CompanionLib.companion_helpers import get_current_time, check_device_tuple
+from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
     error_checking_for_update, device_connection_error, config_file_path, current_version
 from View.MainWindow.main_window import CompanionWindow
@@ -102,6 +101,7 @@ class CompanionController:
         self.device_manager = DeviceManager(self.receive_msg_from_device_manager, self.ch)
 
         # Initialize storage and state
+        self.__controller_list = list()
         self.__controller_inits = dict()
         self.__graph_inits = dict()
         self.__populate_func_dicts()
@@ -131,8 +131,7 @@ class CompanionController:
         self.logger.debug("running")
         if msg_type == 1:  # Communication from a device
             self.logger.debug("Passing msg to device controller. msg is: " + msg_string)
-            self.__device_controllers[device].handle_msg(msg_string, (self.__current_cond_name, self.flag_box.get_flag(),
-                                                                      timestamp))
+            self.__device_controllers[device].handle_msg(msg_string, timestamp)
         elif msg_type == 2:  # Adding a new device
             self.logger.debug("Adding a new device")
             self.__add_device(device)
@@ -145,6 +144,18 @@ class CompanionController:
         else:  # Unknown error
             self.logger.error("This line should not be reached")
         self.logger.debug("done")
+
+    # TODO: Handle for when multiple devices are plugged in.
+    def save_device_data(self, device_name, device_line, timestamp=None):
+        if not timestamp:
+            timestamp = get_current_time(device=True)
+        spacer = ", "
+        time = timestamp.strftime("%H:%M:%S")
+        date = timestamp.strftime("%Y-%m-%d")
+        block_num = self.info_box.get_block_number()
+        cond_name = self.button_box.get_condition_name()
+        flag = self.flag_box.get_flag()
+        main_block = time + spacer + date + spacer + block_num + spacer + cond_name + spacer + flag
 
     ########################################################################################
     # initial setup
@@ -166,6 +177,10 @@ class CompanionController:
         self.ui.add_tab_widget(self.tab_box)
         self.ui.show()
         self.logger.debug("done")
+
+    def __popluate_controller_list(self):
+        self.__controller_list.append(DRTController)
+        self.__controller_list.append(VOGController)
 
     # TODO: Add device controller destructors?
     def __populate_func_dicts(self):

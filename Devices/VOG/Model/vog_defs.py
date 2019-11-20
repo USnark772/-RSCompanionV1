@@ -32,7 +32,7 @@ vog_about = "The Visual Occlusion Glasses have a few different settings availabl
 
 vog_note_spacer = ", , , , "
 
-vog_file_hdr = "Type, Condition, Key Flag, Timestamp, Trial counter, Millis Open, Millis Closed, Note"
+vog_file_hdr = "VOG Trial, VOG Open, VOG Closed"
 
 vog_config_fields = []
 vog_output_field = ['trialCounter', 'millis_openElapsed', 'millis_closeElapsed']

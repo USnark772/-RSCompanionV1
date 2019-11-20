@@ -53,6 +53,23 @@ class CameraController:
         self.__set_handlers()
         self.logger.debug("Initialized")
 
+    def create_new_save_file(self, new_filename):
+        pass
+
+    def start_exp(self):
+        """ Required function for all device controllers. """
+        pass
+
+    def end_exp(self):
+        """ Required function for all device controllers. """
+        pass
+
+    def start_block(self):
+        pass
+
+    def end_block(self):
+        pass
+
     def get_tab_obj(self):
         return self.__tab
 
