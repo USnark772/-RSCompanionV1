@@ -45,6 +45,14 @@ class InfoBox(QGroupBox):
         self.__start_time_val.setAlignment(Qt.AlignRight)
         self.layout().addWidget(self.__start_time_val, 1, 1, 1, 1)
 
+        self.__block_num_label = QLabel()
+        self.__block_num_label.setAlignment(Qt.AlignLeft)
+        self.layout().addWidget(self.__block_num_label, 2, 0, 1, 1)
+
+        self.__block_num_val = QLabel()
+        self.__block_num_val.setAlignment(Qt.AlignRight)
+        self.layout().addWidget(self.__block_num_val, 2, 1, 1, 1)
+
         self.__set_texts()
         self.logger.debug("Initialized")
 
@@ -58,9 +66,19 @@ class InfoBox(QGroupBox):
         self.__start_time_val.setText("00:00:00")
         self.logger.debug("done")
 
+    def set_block_num(self, num):
+        self.logger.debug("running")
+        self.__block_num_val.setText(str(num))
+        self.logger.debug("done")
+
+    def get_block_num(self):
+        return self.__block_num_val.text()
+
     def __set_texts(self):
         self.logger.debug("running")
         self.setTitle("Information")
         self.__start_time_label.setText("Experiment start time:")
+        self.__block_num_label.setText("Block number:")
+        self.__block_num_val.setText("0")
         self.reset_start_time()
         self.logger.debug("done")

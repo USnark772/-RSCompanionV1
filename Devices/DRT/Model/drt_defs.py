@@ -24,12 +24,13 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 """ Definitions specific to the DRT device """
 
-drtv1_0_note_spacer = ", , , , , "
+drtv1_0_note_spacer = ", , , , "
 
-drtv1_0_file_hdr = "DRT Millis, DRT Trial, DRT Clicks, DRT RT"
+drtv1_0_file_hdr = "DRT Millis, DRT Trial, DRT Clicks, DRT RT, "
 
 drtv1_0_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drtv1_0_output_fields = ['startMillis', 'trial', 'clicks', 'rt']
+drtv1_0_save_fields = ['trial', 'clicks', 'startMillis', 'rt']
 drtv1_0_ui_fields = ['Mills from block start', 'probe #', 'clicks', 'response time']
 
 drtv1_0_iso_standards = {'upperISI': 5000, 'lowerISI': 3000, 'intensity': 255, 'stimDur': 1000}

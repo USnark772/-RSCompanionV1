@@ -101,7 +101,7 @@ class CompanionController:
         self.device_manager = DeviceManager(self.receive_msg_from_device_manager, self.ch)
 
         # Initialize storage and state
-        self.__controller_list = list()
+        self.__controller_classes = dict()
         self.__controller_inits = dict()
         self.__graph_inits = dict()
         self.__populate_func_dicts()
@@ -112,9 +112,12 @@ class CompanionController:
         self.__num_vogs = 0
         self.__current_cond_name = ""
         self.__device_controllers = dict()
+        self.__save_file_name = ""
+        self.__device_spacers = dict()
 
         # Assemble View objects
         self.__initialize_view()
+        self.__init_controller_classes()
 
         self.__add_camera_tab()
         self.logger.debug("Initialized")
@@ -145,17 +148,30 @@ class CompanionController:
             self.logger.error("This line should not be reached")
         self.logger.debug("done")
 
-    # TODO: Handle for when multiple devices are plugged in.
     def save_device_data(self, device_name, device_line, timestamp=None):
         if not timestamp:
             timestamp = get_current_time(device=True)
         spacer = ", "
         time = timestamp.strftime("%H:%M:%S")
         date = timestamp.strftime("%Y-%m-%d")
-        block_num = self.info_box.get_block_number()
+        block_num = self.info_box.get_block_num()
         cond_name = self.button_box.get_condition_name()
         flag = self.flag_box.get_flag()
         main_block = time + spacer + date + spacer + block_num + spacer + cond_name + spacer + flag
+        if device_name == "Note":
+            line = device_name + spacer + main_block + spacer
+            for val in self.__controller_classes.values():
+                if val[1] > 0:
+                    line += val[0].get_note_spacer()
+            line += device_line
+        else:
+            line = device_name[0] + device_name[1] + spacer + main_block
+            for key in self.__controller_classes:
+                if device_name[0] == key:
+                    line += device_line
+                elif self.__controller_classes[key][1] > 0:
+                    line += self.__controller_classes[key][0].get_note_spacer()
+        write_line_to_file(self.__save_file_name, line)
 
     ########################################################################################
     # initial setup
@@ -178,10 +194,6 @@ class CompanionController:
         self.ui.show()
         self.logger.debug("done")
 
-    def __popluate_controller_list(self):
-        self.__controller_list.append(DRTController)
-        self.__controller_list.append(VOGController)
-
     # TODO: Add device controller destructors?
     def __populate_func_dicts(self):
         self.__controller_inits['drt'] = dict()
@@ -195,16 +207,19 @@ class CompanionController:
         self.__graph_inits['vog']['creator'] = self.__make_vog_graph
         self.__graph_inits['vog']['destructor'] = self.__destroy_vog_graph
 
+    def __init_controller_classes(self):
+        self.__controller_classes["DRT"] = [DRTController, 0]
+        self.__controller_classes["VOG"] = [VOGController, 0]
+
     def __setup_file_dialog(self):
         """
         Sets up a file dialog for 1. saving data from experiments and 2. opening previous experiments.
         2. not implemented yet
         """
         self.logger.debug("running")
-        self.file_dialog.setOptions(QFileDialog.ShowDirsOnly)
-        self.file_dialog.setViewMode(QFileDialog.Detail)
+        # self.file_dialog.setViewMode(QFileDialog.Detail)
         self.file_dialog.setDirectory(QDir().homePath())
-        self.file_dialog.setFileMode(QFileDialog.Directory)
+        # self.file_dialog.setFileMode(QFileDialog.Directory)
         self.logger.debug("done")
 
     def __setup_handlers(self):
@@ -244,15 +259,16 @@ class CompanionController:
         self.logger.debug("running")
         if not self.__exp_created:
             self.logger.debug("creating experiment")
-            if not self.__get_save_dir_path():
+            if not self.__get_save_file_name():
                 self.logger.debug("no save directory selected, done running __create_end_exp()")
                 return
-            self.__update_device_filenames()
+            # self.__update_device_filenames()
             self.__create_exp()
             self.logger.debug("done")
         else:
             self.logger.debug("ending experiment")
             self.__end_exp()
+            self.__save_file_name = ""
         self.logger.debug("done")
 
     def __create_exp(self):
@@ -367,20 +383,14 @@ class CompanionController:
     def __post_handler(self):
         """ Write a given user note to all device output files. """
         self.logger.debug("running")
-        print("hey")
         note = self.note_box.get_note()
         self.note_box.clear_note()
-        ui_info = (self.__current_cond_name, self.flag_box.get_flag(), get_current_time(device=True))
-        for device in self.__device_controllers:
-            self.logger.debug("writing to: " + device[0] + " " + device[1])
-            try:
-                self.__device_controllers[device].write_note_to_file(note, ui_info)
-            except Exception as e:
-                self.logger.exception("Failed writing to file")
+        self.save_device_data("Note", note)
         self.logger.debug("done")
 
-    def __get_save_dir_path(self):
-        return self.file_dialog.exec_()
+    def __get_save_file_name(self):
+        self.__save_file_name = self.file_dialog.getSaveFileName(filter="*.txt")[0]
+        return len(self.__save_file_name) > 1
 
     def __check_for_updates_handler(self):
         """ Ask VersionChecker if there is an update then alert user to result. """
@@ -436,8 +446,9 @@ class CompanionController:
         if not self.__controller_inits[device[0]]['creator'](device):
             self.logger.debug("Failed to make controller")
             return
-        self.__graphs[device[0]]['frame'].get_graph().add_device(device[1])
+        self.__graphs[device[0]]['frame'].get_graph().add_device(device[1][3:])
         self.tab_box.add_tab(self.__device_controllers[device].get_tab_obj(), device[1])
+        self.__controller_classes[device[0].upper()][1] += 1
         self.logger.debug("done")
 
     def __remove_device(self, device):
@@ -453,9 +464,10 @@ class CompanionController:
             self.logger.debug("Unknown device: " + device[0] + " " + device[1])
             return
         self.tab_box.remove_tab(device[1])
-        self.__graphs[device[0]]['frame'].get_graph().remove_device(device[1])
+        self.__graphs[device[0]]['frame'].get_graph().remove_device(device[1][3:])
         del self.__device_controllers[device]
         self.__check_num_devices()
+        self.__controller_classes[device[0].upper()][1] -= 1
         self.logger.debug("done")
 
     def __create_drt_controller(self, device):
@@ -469,7 +481,7 @@ class CompanionController:
         self.logger.debug("Making controller for drt")
         try:
             device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg,
-                                              self.add_data_to_graph, self.ch)
+                                              self.add_data_to_graph, self.ch, self.save_device_data)
         except Exception as e:
             self.logger.exception("failed to make device_controller for drt" + str(device))
             self.__check_num_devices()
@@ -491,7 +503,7 @@ class CompanionController:
         self.logger.debug("Making controller for vog")
         try:
             device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg,
-                                              self.add_data_to_graph, self.ch)
+                                              self.add_data_to_graph, self.ch, self.save_device_data)
         except Exception as e:
             self.logger.exception("failed to make device_controller for vog" + str(device))
             self.__check_num_devices()
@@ -522,18 +534,16 @@ class CompanionController:
     def ui_close_event_handler(self):
         """ Shut down all devices before closing the app. """
         self.logger.debug("running")
-        if self.__exp_running:
-            try:
-                for controller in self.__device_controllers.values():
-                    controller.end_block()
-            except Exception as e:
-                self.logger.exception("Failed to end_block_all")
-        if self.__exp_created:
-            try:
-                for controller in self.__device_controllers.values():
-                    controller.end_exp()
-            except Exception as e:
-                self.logger.exception("Failed to end_exp_all")
+        try:
+            for controller in self.__device_controllers.values():
+                controller.end_block()
+        except Exception as e:
+            self.logger.exception("Failed to end_block_all")
+        try:
+            for controller in self.__device_controllers.values():
+                controller.end_exp()
+        except Exception as e:
+            self.logger.exception("Failed to end_exp_all")
         self.log_output.close()
         #self.device_manager_thread.terminate()
         self.logger.debug("done")
@@ -629,5 +639,5 @@ class CompanionController:
         if device[0] not in self.__graphs:
             self.logger.warning("device not found in self.__graphs")
             return
-        self.__graphs[device[0]]['frame'].get_graph().add_data(device[1], data)
+        self.__graphs[device[0]]['frame'].get_graph().add_data(device[1][3:], data)
         self.logger.debug("done")

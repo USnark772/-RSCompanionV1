@@ -28,19 +28,20 @@ from CompanionLib.companion_helpers import write_line_to_file
 from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, \
     drtv1_0_ISI_max, drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr, drtv1_0_config_fields, \
-    drtv1_0_note_spacer
+    drtv1_0_note_spacer, drtv1_0_save_fields
 
 
 class DRTController:
-    def __init__(self, tab_parent, device, msg_callback, graph_callback, ch):
+    def __init__(self, tab_parent, device, msg_callback, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
-        self.device_name = device[0].upper() + "_" + device[1][3:]
-        self.__tab = DRTTab(tab_parent, self.device_name, ch)
+        self.device_name = device[0].upper(), "_" + device[1][3:]
+        self.__tab = DRTTab(tab_parent, self.device_name[0] + self.device_name[1], ch)
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__msg_callback = msg_callback
+        self.__save_callback = save_callback
         self.__updating_config = False
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
         self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
@@ -64,13 +65,6 @@ class DRTController:
         elif msg_type == "settings":
             self.__update_config(msg_dict['values'])
 
-    def create_new_save_file(self, new_filename):
-        self.save_file = new_filename
-        self.add_save_file_hdr()
-
-    def add_save_file_hdr(self):
-        write_line_to_file(self.save_file, drtv1_0_file_hdr)
-
     def start_exp(self):
         """ Required function for all device controllers. """
         pass
@@ -85,16 +79,17 @@ class DRTController:
     def end_block(self):
         self.__send_msg(self.__prepare_msg("exp_stop"))
 
-    def write_note_to_file(self, note, ui_info):
-        line = "note, " + ui_info[0] + ", " + ui_info[1] + ", " + ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")\
-               + drtv1_0_note_spacer + note
-        write_line_to_file(self.save_file, line)
+    @staticmethod
+    def get_save_file_hdr():
+        return drtv1_0_file_hdr
+
+    @staticmethod
+    def get_note_spacer():
+        return drtv1_0_note_spacer
 
     def __save_data(self, values, timestamp):
-        prepend = self.device_name + ", " + ui_info[0] + ", " + ui_info[1] + ", " + \
-                  ui_info[2].strftime("%Y-%m-%d-%H-%M-%S")
         line = self.__format_output_for_save_file(values)
-        write_line_to_file(self.save_file, prepend + line)
+        self.__save_callback(self.device_name, line, timestamp)
 
     def __add_data_to_graph(self, data, timestamp):
         """ Send data from device to graph for display. Separate data types into their own calls. """
@@ -385,7 +380,7 @@ class DRTController:
     def __format_output_for_save_file(msg):
         """ Format and return device output. Typically used for saving data to file. """
         line = ""
-        for i in drtv1_0_output_fields:
+        for i in drtv1_0_save_fields:
             line += ", " + str(msg[i])
         line = line.rstrip("\r\n")
         line = line + ", "
