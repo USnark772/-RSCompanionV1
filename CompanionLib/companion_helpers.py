@@ -31,11 +31,15 @@ from Model.general_defs import button_pressed_style, button_normal_style
 logger = logging.getLogger(__name__)
 
 
-def write_line_to_file(fname, line):
+def write_line_to_file(fname, line, new=False):
     logger.debug("running")
     if not line.endswith("\n"):
         line = line + "\n"
-    with open(fname, 'a+') as file:
+    if new:
+        condition = 'w'
+    else:
+        condition = 'a+'
+    with open(fname, condition) as file:
         file.write(line)
     logger.debug("done")
 

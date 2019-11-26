@@ -261,8 +261,8 @@ class CompanionController:
             self.logger.debug("creating experiment")
             if not self.__get_save_file_name():
                 self.logger.debug("no save directory selected, done running __create_end_exp()")
+                print("Failed")
                 return
-            # self.__update_device_filenames()
             self.__create_exp()
             self.logger.debug("done")
         else:
@@ -276,6 +276,7 @@ class CompanionController:
         self.__exp_created = True
         self.button_box.toggle_create_button()
         self.device_manager.set_check_for_updates(False)
+        self.__add_hdr_to_output()
         devices_running = list()
         try:
             for controller in self.__device_controllers.values():
@@ -288,6 +289,7 @@ class CompanionController:
             for controller in devices_running:
                 controller.end_exp()
             return
+        self.__check_toggle_post_button()
         self.info_box.set_start_time(get_current_time(time=True))
         self.logger.debug("done")
 
@@ -301,6 +303,7 @@ class CompanionController:
                 controller.end_exp()
         except Exception as e:
             self.logger.exception("Failed trying to end_exp_all")
+        self.__check_toggle_post_button()
         self.logger.debug("done")
 
     def __start_stop_exp(self):
@@ -323,8 +326,8 @@ class CompanionController:
             self.logger.exception("Failed trying to start_block_all")
             self.__exp_running = False
             return
+        self.info_box.set_block_num(str(int(self.info_box.get_block_num()) + 1))
         self.__current_cond_name = self.button_box.get_condition_name()
-        self.__check_toggle_post_button()
         self.__add_break_in_graph_lines()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
@@ -339,7 +342,6 @@ class CompanionController:
                 controller.end_block()
         except Exception as e:
             self.logger.exception("Failed trying to end_block_all")
-        self.__check_toggle_post_button()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
@@ -357,7 +359,7 @@ class CompanionController:
     def __check_toggle_post_button(self):
         """ If an experiment is created and running and there is a note then allow user access to post button. """
         self.logger.debug("running")
-        if self.__exp_created and self.__exp_running and len(self.note_box.get_note()) > 0:
+        if self.__exp_created and len(self.note_box.get_note()) > 0:  # and self.__exp_running:
             self.logger.debug("button = true")
             self.note_box.toggle_post_button(True)
         else:
@@ -408,15 +410,13 @@ class CompanionController:
     def __log_window_handler(self):
         self.log_output.show()
 
-    def __update_device_filenames(self):
-        """ Ensure all devices have new files to save output data to. """
-        self.logger.debug("running")
-        filepath = self.file_dialog.directory().path()
-        for device in self.__device_controllers:
-            new_file = path.join(filepath, device[0] + " on " + device[1] + " " +
-                                 get_current_time(save=True) + ".txt")
-            self.__device_controllers[device].create_new_save_file(new_file)
-        self.logger.debug("done")
+    def __add_hdr_to_output(self):
+        line = 'Device ID, Time, Date, Block, Condition, Key Flag, '
+        for key in self.__controller_classes:
+            if self.__controller_classes[key][1] > 0:
+                line += self.__controller_classes[key][0].get_save_file_hdr()
+        line += 'Note'
+        write_line_to_file(self.__save_file_name, line, new=True)
 
     @staticmethod
     def __setup_output_file(filename):
@@ -534,18 +534,19 @@ class CompanionController:
     def ui_close_event_handler(self):
         """ Shut down all devices before closing the app. """
         self.logger.debug("running")
-        try:
-            for controller in self.__device_controllers.values():
-                controller.end_block()
-        except Exception as e:
-            self.logger.exception("Failed to end_block_all")
-        try:
-            for controller in self.__device_controllers.values():
-                controller.end_exp()
-        except Exception as e:
-            self.logger.exception("Failed to end_exp_all")
+        if self.__exp_running:
+            try:
+                for controller in self.__device_controllers.values():
+                    controller.end_block()
+            except Exception as e:
+                self.logger.exception("Failed to end_block_all")
+        if self.__exp_created:
+            try:
+                for controller in self.__device_controllers.values():
+                    controller.end_exp()
+            except Exception as e:
+                self.logger.exception("Failed to end_exp_all")
         self.log_output.close()
-        #self.device_manager_thread.terminate()
         self.logger.debug("done")
 
     def __about_company(self):

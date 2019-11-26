@@ -26,7 +26,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 drtv1_0_note_spacer = ", , , , "
 
-drtv1_0_file_hdr = "DRT Millis, DRT Trial, DRT Clicks, DRT RT, "
+drtv1_0_file_hdr = "DRT Trial, DRT Clicks, DRT Millis, DRT RT, "
 
 drtv1_0_config_fields = ['lowerISI', 'upperISI', 'stimDur', 'intensity']
 drtv1_0_output_fields = ['startMillis', 'trial', 'clicks', 'rt']
