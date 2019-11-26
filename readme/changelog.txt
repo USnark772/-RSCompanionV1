@@ -12,3 +12,6 @@ v1.05
 v1.06
     -Buttons now appear to be clicked when clicked on.
     -Bug fixes.
+v1.07
+    -Data from devices are now saved into one file per experiment instead of one file per device per experiment.
+    -Added functionality to post notes to the save file even when experiments are paused.
