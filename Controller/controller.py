@@ -51,7 +51,7 @@ from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
-from Devices.Camera.Controller.camera_controller import CameraController
+#from Devices.Camera.Controller.camera_controller import CameraController
 
 
 class CompanionController:
@@ -119,7 +119,7 @@ class CompanionController:
         self.__initialize_view()
         self.__init_controller_classes()
 
-        self.__add_camera_tab()
+        #self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -515,6 +515,7 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
+    '''
     # TODO: Unfinished.
     def __add_camera_tab(self):
         self.logger.debug("running")
@@ -527,6 +528,7 @@ class CompanionController:
         self.tab_box.add_tab(self.__device_controllers["cameras"].get_tab_obj(), "cameras")
         self.graph_box.add_display(self.__device_controllers["cameras"].get_viewer())
         self.logger.debug("done")
+    '''
 
     ########################################################################################
     # Other handlers
