@@ -304,6 +304,7 @@ class CompanionController:
         except Exception as e:
             self.logger.exception("Failed trying to end_exp_all")
         self.__check_toggle_post_button()
+        self.info_box.set_block_num(0)
         self.logger.debug("done")
 
     def __start_stop_exp(self):

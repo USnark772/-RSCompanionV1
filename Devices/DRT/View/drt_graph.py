@@ -23,6 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+from datetime import datetime, timedelta
 from numpy import mean
 from View.DisplayWidget.graph import CanvasObj
 
@@ -55,6 +56,8 @@ class DRTGraph(CanvasObj):
         data = self.__data[plot_name]
         # mean = self.__data[plot_name]['mean']
         lines = []
+        left = datetime.now()
+        right = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         for port in data:
             if show_in_legend:
                 the_label = port
@@ -62,6 +65,14 @@ class DRTGraph(CanvasObj):
                 the_label = "_nolegend_"
             line, = axes.plot(data[port][0], data[port][1], label=the_label, marker='o')
             lines.append((port, line))
+            if len(data[port][0]) > 0:
+                if right < data[port][0][-1]:
+                    right = data[port][0][-1]
+                if left > data[port][0][0]:
+                    left = data[port][0][0]
+        if left < right - timedelta(minutes=2):
+            left = right - timedelta(minutes=2)
+        axes.set_xlim(left=left - timedelta(seconds=10), right=right + timedelta(seconds=10))
         # line, = axes.plot(mean[0], mean[1], label='mean')
         # lines.append(("mean", line))
         self.logger.debug("done")

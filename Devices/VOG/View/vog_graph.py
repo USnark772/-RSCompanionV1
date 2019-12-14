@@ -23,6 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+from datetime import datetime, timedelta
 from numpy import mean
 from View.DisplayWidget.graph import CanvasObj
 
@@ -50,6 +51,8 @@ class VOGGraph(CanvasObj):
         """
         self.logger.debug("running")
         lines = []
+        left = datetime.now()
+        right = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         for port in self.__data:
             the_label_open = port + " open"
             the_label_closed = port + " closed"
@@ -59,6 +62,14 @@ class VOGGraph(CanvasObj):
                                label=the_label_closed, marker='s', linestyle='None')  # color=line1.get_color()
             lines.append((the_label_open, line1))
             lines.append((the_label_closed, line2))
+            if len(self.__data[port][0]) > 0:
+                if right < self.__data[port][0][-1]:
+                    right = self.__data[port][0][-1]
+                if left > self.__data[port][0][0]:
+                    left = self.__data[port][0][0]
+        if left < right - timedelta(minutes=2):
+            left = right - timedelta(minutes=2)
+        axes.set_xlim(left=left - timedelta(seconds=10), right=right + timedelta(seconds=10))
         # line, = axes.plot(self.__data['mean'][0], self.__data['mean'][1], label="mean")
         # lines.append(("mean", line))
         self.logger.debug("done")

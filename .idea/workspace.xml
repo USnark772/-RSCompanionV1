@@ -6,10 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/general_defs.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/general_defs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/View/drt_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/View/vog_graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/For_setup/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/For_setup/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/DisplayWidget/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/DisplayWidget/graph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/readme/changelog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme/changelog.txt" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +29,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1OhI0e1IvZpba2S7C2zBltvGmoB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="HOTFIX_customHotfixCommitMessage_text" value="Tagging hotfix %name%" />
@@ -48,18 +56,6 @@
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup\Build 0.4" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -177,6 +173,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -270,6 +278,32 @@
     <MESSAGE value="Saving is working but needs testing" />
     <MESSAGE value="Program now saves all data to one save file per experiment." />
     <option name="LAST_COMMIT_MESSAGE" value="Program now saves all data to one save file per experiment." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1899" height="211" key="GridCell.Tab.0.bottom" timestamp="1576350385564">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1899" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
+    <state width="1899" height="211" key="GridCell.Tab.0.center" timestamp="1576350385564">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1899" height="211" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
+    <state width="1899" height="211" key="GridCell.Tab.0.left" timestamp="1576350385564">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1899" height="211" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
+    <state width="1899" height="211" key="GridCell.Tab.0.right" timestamp="1576350385564">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1899" height="211" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
+    <state x="656" y="363" key="com.intellij.ide.util.TipDialog" timestamp="1576345620433">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="656" y="363" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1576345620433" />
+    <state x="601" y="265" width="700" height="530" key="recent.locations.popup" timestamp="1576348335298">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="601" y="265" width="700" height="530" key="recent.locations.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1576348335298" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

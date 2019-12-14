@@ -93,14 +93,14 @@ class CanvasObj(Canvas):
         self.figure.clear()
         self.figure.set_tight_layout(True)
         i = 0
-        for key in self.__plots:  # coords, name, active
-            plot = self.__plots[key]
-            lines[plot[1]] = []
-            if plot[2]:
+        for plot_name in self.__plots:  # coords, name, active
+            plot = self.__plots[plot_name]
+            lines[plot_name] = []
+            if plot[1]:
                 coords = plot[0]
                 axes = self.figure.add_subplot(coords[0], coords[1], coords[2])
                 axes.tick_params(axis='x', labelrotation=30)
-                axes.set_ylabel(plot[1])
+                axes.set_ylabel(plot_name)
                 if i == 0:
                     show_in_legend = True
                     axes.set_title(self.__title)
@@ -109,7 +109,7 @@ class CanvasObj(Canvas):
                 if i == len(self.__plots) - 1:
                     axes.set_xlabel("Timestamp")
                 if not new:
-                    lines[plot[1]] = self.__plotter(axes, plot[1], show_in_legend)
+                    lines[plot_name] = self.__plotter(axes, plot_name, show_in_legend)
             i += 1
         if not new:
             legend = self.figure.legend(loc='upper left', framealpha=0.4)
@@ -149,7 +149,7 @@ class CanvasObj(Canvas):
         r = len(self.__plot_names)
         c = 1
         for i in range(0, r):
-            self.__plots[self.__plot_names[i]] = [(r, c, i + 1), self.__plot_names[i], True]
+            self.__plots[self.__plot_names[i]] = [(r, c, i + 1), True]
         self.logger.debug("done")
 
     def __onpick(self, event):
