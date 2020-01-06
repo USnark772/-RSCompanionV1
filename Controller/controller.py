@@ -81,7 +81,7 @@ class CompanionController:
         if inierror:
             self.logger.debug("Error reading config.ini, logging level set to debug")
         self.logger.debug("Initializing")
-        ui_min_size = QSize(950, 550)
+        ui_min_size = QSize(950, 740)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
         info_box_size = QSize(230, 120)
@@ -332,7 +332,7 @@ class CompanionController:
         self.__add_break_in_graph_lines()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
-        self.__add_vert_lines_to_graphs()
+        # self.__add_vert_lines_to_graphs()
         self.logger.debug("done")
 
     def __stop_exp(self):

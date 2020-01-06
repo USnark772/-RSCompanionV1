@@ -4,7 +4,7 @@ TODO:
     -   Lots of error checking
     -   Debug everywhere
 -   Threading (some issues with UI lag)
-
+-   Resize main window to fit entire height of device output graph
 At some point
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
     Would we need to pass a reference to the device controller's respective function in?
