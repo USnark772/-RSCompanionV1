@@ -28,8 +28,8 @@ via the new Pythonic cv2 interface.  Press <esc> to quit.
 """
 
 import logging
-from PySide2.QtWidgets import *
-from PySide2.QtMultimedia import *
+from PySide2.QtWidgets import QErrorMessage
+from PySide2.QtMultimedia import QCamera, QCameraInfo
 from Devices.Camera.View.camera_viewer import CamViewer
 from Devices.Camera.View.camera_tab import CameraTab
 
@@ -77,7 +77,6 @@ class CameraController:
         return self.viewer.get_viewfinder()
 
     def change_camera(self):
-        print("Boom")
         self.logger.debug("running")
         index = self.__tab.get_cam_index()
         self.__get_camera(index)
