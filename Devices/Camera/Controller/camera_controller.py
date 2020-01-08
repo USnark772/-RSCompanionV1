@@ -28,12 +28,34 @@ via the new Pythonic cv2 interface.  Press <esc> to quit.
 """
 
 import logging
+import cv2
 from PySide2.QtWidgets import QErrorMessage
+from PySide2.QtCore import QThread, Qt
+from PySide2.QtGui import QImage
 from PySide2.QtMultimedia import QCamera, QCameraInfo
 from Devices.Camera.View.camera_viewer import CamViewer
 from Devices.Camera.View.camera_tab import CameraTab
 
+# TODO: Finish putting image into gui. This thread takes cv2 image and converts to Qt format then pushes to queue.
+# Taken from https://stackoverflow.com/questions/44404349/pyqt-showing-video-stream-from-opencv
+class Thread(QThread):
+    def __init__(self, cap, queue):
+        self.cap = cap
+        self.queue = queue
 
+    def run(self):
+        while True:
+            ret, frame = self.cap.read()
+            if ret:
+                rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                h, w, ch = rgbImage.shape
+                bytesPerLine = ch * w
+                convertToQtFormat = QImage(rgbImage.data, w, h, bytesPerLine, QImage.Format_RGB888)
+                p = convertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+                self.queue.put(p)
+
+
+# TODO: Change this to use cv2 instead of Qt camera stuff
 class CameraController:
     def __init__(self, tab_parent, ch):
         self.logger = logging.getLogger(__name__)

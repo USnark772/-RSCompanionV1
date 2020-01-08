@@ -1,12 +1,10 @@
 import cv2
-from traceback import print_stack
-
 
 index = 0
 cams = []
 while True:
-    cap = cv2.VideoCapture(index)
-    if not cap.read()[0]:
+    cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+    if cap is None or not cap.isOpened():
         break
     else:
         cams.append(cap)
@@ -22,5 +20,6 @@ while True:
         break
 
 # When everything done, release the capture
-cap.release()
+for a in cams:
+    a.release()
 cv2.destroyAllWindows()
