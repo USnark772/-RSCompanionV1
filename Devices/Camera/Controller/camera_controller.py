@@ -22,11 +22,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-"""
-Simply display the contents of the camera with optional mirroring using OpenCV 
-via the new Pythonic cv2 interface.  Press <esc> to quit.
-"""
-
 import logging
 import cv2
 from PySide2.QtWidgets import QErrorMessage
@@ -35,6 +30,9 @@ from PySide2.QtGui import QImage
 from PySide2.QtMultimedia import QCamera, QCameraInfo
 from Devices.Camera.View.camera_viewer import CamViewer
 from Devices.Camera.View.camera_tab import CameraTab
+
+# Use separate tabs for each camera. Use separate windows for each camera feed.
+# Save video feed separately for now.
 
 # TODO: Finish putting image into gui. This thread takes cv2 image and converts to Qt format then pushes to queue.
 # Taken from https://stackoverflow.com/questions/44404349/pyqt-showing-video-stream-from-opencv
@@ -70,7 +68,7 @@ class CameraController:
 
         self.current_cam_index = 0
         self.__get_camera(self.current_cam_index)
-        self.__tab = CameraTab(tab_parent)
+        self.__tab = CameraTab(tab_parent, name="Cameras")
         self.__update_tab_cam_list()
         self.__set_handlers()
         self.logger.debug("Initialized")

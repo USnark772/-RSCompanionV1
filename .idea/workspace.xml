@@ -7,6 +7,7 @@
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unused/Tests/opencv_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/opencv_tester.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -276,25 +277,25 @@
     <option name="LAST_COMMIT_MESSAGE" value="Program now saves all data to one save file per experiment." />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2539" height="211" key="GridCell.Tab.0.bottom" timestamp="1578443386756">
+    <state width="2539" height="211" key="GridCell.Tab.0.bottom" timestamp="1578511740078">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578443386756" />
+    <state width="2539" height="211" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
     <state width="1899" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="211" key="GridCell.Tab.0.center" timestamp="1578443386756">
+    <state width="2539" height="211" key="GridCell.Tab.0.center" timestamp="1578511740078">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578443386756" />
+    <state width="2539" height="211" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
     <state width="1899" height="211" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="211" key="GridCell.Tab.0.left" timestamp="1578443386755">
+    <state width="2539" height="211" key="GridCell.Tab.0.left" timestamp="1578511740078">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578443386755" />
+    <state width="2539" height="211" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
     <state width="1899" height="211" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="211" key="GridCell.Tab.0.right" timestamp="1578443386756">
+    <state width="2539" height="211" key="GridCell.Tab.0.right" timestamp="1578511740078">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578443386756" />
+    <state width="2539" height="211" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
     <state width="1899" height="211" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
     <state width="2539" height="356" key="GridCell.Tab.1.bottom" timestamp="1578440521680">
       <screen x="0" y="0" width="2560" height="1080" />

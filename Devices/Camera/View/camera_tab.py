@@ -28,8 +28,9 @@ from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
 
 class CameraTab(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, name=""):
         super().__init__(parent)
+        self.name = name
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
         self.setMaximumHeight(400)
@@ -48,8 +49,6 @@ class CameraTab(QWidget):
 
         self.layout().addWidget(EasyFrame(line=True))
 
-        """ Set upload button selection area. """
-        # TODO: Replace cam_selector_button with this.
         self.__upload_settings_button = ClickAnimationButton()
         self.layout().addWidget(self.__upload_settings_button)
 
@@ -61,7 +60,7 @@ class CameraTab(QWidget):
         self.__upload_settings_button.clicked.connect(func)
 
     def get_name(self):
-        return "Cameras"
+        return self.name
 
     def add_cam(self, cam_index):
         self.__cam_selector.addItem("")
