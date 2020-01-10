@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unused/Tests/opencv_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/opencv_tester.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,6 +54,27 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.opencv_tester">
+    <configuration name="PySerial_Tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/PySerial_Tester.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -97,7 +117,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="profiler" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="pyserial_tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -105,32 +125,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/profiler.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="testdictionary" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testdictionary.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/pyserial_tester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -163,10 +162,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.opencv_tester" />
+        <item itemvalue="Python.pyserial_tester" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.PySerial_Tester" />
         <item itemvalue="Python.webcam_tester" />
-        <item itemvalue="Python.testdictionary" />
-        <item itemvalue="Python.profiler" />
       </list>
     </recent_temporary>
   </component>
@@ -277,42 +276,42 @@
     <option name="LAST_COMMIT_MESSAGE" value="Program now saves all data to one save file per experiment." />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2539" height="211" key="GridCell.Tab.0.bottom" timestamp="1578511740078">
+    <state width="2539" height="356" key="GridCell.Tab.0.bottom" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
+    <state width="2539" height="356" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
     <state width="1899" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="211" key="GridCell.Tab.0.center" timestamp="1578511740078">
+    <state width="2539" height="356" key="GridCell.Tab.0.center" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
+    <state width="2539" height="356" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
     <state width="1899" height="211" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="211" key="GridCell.Tab.0.left" timestamp="1578511740078">
+    <state width="2539" height="356" key="GridCell.Tab.0.left" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
+    <state width="2539" height="356" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
     <state width="1899" height="211" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="211" key="GridCell.Tab.0.right" timestamp="1578511740078">
+    <state width="2539" height="356" key="GridCell.Tab.0.right" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="211" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578511740078" />
+    <state width="2539" height="356" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
     <state width="1899" height="211" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1576350385564" />
-    <state width="2539" height="356" key="GridCell.Tab.1.bottom" timestamp="1578440521680">
+    <state width="2539" height="356" key="GridCell.Tab.1.bottom" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.1.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578440521680" />
-    <state width="2539" height="356" key="GridCell.Tab.1.center" timestamp="1578440521680">
+    <state width="2539" height="356" key="GridCell.Tab.1.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="2539" height="356" key="GridCell.Tab.1.center" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.1.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578440521680" />
-    <state width="2539" height="356" key="GridCell.Tab.1.left" timestamp="1578440521680">
+    <state width="2539" height="356" key="GridCell.Tab.1.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="2539" height="356" key="GridCell.Tab.1.left" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.1.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578440521680" />
-    <state width="2539" height="356" key="GridCell.Tab.1.right" timestamp="1578440521680">
+    <state width="2539" height="356" key="GridCell.Tab.1.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="2539" height="356" key="GridCell.Tab.1.right" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.1.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578440521680" />
+    <state width="2539" height="356" key="GridCell.Tab.1.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
     <state x="781" y="183" key="SettingsEditor" timestamp="1578439423308">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
