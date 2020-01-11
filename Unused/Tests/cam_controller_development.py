@@ -8,6 +8,12 @@ from traceback import print_stack
 #  Likely need to use a lock around a shared resource.
 
 
+class CamObj:
+    def __init__(self, cap, name):
+        self.cap = cap
+        self.name = name
+
+
 class CamScanner(threading.Thread):
     def __init__(self, the_list):
         threading.Thread.__init__(self, daemon=True)
@@ -25,11 +31,10 @@ class CamScanner(threading.Thread):
             if cap is None or not cap.isOpened():
                 break
             else:
-                self.list.add_cam_to_list((cap, "Camera " + str(index), index))
+                self.list.add_cam_to_list(CamObj(cap, "Camera " + str(index)))
             index += 1
 
 
-# TODO: Fix the deadlocking between iterating and add/remove cams.
 class CameraList:
     def __init__(self):
         print("making read and write locks")
@@ -53,15 +58,29 @@ class CameraList:
             self.write_lock.release()
             self.read_lock.release()
 
-    def remove_cam_from_list(self, cam):
+    def update_list(self, list_to_remove):
         self.read_lock.acquire()
         self.write_lock.acquire()
         try:
-            self.__release_cam(cam)
-            self.__cams.remove(cam)
+            for cam in list_to_remove:
+                self.__remove_cam_from_list(cam)
         finally:
             self.write_lock.release()
             self.read_lock.release()
+
+    def empty_cam_list(self):
+        self.read_lock.acquire()
+        self.write_lock.acquire()
+        try:
+            for cam in self.__cams:
+                self.__remove_cam_from_list(cam)
+        finally:
+            self.write_lock.release()
+            self.read_lock.release()
+
+    def __remove_cam_from_list(self, cam):
+        self.__release_cam(cam)
+        self.__cams.remove(cam)
 
     def iterate_cams(self):
         self.read_lock.acquire()
@@ -73,8 +92,8 @@ class CameraList:
 
     @staticmethod
     def __release_cam(cam):
-        cv2.destroyWindow(cam[1])
-        cam[0].release()
+        cam.cap.release()
+        cv2.destroyWindow(cam.name)
 
 
 class CameraManager:
@@ -83,17 +102,19 @@ class CameraManager:
         self.cam_scanner = CamScanner(self.cam_list)
         self.cam_scanner.start()
 
-    def release_all_cams(self):
-        for cam in self.cam_list.iterate_cams():
-            self.cam_list.remove_cam_from_list(cam)
+    def cleanup(self):
+        self.cam_list.empty_cam_list()
 
     def refresh_all_cams(self):
+        to_remove = []
         for cam in self.cam_list.iterate_cams():
-            ret, frame = cam[0].read()
+            ret, frame = cam.cap.read()
             if ret:
-                cv2.imshow(cam[1], frame)
+                cv2.imshow(cam.name, frame)
             else:
-                self.cam_list.remove_cam_from_list(cam)
+                to_remove.append(cam)
+        if len(to_remove) > 0:
+            self.cam_list.update_list(to_remove)
 
 
 def main():
@@ -104,7 +125,7 @@ def main():
         if keypress == ord('q'):
             break
     # When everything done, release the capture
-    cam_man.release_all_cams()
+    cam_man.cleanup()
 
 
 main()

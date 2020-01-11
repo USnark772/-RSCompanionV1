@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Program now saves all data to one save file per experiment.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/OpenCV_Testing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/opencv_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unused/Tests/webcam_tester.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,25 +279,29 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1578766265893" />
-    <state width="1899" height="211" key="GridCell.Tab.0.bottom" timestamp="1578768418118">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1348" height="170" key="GridCell.Tab.0.bottom" timestamp="1578783320077">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="1348" height="170" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
     <state width="1899" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="1899" height="211" key="GridCell.Tab.0.center" timestamp="1578768418118">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1348" height="170" key="GridCell.Tab.0.center" timestamp="1578783320077">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="1348" height="170" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
     <state width="1899" height="211" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="1899" height="211" key="GridCell.Tab.0.left" timestamp="1578768418118">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1348" height="170" key="GridCell.Tab.0.left" timestamp="1578783320077">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="1348" height="170" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
     <state width="1899" height="211" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="1899" height="211" key="GridCell.Tab.0.right" timestamp="1578768418118">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1348" height="170" key="GridCell.Tab.0.right" timestamp="1578783320077">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="1348" height="170" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
     <state width="1899" height="211" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
     <state width="2539" height="356" key="GridCell.Tab.1.bottom" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />
