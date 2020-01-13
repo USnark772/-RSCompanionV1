@@ -4,8 +4,12 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Program now saves all data to one save file per experiment.">
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller_old.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_viewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,62 +43,20 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\config" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Controller" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\readme" />
-      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\OldCode" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup\Build 0.5" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup\Build 0.4" />
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Devices\Camera\Controller" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\config" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\Controller" />
+      <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\readme" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python.cam_controller_development (1)">
-    <configuration name="Threading_tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/Threading_tester.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="cam_controller_development (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.main">
     <configuration name="cam_controller_development" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -107,7 +69,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\Tests\cam_controller_development.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -137,34 +99,14 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pyserial_tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/pyserial_tester.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+    <list>
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.cam_controller_development" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.cam_controller_development (1)" />
-        <item itemvalue="Python.Threading_tester" />
-        <item itemvalue="Python.cam_controller_development" />
-        <item itemvalue="Python.pyserial_tester" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.cam_controller_development" />
       </list>
     </recent_temporary>
   </component>
@@ -247,7 +189,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574735361804</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Working prototype for handling camera plug/unplug events.">
+      <created>1578783730639</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1578783730639</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -272,36 +221,43 @@
     <MESSAGE value="." />
     <MESSAGE value="Saving is working but needs testing" />
     <MESSAGE value="Program now saves all data to one save file per experiment." />
-    <option name="LAST_COMMIT_MESSAGE" value="Program now saves all data to one save file per experiment." />
+    <MESSAGE value="Working prototype for handling camera plug/unplug events." />
+    <option name="LAST_COMMIT_MESSAGE" value="Working prototype for handling camera plug/unplug events." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1578766265893">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
+    <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578938648124" />
+    <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1368.912@0.0.1368.912" timestamp="1578928378101" />
+    <state x="380" y="102" key="CommitChangelistDialog2" timestamp="1578783729584">
+      <screen x="0" y="0" width="1368" height="912" />
+    </state>
+    <state x="380" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1578783729584" />
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1578766265893" />
-    <state width="1348" height="170" key="GridCell.Tab.0.bottom" timestamp="1578783320077">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="2539" height="170" key="GridCell.Tab.0.bottom" timestamp="1578943199119">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="1348" height="170" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
+    <state width="2539" height="170" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
+    <state width="1348" height="170" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
     <state width="1899" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="1348" height="170" key="GridCell.Tab.0.center" timestamp="1578783320077">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="2539" height="170" key="GridCell.Tab.0.center" timestamp="1578943199119">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="1348" height="170" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
+    <state width="2539" height="170" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
+    <state width="1348" height="170" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
     <state width="1899" height="211" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="1348" height="170" key="GridCell.Tab.0.left" timestamp="1578783320077">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="2539" height="170" key="GridCell.Tab.0.left" timestamp="1578943199119">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="1348" height="170" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
+    <state width="2539" height="170" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
+    <state width="1348" height="170" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
     <state width="1899" height="211" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="1348" height="170" key="GridCell.Tab.0.right" timestamp="1578783320077">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="2539" height="170" key="GridCell.Tab.0.right" timestamp="1578943199119">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="356" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="1348" height="170" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1578783320077" />
+    <state width="2539" height="170" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
+    <state width="1348" height="170" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
     <state width="1899" height="211" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
     <state width="2539" height="356" key="GridCell.Tab.1.bottom" timestamp="1578619468382">
       <screen x="0" y="0" width="2560" height="1080" />

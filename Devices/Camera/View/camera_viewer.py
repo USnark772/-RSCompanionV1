@@ -17,26 +17,27 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Date: 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-"""
-Simply display the contents of the camera with optional mirroring using OpenCV 
-via the new Pythonic cv2 interface.  Press <esc> to quit.
-"""
 
-from PySide2.QtWidgets import QWidget
-from PySide2.QtMultimediaWidgets import QCameraViewfinder
+from PySide2.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PySide2.QtGui import QPixmap
 
 
-# TODO: Turn this into a framed widget for placement into graph_box
 class CamViewer(QWidget):
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
-        self.cam_view = QCameraViewfinder()
-        #self.cam_view.show()
+        self.resize(400, 200)
+        self.move(100, 100)
+        self.setWindowTitle(name)
+        self.setLayout(QVBoxLayout())
+        self.image_display = QLabel()
+        self.image_display.resize(640, 480)
+        self.layout().addWidget(self.image_display)
+        self.show()
 
-    def get_viewfinder(self):
-        return self.cam_view
+    def set_image(self, frame):
+        self.image_display.setPixmap(QPixmap.fromImage(frame))

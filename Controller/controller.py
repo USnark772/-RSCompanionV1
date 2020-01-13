@@ -525,7 +525,7 @@ class CompanionController:
             return
         self.__device_controllers["cameras"] = controller
         self.tab_box.add_tab(self.__device_controllers["cameras"].get_tab_obj(), "cameras")
-        self.graph_box.add_display(self.__device_controllers["cameras"].get_viewer())
+        # self.graph_box.add_display(self.__device_controllers["cameras"].get_viewer())
         self.logger.debug("done")
 
     ########################################################################################
