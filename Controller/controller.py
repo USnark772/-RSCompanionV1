@@ -547,6 +547,7 @@ class CompanionController:
                     controller.end_exp()
             except Exception as e:
                 self.logger.exception("Failed to end_exp_all")
+        self.__device_controllers["cameras"].cleanup()
         self.log_output.close()
         self.logger.debug("done")
 

@@ -23,14 +23,73 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import cv2
-import threading
 import logging
-from PySide2.QtCore import Qt, QThread, QObject, Signal, Slot
-from PySide2.QtGui import QImage
+from numpy import ndarray
+from PySide2.QtCore import QThread, QObject, Signal, QMutex
 from Devices.Camera.View.camera_tab import CameraTab
 from CompanionLib.companion_helpers import get_current_time
-from Devices.Camera.View.camera_viewer import CamViewer
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
+# TODO: Add logging to this file
+
+
+class CamScanner(QThread):
+    def __init__(self, counter):
+        QThread.__init__(self)
+        self.signal = ScannerSig()
+        self.cam_counter = counter
+        self.running = True
+
+    # Try to connect new cam from latest index and up
+    def run(self):
+        while self.running:
+            self.check_for_cams(self.get_index())
+
+    def get_index(self):
+        self.cam_counter.get_lock()
+        i = self.cam_counter.get_count()
+        self.cam_counter.release_lock()
+        return i
+
+    def check_for_cams(self, index=0):
+        while True:
+            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            if cap is None or not cap.isOpened():
+                break
+            else:
+                cam_obj = CamObj(cap, "Camera " + str(index))
+                self.increment_cam_count()
+                self.signal.sig.emit(cam_obj)
+            index += 1
+
+    def increment_cam_count(self):
+        self.cam_counter.get_lock()
+        self.cam_counter.increment_count()
+        self.cam_counter.release_lock()
+
+
+class CamWorker(QThread):
+    def __init__(self, cam, cam_counter):
+        QThread.__init__(self)
+        self.signal = WorkerSig()
+        self.cam = cam
+        self.cam_counter = cam_counter
+        self.running = True
+
+    def run(self):
+        while self.running:
+            ret, frame = self.cam.read_camera()
+            if ret:
+                self.signal.new_frame_sig.emit(self.cam, frame)
+            else:
+                # Error with read_camera() due to lost camera connection
+                self.cleanup()
+                break
+
+    def cleanup(self):
+        self.cam_counter.get_lock()
+        self.cam_counter.decrement_count()
+        self.cam_counter.release_lock()
+        self.signal.cleanup_sig.emit(self.cam)
 
 
 class CamObj:
@@ -38,7 +97,6 @@ class CamObj:
         self.cap = cap
         self.name = name
         self.writer = None
-        self.window = CamViewer(self.name)
 
     def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=20, frame_size=(640, 480), codec='DIVX'):
         self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
@@ -49,18 +107,8 @@ class CamObj:
             self.writer.release()
             self.writer = None
 
-    def get_data(self):
+    def read_camera(self):
         return self.cap.read()
-
-    def show_data(self, frame):
-        rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        h, w, ch = rgb_image.shape
-        bytes_per_line = ch * w
-        convert_to_qt_format = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format_RGB888)
-        image = convert_to_qt_format.scaled(640, 480, Qt.KeepAspectRatio)
-        print("setting image")
-        self.window.set_image(image)
-        print("Done setting image")
 
     def save_data(self, frame):
         if self.writer:
@@ -72,152 +120,82 @@ class CamObj:
         cv2.destroyWindow(self.name)
 
 
-class CamScanner(QThread):
-    def __init__(self, the_list):
-        QThread.__init__(self)
-        self.list = the_list
-
-    # Try to connect new cam from latest index and up
-    def run(self):
-        while True:
-            i = self.list.get_num_cams()
-            self.check_for_cams(i)
-            print("scanner thread Sleeping")
-            self.sleep(10)
-            print("scanner thread Done sleeping")
-
-    def check_for_cams(self, index=0):
-        while True:
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-            if cap is None or not cap.isOpened():
-                break
-            else:
-                self.list.add_cam_to_list(CamObj(cap, "Camera " + str(index)))
-            index += 1
+class ScannerSig(QObject):
+    sig = Signal(CamObj)
 
 
-class CameraList:
+class WorkerSig(QObject):
+    new_frame_sig = Signal((CamObj, ndarray))
+    cleanup_sig = Signal(CamObj)
+
+
+class CamCounter:
     def __init__(self):
-        self.write_lock = threading.Lock()
-        self.read_lock = threading.Lock()
-        self.__cams = []
+        self.lock = QMutex()
+        self.count = 0
 
-    def get_num_cams(self):
-        self.read_lock.acquire()
-        try:
-            return len(self.__cams)
-        finally:
-            self.read_lock.release()
+    def get_lock(self):
+        self.lock.lock()
 
-    def add_cam_to_list(self, cam):
-        self.read_lock.acquire()
-        self.write_lock.acquire()
-        try:
-            self.__cams.append(cam)
-        finally:
-            self.write_lock.release()
-            self.read_lock.release()
+    def release_lock(self):
+        self.lock.unlock()
 
-    def remove_cams(self, cams_to_remove):
-        self.read_lock.acquire()
-        self.write_lock.acquire()
-        try:
-            for cam in cams_to_remove:
-                self.__remove_cam_from_list(cam)
-        finally:
-            self.write_lock.release()
-            self.read_lock.release()
+    def get_count(self):
+        return self.count
 
-    def empty_cam_list(self):
-        self.read_lock.acquire()
-        self.write_lock.acquire()
-        try:
-            for cam in self.__cams:
-                self.__remove_cam_from_list(cam)
-        finally:
-            self.write_lock.release()
-            self.read_lock.release()
+    def increment_count(self):
+        self.count += 1
 
-    def __remove_cam_from_list(self, cam):
-        self.__release_cam(cam)
-        self.__cams.remove(cam)
-
-    def iterate_cams(self):
-        self.read_lock.acquire()
-        try:
-            for cam in self.__cams:
-                yield cam
-        finally:
-            self.read_lock.release()
-
-    @staticmethod
-    def __release_cam(cam):
-        cam.release()
+    def decrement_count(self):
+        self.count -= 1
 
 
-class CameraManager:
+class CamMan:
     def __init__(self):
-        self.cam_list = CameraList()
-        self.cam_scanner = CamScanner(self.cam_list)
-        self.cam_refresher = CamRefresher(self.refresh_all_cams)
-        self.cam_scanner.start()
-        self.cam_refresher.start()
-        self.vid_writer = cv2.VideoWriter()
-        self.saving = False
-
-    def setup_savers(self, timestamp, save_dir='', vid_ext='.avi', fps=20, frame_size=(640, 480), codec='DIVX'):
-        for cam in self.cam_list.iterate_cams():
-            cam.setup_writer(timestamp, save_dir=save_dir, vid_ext=vid_ext, fps=fps, frame_size=frame_size, codec=codec)
-
-    def destroy_savers(self):
-        for cam in self.cam_list.iterate_cams():
-            cam.destroy_writer()
-
-    def set_saving(self, new_val):
-        self.saving = new_val
+        self.cam_list = []
+        self.worker_thread_list = []
+        self.cam_counter = CamCounter()
+        self.scanner_thread = CamScanner(self.cam_counter)
+        self.scanner_thread.signal.sig.connect(self.handle_new_camera)
+        self.scanner_thread.start()
 
     def cleanup(self):
-        self.cam_list.empty_cam_list()
+        self.scanner_thread.running = False
+        self.scanner_thread.wait()
+        for worker in self.worker_thread_list:
+            worker.running = False
+            worker.wait()
+        for cam in self.cam_list:
+            cam.release()
 
-    def controller_callback(self, cam):
-        self.cam_list.remove_cams([cam])
+    def handle_new_camera(self, cam_obj):
+        self.cam_list.append(cam_obj)
+        new_worker = CamWorker(cam_obj, self.cam_counter)
+        new_worker.signal.new_frame_sig.connect(self.handle_new_frame)
+        new_worker.signal.cleanup_sig.connect(self.cleanup_cam_obj)
+        new_worker.start()
+        self.worker_thread_list.append(new_worker)
 
-    def refresh_all_cams(self):
-        to_remove = []
-        print("In refresh all cams")
-        for cam in self.cam_list.iterate_cams():
-            print("getting ret, frame")
-            ret, frame = cam.get_data()
-            if ret:
-                print("doing cam.show_data(frame)")
-                cam.show_data(frame)
-                if self.saving:
-                    cam.save_data(frame)
-            else:
-                to_remove.append(cam)
-        if len(to_remove) > 0:
-            self.cam_list.remove_cams(to_remove)
+    def cleanup_cam_obj(self, cam_obj):
+        self.cam_list.remove(cam_obj)
+        cam_obj.release()
+        del cam_obj
 
+    def start_recording(self, timestamp, save_dir):
+        for cam in self.cam_list:
+            cam.setup_writer(timestamp, save_dir=save_dir)
 
-class Communicator(QObject):
-    signal_image = Signal(QImage)
+    def stop_recording(self):
+        for cam in self.cam_list:
+            cam.destroy_writer()
 
-
-class CamRefresher(QThread):
-    def __init__(self, func):
-        QThread.__init__(self)
-        self.signals = Communicator()
-        self.to_run = func
-        #self.signals.signal_image.connect()
-
-    def run(self):
-        while True:
-            self.to_run()
-            print("refresher thread Sleeping")
-            self.sleep(100)
-            print("refresher thread Done sleeping")
+    @staticmethod
+    def handle_new_frame(cam_obj, frame):
+        cv2.imshow(cam_obj.name, frame)
+        cam_obj.save_data(frame)
 
 
+# TODO: Pipe save directory name through to here somehow.
 class CameraController:
     def __init__(self, tab_parent, ch):
         self.logger = logging.getLogger(__name__)
@@ -226,9 +204,13 @@ class CameraController:
         self.tab_parent = tab_parent
         self.__tab = CameraTab(tab_parent, name="Cameras")
         self.save_dir = 'C:/Users/phill/Companion App Save Folder/'
-        self.cam_man = CameraManager()
+        self.cam_man = CamMan()
+
+    def cleanup(self):
+        self.cam_man.cleanup()
 
     def create_new_save_file(self, new_filename):
+        """ Required function for all device controllers. """
         pass
 
     def start_exp(self):
@@ -240,33 +222,10 @@ class CameraController:
         pass
 
     def start_block(self):
-        self.cam_man.setup_savers(timestamp=get_current_time(save=True), save_dir=self.save_dir)
-        self.cam_man.set_saving(True)
+        self.cam_man.start_recording(timestamp=get_current_time(save=True), save_dir=self.save_dir)
 
     def end_block(self):
-        self.cam_man.set_saving(False)
-        self.cam_man.destroy_savers()
+        self.cam_man.stop_recording()
 
     def get_tab_obj(self):
         return self.__tab
-
-'''
-def main():
-    cam_man = CameraManager()
-    while True:
-        cam_man.refresh_all_cams()
-        keypress = cv2.waitKey(1) & 0xFF
-        if keypress == ord('q'):
-            break
-        elif keypress == ord('s'):
-            cam_man.setup_savers(get_current_time(save=True))
-            cam_man.set_saving(True)
-        elif keypress == ord('d'):
-            cam_man.set_saving(False)
-            cam_man.destroy_savers()
-    # When everything done, release the capture
-    cam_man.cleanup()
-
-
-main()
-'''

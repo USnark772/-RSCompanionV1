@@ -40,7 +40,8 @@ from serial.tools import list_ports
 from Model.general_defs import devices
 
 
-# TODO: Try threading each device connection.
+# TODO: Try threading each device connection. Maybe use signals to add/remove devices and get data from devices instead
+#  of a timer.
 class PortMonitor(threading.Thread):
     def __init__(self, port, devices_list, lock):
         threading.Thread.__init__(self, daemon=True)

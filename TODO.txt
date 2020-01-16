@@ -1,53 +1,31 @@
-TODO:
--   Comments everywhere
--   Logging everywhere
-    -   Lots of error checking
-    -   Debug everywhere
--   Threading (some issues with UI lag)
-
-At some point
--   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
-    Would we need to pass a reference to the device controller's respective function in?
+To deal with at some point:
 -   Change output path to fixed and user can change it if desired but doesn't need to.
 -   Give program a folder in user space instead of program files space and place config file in there.
-
-After launch:
--   IGNORE Fix time on charts and output files so that it matches the time shown in users computers.
--   IGNORE Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
--   Video integration (OpenCV? Might have some fps issues, some talk about using pygame.)
-    Seems to have trouble accessing USB camera. Uses builtin webcams just fine. Need to do more searching.
-    It seems Qt5 has a good implementation so far. Preliminary research shows there is a way to overlay. Consider using
-    https://developer.ridgerun.com/wiki/index.php?title=Gstreamer_QT_Overlay for overlay but do more research.
+-   Fix time on charts and output files so that it matches the time shown in users computers.
+-   Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
 -   GPS integration
+-   Possibly use numpy for internal data storage.
+-   Design good way to calculate mean of each data type
+    -   Let user set the bounds of the mean
+-   When scrolling, the graphs move in their canvasas
+-   Some unexplained issues with ui sizing (Has to do with screen scaling)
+
+In progress:
+-   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
+    Would we need to pass a reference to the device controller's respective function in?
+
+Dealt with:
+-   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
+    Using GPL 3.0 or later at this time.
+-   Check for updates is not working. (Solution: Make sure repo is public)
 
 Updater:
 -   Automatically download latest version at users request
 -   Automatically check for updates at startup if user selects that option
 
-Installer: Inno Setup
--   DONE Make sure installer installs over previous versions of Companion app
-
 Video:
 -   Begin exp starts recording video. Device overlay is recorded with the video
     Device output will add a frame # for when that device output came in
-    Consider OpenCV python module
-    Video output will be all one video file with possibly multiple video feeds.
-    Try for multiple feeds at the same time.
-
-Graphing:
--   Design good way to calculate mean of each data type (don't worry about this for now)
-    -   Let user set the bounds of the mean
-    -   Put graph controls below each graph
-
-TODO: fix these issues
--   Check for updates is not working again. Possibly due to repository being private (fixed, repo was private)
--   When scrolling, the graphs move in their canvasas (don't worry about this for now)
--   Some unexplained issues with ui sizing (Has to do with screen scaling) (don't worry about this for now)
-
-At some point:
--   Possibly use numpy for internal data storage. (don't worry about this for now)
--   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
-    Using GPL 3.0 or later at this time.
 
 to get stack trace
 -   from traceback import print_stack

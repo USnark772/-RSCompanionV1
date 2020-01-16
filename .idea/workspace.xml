@@ -4,12 +4,15 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller_old.py" afterDir="false" />
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Integrated threaded cameras into app">
+      <change afterPath="$PROJECT_DIR$/Devices/device_controller.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/signal_slot_example.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_viewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller_old.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,6 +81,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="cam_threading_development" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/cam_threading_development.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,14 +123,62 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="quick_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/quick_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="signal_slot_example" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\Tests\signal_slot_example.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.main" />
       <item itemvalue="Python.cam_controller_development" />
+      <item itemvalue="Python.cam_threading_development" />
+      <item itemvalue="Python.quick_test" />
+      <item itemvalue="Python.signal_slot_example" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
         <item itemvalue="Python.cam_controller_development" />
+        <item itemvalue="Python.quick_test" />
+        <item itemvalue="Python.signal_slot_example" />
+        <item itemvalue="Python.cam_threading_development" />
       </list>
     </recent_temporary>
   </component>
@@ -196,7 +268,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578783730639</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Working on threading for cameras.">
+      <created>1578943290400</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1578943290400</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -222,7 +301,8 @@
     <MESSAGE value="Saving is working but needs testing" />
     <MESSAGE value="Program now saves all data to one save file per experiment." />
     <MESSAGE value="Working prototype for handling camera plug/unplug events." />
-    <option name="LAST_COMMIT_MESSAGE" value="Working prototype for handling camera plug/unplug events." />
+    <MESSAGE value="Working on threading for cameras." />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on threading for cameras." />
   </component>
   <component name="WindowStateProjectService">
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
@@ -230,64 +310,77 @@
     </state>
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578938648124" />
     <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1368.912@0.0.1368.912" timestamp="1578928378101" />
-    <state x="380" y="102" key="CommitChangelistDialog2" timestamp="1578783729584">
+    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1579144452733">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943289402" />
+    <state x="380" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1578783729584" />
+    <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1579144452733" />
+    <state width="1899" height="210" key="GridCell.Tab.0.bottom" timestamp="1579144687845">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="2539" height="170" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1348" height="170" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
+    <state width="1899" height="210" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687845" />
+    <state width="1899" height="210" key="GridCell.Tab.0.center" timestamp="1579144687844">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="2539" height="170" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1348" height="170" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
+    <state width="1899" height="210" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687844" />
+    <state width="1899" height="210" key="GridCell.Tab.0.left" timestamp="1579144687844">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="2539" height="170" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1348" height="170" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
+    <state width="1899" height="210" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687844" />
+    <state width="1899" height="210" key="GridCell.Tab.0.right" timestamp="1579144687844">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="2539" height="170" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1348" height="170" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
+    <state width="1899" height="210" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687844" />
+    <state width="1348" height="290" key="GridCell.Tab.1.bottom" timestamp="1579119135849">
       <screen x="0" y="0" width="1368" height="912" />
     </state>
-    <state x="380" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1578783729584" />
-    <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1578766265893" />
-    <state width="2539" height="170" key="GridCell.Tab.0.bottom" timestamp="1578943199119">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
-    <state width="2539" height="170" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
-    <state width="1348" height="170" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
-    <state width="1899" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="2539" height="170" key="GridCell.Tab.0.center" timestamp="1578943199119">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
-    <state width="2539" height="170" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
-    <state width="1348" height="170" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
-    <state width="1899" height="211" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="2539" height="170" key="GridCell.Tab.0.left" timestamp="1578943199119">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
-    <state width="2539" height="170" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
-    <state width="1348" height="170" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
-    <state width="1899" height="211" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="2539" height="170" key="GridCell.Tab.0.right" timestamp="1578943199119">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
-    <state width="2539" height="170" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943199119" />
-    <state width="1348" height="170" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1578928784412" />
-    <state width="1899" height="211" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1578768418118" />
-    <state width="2539" height="356" key="GridCell.Tab.1.bottom" timestamp="1578619468382">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
     <state width="2539" height="356" key="GridCell.Tab.1.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="2539" height="356" key="GridCell.Tab.1.center" timestamp="1578619468382">
-      <screen x="0" y="0" width="2560" height="1080" />
+    <state width="1348" height="290" key="GridCell.Tab.1.bottom/0.0.1368.912@0.0.1368.912" timestamp="1579119135849" />
+    <state width="1899" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
+    <state width="1348" height="290" key="GridCell.Tab.1.center" timestamp="1579119135849">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.1.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="2539" height="356" key="GridCell.Tab.1.left" timestamp="1578619468382">
-      <screen x="0" y="0" width="2560" height="1080" />
+    <state width="1348" height="290" key="GridCell.Tab.1.center/0.0.1368.912@0.0.1368.912" timestamp="1579119135849" />
+    <state width="1899" height="356" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
+    <state width="1348" height="290" key="GridCell.Tab.1.left" timestamp="1579119135849">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.1.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
-    <state width="2539" height="356" key="GridCell.Tab.1.right" timestamp="1578619468382">
-      <screen x="0" y="0" width="2560" height="1080" />
+    <state width="1348" height="290" key="GridCell.Tab.1.left/0.0.1368.912@0.0.1368.912" timestamp="1579119135849" />
+    <state width="1899" height="356" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
+    <state width="1348" height="290" key="GridCell.Tab.1.right" timestamp="1579119135849">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state width="2539" height="356" key="GridCell.Tab.1.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578619468382" />
+    <state width="1348" height="290" key="GridCell.Tab.1.right/0.0.1368.912@0.0.1368.912" timestamp="1579119135849" />
+    <state width="1899" height="356" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
     <state x="586" y="183" key="SettingsEditor" timestamp="1578762104673">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="781" y="183" key="SettingsEditor/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578439423308" />
     <state x="586" y="183" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1578762104673" />
+    <state x="872" y="274" key="Vcs.Push.Dialog.v2" timestamp="1578943295777">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="872" y="274" key="Vcs.Push.Dialog.v2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943295777" />
     <state x="656" y="363" key="com.intellij.ide.util.TipDialog" timestamp="1576345620433">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="656" y="363" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1576345620433" />
-    <state x="601" y="265" width="700" height="530" key="recent.locations.popup" timestamp="1576348335298">
+    <state x="601" y="265" width="700" height="530" key="recent.locations.popup" timestamp="1579144222204">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="601" y="265" width="700" height="530" key="recent.locations.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1576348335298" />
+    <state x="601" y="265" width="700" height="530" key="recent.locations.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1579144222204" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
