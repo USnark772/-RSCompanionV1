@@ -67,7 +67,7 @@ class CompanionController:
         except configparser.NoSectionError as e:
             logginglevel = logging.DEBUG
             inierror = True
-        logging.basicConfig(filename=self.__setup_output_file("companion_app_log.txt"), filemode='w',
+        logging.basicConfig(filename=self.__setup_log_output_file("companion_app_log.txt"), filemode='w',
                             level=logginglevel, format='%(levelname)s - %(name)s - %(funcName)s: %(message)s')
         self.logger = logging.getLogger(__name__)
 
@@ -113,6 +113,7 @@ class CompanionController:
         self.__current_cond_name = ""
         self.__device_controllers = dict()
         self.__save_file_name = ""
+        self.__save_dir = ""
         self.__device_spacers = dict()
 
         # Assemble View objects
@@ -261,7 +262,6 @@ class CompanionController:
             self.logger.debug("creating experiment")
             if not self.__get_save_file_name():
                 self.logger.debug("no save directory selected, done running __create_end_exp()")
-                print("Failed")
                 return
             self.__create_exp()
             self.logger.debug("done")
@@ -278,6 +278,7 @@ class CompanionController:
         self.device_manager.set_check_for_updates(False)
         self.__add_hdr_to_output()
         devices_running = list()
+        self.__send_dir_name_to_cameras()
         try:
             for controller in self.__device_controllers.values():
                 controller.start_exp()
@@ -368,6 +369,9 @@ class CompanionController:
             self.note_box.toggle_post_button(False)
         self.logger.debug("done")
 
+    def __send_dir_name_to_cameras(self):
+        self.__device_controllers["cameras"].create_new_save_file(self.__save_dir)
+
     ########################################################################################
     # Data saving
     ########################################################################################
@@ -393,7 +397,16 @@ class CompanionController:
 
     def __get_save_file_name(self):
         self.__save_file_name = self.file_dialog.getSaveFileName(filter="*.txt")[0]
-        return len(self.__save_file_name) > 1
+        valid = len(self.__save_file_name) > 1
+        if valid:
+            self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
+        return valid
+
+    @staticmethod
+    def __get_save_dir_from_file_name(file_name):
+        end_index = file_name.rfind('/')
+        dir_name = file_name[:end_index + 1]
+        return dir_name
 
     def __check_for_updates_handler(self):
         """ Ask VersionChecker if there is an update then alert user to result. """
@@ -420,9 +433,9 @@ class CompanionController:
         write_line_to_file(self.__save_file_name, line, new=True)
 
     @staticmethod
-    def __setup_output_file(filename):
+    def __setup_log_output_file(file_name):
         """ Create program output file to save log. """
-        fname = gettempdir() + "\\" + filename
+        fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
         return fname

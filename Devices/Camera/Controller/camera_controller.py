@@ -27,8 +27,11 @@ import logging
 from numpy import ndarray
 from PySide2.QtCore import QThread, QObject, Signal, QMutex
 from Devices.Camera.View.camera_tab import CameraTab
+from Devices.abc_device_controller import ABCDeviceController
 from CompanionLib.companion_helpers import get_current_time
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
+
+# TODO: Add tab per camera?
 # TODO: Add logging to this file
 
 
@@ -58,7 +61,7 @@ class CamScanner(QThread):
             else:
                 cam_obj = CamObj(cap, "Camera " + str(index))
                 self.increment_cam_count()
-                self.signal.sig.emit(cam_obj)
+                self.signal.new_cam_sig.emit(cam_obj)
             index += 1
 
     def increment_cam_count(self):
@@ -114,14 +117,14 @@ class CamObj:
         if self.writer:
             self.writer.write(frame)
 
-    def release(self):
+    def cleanup(self):
         self.cap.release()
         self.destroy_writer()
         cv2.destroyWindow(self.name)
 
 
 class ScannerSig(QObject):
-    sig = Signal(CamObj)
+    new_cam_sig = Signal(CamObj)
 
 
 class WorkerSig(QObject):
@@ -156,7 +159,7 @@ class CamMan:
         self.worker_thread_list = []
         self.cam_counter = CamCounter()
         self.scanner_thread = CamScanner(self.cam_counter)
-        self.scanner_thread.signal.sig.connect(self.handle_new_camera)
+        self.scanner_thread.signal.new_cam_sig.connect(self.handle_new_camera)
         self.scanner_thread.start()
 
     def cleanup(self):
@@ -166,7 +169,7 @@ class CamMan:
             worker.running = False
             worker.wait()
         for cam in self.cam_list:
-            cam.release()
+            cam.cleanup()
 
     def handle_new_camera(self, cam_obj):
         self.cam_list.append(cam_obj)
@@ -176,10 +179,10 @@ class CamMan:
         new_worker.start()
         self.worker_thread_list.append(new_worker)
 
-    def cleanup_cam_obj(self, cam_obj):
-        self.cam_list.remove(cam_obj)
-        cam_obj.release()
-        del cam_obj
+    def cleanup_cam_obj(self, cam):
+        self.cam_list.remove(cam)
+        cam.cleanup()
+        del cam
 
     def start_recording(self, timestamp, save_dir):
         for cam in self.cam_list:
@@ -195,37 +198,26 @@ class CamMan:
         cam_obj.save_data(frame)
 
 
-# TODO: Pipe save directory name through to here somehow.
-class CameraController:
+# TODO: Pipe save directory name through to here somehow or figure out if this is not the right structure.
+#  Maybe CamMan is the controller and CameraController is more like device manager?
+class CameraController(ABCDeviceController):
     def __init__(self, tab_parent, ch):
+        tab = CameraTab(tab_parent, name="Cameras")
+        super().__init__(tab)
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
-        self.tab_parent = tab_parent
-        self.__tab = CameraTab(tab_parent, name="Cameras")
-        self.save_dir = 'C:/Users/phill/Companion App Save Folder/'
+        self.save_dir = ''
         self.cam_man = CamMan()
 
     def cleanup(self):
         self.cam_man.cleanup()
 
     def create_new_save_file(self, new_filename):
-        """ Required function for all device controllers. """
-        pass
+        self.save_dir = new_filename
 
     def start_exp(self):
-        """ Required function for all device controllers. """
-        pass
-
-    def end_exp(self):
-        """ Required function for all device controllers. """
-        pass
-
-    def start_block(self):
         self.cam_man.start_recording(timestamp=get_current_time(save=True), save_dir=self.save_dir)
 
-    def end_block(self):
+    def end_exp(self):
         self.cam_man.stop_recording()
-
-    def get_tab_obj(self):
-        return self.__tab

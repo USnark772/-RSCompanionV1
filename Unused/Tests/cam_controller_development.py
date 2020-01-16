@@ -79,7 +79,7 @@ class CamObj:
 
     def destroy_writer(self):
         if self.writer:
-            self.writer.release()
+            self.writer.cleanup()
             self.writer = None
 
     def read_camera(self):
@@ -90,7 +90,7 @@ class CamObj:
             self.writer.write(frame)
 
     def release(self):
-        self.cap.release()
+        self.cap.cleanup()
         self.destroy_writer()
         cv2.destroyWindow(self.name)
 
@@ -141,7 +141,7 @@ class CamMan:
             worker.running = False
             worker.wait()
         for cam in self.cam_list:
-            cam.release()
+            cam.cleanup()
 
     def handle_new_camera(self, cam_obj):
         self.cam_list.append(cam_obj)
@@ -153,7 +153,7 @@ class CamMan:
 
     def cleanup_cam_obj(self, cam_obj):
         self.cam_list.remove(cam_obj)
-        cam_obj.release()
+        cam_obj.cleanup()
         del cam_obj
 
     def start_recording(self, timestamp, save_dir):

@@ -1,10 +1,12 @@
+from abc import ABC, abstractmethod
 
 
 # TODO: Figure out if subclassing with this is worth it right now.
-class DeviceController:
-    def __init__(self):
-        self.__tab = None
+class ABCDeviceController(ABC):
+    def __init__(self, tab):
+        self.__tab = tab
 
+    @abstractmethod
     def cleanup(self):
         pass
 
@@ -12,28 +14,27 @@ class DeviceController:
         pass
 
     def start_exp(self):
-        """ Required function for all device controllers. """
         pass
 
     def end_exp(self):
-        """ Required function for all device controllers. """
         pass
 
     def start_block(self):
-        """ Required function for all device controllers. """
         pass
 
     def end_block(self):
-        """ Required function for all device controllers. """
         pass
 
+    # TODO: Figure out if we don't always need a tab obj.
     def get_tab_obj(self):
         return self.__tab
 
+    # TODO: Figure out if can pass instead of return ''
     @staticmethod
     def get_save_file_hdr():
         return ''
 
+    # TODO: Figure out if can pass instead of return ''
     @staticmethod
     def get_note_spacer():
         return ''

@@ -4,15 +4,12 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Integrated threaded cameras into app">
-      <change afterPath="$PROJECT_DIR$/Devices/device_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/signal_slot_example.py" afterDir="false" />
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Devices/abc_device_tab.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/device_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller_old.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/device_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/abc_device_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/cam_controller_development.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -275,7 +272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1578943290400</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Integrated threaded cameras into app.">
+      <created>1579145331624</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1579145331624</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -302,7 +306,8 @@
     <MESSAGE value="Program now saves all data to one save file per experiment." />
     <MESSAGE value="Working prototype for handling camera plug/unplug events." />
     <MESSAGE value="Working on threading for cameras." />
-    <option name="LAST_COMMIT_MESSAGE" value="Working on threading for cameras." />
+    <MESSAGE value="Integrated threaded cameras into app." />
+    <option name="LAST_COMMIT_MESSAGE" value="Integrated threaded cameras into app." />
   </component>
   <component name="WindowStateProjectService">
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
@@ -310,36 +315,48 @@
     </state>
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578938648124" />
     <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1368.912@0.0.1368.912" timestamp="1578928378101" />
-    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1579144452733">
+    <state x="636" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1579192716983">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="636" y="344" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1579192716983" />
+    <state x="765" y="257" key="#com.intellij.ide.util.MemberChooser" timestamp="1579192078305">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="765" y="257" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1579192078305" />
+    <state x="412" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1579191541611">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="412" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1579191541611" />
+    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1579145330667">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943289402" />
     <state x="380" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1578783729584" />
-    <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1579144452733" />
-    <state width="1899" height="210" key="GridCell.Tab.0.bottom" timestamp="1579144687845">
+    <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1579145330667" />
+    <state width="1899" height="210" key="GridCell.Tab.0.bottom" timestamp="1579193088035">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
     <state width="1348" height="170" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
-    <state width="1899" height="210" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687845" />
-    <state width="1899" height="210" key="GridCell.Tab.0.center" timestamp="1579144687844">
+    <state width="1899" height="210" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579193088035" />
+    <state width="1899" height="210" key="GridCell.Tab.0.center" timestamp="1579193088035">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
     <state width="1348" height="170" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
-    <state width="1899" height="210" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687844" />
-    <state width="1899" height="210" key="GridCell.Tab.0.left" timestamp="1579144687844">
+    <state width="1899" height="210" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579193088035" />
+    <state width="1899" height="210" key="GridCell.Tab.0.left" timestamp="1579193088035">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
     <state width="1348" height="170" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
-    <state width="1899" height="210" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687844" />
-    <state width="1899" height="210" key="GridCell.Tab.0.right" timestamp="1579144687844">
+    <state width="1899" height="210" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579193088035" />
+    <state width="1899" height="210" key="GridCell.Tab.0.right" timestamp="1579193088035">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
     <state width="1348" height="170" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1579128961592" />
-    <state width="1899" height="210" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579144687844" />
+    <state width="1899" height="210" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579193088035" />
     <state width="1348" height="290" key="GridCell.Tab.1.bottom" timestamp="1579119135849">
       <screen x="0" y="0" width="1368" height="912" />
     </state>
@@ -369,10 +386,11 @@
     </state>
     <state x="781" y="183" key="SettingsEditor/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578439423308" />
     <state x="586" y="183" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1578762104673" />
-    <state x="872" y="274" key="Vcs.Push.Dialog.v2" timestamp="1578943295777">
-      <screen x="0" y="0" width="2560" height="1080" />
+    <state x="654" y="274" key="Vcs.Push.Dialog.v2" timestamp="1579145334617">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="872" y="274" key="Vcs.Push.Dialog.v2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943295777" />
+    <state x="654" y="274" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1579145334617" />
     <state x="656" y="363" key="com.intellij.ide.util.TipDialog" timestamp="1576345620433">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
