@@ -55,7 +55,6 @@ class VOGController:
         self.__lens_open = False
         # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
         self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
-        self.__get_vals()
         self.__set_upload_button(False)
         self.__data_types = [["Time Open", 0, True], ["Time Closed", 0, True]]
         self.save_file = str()
@@ -86,6 +85,17 @@ class VOGController:
 
     def end_block(self):
         self.__send_msg(self.__prepare_msg("do_trialStop"))
+
+    def init_values(self):
+        """ Request current device settings. """
+        self.logger.debug("running")
+        self.__send_msg(self.__prepare_msg("get_configName"))
+        self.__send_msg(self.__prepare_msg("get_configMaxOpen"))
+        self.__send_msg(self.__prepare_msg("get_configMaxClose"))
+        self.__send_msg(self.__prepare_msg("get_configDebounce"))
+        self.__send_msg(self.__prepare_msg("get_configClickMode"))
+        self.__send_msg(self.__prepare_msg("get_configButtonControl"))
+        self.logger.debug("done")
 
     @staticmethod
     def get_save_file_hdr():
@@ -244,17 +254,6 @@ class VOGController:
         self.__debounce_changed = False
         self.__mode_changed = False
         self.__config_val_changed = False
-        self.logger.debug("done")
-
-    def __get_vals(self):
-        """ Request current device settings. """
-        self.logger.debug("running")
-        self.__send_msg(self.__prepare_msg("get_configName"))
-        self.__send_msg(self.__prepare_msg("get_configMaxOpen"))
-        self.__send_msg(self.__prepare_msg("get_configMaxClose"))
-        self.__send_msg(self.__prepare_msg("get_configDebounce"))
-        self.__send_msg(self.__prepare_msg("get_configClickMode"))
-        self.__send_msg(self.__prepare_msg("get_configButtonControl"))
         self.logger.debug("done")
 
     def __set_upload_button(self, is_active):

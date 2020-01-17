@@ -44,22 +44,22 @@ class TabContainer(QTabWidget):
         self.__tabs = {}
         self.logger.debug("Initialized")
 
-    def add_tab(self, contents, port):
+    def add_tab(self, contents):
         self.logger.debug("running")
         new_tab = self.__Tab()
         new_tab.add_contents(contents)
         self.setUpdatesEnabled(False)
         index = self.addTab(new_tab, "")
-        self.__tabs[port] = new_tab
+        self.__tabs[contents.get_name()] = new_tab
         self.setTabText(index, contents.get_name())
         self.setUpdatesEnabled(True)
         self.logger.debug("done")
 
-    def remove_tab(self, port):
+    def remove_tab(self, name):
         self.logger.debug("running")
-        the_tab = self.__tabs[port]
+        the_tab = self.__tabs[name]
         self.removeTab(QTabWidget.indexOf(self, the_tab))
-        del self.__tabs[port]
+        del self.__tabs[name]
         self.logger.debug("done")
 
     class __Tab(QWidget):

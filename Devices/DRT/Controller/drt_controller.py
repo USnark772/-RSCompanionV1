@@ -50,7 +50,6 @@ class DRTController:
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
         self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
         self.__current_vals = [0, 0, 0, 0]  # stimDur, stimIntens, upperISI, lowerISI
-        self.__get_vals()
         self.__set_upload_button(False)
         self.__data_types = [["Response Time", 0, True], ["Clicks", 0, True]]
         self.save_file = str()
@@ -82,6 +81,12 @@ class DRTController:
 
     def end_block(self):
         self.__send_msg(self.__prepare_msg("exp_stop"))
+
+    def init_values(self):
+        self.logger.debug("running")
+        """ Request current device settings. """
+        self.__send_msg(self.__prepare_msg("get_config"))
+        self.logger.debug("done")
 
     @staticmethod
     def get_save_file_hdr():
@@ -256,12 +261,6 @@ class DRTController:
         self.logger.debug("running")
         for i in self.__changed:
             self.__changed[i] = False
-        self.logger.debug("done")
-
-    def __get_vals(self):
-        self.logger.debug("running")
-        """ Request current device settings. """
-        self.__send_msg(self.__prepare_msg("get_config"))
         self.logger.debug("done")
 
     def __set_val(self, var, val):

@@ -13,6 +13,10 @@ To deal with at some point:
 In progress:
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
     Would we need to pass a reference to the device controller's respective function in?
+    Video:
+    -   Begin exp starts recording video. Device overlay is recorded with the video
+        Device output will add a frame # for when that device output came in
+    -   TODO: Figure out why built in webcams record slower than usb cam.
 
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
@@ -22,10 +26,6 @@ Dealt with:
 Updater:
 -   Automatically download latest version at users request
 -   Automatically check for updates at startup if user selects that option
-
-Video:
--   Begin exp starts recording video. Device overlay is recorded with the video
-    Device output will add a frame # for when that device output came in
 
 to get stack trace
 -   from traceback import print_stack

@@ -25,28 +25,27 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
-from Controller.Camera_Manager.camera_manager import CameraManager  # TODO: Circular dependency?
 from CompanionLib.companion_helpers import get_current_time
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
 
-# TODO: Add tab per camera?
+
 # TODO: Add comments
-
-
+# TODO: Turn this into per camera controller instead of camera manager controller.
 class CameraController(ABCDeviceController):
-    def __init__(self, tab_parent, ch):
-        tab = CameraTab(tab_parent, name="Cameras")
+    def __init__(self, cam_obj, tab_parent, ch):
+        tab = CameraTab(tab_parent, name=cam_obj.name)
         super().__init__(tab)
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
+        self.cam_obj = cam_obj
         self.save_dir = ''
-        self.cam_man = CameraManager(ch)  # TODO: Move this to main controller and reformat code. Need controller per cam
+        self.timestamp = None
         self.logger.debug("Initialized")
 
     def cleanup(self):
         self.logger.debug("running")
-        self.cam_man.cleanup()
+        pass
         self.logger.debug("done")
 
     def create_new_save_file(self, new_filename):
@@ -54,12 +53,15 @@ class CameraController(ABCDeviceController):
         self.save_dir = new_filename
         self.logger.debug("done")
 
+    def set_start_time(self, timestamp):
+        self.timestamp = timestamp
+
     def start_exp(self):
         self.logger.debug("running")
-        self.cam_man.start_recording(timestamp=get_current_time(save=True), save_dir=self.save_dir)
+        self.cam_obj.setup_writer(save_dir=self.save_dir, timestamp=self.timestamp)
         self.logger.debug("done")
 
     def end_exp(self):
         self.logger.debug("running")
-        self.cam_man.stop_recording()
+        self.cam_obj.destroy_writer()
         self.logger.debug("done")

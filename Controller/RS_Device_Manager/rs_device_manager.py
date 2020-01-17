@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from time import sleep
 from PySide2.QtCore import QObject, QThread, Signal
 from serial import Serial, SerialException
@@ -7,7 +8,7 @@ from Model.general_defs import devices as dev_profs
 
 
 class PortWorkerSig(QObject):
-    new_msg_sig = Signal(str)
+    new_msg_sig = Signal(str, datetime)
     cleanup_sig = Signal((str, str))
 
 
@@ -31,7 +32,7 @@ class PortWorker(QThread):
         try:
             if self.port.in_waiting > 0:
                 the_msg = self.port.readline().decode("utf-8")
-                self.signals.new_msg_sig.emit(the_msg)
+                self.signals.new_msg_sig.emit(the_msg, datetime.now())
         except Exception as e:
             self.running = False
 

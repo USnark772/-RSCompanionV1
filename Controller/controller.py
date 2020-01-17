@@ -42,10 +42,11 @@ from View.DockWidget.note_box import NoteBox
 from View.MenuBarWidget.menu_bar import MenuBar
 from View.DisplayWidget.display_container import DisplayContainer
 from View.DisplayWidget.graph_frame import GraphFrame
-from View.TabWidget.device_tab import TabContainer
+from View.TabWidget.device_tab_container import TabContainer
 from View.OutputLog.output_window import OutputWindow
 from Controller.version_checker import VersionChecker
 from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager
+from Controller.Camera_Manager.camera_manager import CameraConnectionManager
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
@@ -99,6 +100,7 @@ class CompanionController:
         self.file_dialog = QFileDialog(self.ui)
 
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
+        self.cam_con_manager = CameraConnectionManager(self.ch)
         self.__setup_managers()
         # Initialize storage and state
         self.__controller_classes = dict()
@@ -115,28 +117,53 @@ class CompanionController:
         self.__save_file_name = ""
         self.__save_dir = ""
         self.__device_spacers = dict()
+        self.__devices_to_add = dict()
 
         # Assemble View objects
         self.__initialize_view()
         self.__init_controller_classes()
 
-        self.__add_camera_tab()
+        # self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
     # public functions
     ########################################################################################
 
+    # TODO: Figure out how to add device but not use it until next experiment.
     def add_device(self, device_name, port_name, thread):
-        self.__add_device((device_name, port_name), thread)
+        self.logger.debug("running")
+        if not self.__exp_created:
+            self.__add_device((device_name, port_name), thread)
+        else:
+            self.__devices_to_add[(device_name, port_name)] = thread
+        self.logger.debug("done")
 
     def remove_device(self, device_name, port_name):
-        self.__remove_device((device_name, port_name))
+        self.logger.debug("running")
+        if (device_name, port_name) in self.__devices_to_add:
+            del self.__devices_to_add[(device_name, port_name)]
+        else:
+            self.__remove_device((device_name, port_name))
+        self.logger.debug("done")
+
+    def add_camera(self, cam_obj):
+        self.logger.debug("running")
+        self.__add_camera(cam_obj)
+        self.logger.debug("done")
+
+    def remove_camera(self, cam_obj):
+        self.logger.debug("running")
+        self.__remove_camera(cam_obj)
+        self.logger.debug("done")
 
     def alert_device_connection_failure(self):
+        self.logger.debug("running")
         self.ui.show_help_window("Error", device_connection_error)
+        self.logger.debug("done")
 
     def save_device_data(self, device_name, device_line, timestamp=None):
+        self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
         spacer = ", "
@@ -160,6 +187,7 @@ class CompanionController:
                 elif self.__controller_classes[key][1] > 0:
                     line += self.__controller_classes[key][0].get_note_spacer()
         write_line_to_file(self.__save_file_name, line)
+        self.logger.debug("done")
 
     ########################################################################################
     # initial setup
@@ -170,6 +198,8 @@ class CompanionController:
         self.dev_con_manager.signals.new_device_sig.connect(self.add_device)
         self.dev_con_manager.signals.disconnect_sig.connect(self.remove_device)
         self.dev_con_manager.signals.failed_con_sig.connect(self.alert_device_connection_failure)
+        self.cam_con_manager.signals.new_cam_sig.connect(self.add_camera)
+        self.cam_con_manager.signals.disconnect_sig.connect(self.remove_camera)
         self.logger.debug("done")
 
     def __initialize_view(self):
@@ -191,6 +221,7 @@ class CompanionController:
 
     # TODO: Add device controller destructors?
     def __populate_func_dicts(self):
+        self.logger.debug("running")
         self.__controller_inits['drt'] = dict()
         self.__controller_inits['vog'] = dict()
         self.__graph_inits['drt'] = dict()
@@ -201,10 +232,13 @@ class CompanionController:
         self.__graph_inits['drt']['destructor'] = self.__destroy_drt_graph
         self.__graph_inits['vog']['creator'] = self.__make_vog_graph
         self.__graph_inits['vog']['destructor'] = self.__destroy_vog_graph
+        self.logger.debug("done")
 
     def __init_controller_classes(self):
+        self.logger.debug("running")
         self.__controller_classes["DRT"] = [DRTController, 0]
         self.__controller_classes["VOG"] = [VOGController, 0]
+        self.logger.debug("done")
 
     def __setup_file_dialog(self):
         """
@@ -257,12 +291,12 @@ class CompanionController:
 
     def __create_exp(self):
         self.logger.debug("running")
+        date_time = get_current_time(device=True)
         self.__exp_created = True
         self.button_box.toggle_create_button()
-        self.dev_con_manager.set_check_for_updates(False)  # TODO: Fix this
         self.__add_hdr_to_output()
         devices_running = list()
-        self.__send_dir_name_to_cameras()
+        self.__send_save_data_to_cams(get_current_time(date_time=date_time, save=True))
         try:
             for controller in self.__device_controllers.values():
                 controller.start_exp()
@@ -275,14 +309,13 @@ class CompanionController:
                 controller.end_exp()
             return
         self.__check_toggle_post_button()
-        self.info_box.set_start_time(get_current_time(time=True))
+        self.info_box.set_start_time(get_current_time(time=True, date_time=date_time))
         self.logger.debug("done")
 
     def __end_exp(self):
         self.logger.debug("running")
         self.__exp_created = False
         self.button_box.toggle_create_button()
-        self.dev_con_manager.set_check_for_updates(True)  # TODO: Fix this
         try:
             for controller in self.__device_controllers.values():
                 controller.end_exp()
@@ -290,6 +323,7 @@ class CompanionController:
             self.logger.exception("Failed trying to end_exp_all")
         self.__check_toggle_post_button()
         self.info_box.set_block_num(0)
+        self.__check_device_backlog()
         self.logger.debug("done")
 
     def __start_stop_exp(self):
@@ -353,8 +387,11 @@ class CompanionController:
             self.note_box.toggle_post_button(False)
         self.logger.debug("done")
 
-    def __send_dir_name_to_cameras(self):
-        self.__device_controllers["cameras"].create_new_save_file(self.__save_dir)
+    def __send_save_data_to_cams(self, timestamp):
+        for device in self.__device_controllers:
+            if "CAM" in device:
+                self.__device_controllers[device].create_new_save_file(self.__save_dir)
+                self.__device_controllers[device].set_start_time(timestamp)
 
     ########################################################################################
     # Data saving
@@ -428,6 +465,10 @@ class CompanionController:
     # generic device handling
     ########################################################################################
 
+    def __check_device_backlog(self):
+        for device in self.__devices_to_add:
+            self.__add_device(device, self.__devices_to_add[device])
+
     def __add_device(self, device, thread):
         """
         Handles when a new device is found by the device manager and added to the program's scope.
@@ -445,7 +486,7 @@ class CompanionController:
             self.logger.debug("Failed to make controller")
             return
         self.__graphs[device[0]]['frame'].get_graph().add_device(device[1][3:])
-        self.tab_box.add_tab(self.__device_controllers[device].get_tab_obj(), device[1])
+        self.tab_box.add_tab(self.__device_controllers[device].get_tab_obj())
         self.__controller_classes[device[0].upper()][1] += 1
         self.logger.debug("done")
 
@@ -461,7 +502,7 @@ class CompanionController:
         else:
             self.logger.debug("Unknown device: " + device[0] + " " + device[1])
             return
-        self.tab_box.remove_tab(device[1])
+        self.tab_box.remove_tab(self.__device_controllers[device].get_tab_obj().get_name())
         self.__graphs[device[0]]['frame'].get_graph().remove_device(device[1][3:])
         del self.__device_controllers[device]
         self.__check_num_devices()
@@ -481,6 +522,8 @@ class CompanionController:
             device_controller = DRTController(self.tab_box, device, self.add_data_to_graph, self.ch,
                                               self.save_device_data)
             device_controller.signals.send_device_msg_sig.connect(thread.send_msg)
+            thread.signals.new_msg_sig.connect(device_controller.handle_msg)
+            device_controller.init_values()
         except Exception as e:
             self.logger.exception("failed to make device_controller for drt" + str(device))
             self.__check_num_devices()
@@ -504,6 +547,8 @@ class CompanionController:
             device_controller = VOGController(self.tab_box, device, self.add_data_to_graph, self.ch,
                                               self.save_device_data)
             device_controller.signals.send_device_msg_sig.connect(thread.send_msg)
+            thread.signals.new_msg_sig.connect(device_controller.handle_msg)
+            device_controller.init_values()
         except Exception as e:
             self.logger.exception("failed to make device_controller for vog" + str(device))
             self.__check_num_devices()
@@ -514,17 +559,21 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    # TODO: Unfinished.
-    def __add_camera_tab(self):
+    def __add_camera(self, cam_obj):
         self.logger.debug("running")
         try:
-            controller = CameraController(self.tab_box, self.ch)
+            cam_controller = CameraController(cam_obj, self.tab_box, self.ch)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return
-        self.__device_controllers["cameras"] = controller
-        self.tab_box.add_tab(self.__device_controllers["cameras"].get_tab_obj(), "cameras")
-        # self.graph_box.add_display(self.__device_controllers["cameras"].get_viewer())
+        self.__device_controllers[cam_obj.name] = cam_controller
+        self.tab_box.add_tab(cam_controller.get_tab_obj())
+        self.logger.debug("done")
+
+    def __remove_camera(self, cam_obj):
+        self.logger.debug("running")
+        self.tab_box.remove_tab(cam_obj.name)
+        del self.__device_controllers[cam_obj.name]
         self.logger.debug("done")
 
     ########################################################################################
@@ -546,8 +595,8 @@ class CompanionController:
                     controller.end_exp()
             except Exception as e:
                 self.logger.exception("Failed to end_exp_all")
-        self.__device_controllers["cameras"].cleanup()
         self.dev_con_manager.cleanup()
+        self.cam_con_manager.cleanup()
         self.log_output.close()
         self.logger.debug("done")
 

@@ -103,7 +103,7 @@ class CamScanner(QThread):
             if cap is None or not cap.isOpened():
                 break
             else:
-                cam_obj = CamObj(cap, "Camera " + str(index), self.ch)
+                cam_obj = CamObj(cap, "CAM_" + str(index + 1), self.ch)
                 self.__increment_cam_count()
                 self.signal.new_cam_sig.emit(cam_obj)
             index += 1
@@ -155,18 +155,18 @@ class CamCounter:
 
 
 # TODO: Connect these to something in controller
-class CamManSig(QObject):
-    new_cam_sig = Signal()
-    disconnect_sig = Signal()
+class CamConManSig(QObject):
+    new_cam_sig = Signal(CamObj)
+    disconnect_sig = Signal(CamObj)
 
 
-class CameraManager:
+class CameraConnectionManager:
     def __init__(self, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.ch = ch
-        self.signals = CamManSig()
+        self.signals = CamConManSig()
         self.cam_list = []
         self.worker_thread_list = []
         self.cam_counter = CamCounter(ch)
@@ -194,20 +194,20 @@ class CameraManager:
         new_worker.signal.cleanup_sig.connect(self.cleanup_cam_and_thread)
         new_worker.start()
         self.worker_thread_list.append(new_worker)
-        self.signals.new_cam_sig.emit()
+        self.signals.new_cam_sig.emit(cam_obj)
         self.logger.debug("done")
 
     # TODO: Test thread removal addition
-    def cleanup_cam_and_thread(self, cam):
+    def cleanup_cam_and_thread(self, cam_obj):
         self.logger.debug("running")
-        self.cam_list.remove(cam)
-        cam.cleanup()
-        del cam
+        self.cam_list.remove(cam_obj)
+        cam_obj.cleanup()
+        self.signals.disconnect_sig.emit(cam_obj)
         for worker in self.worker_thread_list:
             if not worker.running:
                 self.worker_thread_list.remove(worker)
                 worker.wait()
-        self.signals.disconnect_sig.emit()
+        del cam_obj
         self.logger.debug("done")
 
     def start_recording(self, timestamp, save_dir):

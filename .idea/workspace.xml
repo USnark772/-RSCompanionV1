@@ -5,17 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/RS_Device_Manager/rs_device_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/rs_device_manager_development.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CompanionLib/companion_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/CompanionLib/companion_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/RS_Device_Manager/rs_device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/RS_Device_Manager/rs_device_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/OldCode/rs_device_manager_old.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/version_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/version_checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/DRT/Controller/drt_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/TabWidget/device_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/TabWidget/device_tab_container.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -291,7 +291,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579193181727</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Replaced device manager code with much cleaner new code that utilizes threading and signals">
+      <created>1579288110130</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1579288110130</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -320,7 +327,8 @@
     <MESSAGE value="Working on threading for cameras." />
     <MESSAGE value="Integrated threaded cameras into app." />
     <MESSAGE value="Video files now saved to same dir as data file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Video files now saved to same dir as data file" />
+    <MESSAGE value="Replaced device manager code with much cleaner new code that utilizes threading and signals" />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced device manager code with much cleaner new code that utilizes threading and signals" />
   </component>
   <component name="WindowStateProjectService">
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
@@ -340,36 +348,40 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="412" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1579191541611" />
-    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1579193180828">
+    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1579288108364">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943289402" />
     <state x="380" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1578783729584" />
-    <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1579193180828" />
-    <state width="1899" height="252" key="GridCell.Tab.0.bottom" timestamp="1579287823141">
+    <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1579288108364" />
+    <state width="1914" height="252" key="GridCell.Tab.0.bottom" timestamp="1579301922335">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1914" height="252" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579301922335" />
     <state width="1348" height="169" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1579198745430" />
-    <state width="1899" height="252" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579287823141" />
-    <state width="1899" height="252" key="GridCell.Tab.0.center" timestamp="1579287823141">
+    <state width="1899" height="252" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579298025711" />
+    <state width="1914" height="252" key="GridCell.Tab.0.center" timestamp="1579301922334">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1914" height="252" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579301922334" />
     <state width="1348" height="169" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1579198745430" />
-    <state width="1899" height="252" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579287823141" />
-    <state width="1899" height="252" key="GridCell.Tab.0.left" timestamp="1579287823141">
+    <state width="1899" height="252" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579298025710" />
+    <state width="1914" height="252" key="GridCell.Tab.0.left" timestamp="1579301922334">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1914" height="252" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579301922334" />
     <state width="1348" height="169" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1579198745430" />
-    <state width="1899" height="252" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579287823141" />
-    <state width="1899" height="252" key="GridCell.Tab.0.right" timestamp="1579287823141">
+    <state width="1899" height="252" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579298025710" />
+    <state width="1914" height="252" key="GridCell.Tab.0.right" timestamp="1579301922335">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="170" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943309242" />
+    <state width="1914" height="252" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579301922335" />
     <state width="1348" height="169" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1579198745430" />
-    <state width="1899" height="252" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579287823141" />
+    <state width="1899" height="252" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579298025710" />
     <state width="1348" height="290" key="GridCell.Tab.1.bottom" timestamp="1579119135849">
       <screen x="0" y="0" width="1368" height="912" />
     </state>
@@ -412,13 +424,18 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="656" y="363" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1576345620433" />
+    <state x="769" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1579299764953">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="769" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579299764953" />
     <state x="601" y="265" width="700" height="530" key="recent.locations.popup" timestamp="1579144222204">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="601" y="265" width="700" height="530" key="recent.locations.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1579144222204" />
-    <state x="427" y="101" key="refactoring.ChangeSignatureDialog" timestamp="1579198475029">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state x="599" y="120" key="refactoring.ChangeSignatureDialog" timestamp="1579299020841">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="599" y="120" key="refactoring.ChangeSignatureDialog/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579299020841" />
     <state x="427" y="101" key="refactoring.ChangeSignatureDialog/0.0.1368.912@0.0.1368.912" timestamp="1579198475029" />
   </component>
   <component name="XDebuggerManager">
