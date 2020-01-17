@@ -22,44 +22,47 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+
 import logging
-from Devices.Camera.View.camera_tab import CameraTab
-from Devices.abc_device_controller import ABCDeviceController
-from Controller.Camera_Manager.camera_manager import CameraManager  # TODO: Circular dependency?
-from CompanionLib.companion_helpers import get_current_time
-# If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
+import cv2
 
-# TODO: Add tab per camera?
+
 # TODO: Add comments
-
-
-class CameraController(ABCDeviceController):
-    def __init__(self, tab_parent, ch):
-        tab = CameraTab(tab_parent, name="Cameras")
-        super().__init__(tab)
+class CamObj:
+    def __init__(self, cap, name, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
-        self.save_dir = ''
-        self.cam_man = CameraManager(ch)  # TODO: Move this to main controller and reformat code. Need controller per cam
+        self.cap = cap
+        self.name = name
+        self.writer = None
         self.logger.debug("Initialized")
+
+    def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=20, frame_size=(640, 480), codec='DIVX'):
+        self.logger.debug("running")
+        self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
+                                      cv2.VideoWriter_fourcc(*codec), fps, frame_size)
+        self.logger.debug("done")
+
+    def destroy_writer(self):
+        self.logger.debug("running")
+        if self.writer:
+            self.writer.release()
+            self.writer = None
+        self.logger.debug("done")
+
+    def read_camera(self):
+        return self.cap.read()
+
+    def save_data(self, frame):
+        # self.logger.debug("running")
+        if self.writer:
+            self.writer.write(frame)
+        # self.logger.debug("done")
 
     def cleanup(self):
         self.logger.debug("running")
-        self.cam_man.cleanup()
-        self.logger.debug("done")
-
-    def create_new_save_file(self, new_filename):
-        self.logger.debug("running")
-        self.save_dir = new_filename
-        self.logger.debug("done")
-
-    def start_exp(self):
-        self.logger.debug("running")
-        self.cam_man.start_recording(timestamp=get_current_time(save=True), save_dir=self.save_dir)
-        self.logger.debug("done")
-
-    def end_exp(self):
-        self.logger.debug("running")
-        self.cam_man.stop_recording()
+        self.cap.release()
+        self.destroy_writer()
+        cv2.destroyWindow(self.name)
         self.logger.debug("done")

@@ -23,22 +23,26 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from CompanionLib.companion_helpers import write_line_to_file
+from PySide2.QtCore import QObject, Signal
 from Devices.VOG.View.vog_tab import VOGTab
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
     vog_output_field, vog_file_hdr, vog_note_spacer
 
 
+class VOGSig(QObject):
+    send_device_msg_sig = Signal(str)
+
+
 class VOGController:
-    def __init__(self, tab_parent, device, msg_callback, graph_callback, ch, save_callback):
+    def __init__(self, tab_parent, device, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
+        self.signals = VOGSig()
         self.device_name = device[0].upper(), "_" + device[1][3:]
         self.__tab = VOGTab(tab_parent, self.device_name[0] + self.device_name[1], ch)
         self.__graph_callback = graph_callback
         self.__device_info = device
-        self.__msg_callback = msg_callback
         self.__save_callback = save_callback
         self.__updating_config = False
         self.__errors = [False] * 3
@@ -427,7 +431,7 @@ class VOGController:
     def __send_msg(self, msg):
         """ Send message to device. """
         self.logger.debug("running")
-        self.__msg_callback(self.__device_info, msg)
+        self.signals.send_device_msg_sig.emit(msg)
         self.logger.debug("done")
 
     @staticmethod

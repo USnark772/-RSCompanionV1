@@ -24,23 +24,27 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 from math import trunc, ceil
 import logging
-from CompanionLib.companion_helpers import write_line_to_file
+from PySide2.QtCore import QObject, Signal
 from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, \
     drtv1_0_ISI_max, drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr, drtv1_0_config_fields, \
     drtv1_0_note_spacer, drtv1_0_save_fields
 
 
+class DRTSig(QObject):
+    send_device_msg_sig = Signal(str)
+
+
 class DRTController:
-    def __init__(self, tab_parent, device, msg_callback, graph_callback, ch, save_callback):
+    def __init__(self, tab_parent, device, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
+        self.signals = DRTSig()
         self.device_name = device[0].upper(), "_" + device[1][3:]
         self.__tab = DRTTab(tab_parent, self.device_name[0] + self.device_name[1], ch)
         self.__graph_callback = graph_callback
         self.__device_info = device
-        self.__msg_callback = msg_callback
         self.__save_callback = save_callback
         self.__updating_config = False
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
@@ -318,7 +322,7 @@ class DRTController:
     def __send_msg(self, msg):
         """ Send message to device. """
         self.logger.debug("running")
-        self.__msg_callback(self.__device_info, msg)
+        self.signals.send_device_msg_sig.emit(msg)
         self.logger.debug("done")
 
     @staticmethod
