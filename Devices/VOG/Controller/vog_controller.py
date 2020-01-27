@@ -27,20 +27,21 @@ from PySide2.QtCore import QObject, Signal
 from Devices.VOG.View.vog_tab import VOGTab
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min, \
     vog_output_field, vog_file_hdr, vog_note_spacer
+from Devices.abc_device_controller import ABCDeviceController
 
 
 class VOGSig(QObject):
     send_device_msg_sig = Signal(str)
 
 
-class VOGController:
+class VOGController(ABCDeviceController):
     def __init__(self, tab_parent, device, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.signals = VOGSig()
         self.device_name = device[0].upper(), "_" + device[1][3:]
-        self.__tab = VOGTab(tab_parent, self.device_name[0] + self.device_name[1], ch)
+        super().__init__(VOGTab(tab_parent, self.device_name[0] + self.device_name[1], ch))
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__save_callback = save_callback
@@ -62,7 +63,7 @@ class VOGController:
         self.logger.debug("Initialized")
 
     def get_tab_obj(self):
-        return self.__tab
+        return self.tab
 
     def handle_msg(self, msg_string, timestamp):
         msg_dict = self.__parse_msg(msg_string)
@@ -73,6 +74,10 @@ class VOGController:
                 self.__save_data(msg_dict['values'], timestamp)
             elif msg_type == "settings":
                 self.__update_config(msg_dict['values'])
+
+    def cleanup(self):
+        self.end_block()
+        self.end_exp()
 
     def start_exp(self):
         self.__send_msg(self.__prepare_msg("do_expStart"))
@@ -126,18 +131,31 @@ class VOGController:
 
     def __set_handlers(self):
         self.logger.debug("running")
-        self.__tab.add_nhtsa_button_handler(self.__nhtsa)
-        self.__tab.add_eblind_button_handler(self.__eblind)
-        self.__tab.add_direct_control_button_handler(self.__direct_control)
-        self.__tab.add_upload_button_handler(self.__update_device)
-        self.__tab.add_open_inf_handler(self.__toggle_open_inf)
-        self.__tab.add_close_inf_handler(self.__toggle_close_inf)
-        self.__tab.add_open_entry_changed_handler(self.__open_entry_changed)
-        self.__tab.add_close_entry_changed_handler(self.__close_entry_changed)
-        self.__tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
-        self.__tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
-        self.__tab.add_config_val_changed_handler(self.__config_val_entry_changed)
-        self.__tab.add_manual_control_handler(self.__toggle_lens)
+        self.tab.add_nhtsa_button_handler(self.__nhtsa)
+        self.tab.add_eblind_button_handler(self.__eblind)
+        self.tab.add_direct_control_button_handler(self.__direct_control)
+        self.tab.add_upload_button_handler(self.__update_device)
+        self.tab.add_open_inf_handler(self.__toggle_open_inf)
+        self.tab.add_close_inf_handler(self.__toggle_close_inf)
+        self.tab.add_open_entry_changed_handler(self.__open_entry_changed)
+        self.tab.add_close_entry_changed_handler(self.__close_entry_changed)
+        self.tab.add_debounce_entry_changed_handler(self.__debounce_entry_changed)
+        self.tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
+        self.tab.add_config_val_changed_handler(self.__config_val_entry_changed)
+        self.tab.add_manual_control_handler(self.__toggle_lens)
+        self.logger.debug("done")
+
+    # TODO: Finish setting this up
+    def __config_name_entry_changed(self):
+        """
+        Handle when user changes the value in the time open field.
+        Make sure it was user that changed the value that it was not changed programmatically.
+        If changed by user, check validity of value and then allow user to commit change.
+        """
+        self.logger.debug("running")
+        if not self.__updating_config:
+            self.__check_open_val()
+            self.__set_upload_button(True)
         self.logger.debug("done")
 
     def __open_entry_changed(self):
@@ -208,11 +226,11 @@ class VOGController:
         """
         self.logger.debug("running")
         if is_checked:
-            self.__prev_vals[0] = self.__tab.get_open_val()
-            self.__tab.set_open_val(str(vog_max_open_close))
+            self.__prev_vals[0] = self.tab.get_open_val()
+            self.tab.set_open_val(str(vog_max_open_close))
         else:
-            self.__tab.set_open_val(self.__prev_vals[0])
-        self.__tab.set_open_val_entry_activity(not is_checked)
+            self.tab.set_open_val(self.__prev_vals[0])
+        self.tab.set_open_val_entry_activity(not is_checked)
         self.logger.debug("done")
 
     def __toggle_close_inf(self, is_checked):
@@ -223,26 +241,26 @@ class VOGController:
         """
         self.logger.debug("running")
         if is_checked:
-            self.__prev_vals[1] = self.__tab.get_close_val()
-            self.__tab.set_close_val(str(vog_max_open_close))
+            self.__prev_vals[1] = self.tab.get_close_val()
+            self.tab.set_close_val(str(vog_max_open_close))
         else:
-            self.__tab.set_close_val(self.__prev_vals[1])
-        self.__tab.set_close_val_entry_activity(not is_checked)
+            self.tab.set_close_val(self.__prev_vals[1])
+        self.tab.set_close_val_entry_activity(not is_checked)
         self.logger.debug("done")
 
     def __update_device(self):
         """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
         self.logger.debug("running")
         if self.__open_changed:
-            self.__set_device_open(self.__tab.get_open_val())
+            self.__set_device_open(self.tab.get_open_val())
         if self.__closed_changed:
-            self.__set_device_close(self.__tab.get_close_val())
+            self.__set_device_close(self.tab.get_close_val())
         if self.__debounce_changed:
-            self.__set_device_debounce(self.__tab.get_debounce_val())
+            self.__set_device_debounce(self.tab.get_debounce_val())
         if self.__mode_changed:
-            self.__set_device_click(self.__tab.get_button_mode())
+            self.__set_device_click(self.tab.get_button_mode())
         if self.__config_val_changed:
-            self.__set_device_config(self.__tab.get_config_value())
+            self.__set_device_config(self.tab.get_config_value())
         self.__set_changed_bools_false()
         self.__set_upload_button(False)
         self.logger.debug("done")
@@ -261,76 +279,76 @@ class VOGController:
         self.logger.debug("running")
         if (self.__open_changed or self.__closed_changed or self.__debounce_changed or self.__mode_changed)\
                 and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
-            self.__tab.set_upload_button_activity(is_active)
+            self.tab.set_upload_button_activity(is_active)
         else:
-            self.__tab.set_upload_button_activity(False)
+            self.tab.set_upload_button_activity(False)
         self.logger.debug("done")
 
     def __check_open_val(self):
         """ Check validity of value, if not valid then set error bool and set visual cue. """
         self.logger.debug("running")
         self.__errors[0] = True
-        usr_input = self.__tab.get_open_val()
+        usr_input = self.tab.get_open_val()
         if usr_input.isdigit():
             usr_input_int = int(usr_input)
             if vog_max_open_close >= usr_input_int >= vog_min_open_close:
                 self.__errors[0] = False
                 self.__open_changed = usr_input_int != self.__current_vals[0]
-        self.__tab.set_open_val_error(self.__errors[0])
+        self.tab.set_open_val_error(self.__errors[0])
         self.logger.debug("done")
 
     def __check_close_val(self):
         """ Check validity of value, if not valid then set error bool and set visual cue. """
         self.logger.debug("running")
         self.__errors[1] = True
-        usr_input = self.__tab.get_close_val()
+        usr_input = self.tab.get_close_val()
         if usr_input.isdigit():
             usr_input_int = int(usr_input)
             if vog_max_open_close >= usr_input_int >= vog_min_open_close:
                 self.__errors[1] = False
                 self.__closed_changed = usr_input_int != self.__current_vals[1]
-        self.__tab.set_close_val_error(self.__errors[1])
+        self.tab.set_close_val_error(self.__errors[1])
         self.logger.debug("done")
 
     def __check_debounce_val(self):
         """ Check validity of value, if not valid then set error bool and set visual cue. """
         self.logger.debug("running")
         self.__errors[2] = True
-        usr_input = self.__tab.get_debounce_val()
+        usr_input = self.tab.get_debounce_val()
         if usr_input.isdigit():
             usr_input_int = int(usr_input)
             if vog_debounce_max >= usr_input_int >= vog_debounce_min:
                 self.__errors[2] = False
                 self.__debounce_changed = usr_input_int != self.__current_vals[2]
-        self.__tab.set_debounce_val_error(self.__errors[2])
+        self.tab.set_debounce_val_error(self.__errors[2])
         self.logger.debug("done")
 
     def __check_button_mode_val(self):
         """ Set button mode changed bool. """
         self.logger.debug("running")
-        self.__mode_changed = self.__tab.get_button_mode() != self.__current_vals[3]
+        self.__mode_changed = self.tab.get_button_mode() != self.__current_vals[3]
         self.logger.debug("done")
 
     def __set_val(self, var, val):
         """ Set display value of var to val. """
         self.logger.debug("running")
         if var == "Name":
-            self.__tab.set_config_value(val)
+            self.tab.set_config_value(val)
         elif var == "MaxOpen":
             self.__current_vals[0] = int(val)
-            self.__tab.set_open_val(val)
-            self.__tab.set_open_val_error(False)
+            self.tab.set_open_val(val)
+            self.tab.set_open_val_error(False)
         elif var == "MaxClose":
             self.__current_vals[1] = int(val)
-            self.__tab.set_close_val_error(False)
-            self.__tab.set_close_val(val)
+            self.tab.set_close_val_error(False)
+            self.tab.set_close_val(val)
         elif var == "Debounce":
             self.__current_vals[2] = int(val)
-            self.__tab.set_debounce_val(val)
-            self.__tab.set_debounce_val_error(False)
+            self.tab.set_debounce_val(val)
+            self.tab.set_debounce_val_error(False)
         elif var == "ClickMode":
             self.__current_vals[3] = int(val)
-            self.__tab.set_button_mode(val)
+            self.tab.set_button_mode(val)
         elif var == "buttonControl":
             self.__current_vals[4] = int(val)
         elif var == "lensState":
@@ -352,8 +370,8 @@ class VOGController:
     def __nhtsa(self):
         """ Set device and display to nhtsa defaults. """
         self.logger.debug("running")
-        self.__tab.set_open_inf(False)
-        self.__tab.set_close_inf(False)
+        self.tab.set_open_inf(False)
+        self.tab.set_close_inf(False)
         self.__set_device_config("NHTSA")
         self.__set_device_open("1500")
         self.__set_device_close("1500")
@@ -366,8 +384,8 @@ class VOGController:
     def __eblind(self):
         """ Set device and display to eblind mode. """
         self.logger.debug("running")
-        self.__tab.set_open_inf(True)
-        self.__tab.set_close_inf(False)
+        self.tab.set_open_inf(True)
+        self.tab.set_close_inf(False)
         self.__set_device_config("eBlindfold")
         self.__set_device_open(vog_max_open_close)
         self.__set_device_close("0")
@@ -380,8 +398,8 @@ class VOGController:
     def __direct_control(self):
         """ Set device and display to direct control mode. """
         self.logger.debug("running")
-        self.__tab.set_open_inf(True)
-        self.__tab.set_close_inf(True)
+        self.tab.set_open_inf(True)
+        self.tab.set_close_inf(True)
         self.__set_device_config("DIRECT CONTROL")
         self.__set_device_open(vog_max_open_close)
         self.__set_device_close("0")

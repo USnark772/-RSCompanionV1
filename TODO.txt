@@ -9,14 +9,19 @@ To deal with at some point:
     -   Let user set the bounds of the mean
 -   When scrolling, the graphs move in their canvasas
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
+-   Add button that leads to last used directory for saving.
+-   Add cpu resource monitor to code with possible color coding based on percentage. < 70% is green, 70% - 90% yellow, > 90% red.
 
 In progress:
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
     Would we need to pass a reference to the device controller's respective function in?
     Video:
-    -   Begin exp starts recording video. Device overlay is recorded with the video
-        Device output will add a frame # for when that device output came in
-    -   TODO: Figure out why built in webcams record slower than usb cam.
+    -   Create exp starts recording video (Done).
+    -   Device overlay is recorded with the video
+    -   Device output will add a frame # for when that device output came in
+    -   Figure out all the configuration ideas for cameras and put them in the tabs.
+    -   Add camera deactivation options. (Whether or not to actually use camera_manager and also user options to
+        close specific cameras) Also see if can disconnect from specific cameras.
 
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )

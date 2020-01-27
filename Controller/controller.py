@@ -25,14 +25,13 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 import logging.config
-import configparser
 from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QTimer, QDir, QSize
+from PySide2.QtCore import QDir, QSize, QSettings
 from PySide2.QtGui import QKeyEvent
 from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    error_checking_for_update, device_connection_error, config_file_path, current_version
+    error_checking_for_update, device_connection_error, current_version
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -58,15 +57,14 @@ class CompanionController:
     def __init__(self):
         """ Create elements of View and Controller """
         self.log_output = OutputWindow()
+        self.settings = QSettings("Red Scientific", "Companion")
 
-        config = configparser.ConfigParser()
-        try:
-            config.read(config_file_path)
-            logginglevel = eval('logging.' + config.get('logging', 'level'))
-            inierror = False
-        except configparser.NoSectionError as e:
-            logginglevel = logging.DEBUG
-            inierror = True
+        self.settings.beginGroup("logging")
+        if not self.settings.contains("loglevel"):
+            self.settings.setValue("loglevel", "DEBUG")
+        logginglevel = eval('logging.' + self.settings.value('loglevel'))
+        self.settings.endGroup()
+
         logging.basicConfig(filename=self.__setup_log_output_file("companion_app_log.txt"), filemode='w',
                             level=logginglevel, format='%(levelname)s - %(name)s - %(funcName)s: %(message)s')
         self.logger = logging.getLogger(__name__)
@@ -78,9 +76,8 @@ class CompanionController:
         self.logger.addHandler(self.ch)
 
         self.logger.info("RS Companion app version: " + str(current_version))
-        if inierror:
-            self.logger.debug("Error reading config.ini, logging level set to debug")
         self.logger.debug("Initializing")
+        self.logger.warning("This is a test")
         ui_min_size = QSize(950, 740)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
@@ -102,6 +99,16 @@ class CompanionController:
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
         self.cam_con_manager = CameraConnectionManager(self.ch)
         self.__setup_managers()
+        self.settings.beginGroup("Camera manager")
+        try:
+            active = eval(self.settings.value("active", True))
+        except:
+            self.settings.setValue("active", "True")
+            active = True
+        if active:
+            self.cam_con_manager.activate()
+        self.menu_bar.set_cam_bool_checked(active)
+        self.settings.endGroup()
         # Initialize storage and state
         self.__controller_classes = dict()
         self.__controller_inits = dict()
@@ -130,7 +137,7 @@ class CompanionController:
     # public functions
     ########################################################################################
 
-    # TODO: Figure out how to add device but not use it until next experiment.
+    # TODO: Figure out how to show device added but not allow use until next experiment
     def add_device(self, device_name, port_name, thread):
         self.logger.debug("running")
         if not self.__exp_created:
@@ -143,8 +150,7 @@ class CompanionController:
         self.logger.debug("running")
         if (device_name, port_name) in self.__devices_to_add:
             del self.__devices_to_add[(device_name, port_name)]
-        else:
-            self.__remove_device((device_name, port_name))
+        self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
     def add_camera(self, cam_obj):
@@ -258,6 +264,7 @@ class CompanionController:
         self.button_box.add_start_button_handler(self.__start_stop_exp)
         self.note_box.add_note_box_changed_handler(self.__check_toggle_post_button)
         self.note_box.add_post_handler(self.__post_handler)
+        self.menu_bar.add_cam_bool_handler(self.__toggle_use_cameras)
         self.menu_bar.add_about_app_handler(self.__about_app)
         self.menu_bar.add_about_company_handler(self.__about_company)
         self.menu_bar.add_update_handler(self.__check_for_updates_handler)
@@ -299,8 +306,9 @@ class CompanionController:
         self.__send_save_data_to_cams(get_current_time(date_time=date_time, save=True))
         try:
             for controller in self.__device_controllers.values():
-                controller.start_exp()
-                devices_running.append(controller)
+                if controller.active:
+                    controller.start_exp()
+                    devices_running.append(controller)
         except Exception as e:
             self.logger.exception("Failed trying to start_exp_all")
             self.button_box.toggle_create_button()
@@ -339,19 +347,23 @@ class CompanionController:
     def __start_exp(self):
         self.logger.debug("running")
         self.__exp_running = True
+        devices_running = list()
         try:
             for controller in self.__device_controllers.values():
-                controller.start_block()
+                if controller.active:
+                    controller.start_block()
+                    devices_running.append(controller)
         except Exception as e:
             self.logger.exception("Failed trying to start_block_all")
             self.__exp_running = False
+            for controller in devices_running:
+                controller.end_exp()
             return
         self.info_box.set_block_num(str(int(self.info_box.get_block_num()) + 1))
         self.__current_cond_name = self.button_box.get_condition_name()
         self.__add_break_in_graph_lines()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
-        # self.__add_vert_lines_to_graphs()
         self.logger.debug("done")
 
     def __stop_exp(self):
@@ -366,6 +378,7 @@ class CompanionController:
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
 
+    # Depreciated
     def __add_vert_lines_to_graphs(self):
         time = get_current_time(graph=True)
         for device_type in self.__graphs.values():
@@ -500,7 +513,7 @@ class CompanionController:
         if device in self.__device_controllers:
             self.__graphs[device[0]]['num_devices'] -= 1
         else:
-            self.logger.debug("Unknown device: " + device[0] + " " + device[1])
+            self.logger.debug("Unknown device or already disconnected: " + device[0] + " " + device[1])
             return
         self.tab_box.remove_tab(self.__device_controllers[device].get_tab_obj().get_name())
         self.__graphs[device[0]]['frame'].get_graph().remove_device(device[1][3:])
@@ -600,6 +613,15 @@ class CompanionController:
         self.log_output.close()
         self.logger.debug("done")
 
+    def __toggle_use_cameras(self):
+        self.settings.beginGroup("Camera manager")
+        if self.cam_con_manager.is_active:
+            self.cam_con_manager.deactivate()
+            self.settings.setValue("active", "False")
+        else:
+            self.cam_con_manager.activate()
+            self.settings.setValue("active", "True")
+
     def __about_company(self):
         """ Display company information. """
         self.logger.debug("running")
@@ -609,7 +631,8 @@ class CompanionController:
     def __about_app(self):
         """ Display app information. """
         self.logger.debug("running")
-        self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: " + str(current_version))
+        self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: "
+                                 + str(current_version))
         self.logger.debug("done")
 
     ########################################################################################

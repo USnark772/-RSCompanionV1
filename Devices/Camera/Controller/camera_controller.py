@@ -29,8 +29,6 @@ from CompanionLib.companion_helpers import get_current_time
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
 
 
-# TODO: Add comments
-# TODO: Turn this into per camera controller instead of camera manager controller.
 class CameraController(ABCDeviceController):
     def __init__(self, cam_obj, tab_parent, ch):
         tab = CameraTab(tab_parent, name=cam_obj.name)

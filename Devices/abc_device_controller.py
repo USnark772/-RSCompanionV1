@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 # TODO: Figure out if subclassing with this is worth it right now.
 class ABCDeviceController(ABC):
     def __init__(self, tab):
-        self.__tab = tab
+        self.tab = tab
+        self.active = False
 
     @abstractmethod
     def cleanup(self):
@@ -27,7 +28,7 @@ class ABCDeviceController(ABC):
 
     # TODO: Figure out if we don't always need a tab obj.
     def get_tab_obj(self):
-        return self.__tab
+        return self.tab
 
     # TODO: Figure out if can pass instead of return ''
     @staticmethod

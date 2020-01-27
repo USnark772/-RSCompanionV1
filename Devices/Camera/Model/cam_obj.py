@@ -27,7 +27,6 @@ import logging
 import cv2
 
 
-# TODO: Add comments
 class CamObj:
     def __init__(self, cap, name, ch):
         self.logger = logging.getLogger(__name__)
@@ -38,7 +37,7 @@ class CamObj:
         self.writer = None
         self.logger.debug("Initialized")
 
-    def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=24, frame_size=(640, 480), codec='DIVX'):
+    def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=30, frame_size=(640, 480), codec='DIVX'):
         self.logger.debug("running")
         self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                       cv2.VideoWriter_fourcc(*codec), fps, frame_size)

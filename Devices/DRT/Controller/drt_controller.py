@@ -29,20 +29,21 @@ from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, \
     drtv1_0_ISI_max, drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr, drtv1_0_config_fields, \
     drtv1_0_note_spacer, drtv1_0_save_fields
+from Devices.abc_device_controller import ABCDeviceController
 
 
 class DRTSig(QObject):
     send_device_msg_sig = Signal(str)
 
 
-class DRTController:
+class DRTController(ABCDeviceController):
     def __init__(self, tab_parent, device, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.signals = DRTSig()
         self.device_name = device[0].upper(), "_" + device[1][3:]
-        self.__tab = DRTTab(tab_parent, self.device_name[0] + self.device_name[1], ch)
+        super().__init__(DRTTab(tab_parent, self.device_name[0] + self.device_name[1], ch))
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__save_callback = save_callback
@@ -57,7 +58,7 @@ class DRTController:
         self.logger.debug("Initialized")
 
     def get_tab_obj(self):
-        return self.__tab
+        return self.tab
 
     def handle_msg(self, msg_string, timestamp):
         msg_dict = self.__parse_msg(msg_string)
@@ -68,13 +69,8 @@ class DRTController:
         elif msg_type == "settings":
             self.__update_config(msg_dict['values'])
 
-    def start_exp(self):
-        """ Required function for all device controllers. """
-        pass
-
-    def end_exp(self):
-        """ Required function for all device controllers. """
-        pass
+    def cleanup(self):
+        self.end_block()
 
     def start_block(self):
         self.__send_msg(self.__prepare_msg("exp_start"))
@@ -118,12 +114,12 @@ class DRTController:
 
     def __set_handlers(self):
         self.logger.debug("running")
-        self.__tab.add_iso_button_handler(self.__iso)
-        self.__tab.add_upload_button_handler(self.__update_device)
-        self.__tab.add_stim_dur_entry_changed_handler(self.__stim_dur_entry_changed)
-        self.__tab.add_stim_intens_entry_changed_handler(self.__stim_intens_entry_changed)
-        self.__tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
-        self.__tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
+        self.tab.add_iso_button_handler(self.__iso)
+        self.tab.add_upload_button_handler(self.__update_device)
+        self.tab.add_stim_dur_entry_changed_handler(self.__stim_dur_entry_changed)
+        self.tab.add_stim_intens_entry_changed_handler(self.__stim_intens_entry_changed)
+        self.tab.add_upper_isi_entry_changed_handler(self.__upper_isi_entry_changed)
+        self.tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
         self.logger.debug("done")
 
     def __stim_dur_entry_changed(self):
@@ -178,20 +174,20 @@ class DRTController:
         """ Check validity of value, if not valid then set error bool and set visual cue. """
         self.logger.debug("running")
         self.__errors[0] = True
-        usr_input = self.__tab.get_stim_dur_val()
+        usr_input = self.tab.get_stim_dur_val()
         if usr_input.isdigit():
             usr_input_int = int(usr_input)
             if drtv1_0_stim_dur_max >= usr_input_int >= drtv1_0_stim_dur_min:
                 self.__errors[0] = False
                 self.__changed[0] = usr_input_int != self.__current_vals[0]
-        self.__tab.set_stim_dur_val_error(self.__errors[0])
+        self.tab.set_stim_dur_val_error(self.__errors[0])
         self.logger.debug("done")
 
     def __check_stim_intens_val(self):
         """ Update value with new value from slider. This value will never be out of range due to set slider range. """
         self.logger.debug("running")
-        new_val_percent = self.__tab.get_stim_intens_val()
-        self.__tab.set_stim_intens_val_label(new_val_percent)
+        new_val_percent = self.tab.get_stim_intens_val()
+        self.tab.set_stim_intens_val_label(new_val_percent)
         self.__changed[1] = self.__calc_percent_to_val(new_val_percent) != self.__current_vals[1]
         self.logger.debug("done")
 
@@ -199,14 +195,14 @@ class DRTController:
         """ Check validity of value, if not valid then set error bool and set visual cue. """
         self.logger.debug("running")
         self.__errors[1] = True
-        usr_input = self.__tab.get_upper_isi_val()
-        lower = self.__tab.get_lower_isi_val()
+        usr_input = self.tab.get_upper_isi_val()
+        lower = self.tab.get_lower_isi_val()
         if usr_input.isdigit() and lower.isdigit():
             usr_input_int = int(usr_input)
             if drtv1_0_ISI_max >= usr_input_int >= int(lower):
                 self.__errors[1] = False
                 self.__changed[2] = usr_input_int != self.__current_vals[2]
-        self.__tab.set_upper_isi_val_error(self.__errors[1])
+        self.tab.set_upper_isi_val_error(self.__errors[1])
         if not self.__errors[1] and self.__errors[2]:
             self.__check_lower_isi_val()
         elif self.__errors[1] and not self.__errors[2]:
@@ -217,14 +213,14 @@ class DRTController:
         """ Check validity of value, if not valid then set error bool and set visual cue. """
         self.logger.debug("running")
         self.__errors[2] = True
-        usr_input = self.__tab.get_lower_isi_val()
-        upper = self.__tab.get_upper_isi_val()
+        usr_input = self.tab.get_lower_isi_val()
+        upper = self.tab.get_upper_isi_val()
         if usr_input.isdigit() and upper.isdigit():
             usr_input_int = int(usr_input)
             if int(upper) >= usr_input_int >= drtv1_0_ISI_min:
                 self.__errors[2] = False
                 self.__changed[3] = usr_input_int != self.__current_vals[3]
-        self.__tab.set_lower_isi_val_error(self.__errors[2])
+        self.tab.set_lower_isi_val_error(self.__errors[2])
         if not self.__errors[2] and self.__errors[1]:
             self.__check_upper_isi_val()
         elif self.__errors[2] and not self.__errors[1]:
@@ -236,23 +232,23 @@ class DRTController:
         self.logger.debug("running")
         if (self.__changed[0] or self.__changed[1] or self.__changed[2] or self.__changed[3])\
                 and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
-            self.__tab.set_upload_button_activity(is_active)
+            self.tab.set_upload_button_activity(is_active)
         else:
-            self.__tab.set_upload_button_activity(False)
+            self.tab.set_upload_button_activity(False)
         self.logger.debug("done")
 
     def __update_device(self):
         """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
         self.logger.debug("running")
         if self.__changed[0]:
-            self.__set_device_stim_duration(self.__tab.get_stim_dur_val())
+            self.__set_device_stim_duration(self.tab.get_stim_dur_val())
         if self.__changed[1]:
-            self.__set_device_stim_intensity(self.__tab.get_stim_intens_val())
+            self.__set_device_stim_intensity(self.tab.get_stim_intens_val())
         if self.__changed[2]:
-            self.__set_device_upper_isi(self.__tab.get_upper_isi_val())
+            self.__set_device_upper_isi(self.tab.get_upper_isi_val())
         if self.__changed[3]:
-            self.__set_device_lower_isi(self.__tab.get_lower_isi_val())
-        self.__tab.set_config_val("Custom")
+            self.__set_device_lower_isi(self.tab.get_lower_isi_val())
+        self.tab.set_config_val("Custom")
         self.__set_change_bools_false()
         self.__set_upload_button(False)
         self.logger.debug("done")
@@ -268,25 +264,25 @@ class DRTController:
         self.logger.debug("running")
         if var == "stimDur":
             self.__current_vals[0] = int(val)
-            self.__tab.set_stim_dur_val(val)
-            self.__tab.set_stim_dur_val_error(False)
+            self.tab.set_stim_dur_val(val)
+            self.tab.set_stim_dur_val_error(False)
         elif var == "intensity":
             self.__current_vals[1] = int(val)
-            self.__tab.set_stim_intens_val(self.__calc_val_to_percent(val))
+            self.tab.set_stim_intens_val(self.__calc_val_to_percent(val))
         elif var == "upperISI":
             self.__current_vals[2] = int(val)
-            self.__tab.set_upper_isi_val(val)
-            self.__tab.set_upper_isi_val_error(False)
+            self.tab.set_upper_isi_val(val)
+            self.tab.set_upper_isi_val_error(False)
         elif var == "lowerISI":
             self.__current_vals[3] = int(val)
-            self.__tab.set_lower_isi_val(val)
-            self.__tab.set_lower_isi_val_error(False)
+            self.tab.set_lower_isi_val(val)
+            self.tab.set_lower_isi_val_error(False)
         self.logger.debug("done")
 
     def __iso(self):
         """ Upload ISO Standards to device. """
         self.logger.debug("running")
-        self.__tab.set_config_val("ISO")
+        self.tab.set_config_val("ISO")
         self.__set_device_upper_isi("5000")
         self.__set_device_lower_isi("3000")
         self.__set_device_stim_intensity(100)

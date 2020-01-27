@@ -47,7 +47,7 @@ class PortWorker(QThread):
 
 class PortScannerSig(QObject):
     new_device_sig = Signal((str, Serial))
-    disconnect_sig = Signal((str, str))  # TODO: Need this here?
+    disconnect_sig = Signal((str, str))
     device_connect_fail_sig = Signal()
 
 

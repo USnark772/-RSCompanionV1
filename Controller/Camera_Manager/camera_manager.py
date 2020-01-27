@@ -29,7 +29,6 @@ from PySide2.QtCore import QThread, QObject, QMutex, Signal
 from Devices.Camera.Model.cam_obj import CamObj
 
 
-# TODO: Add comments
 class CamWorker(QThread):
     def __init__(self, cam, cam_counter, ch):
         self.logger = logging.getLogger(__name__)
@@ -50,8 +49,9 @@ class CamWorker(QThread):
                 self.signal.new_frame_sig.emit(self.cam, frame)
             else:
                 # Error with read_camera() due to lost camera connection
-                self.cleanup()
+                # self.cleanup()
                 break
+        self.cleanup()
         self.logger.debug("done")
 
     def cleanup(self):
@@ -154,7 +154,6 @@ class CamCounter:
         self.logger.debug("done")
 
 
-# TODO: Connect these to something in controller
 class CamConManSig(QObject):
     new_cam_sig = Signal(CamObj)
     disconnect_sig = Signal(CamObj)
@@ -170,15 +169,26 @@ class CameraConnectionManager:
         self.cam_list = []
         self.worker_thread_list = []
         self.cam_counter = CamCounter(ch)
-        self.scanner_thread = CamScanner(self.cam_counter, ch)
+        self.scanner_thread = None
+        self.is_active = False
+        self.logger.debug("Initialized")
+
+    def deactivate(self):
+        self.is_active = False
+        self.cleanup()
+
+    def activate(self):
+        self.is_active = True
+        self.scanner_thread = CamScanner(self.cam_counter, self.ch)
         self.scanner_thread.signal.new_cam_sig.connect(self.handle_new_camera)
         self.scanner_thread.start()
-        self.logger.debug("Initialized")
 
     def cleanup(self):
         self.logger.debug("running")
-        self.scanner_thread.running = False
-        self.scanner_thread.wait()
+        if self.scanner_thread:
+            self.scanner_thread.running = False
+            self.scanner_thread.wait()
+            self.scanner_thread = None
         for worker in self.worker_thread_list:
             worker.running = False
             worker.wait()
@@ -197,7 +207,6 @@ class CameraConnectionManager:
         self.signals.new_cam_sig.emit(cam_obj)
         self.logger.debug("done")
 
-    # TODO: Test thread removal addition
     def cleanup_cam_and_thread(self, cam_obj):
         self.logger.debug("running")
         self.cam_list.remove(cam_obj)
@@ -222,7 +231,7 @@ class CameraConnectionManager:
             cam.destroy_writer()
         self.logger.debug("done")
 
-    @staticmethod
-    def handle_new_frame(cam_obj, frame):
-        cv2.imshow(cam_obj.name, frame)
-        cam_obj.save_data(frame)
+    def handle_new_frame(self, cam_obj, frame):
+        if self.is_active:
+            cv2.imshow(cam_obj.name, frame)
+            cam_obj.save_data(frame)

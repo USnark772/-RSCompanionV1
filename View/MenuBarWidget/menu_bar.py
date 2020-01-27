@@ -36,6 +36,13 @@ class MenuBar(QMenuBar):
         super().__init__(parent)
         self.setGeometry(QRect(0, 0, 840, 22))
 
+        self.__file = QMenu(self)
+        self.addAction((self.__file.menuAction()))
+
+        self.__use_cameras = QAction(self)
+        self.__use_cameras.setCheckable(True)
+        self.__file.addAction(self.__use_cameras)
+
         self.__help = QMenu(self)
         self.addAction(self.__help.menuAction())
 
@@ -53,6 +60,14 @@ class MenuBar(QMenuBar):
 
         self.__set_texts()
         self.logger.debug("Initialized")
+
+    def set_cam_bool_checked(self, checked):
+        self.__use_cameras.setChecked(checked)
+
+    def add_cam_bool_handler(self, func):
+        self.logger.debug("running")
+        self.__use_cameras.triggered.connect(func)
+        self.logger.debug("done")
 
     def add_about_app_handler(self, func):
         self.logger.debug("running")
@@ -76,6 +91,8 @@ class MenuBar(QMenuBar):
 
     def __set_texts(self):
         self.logger.debug("running")
+        self.__file.setTitle("File")
+        self.__use_cameras.setText("Use cameras")
         self.__help.setTitle("Help")
         self.__about_app.setText("About RS Companion")
         self.__about_company.setText("About Red Scientific")
