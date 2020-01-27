@@ -117,7 +117,8 @@ class VOGController(ABCDeviceController):
     def __add_data_to_graph(self, data, timestamp):
         """ Send data from device to graph for display. """
         self.logger.debug("running")
-        self.__graph_callback(self.__device_info, (timestamp, int(data[vog_output_field[1]]), int(data[vog_output_field[2]])))
+        self.__graph_callback(self.__device_info,
+                              (timestamp, int(data[vog_output_field[1]]), int(data[vog_output_field[2]])))
         self.logger.debug("done")
 
     def __update_config(self, msg):
@@ -143,19 +144,6 @@ class VOGController(ABCDeviceController):
         self.tab.add_button_mode_entry_changed_handler(self.__button_mode_entry_changed)
         self.tab.add_config_val_changed_handler(self.__config_val_entry_changed)
         self.tab.add_manual_control_handler(self.__toggle_lens)
-        self.logger.debug("done")
-
-    # TODO: Finish setting this up
-    def __config_name_entry_changed(self):
-        """
-        Handle when user changes the value in the time open field.
-        Make sure it was user that changed the value that it was not changed programmatically.
-        If changed by user, check validity of value and then allow user to commit change.
-        """
-        self.logger.debug("running")
-        if not self.__updating_config:
-            self.__check_open_val()
-            self.__set_upload_button(True)
         self.logger.debug("done")
 
     def __open_entry_changed(self):
@@ -214,6 +202,7 @@ class VOGController(ABCDeviceController):
         """
         self.logger.debug("running")
         if not self.__updating_config:
+            print("Config val changed")
             self.__config_val_changed = True
             self.__set_upload_button(True)
         self.logger.debug("done")
@@ -277,8 +266,8 @@ class VOGController(ABCDeviceController):
     def __set_upload_button(self, is_active):
         """ Check to make sure no errors are set and that there are changes to be made. Activate button if needed. """
         self.logger.debug("running")
-        if (self.__open_changed or self.__closed_changed or self.__debounce_changed or self.__mode_changed)\
-                and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
+        if (self.__config_val_changed or self.__open_changed or self.__closed_changed or self.__debounce_changed or
+                self.__mode_changed) and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
             self.tab.set_upload_button_activity(is_active)
         else:
             self.tab.set_upload_button_activity(False)
