@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -320,7 +317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580163972899</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Cameras do not toggle when there is an experiment.">
+      <created>1580164508473</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1580164508473</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -354,7 +358,8 @@
     <MESSAGE value="Using QSettings, use of cameras is now saved across sessions." />
     <MESSAGE value="Minor bug fix with VOG Config value changing and upload button not becoming available." />
     <MESSAGE value="Added functionality to toggle cameras only if they are not part of an experiment." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added functionality to toggle cameras only if they are not part of an experiment." />
+    <MESSAGE value="Cameras do not toggle when there is an experiment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Cameras do not toggle when there is an experiment." />
   </component>
   <component name="WindowStateProjectService">
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
@@ -379,12 +384,12 @@
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="415" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1368.912@0.0.1368.912" timestamp="1580152294646" />
-    <state x="275" y="102" key="CommitChangelistDialog2" timestamp="1580163971103">
+    <state x="275" y="102" key="CommitChangelistDialog2" timestamp="1580164507171">
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943289402" />
     <state x="533" y="134" key="CommitChangelistDialog2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579302140112" />
-    <state x="275" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1580163971103" />
+    <state x="275" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1580164507171" />
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1580149275165" />
     <state width="1348" height="290" key="GridCell.Tab.0.bottom" timestamp="1580164440648">
       <screen x="0" y="0" width="1368" height="912" />

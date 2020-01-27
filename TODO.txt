@@ -22,9 +22,7 @@ In progress:
     -   Figure out all the configuration ideas for cameras and put them in the tabs.
     -   Add camera deactivation options. (Done)
     -   Also see if can disconnect from specific cameras. (Done)
-        -   Should we disable removing cameras during an experiment?
-        -   If we enable a camera during an experiment should it just wait until next experiment or should it join?
-
+    
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
     Using GPL 3.0 or later at this time.
