@@ -47,7 +47,7 @@ class DRTTab(QWidget):
 
         self.config_horizontal_layout = QHBoxLayout()
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set configuration value display area"""
         self.config_frame = EasyFrame()
@@ -60,7 +60,7 @@ class DRTTab(QWidget):
         self.config_layout.addWidget(self.config_val)
         self.layout().addWidget(self.config_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set preset button selection area. """
         self.presets_frame = EasyFrame()
@@ -69,7 +69,7 @@ class DRTTab(QWidget):
         self.presets_layout.addWidget(self.iso_button)
         self.layout().addWidget(self.presets_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set stim intensity settings display area. """
         self.slider_frame = EasyFrame()
@@ -92,7 +92,7 @@ class DRTTab(QWidget):
         self.slider_layout.addWidget(self.stim_intens_slider)
         self.layout().addWidget(self.slider_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set stim duration, upper isi and lower isi settings display area. """
         self.input_box_frame = EasyFrame()
@@ -114,13 +114,13 @@ class DRTTab(QWidget):
         self.input_box_layout.addWidget(self.lower_isi_label, 2, 0, 1, 1)
         self.layout().addWidget(self.input_box_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set upload button selection area. """
         self.upload_settings_button = ClickAnimationButton()
         self.layout().addWidget(self.upload_settings_button)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         self.__graph_buttons = []
         self.device_info = device

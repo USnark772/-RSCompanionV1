@@ -26,7 +26,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 """ Change these when building """
 image_file_path = '../View/Images/'  # new path should be 'Images/'
-config_file_path = '../config/config.ini'  # new path should be 'config/config.ini'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
 current_version = 1.07  # New version should be incremented.
 

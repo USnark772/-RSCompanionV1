@@ -57,9 +57,10 @@ class TabContainer(QTabWidget):
 
     def remove_tab(self, name):
         self.logger.debug("running")
-        the_tab = self.__tabs[name]
-        self.removeTab(QTabWidget.indexOf(self, the_tab))
-        del self.__tabs[name]
+        if name in self.__tabs.keys():
+            the_tab = self.__tabs[name]
+            self.removeTab(QTabWidget.indexOf(self, the_tab))
+            del self.__tabs[name]
         self.logger.debug("done")
 
     class __Tab(QWidget):

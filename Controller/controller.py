@@ -153,9 +153,9 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
-    def add_camera(self, cam_obj):
+    def add_camera(self, cam_obj, thread):
         self.logger.debug("running")
-        self.__add_camera(cam_obj)
+        self.__create_camera_controller(cam_obj, thread)
         self.logger.debug("done")
 
     def remove_camera(self, cam_obj):
@@ -572,10 +572,11 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __add_camera(self, cam_obj):
+    def __create_camera_controller(self, cam_obj, thread):
         self.logger.debug("running")
         try:
             cam_controller = CameraController(cam_obj, self.tab_box, self.ch)
+            thread.signals.new_frame_sig.connect(cam_obj.handle_new_frame)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return

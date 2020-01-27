@@ -23,16 +23,15 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+import cv2
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
-from CompanionLib.companion_helpers import get_current_time
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
 
 
 class CameraController(ABCDeviceController):
     def __init__(self, cam_obj, tab_parent, ch):
-        tab = CameraTab(tab_parent, name=cam_obj.name)
-        super().__init__(tab)
+        super().__init__(CameraTab(tab_parent, name=cam_obj.name))
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -40,6 +39,7 @@ class CameraController(ABCDeviceController):
         self.save_dir = ''
         self.timestamp = None
         self.logger.debug("Initialized")
+        self.__setup_handlers()
 
     def cleanup(self):
         self.logger.debug("running")
@@ -56,10 +56,20 @@ class CameraController(ABCDeviceController):
 
     def start_exp(self):
         self.logger.debug("running")
-        self.cam_obj.setup_writer(save_dir=self.save_dir, timestamp=self.timestamp)
+        if self.cam_obj.is_active:
+            self.cam_obj.setup_writer(save_dir=self.save_dir, timestamp=self.timestamp)
         self.logger.debug("done")
 
     def end_exp(self):
         self.logger.debug("running")
         self.cam_obj.destroy_writer()
         self.logger.debug("done")
+
+    def toggle_cam(self):
+        if not self.cam_obj.writing:
+            self.cam_obj.is_active = not self.cam_obj.is_active
+            if not self.cam_obj.is_active:
+                self.cam_obj.close_window()
+
+    def __setup_handlers(self):
+        self.tab.add_use_cam_button_handler(self.toggle_cam)

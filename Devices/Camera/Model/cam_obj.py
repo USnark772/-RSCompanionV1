@@ -35,31 +35,44 @@ class CamObj:
         self.cap = cap
         self.name = name
         self.writer = None
+        self.active = True
+        self.writing = False
         self.logger.debug("Initialized")
 
     def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=30, frame_size=(640, 480), codec='DIVX'):
         self.logger.debug("running")
+        print("Making writer")
         self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                       cv2.VideoWriter_fourcc(*codec), fps, frame_size)
+        self.writing = True
         self.logger.debug("done")
 
     def destroy_writer(self):
         self.logger.debug("running")
-        if self.writer:
+        if self.writing:
             self.writer.release()
             self.writer = None
+            self.writing = False
         self.logger.debug("done")
 
     def read_camera(self):
         return self.cap.read()
 
     def save_data(self, frame):
-        if self.writer:
+        if self.writing:
             self.writer.write(frame)
+
+    def handle_new_frame(self, frame):
+        if self.active:
+            cv2.imshow(self.name, frame)
+            self.save_data(frame)
+
+    def close_window(self):
+        cv2.destroyWindow(self.name)
 
     def cleanup(self):
         self.logger.debug("running")
         self.cap.release()
         self.destroy_writer()
-        cv2.destroyWindow(self.name)
+        self.close_window()
         self.logger.debug("done")

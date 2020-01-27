@@ -35,7 +35,7 @@ class CamWorker(QThread):
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         QThread.__init__(self)
-        self.signal = WorkerSig()
+        self.signals = WorkerSig()
         self.cam = cam
         self.cam_counter = cam_counter
         self.running = True
@@ -46,7 +46,7 @@ class CamWorker(QThread):
         while self.running:
             ret, frame = self.cam.read_camera()
             if ret:
-                self.signal.new_frame_sig.emit(self.cam, frame)
+                self.signals.new_frame_sig.emit(frame)
             else:
                 # Error with read_camera() due to lost camera connection
                 # self.cleanup()
@@ -60,12 +60,12 @@ class CamWorker(QThread):
         self.cam_counter.get_lock()
         self.cam_counter.decrement_count()
         self.cam_counter.release_lock()
-        self.signal.cleanup_sig.emit(self.cam)
+        self.signals.cleanup_sig.emit(self.cam)
         self.logger.debug("done")
 
 
 class WorkerSig(QObject):
-    new_frame_sig = Signal((CamObj, ndarray))
+    new_frame_sig = Signal(ndarray)
     cleanup_sig = Signal(CamObj)
 
 
@@ -155,7 +155,7 @@ class CamCounter:
 
 
 class CamConManSig(QObject):
-    new_cam_sig = Signal(CamObj)
+    new_cam_sig = Signal(CamObj, classmethod)
     disconnect_sig = Signal(CamObj)
 
 
@@ -200,11 +200,10 @@ class CameraConnectionManager:
         self.logger.debug("running")
         self.cam_list.append(cam_obj)
         new_worker = CamWorker(cam_obj, self.cam_counter, self.ch)
-        new_worker.signal.new_frame_sig.connect(self.handle_new_frame)
-        new_worker.signal.cleanup_sig.connect(self.cleanup_cam_and_thread)
+        new_worker.signals.cleanup_sig.connect(self.cleanup_cam_and_thread)
         new_worker.start()
         self.worker_thread_list.append(new_worker)
-        self.signals.new_cam_sig.emit(cam_obj)
+        self.signals.new_cam_sig.emit(cam_obj, new_worker)
         self.logger.debug("done")
 
     def cleanup_cam_and_thread(self, cam_obj):
@@ -219,19 +218,8 @@ class CameraConnectionManager:
         del cam_obj
         self.logger.debug("done")
 
-    def start_recording(self, timestamp, save_dir):
-        self.logger.debug("running")
-        for cam in self.cam_list:
-            cam.setup_writer(timestamp, save_dir=save_dir)
-        self.logger.debug("done")
-
     def stop_recording(self):
         self.logger.debug("running")
         for cam in self.cam_list:
             cam.destroy_writer()
         self.logger.debug("done")
-
-    def handle_new_frame(self, cam_obj, frame):
-        if self.is_active:
-            cv2.imshow(cam_obj.name, frame)
-            cam_obj.save_data(frame)

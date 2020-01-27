@@ -20,8 +20,10 @@ In progress:
     -   Device overlay is recorded with the video
     -   Device output will add a frame # for when that device output came in
     -   Figure out all the configuration ideas for cameras and put them in the tabs.
-    -   Add camera deactivation options. (Whether or not to actually use camera_manager and also user options to
-        close specific cameras) Also see if can disconnect from specific cameras.
+    -   Add camera deactivation options. (Done)
+    -   Also see if can disconnect from specific cameras. (Done)
+        -   Should we disable removing cameras during an experiment?
+        -   If we enable a camera during an experiment should it just wait until next experiment or should it join?
 
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )

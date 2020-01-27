@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 class ABCDeviceController(ABC):
     def __init__(self, tab):
         self.tab = tab
-        self.active = False
+        self.active = True
 
     @abstractmethod
     def cleanup(self):
