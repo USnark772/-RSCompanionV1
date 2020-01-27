@@ -41,7 +41,6 @@ class CamObj:
 
     def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=30, frame_size=(640, 480), codec='DIVX'):
         self.logger.debug("running")
-        print("Making writer")
         self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                       cv2.VideoWriter_fourcc(*codec), fps, frame_size)
         self.writing = True

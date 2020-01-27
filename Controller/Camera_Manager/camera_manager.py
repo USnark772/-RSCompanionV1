@@ -170,15 +170,15 @@ class CameraConnectionManager:
         self.worker_thread_list = []
         self.cam_counter = CamCounter(ch)
         self.scanner_thread = None
-        self.is_active = False
+        self.active = False
         self.logger.debug("Initialized")
 
     def deactivate(self):
-        self.is_active = False
+        self.active = False
         self.cleanup()
 
     def activate(self):
-        self.is_active = True
+        self.active = True
         self.scanner_thread = CamScanner(self.cam_counter, self.ch)
         self.scanner_thread.signal.new_cam_sig.connect(self.handle_new_camera)
         self.scanner_thread.start()

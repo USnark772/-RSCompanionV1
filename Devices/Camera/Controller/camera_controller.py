@@ -38,6 +38,7 @@ class CameraController(ABCDeviceController):
         self.cam_obj = cam_obj
         self.save_dir = ''
         self.timestamp = None
+        self.exp = False
         self.logger.debug("Initialized")
         self.__setup_handlers()
 
@@ -56,19 +57,21 @@ class CameraController(ABCDeviceController):
 
     def start_exp(self):
         self.logger.debug("running")
-        if self.cam_obj.is_active:
+        if self.cam_obj.active:
             self.cam_obj.setup_writer(save_dir=self.save_dir, timestamp=self.timestamp)
+        self.exp = True
         self.logger.debug("done")
 
     def end_exp(self):
         self.logger.debug("running")
         self.cam_obj.destroy_writer()
+        self.exp = False
         self.logger.debug("done")
 
     def toggle_cam(self):
-        if not self.cam_obj.writing:
-            self.cam_obj.is_active = not self.cam_obj.is_active
-            if not self.cam_obj.is_active:
+        if not self.exp:
+            self.cam_obj.active = not self.cam_obj.active
+            if not self.cam_obj.active:
                 self.cam_obj.close_window()
 
     def __setup_handlers(self):

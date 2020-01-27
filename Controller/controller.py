@@ -616,7 +616,7 @@ class CompanionController:
 
     def __toggle_use_cameras(self):
         self.settings.beginGroup("Camera manager")
-        if self.cam_con_manager.is_active:
+        if self.cam_con_manager.active:
             self.cam_con_manager.deactivate()
             self.settings.setValue("active", "False")
         else:
