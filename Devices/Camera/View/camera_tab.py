@@ -42,6 +42,17 @@ class CameraTab(QWidget):
         self.__use_cam_button = ClickAnimationButton()
         self.layout().addWidget(self.__use_cam_button)
 
+        self.next_button = ClickAnimationButton()
+        self.next_button.setText("Next resolution")
+        self.layout().addWidget(self.next_button)
+        #
+        # prop_buttons = []
+        # for i in range(15):
+        #     next_button = ClickAnimationButton()
+        #     next_button.setText("Property " + str(i+1))
+        #     self.layout().addWidget(next_button)
+        #     prop_buttons.append(next_button)
+
         self.layout().addWidget(EasyFrame(line=True))
 
         self.__set_texts()

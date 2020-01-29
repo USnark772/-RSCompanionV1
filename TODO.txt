@@ -17,12 +17,9 @@ In progress:
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
     Would we need to pass a reference to the device controller's respective function in?
     Video:
-    -   Create exp starts recording video (Done).
     -   Device overlay is recorded with the video
     -   Device output will add a frame # for when that device output came in
     -   Figure out all the configuration ideas for cameras and put them in the tab.
-    -   Add camera deactivation options. (Done)
-    -   Also see if can disconnect from specific cameras. (Done)
     -   Figure out bug with turning camman on or off. (Seems to be an issue with usb cams) (Can't seem to reproduce)
     -   Figure out but with toggling cameras and then clicking create exp (Seems to freeze the app indefinitely)
     

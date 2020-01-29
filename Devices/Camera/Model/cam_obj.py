@@ -82,3 +82,7 @@ class CamObj:
         self.destroy_writer()
         self.close_window()
         self.logger.debug("done")
+
+    def set_image_size(self, size):
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[0])
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[1])

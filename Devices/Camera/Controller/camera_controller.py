@@ -48,6 +48,9 @@ class CameraController(ABCDeviceController):
         self.cam_active = True
         self.logger.debug("Initialized")
         self.__setup_handlers()
+        self.current_size = 0
+        self.sizes = []
+        self.populate_sizes()
 
     def cleanup(self):
         self.logger.debug("running")
@@ -84,5 +87,15 @@ class CameraController(ABCDeviceController):
                 self.cam_thread.signals.wcond.wakeAll()
             self.cam_obj.toggle_activity()
 
+    def populate_sizes(self):
+        self.sizes.append((1920, 1080))
+        self.sizes.append((1280, 1024))
+        self.sizes.append((800, 600))
+
+    def cycle_image_size(self):
+        self.current_size = (self.current_size + 1) % len(self.sizes)
+        self.cam_obj.set_image_size(self.sizes[self.current_size])
+
     def __setup_handlers(self):
         self.tab.add_use_cam_button_handler(self.toggle_cam)
+        self.tab.next_button.clicked.connect(self.cycle_image_size)
