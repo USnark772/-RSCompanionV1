@@ -23,28 +23,36 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-import cv2
+from PySide2.QtCore import QObject, Signal
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
 
 
+class ControllerSig(QObject):
+    toggle_signal = Signal()
+
+
 class CameraController(ABCDeviceController):
-    def __init__(self, cam_obj, tab_parent, ch):
-        super().__init__(CameraTab(tab_parent, name=cam_obj.name))
+    def __init__(self, cam_obj, thread, ch):
+        super().__init__(CameraTab(name=cam_obj.name))
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
+        self.signals = ControllerSig()
         self.cam_obj = cam_obj
+        self.cam_thread = thread
         self.save_dir = ''
         self.timestamp = None
         self.exp = False
+        self.cam_active = True
         self.logger.debug("Initialized")
         self.__setup_handlers()
 
     def cleanup(self):
         self.logger.debug("running")
-        pass
+        if not self.cam_active:
+            self.toggle_cam()
         self.logger.debug("done")
 
     def create_new_save_file(self, new_filename):
@@ -70,9 +78,11 @@ class CameraController(ABCDeviceController):
 
     def toggle_cam(self):
         if not self.exp:
-            self.cam_obj.active = not self.cam_obj.active
-            if not self.cam_obj.active:
-                self.cam_obj.close_window()
+            self.cam_thread.reading = not self.cam_thread.reading
+            self.cam_active = not self.cam_active
+            if self.cam_active:
+                self.cam_thread.signals.wcond.wakeAll()
+            self.cam_obj.toggle_activity()
 
     def __setup_handlers(self):
         self.tab.add_use_cam_button_handler(self.toggle_cam)

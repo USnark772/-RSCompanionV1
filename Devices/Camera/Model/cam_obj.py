@@ -39,11 +39,17 @@ class CamObj:
         self.writing = False
         self.logger.debug("Initialized")
 
+    def toggle_activity(self):
+        self.active = not self.active
+        if not self.active:
+            self.close_window()
+
     def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=30, frame_size=(640, 480), codec='DIVX'):
         self.logger.debug("running")
-        self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
-                                      cv2.VideoWriter_fourcc(*codec), fps, frame_size)
-        self.writing = True
+        if self.active:
+            self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
+                                          cv2.VideoWriter_fourcc(*codec), fps, frame_size)
+            self.writing = True
         self.logger.debug("done")
 
     def destroy_writer(self):
@@ -71,6 +77,7 @@ class CamObj:
 
     def cleanup(self):
         self.logger.debug("running")
+        self.active = False
         self.cap.release()
         self.destroy_writer()
         self.close_window()

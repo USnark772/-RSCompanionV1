@@ -25,7 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import cv2
 from numpy import ndarray
-from PySide2.QtCore import QThread, QObject, QMutex, Signal
+from PySide2.QtCore import QThread, QObject, QMutex, Signal, QWaitCondition
 from Devices.Camera.Model.cam_obj import CamObj
 
 
@@ -39,17 +39,21 @@ class CamWorker(QThread):
         self.cam = cam
         self.cam_counter = cam_counter
         self.running = True
+        self.reading = True
         self.logger.debug("Initialized")
 
     def run(self):
         self.logger.debug("running")
         while self.running:
+            self.signals.lock.lock()
+            if not self.reading:
+                self.signals.wcond.wait(self.signals.lock)
+            self.signals.lock.unlock()
             ret, frame = self.cam.read_camera()
             if ret:
                 self.signals.new_frame_sig.emit(frame)
             else:
-                # Error with read_camera() due to lost camera connection
-                # self.cleanup()
+                # Lost connection to camera.
                 break
         self.cleanup()
         self.logger.debug("done")
@@ -63,10 +67,15 @@ class CamWorker(QThread):
         self.signals.cleanup_sig.emit(self.cam)
         self.logger.debug("done")
 
+    def toggle(self):
+        self.reading = not self.reading
+
 
 class WorkerSig(QObject):
     new_frame_sig = Signal(ndarray)
     cleanup_sig = Signal(CamObj)
+    wcond = QWaitCondition()
+    lock = QMutex()
 
 
 class CamScanner(QThread):

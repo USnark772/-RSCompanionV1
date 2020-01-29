@@ -11,6 +11,7 @@ To deal with at some point:
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
 -   Add button that leads to last used directory for saving.
 -   Add cpu resource monitor to code with possible color coding based on percentage. < 70% is green, 70% - 90% yellow, > 90% red.
+-   Add audio support. Does the camera mic come in separately or with the audio?
 
 In progress:
 -   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
@@ -19,9 +20,11 @@ In progress:
     -   Create exp starts recording video (Done).
     -   Device overlay is recorded with the video
     -   Device output will add a frame # for when that device output came in
-    -   Figure out all the configuration ideas for cameras and put them in the tabs.
+    -   Figure out all the configuration ideas for cameras and put them in the tab.
     -   Add camera deactivation options. (Done)
     -   Also see if can disconnect from specific cameras. (Done)
+    -   Figure out bug with turning camman on or off. (Seems to be an issue with usb cams) (Can't seem to reproduce)
+    -   Figure out but with toggling cameras and then clicking create exp (Seems to freeze the app indefinitely)
     
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
@@ -38,3 +41,6 @@ to get stack trace
 to get exceptions
 -   from traceback import print_exc
     print_exc(filename)
+
+cam version we have:
+c920

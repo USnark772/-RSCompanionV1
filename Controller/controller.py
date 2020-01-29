@@ -522,6 +522,8 @@ class CompanionController:
         self.__controller_classes[device[0].upper()][1] -= 1
         self.logger.debug("done")
 
+    # TODO: This and create drt controller functions could be merged. Perhaps different functions for the
+    #  try except block.
     def __create_drt_controller(self, device, thread):
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
@@ -532,11 +534,9 @@ class CompanionController:
                 return False
         self.logger.debug("Making controller for drt")
         try:
-            device_controller = DRTController(self.tab_box, device, self.add_data_to_graph, self.ch,
+            device_controller = DRTController(device, thread, self.add_data_to_graph, self.ch,
                                               self.save_device_data)
-            device_controller.signals.send_device_msg_sig.connect(thread.send_msg)
-            thread.signals.new_msg_sig.connect(device_controller.handle_msg)
-            device_controller.init_values()
+            device_controller.get_tab_obj().setParent(self.tab_box)
         except Exception as e:
             self.logger.exception("failed to make device_controller for drt" + str(device))
             self.__check_num_devices()
@@ -557,11 +557,9 @@ class CompanionController:
                 return False
         self.logger.debug("Making controller for vog")
         try:
-            device_controller = VOGController(self.tab_box, device, self.add_data_to_graph, self.ch,
+            device_controller = VOGController(device, thread, self.add_data_to_graph, self.ch,
                                               self.save_device_data)
-            device_controller.signals.send_device_msg_sig.connect(thread.send_msg)
-            thread.signals.new_msg_sig.connect(device_controller.handle_msg)
-            device_controller.init_values()
+            device_controller.get_tab_obj().setParent(self.tab_box)
         except Exception as e:
             self.logger.exception("failed to make device_controller for vog" + str(device))
             self.__check_num_devices()
@@ -575,7 +573,9 @@ class CompanionController:
     def __create_camera_controller(self, cam_obj, thread):
         self.logger.debug("running")
         try:
-            cam_controller = CameraController(cam_obj, self.tab_box, self.ch)
+            # TODO: Push thread into controllers?
+            cam_controller = CameraController(cam_obj, thread, self.ch)
+            cam_controller.tab.setParent(self.tab_box)
             thread.signals.new_frame_sig.connect(cam_obj.handle_new_frame)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
@@ -597,18 +597,20 @@ class CompanionController:
     def ui_close_event_handler(self):
         """ Shut down all devices before closing the app. """
         self.logger.debug("running")
-        if self.__exp_running:
-            try:
-                for controller in self.__device_controllers.values():
-                    controller.end_block()
-            except Exception as e:
-                self.logger.exception("Failed to end_block_all")
-        if self.__exp_created:
-            try:
-                for controller in self.__device_controllers.values():
-                    controller.end_exp()
-            except Exception as e:
-                self.logger.exception("Failed to end_exp_all")
+        for controller in self.__device_controllers.values():
+            controller.cleanup()
+        # if self.__exp_running:
+        #     try:
+        #         for controller in self.__device_controllers.values():
+        #             controller.end_block()
+        #     except Exception as e:
+        #         self.logger.exception("Failed to end_block_all")
+        # if self.__exp_created:
+        #     try:
+        #         for controller in self.__device_controllers.values():
+        #             controller.end_exp()
+        #     except Exception as e:
+        #         self.logger.exception("Failed to end_exp_all")
         self.dev_con_manager.cleanup()
         self.cam_con_manager.cleanup()
         self.log_output.close()
@@ -616,12 +618,15 @@ class CompanionController:
 
     def __toggle_use_cameras(self):
         self.settings.beginGroup("Camera manager")
-        if self.cam_con_manager.active:
-            self.cam_con_manager.deactivate()
-            self.settings.setValue("active", "False")
-        else:
-            self.cam_con_manager.activate()
-            self.settings.setValue("active", "True")
+        if not self.__exp_created:
+            if self.cam_con_manager.active:
+                self.cam_con_manager.deactivate()
+                self.settings.setValue("active", "False")
+                self.menu_bar.set_cam_bool_checked(False)
+            else:
+                self.cam_con_manager.activate()
+                self.settings.setValue("active", "True")
+                self.menu_bar.set_cam_bool_checked(True)
 
     def __about_company(self):
         """ Display company information. """

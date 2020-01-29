@@ -37,13 +37,13 @@ class DRTSig(QObject):
 
 
 class DRTController(ABCDeviceController):
-    def __init__(self, tab_parent, device, graph_callback, ch, save_callback):
+    def __init__(self, device, thread, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.signals = DRTSig()
         self.device_name = device[0].upper(), "_" + device[1][3:]
-        super().__init__(DRTTab(tab_parent, self.device_name[0] + self.device_name[1], ch))
+        super().__init__(DRTTab(self.device_name[0] + self.device_name[1], ch))
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__save_callback = save_callback
@@ -51,11 +51,18 @@ class DRTController(ABCDeviceController):
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
         self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
         self.__current_vals = [0, 0, 0, 0]  # stimDur, stimIntens, upperISI, lowerISI
+        self.__connect_signals(thread)
         self.__set_upload_button(False)
         self.__data_types = [["Response Time", 0, True], ["Clicks", 0, True]]
         self.save_file = str()
         self.__set_handlers()
+        self.init_values()
         self.logger.debug("Initialized")
+
+    def cleanup(self):
+        self.logger.debug("running")
+        self.end_block()
+        self.logger.debug("done")
 
     def get_tab_obj(self):
         return self.tab
@@ -68,9 +75,6 @@ class DRTController(ABCDeviceController):
             self.__save_data(msg_dict['values'], timestamp)
         elif msg_type == "settings":
             self.__update_config(msg_dict['values'])
-
-    def cleanup(self):
-        self.end_block()
 
     def start_block(self):
         self.__send_msg(self.__prepare_msg("exp_start"))
@@ -91,6 +95,10 @@ class DRTController(ABCDeviceController):
     @staticmethod
     def get_note_spacer():
         return drtv1_0_note_spacer
+
+    def __connect_signals(self, thread):
+        self.signals.send_device_msg_sig.connect(self.thread.send_msg)
+        self.thread.signals.new_msg_sig.connect(self.handle_msg)
 
     def __save_data(self, values, timestamp):
         line = self.__format_output_for_save_file(values)

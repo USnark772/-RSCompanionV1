@@ -32,12 +32,12 @@ from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
 class DRTTab(QWidget):
     """ This code is for helping the user interact with the configurations of the DRT device. """
-    def __init__(self, parent, device, ch):
+    def __init__(self, device, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         try:
-            super().__init__(parent)
+            super().__init__()
         except Exception as e:
             self.logger.exception("Error making DRTTab, passed in parent is invalid")
             return

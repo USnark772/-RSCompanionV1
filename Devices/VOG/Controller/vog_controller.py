@@ -35,13 +35,13 @@ class VOGSig(QObject):
 
 
 class VOGController(ABCDeviceController):
-    def __init__(self, tab_parent, device, graph_callback, ch, save_callback):
+    def __init__(self, device, thread, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.signals = VOGSig()
         self.device_name = device[0].upper(), "_" + device[1][3:]
-        super().__init__(VOGTab(tab_parent, self.device_name[0] + self.device_name[1], ch))
+        super().__init__(VOGTab(self.device_name[0] + self.device_name[1], ch))
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__save_callback = save_callback
@@ -56,11 +56,19 @@ class VOGController(ABCDeviceController):
         self.__lens_open = False
         # bools: tried array but had bugs when setting bools[0] to true, bools must be separate.
         self.__prev_vals = ["", ""]  # MaxOpen, MaxClose
+        self.__connect_signals(thread)
         self.__set_upload_button(False)
         self.__data_types = [["Time Open", 0, True], ["Time Closed", 0, True]]
         self.save_file = str()
         self.__set_handlers()
+        self.init_values()
         self.logger.debug("Initialized")
+
+    def cleanup(self):
+        self.logger.debug("running")
+        self.end_block()
+        self.end_exp()
+        self.logger.debug("done")
 
     def get_tab_obj(self):
         return self.tab
@@ -109,6 +117,10 @@ class VOGController(ABCDeviceController):
     @staticmethod
     def get_note_spacer():
         return vog_note_spacer
+
+    def __connect_signals(self, thread):
+        self.signals.send_device_msg_sig.connect(thread.send_msg)
+        thread.signals.new_msg_sig.connect(self.handle_msg)
 
     def __save_data(self, values, timestamp):
         line = self.__format_output_for_save_file(values)

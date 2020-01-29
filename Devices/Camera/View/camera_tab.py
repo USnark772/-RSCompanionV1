@@ -28,8 +28,8 @@ from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
 
 class CameraTab(QWidget):
-    def __init__(self, parent=None, name=""):
-        super().__init__(parent)
+    def __init__(self, name=""):
+        super().__init__()
         self.name = name
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
