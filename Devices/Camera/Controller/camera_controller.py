@@ -51,6 +51,7 @@ class CameraController(ABCDeviceController):
         self.current_size = 0
         self.frame_sizes = []
         self.fps_values = []
+        self.cam_obj.signals.frame_size_fail_sig.connect(self.set_tab_frame_size)
         self.__populate_sizes()
         self.__populate_fps_selections()
         self.__initialize_tab_values()
@@ -97,9 +98,13 @@ class CameraController(ABCDeviceController):
     def set_frame_size(self):
         self.logger.debug("running")
         new_size = self.tab.get_frame_size()
-        if not self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1]))):
-            pass  # TODO: Make this reset to previous frame size if fail.
+        self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1])))
         self.logger.debug("done")
+
+    # TODO: Alert user to failure?
+    def set_tab_frame_size(self):
+        new_size = self.cam_obj.get_current_frame_size()
+        self.tab.set_frame_size(self.__get_size_val_index(new_size))
 
     def set_fps(self):
         self.logger.debug("running")
@@ -158,15 +163,18 @@ class CameraController(ABCDeviceController):
         self.logger.debug("done")
 
     def __initialize_tab_values(self):
-        # TODO: Is there a better way?
         rotation_val = self.cam_obj.get_current_rotation()
         fps_val = self.cam_obj.get_current_fps()
         size_val = self.cam_obj.get_current_frame_size()
-        x = int(size_val[0])
-        y = int(size_val[1])
-        size_val_str = str(x) + ", " + str(y)
-        size_val_index = self.frame_sizes.index((size_val_str, size_val))
-        fps_val_index = self.fps_values.index((str(fps_val), fps_val))
         self.tab.set_rotation(rotation_val)
-        self.tab.set_fps(fps_val_index)
-        self.tab.set_frame_size(size_val_index)
+        self.tab.set_fps(self.__get_fps_val_index(fps_val))
+        self.tab.set_frame_size(self.__get_size_val_index(size_val))
+
+    def __get_size_val_index(self, value):
+        x = int(value[0])
+        y = int(value[1])
+        the_string = str(x) + ", " + str(y)
+        return self.frame_sizes.index((the_string, value))
+
+    def __get_fps_val_index(self, value):
+        return self.fps_values.index((str(value), value))

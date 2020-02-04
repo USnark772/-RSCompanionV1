@@ -25,6 +25,11 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 import cv2
+from PySide2.QtCore import QObject, Signal
+
+
+class CamObjSig(QObject):
+    frame_size_fail_sig = Signal()
 
 
 class CamObj:
@@ -33,8 +38,10 @@ class CamObj:
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.cap = cap
+        self.signals = CamObjSig()
         self.name = name
         self.frame_size = (cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        print("self.frame_size initialized to:", self.frame_size)
         self.fps = 30
         self.writer = None
         self.active = True
@@ -71,14 +78,16 @@ class CamObj:
             self.writing = False
         self.logger.debug("done")
 
+    # TODO: Program still sometimes crashing when changing resolution.
     def read_camera(self):
         i = 0
         while i < 20:
             try:
                 return self.cap.read()
             except:
-                # TODO: send signal?
-                self.set_frame_size((640, 480))
+                self.frame_size = (640.0, 480.0)
+                self.set_frame_size(self.frame_size)
+                self.signals.frame_size_fail_sig.emit()
             i += 1
         return False, 0
 
@@ -108,30 +117,34 @@ class CamObj:
         self.close_window()
         self.logger.debug("done")
 
-    def set_fps(self, fps):
-        self.fps = fps
-
     def set_use_color(self, is_active):
         self.color_image = is_active
-
-    def set_rotation(self, value):
-        self.rotate_angle = value
-
-    def get_current_rotation(self):
-        return self.rotate_angle
 
     def get_current_fps(self):
         return self.fps
 
-    def set_frame_size(self, size):
-        x = size[0]
-        y = size[1]
-        self.toggle_activity()
-        self.frame_size = (x, y)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, x)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, y)
-        self.close_window()
-        self.toggle_activity()
+    def set_fps(self, fps):
+        self.fps = fps
+
+    def get_current_rotation(self):
+        return self.rotate_angle
+
+    def set_rotation(self, value):
+        self.rotate_angle = value
 
     def get_current_frame_size(self):
         return self.frame_size
+
+    def set_frame_size(self, size):
+        x = float(size[0])
+        y = float(size[1])
+        self.toggle_activity()
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
+        new_x = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        new_y = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.frame_size = (new_x, new_y)
+        if not (x, y) == (new_x, new_y):
+            self.signals.frame_size_fail_sig.emit()
+        self.close_window()
+        self.toggle_activity()

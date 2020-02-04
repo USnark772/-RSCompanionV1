@@ -87,6 +87,7 @@ class CameraTab(QWidget):
         self.layout().addWidget(EasyFrame(line=True))
 
         self.__set_texts()
+        self.__set_tooltips()
 
     def get_name(self):
         return self.name
@@ -145,6 +146,18 @@ class CameraTab(QWidget):
     def __set_texts(self):
         self.use_cam_button.setText("Toggle Camera")
         self.fps_selector_label.setText("FPS")
-        self.frame_size_selector_label.setText("Frame size (causes problems)")
-        self.color_toggle_button.setText("Toggle color image")
-        self.frame_rotation_slider_label.setText("Rotate video feed")
+        self.frame_size_selector_label.setText("Frame size")
+        self.color_toggle_button.setText("Toggle color")
+        self.frame_rotation_slider_label.setText("Rotate")
+
+    def __set_tooltips(self):
+        fps_selector_tooltip = "Select frame rate for the saved footage"
+        frame_size_tooltip = "Select resolution for this camera. Higher resolutions may cause issues."
+        use_cam_tooltip = "Toggle whether this camera is being used."
+        use_color_tooltip = "Toggle between color or black and white video."
+        rotation_tooltip = "Set rotation angle for video feed."
+        self.use_cam_button.setToolTip(use_cam_tooltip)
+        self.color_toggle_button.setToolTip(use_color_tooltip)
+        self.fps_selector_frame.setToolTip(fps_selector_tooltip)
+        self.frame_size_selector_frame.setToolTip(frame_size_tooltip)
+        self.frame_rotation_slider_frame.setToolTip(rotation_tooltip)
