@@ -77,7 +77,6 @@ class CompanionController:
 
         self.logger.info("RS Companion app version: " + str(current_version))
         self.logger.debug("Initializing")
-        self.logger.warning("This is a test")
         ui_min_size = QSize(950, 740)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
@@ -430,10 +429,14 @@ class CompanionController:
         self.logger.debug("done")
 
     def __get_save_file_name(self):
+        self.logger.debug("running")
         self.__save_file_name = self.file_dialog.getSaveFileName(filter="*.txt")[0]
+        self.logger.debug("1")
         valid = len(self.__save_file_name) > 1
+        self.logger.debug("2")
         if valid:
             self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
+        self.logger.debug("done")
         return valid
 
     @staticmethod
@@ -617,6 +620,7 @@ class CompanionController:
         self.logger.debug("done")
 
     def __toggle_use_cameras(self):
+        self.logger.debug("running")
         self.settings.beginGroup("Camera manager")
         if not self.__exp_created:
             if self.cam_con_manager.active:
@@ -627,6 +631,7 @@ class CompanionController:
                 self.cam_con_manager.activate()
                 self.settings.setValue("active", "True")
                 self.menu_bar.set_cam_bool_checked(True)
+        self.logger.debug("done")
 
     def __about_company(self):
         """ Display company information. """

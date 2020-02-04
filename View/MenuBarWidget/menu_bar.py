@@ -39,6 +39,9 @@ class MenuBar(QMenuBar):
         self.__file = QMenu(self)
         self.addAction((self.__file.menuAction()))
 
+        self.__open_save_dir = QAction(self)
+        self.__file.addAction(self.__open_save_dir)
+
         self.__use_cameras = QAction(self)
         self.__use_cameras.setCheckable(True)
         self.__file.addAction(self.__use_cameras)
@@ -92,6 +95,7 @@ class MenuBar(QMenuBar):
     def __set_texts(self):
         self.logger.debug("running")
         self.__file.setTitle("File")
+        self.__open_save_dir.setText("Open last save location")
         self.__use_cameras.setText("Use cameras")
         self.__help.setTitle("Help")
         self.__about_app.setText("About RS Companion")

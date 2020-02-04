@@ -1,6 +1,5 @@
 To deal with at some point:
 -   Change output path to fixed and user can change it if desired but doesn't need to.
--   Give program a folder in user space instead of program files space and place config file in there.
 -   Fix time on charts and output files so that it matches the time shown in users computers.
 -   Chart Y axes need to be set to default values VOG 0-12 seconds, DRT RT 0-2500ms, Clicks 0-3
 -   GPS integration
@@ -9,19 +8,17 @@ To deal with at some point:
     -   Let user set the bounds of the mean
 -   When scrolling, the graphs move in their canvasas
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
--   Add button that leads to last used directory for saving.
 -   Add cpu resource monitor to code with possible color coding based on percentage. < 70% is green, 70% - 90% yellow, > 90% red.
 -   Add audio support. Does the camera mic come in separately or with the audio?
 
 In progress:
--   Refactor so that all device logic (device manager messaging etc.) is in the device specific files
-    Would we need to pass a reference to the device controller's respective function in?
+    -   Add button that leads to last used directory for saving.
     Video:
     -   Device overlay is recorded with the video
     -   Device output will add a frame # for when that device output came in
     -   Figure out all the configuration ideas for cameras and put them in the tab.
     -   Figure out bug with turning camman on or off. (Seems to be an issue with usb cams) (Can't seem to reproduce)
-    -   Figure out but with toggling cameras and then clicking create exp (Seems to freeze the app indefinitely)
+    -   Figure out bug with toggling cameras off and then clicking create exp (Seems to freeze the app indefinitely)
     
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )

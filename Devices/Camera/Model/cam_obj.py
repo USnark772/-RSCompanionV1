@@ -34,6 +34,8 @@ class CamObj:
         self.logger.debug("Initializing")
         self.cap = cap
         self.name = name
+        self.frame_size = (1920, 1080)
+        self.fps = 30
         self.writer = None
         self.active = True
         self.writing = False
@@ -44,8 +46,12 @@ class CamObj:
         if not self.active:
             self.close_window()
 
-    def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=30, frame_size=(640, 480), codec='DIVX'):
+    def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=None, frame_size=None, codec='DIVX'):
         self.logger.debug("running")
+        if not frame_size:
+            frame_size = self.frame_size
+        if not fps:
+            fps = self.fps
         if self.active:
             self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                           cv2.VideoWriter_fourcc(*codec), fps, frame_size)
@@ -83,6 +89,16 @@ class CamObj:
         self.close_window()
         self.logger.debug("done")
 
-    def set_image_size(self, size):
+    def set_fps(self, fps):
+        self.fps = fps
+
+    def get_current_fps(self):
+        return self.fps
+
+    def set_frame_size(self, size):
+        self.frame_size = (size[0], size[1])
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[0])
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[1])
+
+    def get_current_frame_size(self):
+        return self.frame_size

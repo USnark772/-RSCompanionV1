@@ -46,11 +46,13 @@ class CameraController(ABCDeviceController):
         self.timestamp = None
         self.exp = False
         self.cam_active = True
-        self.logger.debug("Initialized")
         self.__setup_handlers()
         self.current_size = 0
-        self.sizes = []
-        self.populate_sizes()
+        self.frame_sizes = []
+        self.fps_values = []
+        self.__populate_sizes()
+        self.__populate_fps_selections()
+        self.logger.debug("Initialized")
 
     def cleanup(self):
         self.logger.debug("running")
@@ -64,7 +66,9 @@ class CameraController(ABCDeviceController):
         self.logger.debug("done")
 
     def set_start_time(self, timestamp):
+        self.logger.debug("running")
         self.timestamp = timestamp
+        self.logger.debug("done")
 
     def start_exp(self):
         self.logger.debug("running")
@@ -80,22 +84,56 @@ class CameraController(ABCDeviceController):
         self.logger.debug("done")
 
     def toggle_cam(self):
+        self.logger.debug("running")
         if not self.exp:
             self.cam_thread.reading = not self.cam_thread.reading
             self.cam_active = not self.cam_active
             if self.cam_active:
                 self.cam_thread.signals.wcond.wakeAll()
             self.cam_obj.toggle_activity()
+        self.logger.debug("done")
 
-    def populate_sizes(self):
-        self.sizes.append((1920, 1080))
-        self.sizes.append((1280, 1024))
-        self.sizes.append((800, 600))
+    def set_frame_size(self):
+        self.logger.debug("running")
+        if not self.exp:
+            new_size = self.tab.get_frame_size()
+            self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1])))
+        else:
+            old_size = str(self.cam_obj.get_current_frame_size())
+            old_size = old_size.strip('(')
+            old_size = old_size.rstrip(')')
+            index = self.frame_sizes.index(old_size)
+            self.tab.set_frame_size_selector(index)
+        self.logger.debug("done")
 
-    def cycle_image_size(self):
-        self.current_size = (self.current_size + 1) % len(self.sizes)
-        self.cam_obj.set_image_size(self.sizes[self.current_size])
+    def set_fps(self):
+        self.logger.debug("running")
+        if not self.exp:
+            self.cam_obj.set_fps(self.tab.get_fps())
+        else:
+            index = self.fps_values.index(str(self.cam_obj.get_current_fps()))
+            self.tab.set_fps_selector(index)
+        self.logger.debug("done")
+
+    def __populate_fps_selections(self):
+        self.logger.debug("running")
+        for i in range(11):
+            self.fps_values.append(str(30 - i))
+        self.tab.populate_fps_selector(self.fps_values)
+        self.logger.debug("done")
+
+    def __populate_sizes(self):
+        self.logger.debug("running")
+        self.frame_sizes.append('1920, 1080')
+        self.frame_sizes.append('1280, 1024')
+        self.frame_sizes.append('800, 600')
+        self.frame_sizes.append('640, 480')
+        self.tab.populate_frame_size_selector(self.frame_sizes)
+        self.logger.debug("done")
 
     def __setup_handlers(self):
+        self.logger.debug("running")
         self.tab.add_use_cam_button_handler(self.toggle_cam)
-        self.tab.next_button.clicked.connect(self.cycle_image_size)
+        self.tab.add_fps_selector_handler(self.set_fps)
+        self.tab.add_frame_size_selector_handler(self.set_frame_size)
+        self.logger.debug("done")

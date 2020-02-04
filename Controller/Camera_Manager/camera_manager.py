@@ -225,7 +225,7 @@ class CameraConnectionManager:
                 self.worker_thread_list.remove(worker)
                 worker.wait()
         del cam_obj
-        self.logger.debug("done")
+        self.logger.debug("done, num cams left = " + str(len(self.cam_list)))
 
     def stop_recording(self):
         self.logger.debug("running")
