@@ -22,7 +22,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QFrame
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QSlider
 from PySide2.QtCore import QRect, Qt
 from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
@@ -33,18 +33,17 @@ class CameraTab(QWidget):
         self.name = name
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setMaximumHeight(200)
+        self.setMaximumHeight(300)
 
         self.config_horizontal_layout = QHBoxLayout()
 
         self.layout().addWidget(EasyFrame(line=True))
 
-        self.__use_cam_button = ClickAnimationButton()
-        self.layout().addWidget(self.__use_cam_button)
+        self.use_cam_button = ClickAnimationButton()
+        self.layout().addWidget(self.use_cam_button)
 
-        self.next_button = ClickAnimationButton()
-        self.next_button.setText("Next resolution")
-        self.layout().addWidget(self.next_button)
+        self.color_toggle_button = ClickAnimationButton()
+        self.layout().addWidget(self.color_toggle_button)
 
         self.layout().addWidget(EasyFrame(line=True))
 
@@ -70,6 +69,21 @@ class CameraTab(QWidget):
 
         self.layout().addWidget(self.frame_size_selector_frame)
 
+        self.frame_rotation_slider_frame = EasyFrame()
+        self.frame_rotation_slider_layout = QVBoxLayout(self.frame_rotation_slider_frame)
+        self.frame_rotation_slider_label = QLabel(self.frame_rotation_slider_frame)
+        self.frame_rotation_slider_label.setAlignment(Qt.AlignCenter)
+        self.frame_rotation_slider_layout.addWidget(self.frame_rotation_slider_label)
+        self.frame_rotation_slider_layout.addWidget(EasyFrame(vert=True))
+        self.frame_rotation_slider = QSlider(self.frame_rotation_slider_frame)
+        self.frame_rotation_slider.setOrientation(Qt.Horizontal)
+        self.frame_rotation_slider.setRange(0, 360)
+        self.frame_rotation_slider.setTickPosition(QSlider.TicksBelow)
+        self.frame_rotation_slider.setTickInterval(90)
+        self.frame_rotation_slider_layout.addWidget(self.frame_rotation_slider)
+
+        self.layout().addWidget(self.frame_rotation_slider_frame)
+
         self.layout().addWidget(EasyFrame(line=True))
 
         self.__set_texts()
@@ -77,8 +91,18 @@ class CameraTab(QWidget):
     def get_name(self):
         return self.name
 
+    def set_controls_active(self, is_active):
+        # self.frame_rotation_slider.setEnabled(is_active)
+        self.frame_size_selector.setEnabled(is_active)
+        self.fps_selector.setEnabled(is_active)
+        self.use_cam_button.setEnabled(is_active)
+        # self.color_toggle_button.setEnabled(is_active)
+
     def add_use_cam_button_handler(self, func):
-        self.__use_cam_button.clicked.connect(func)
+        self.use_cam_button.clicked.connect(func)
+
+    def add_color_toggle_button_handler(self, func):
+        self.color_toggle_button.clicked.connect(func)
 
     def add_fps_selector_handler(self, func):
         self.fps_selector.activated.connect(func)
@@ -86,27 +110,41 @@ class CameraTab(QWidget):
     def add_frame_size_selector_handler(self, func):
         self.frame_size_selector.activated.connect(func)
 
-    def get_fps(self):
-        return self.fps_selector.currentText()
+    def add_frame_rotation_handler(self, func):
+        self.frame_rotation_slider.valueChanged.connect(func)
 
-    def set_fps_selector(self, index):
+    def add_frame_rotation_released_handler(self, func):
+        self.frame_rotation_slider.sliderReleased.connect(func)
+
+    def get_fps(self):
+        return self.fps_selector.currentData()
+
+    def set_fps(self, index):
         self.fps_selector.setCurrentIndex(index)
 
     def get_frame_size(self):
-        return self.frame_size_selector.currentText()
+        return self.frame_size_selector.currentData()
 
-    def set_frame_size_selector(self, index):
+    def set_frame_size(self, index):
         self.frame_size_selector.setCurrentIndex(index)
+
+    def set_rotation(self, value):
+        self.frame_rotation_slider.setValue(value)
+
+    def get_rotation(self):
+        return self.frame_rotation_slider.value()
 
     def populate_fps_selector(self, values):
         for i in range(len(values)):
-            self.fps_selector.insertItem(i, values[i])
+            self.fps_selector.insertItem(i, values[i][0], values[i][1])
 
     def populate_frame_size_selector(self, values):
         for i in range(len(values)):
-            self.frame_size_selector.insertItem(i, values[i])
+            self.frame_size_selector.insertItem(i, values[i][0], values[i][1])
 
     def __set_texts(self):
-        self.__use_cam_button.setText("Toggle Camera")
+        self.use_cam_button.setText("Toggle Camera")
         self.fps_selector_label.setText("FPS")
-        self.frame_size_selector_label.setText("Frame size")
+        self.frame_size_selector_label.setText("Frame size (causes problems)")
+        self.color_toggle_button.setText("Toggle color image")
+        self.frame_rotation_slider_label.setText("Rotate video feed")

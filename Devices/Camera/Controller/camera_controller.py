@@ -44,14 +44,16 @@ class CameraController(ABCDeviceController):
         self.cam_thread = thread
         self.save_dir = ''
         self.timestamp = None
-        self.exp = False
         self.cam_active = True
+        self.color_image = True
+        self.reading = True
         self.__setup_handlers()
         self.current_size = 0
         self.frame_sizes = []
         self.fps_values = []
         self.__populate_sizes()
         self.__populate_fps_selections()
+        self.__initialize_tab_values()
         self.logger.debug("Initialized")
 
     def cleanup(self):
@@ -74,60 +76,75 @@ class CameraController(ABCDeviceController):
         self.logger.debug("running")
         if self.cam_obj.active:
             self.cam_obj.setup_writer(save_dir=self.save_dir, timestamp=self.timestamp)
-        self.exp = True
+        self.tab.set_controls_active(False)
         self.logger.debug("done")
 
     def end_exp(self):
         self.logger.debug("running")
         self.cam_obj.destroy_writer()
-        self.exp = False
+        self.tab.set_controls_active(True)
         self.logger.debug("done")
 
     def toggle_cam(self):
         self.logger.debug("running")
-        if not self.exp:
-            self.cam_thread.reading = not self.cam_thread.reading
-            self.cam_active = not self.cam_active
-            if self.cam_active:
-                self.cam_thread.signals.wcond.wakeAll()
-            self.cam_obj.toggle_activity()
+        self.cam_active = not self.cam_active
+        self.cam_thread.reading = self.cam_active
+        if self.cam_active:
+            self.cam_thread.signals.wcond.wakeAll()
+        self.cam_obj.toggle_activity()
         self.logger.debug("done")
 
     def set_frame_size(self):
         self.logger.debug("running")
-        if not self.exp:
-            new_size = self.tab.get_frame_size()
-            self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1])))
-        else:
-            old_size = str(self.cam_obj.get_current_frame_size())
-            old_size = old_size.strip('(')
-            old_size = old_size.rstrip(')')
-            index = self.frame_sizes.index(old_size)
-            self.tab.set_frame_size_selector(index)
+        new_size = self.tab.get_frame_size()
+        if not self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1]))):
+            pass  # TODO: Make this reset to previous frame size if fail.
         self.logger.debug("done")
 
     def set_fps(self):
         self.logger.debug("running")
-        if not self.exp:
-            self.cam_obj.set_fps(self.tab.get_fps())
-        else:
-            index = self.fps_values.index(str(self.cam_obj.get_current_fps()))
-            self.tab.set_fps_selector(index)
+        print(self.tab.get_fps(), type(self.tab.get_fps()))
+        self.cam_obj.set_fps(self.tab.get_fps())
         self.logger.debug("done")
+
+    def toggle_color(self):
+        self.color_image = not self.color_image
+        self.cam_obj.set_use_color(self.color_image)
+
+    def set_rotation(self):
+        new_rotation = self.tab.get_rotation()
+        self.cam_obj.set_rotation(new_rotation)
 
     def __populate_fps_selections(self):
         self.logger.debug("running")
         for i in range(11):
-            self.fps_values.append(str(30 - i))
+            self.fps_values.append((str(30 - i), 30-i))
         self.tab.populate_fps_selector(self.fps_values)
         self.logger.debug("done")
 
     def __populate_sizes(self):
         self.logger.debug("running")
-        self.frame_sizes.append('1920, 1080')
-        self.frame_sizes.append('1280, 1024')
-        self.frame_sizes.append('800, 600')
-        self.frame_sizes.append('640, 480')
+        self.frame_sizes.append(('1920, 1440', (1920, 1440)))
+        self.frame_sizes.append(('1920, 1200', (1920, 1200)))
+        self.frame_sizes.append(('1920, 1080', (1920, 1080)))
+        self.frame_sizes.append(('1856, 1392', (1856, 1392)))
+        self.frame_sizes.append(('1792, 1344', (1792, 1344)))
+        self.frame_sizes.append(('1680, 1050', (1680, 1050)))
+        self.frame_sizes.append(('1600, 1200', (1600, 1200)))
+        self.frame_sizes.append(('1600, 900', (1600, 900)))
+        self.frame_sizes.append(('1440, 1050', (1440, 1050)))
+        self.frame_sizes.append(('1440, 900', (1440, 900)))
+        self.frame_sizes.append(('1366, 768', (1366, 768)))
+        self.frame_sizes.append(('1360, 768', (1360, 768)))
+        self.frame_sizes.append(('1280, 1024', (1280, 1024)))
+        self.frame_sizes.append(('1280, 960', (1280, 960)))
+        self.frame_sizes.append(('1280, 800', (1280, 800)))
+        self.frame_sizes.append(('1280, 768', (1280, 768)))
+        self.frame_sizes.append(('1280, 720', (1280, 720)))
+        self.frame_sizes.append(('1152, 864', (1152, 864)))
+        self.frame_sizes.append(('1024, 768', (1024, 768)))
+        self.frame_sizes.append(('800, 600', (800, 600)))
+        self.frame_sizes.append(('640, 480', (640, 480)))
         self.tab.populate_frame_size_selector(self.frame_sizes)
         self.logger.debug("done")
 
@@ -136,4 +153,20 @@ class CameraController(ABCDeviceController):
         self.tab.add_use_cam_button_handler(self.toggle_cam)
         self.tab.add_fps_selector_handler(self.set_fps)
         self.tab.add_frame_size_selector_handler(self.set_frame_size)
+        self.tab.add_color_toggle_button_handler(self.toggle_color)
+        self.tab.add_frame_rotation_handler(self.set_rotation)
         self.logger.debug("done")
+
+    def __initialize_tab_values(self):
+        # TODO: Is there a better way?
+        rotation_val = self.cam_obj.get_current_rotation()
+        fps_val = self.cam_obj.get_current_fps()
+        size_val = self.cam_obj.get_current_frame_size()
+        x = int(size_val[0])
+        y = int(size_val[1])
+        size_val_str = str(x) + ", " + str(y)
+        size_val_index = self.frame_sizes.index((size_val_str, size_val))
+        fps_val_index = self.fps_values.index((str(fps_val), fps_val))
+        self.tab.set_rotation(rotation_val)
+        self.tab.set_fps(fps_val_index)
+        self.tab.set_frame_size(size_val_index)

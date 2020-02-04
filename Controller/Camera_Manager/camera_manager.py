@@ -168,6 +168,8 @@ class CamConManSig(QObject):
     disconnect_sig = Signal(CamObj)
 
 
+# TODO: Figure out how to number cameras better. If a camera fails and then plugs in again
+#  then it will overwrite a cam that is currently plugged in since index would be the same.
 class CameraConnectionManager:
     def __init__(self, ch):
         self.logger = logging.getLogger(__name__)

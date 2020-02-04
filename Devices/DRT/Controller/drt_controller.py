@@ -47,6 +47,7 @@ class DRTController(ABCDeviceController):
         self.__graph_callback = graph_callback
         self.__device_info = device
         self.__save_callback = save_callback
+        self.exp = False
         self.__updating_config = False
         self.__errors = [False, False, False]  # stimDur, upperISI, lowerISI
         self.__changed = [False] * 4  # stimDur, stimIntens, upperISI, lowerISI
@@ -61,7 +62,8 @@ class DRTController(ABCDeviceController):
 
     def cleanup(self):
         self.logger.debug("running")
-        self.end_block()
+        if self.exp:
+            self.end_block()
         self.logger.debug("done")
 
     def get_tab_obj(self):
@@ -77,9 +79,11 @@ class DRTController(ABCDeviceController):
             self.__update_config(msg_dict['values'])
 
     def start_block(self):
+        self.exp = True
         self.__send_msg(self.__prepare_msg("exp_start"))
 
     def end_block(self):
+        self.exp = False
         self.__send_msg(self.__prepare_msg("exp_stop"))
 
     def init_values(self):
@@ -97,8 +101,8 @@ class DRTController(ABCDeviceController):
         return drtv1_0_note_spacer
 
     def __connect_signals(self, thread):
-        self.signals.send_device_msg_sig.connect(self.thread.send_msg)
-        self.thread.signals.new_msg_sig.connect(self.handle_msg)
+        self.signals.send_device_msg_sig.connect(thread.send_msg)
+        thread.signals.new_msg_sig.connect(self.handle_msg)
 
     def __save_data(self, values, timestamp):
         line = self.__format_output_for_save_file(values)

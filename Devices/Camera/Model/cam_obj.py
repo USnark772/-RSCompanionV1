@@ -34,11 +34,15 @@ class CamObj:
         self.logger.debug("Initializing")
         self.cap = cap
         self.name = name
-        self.frame_size = (1920, 1080)
+        self.frame_size = (cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
         self.active = True
         self.writing = False
+        self.color_image = True
+        self.alter_image_shape = True
+        self.rotate_angle = 0  # in degrees
+        self.scale = 1  # negative values cause 180 degree rotation as well as scaling
         self.logger.debug("Initialized")
 
     def toggle_activity(self):
@@ -52,6 +56,7 @@ class CamObj:
             frame_size = self.frame_size
         if not fps:
             fps = self.fps
+        print(type(self.frame_size), type(self.fps))
         if self.active:
             self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                           cv2.VideoWriter_fourcc(*codec), fps, frame_size)
@@ -67,7 +72,15 @@ class CamObj:
         self.logger.debug("done")
 
     def read_camera(self):
-        return self.cap.read()
+        i = 0
+        while i < 20:
+            try:
+                return self.cap.read()
+            except:
+                # TODO: send signal?
+                self.set_frame_size((640, 480))
+            i += 1
+        return False, 0
 
     def save_data(self, frame):
         if self.writing:
@@ -75,6 +88,12 @@ class CamObj:
 
     def handle_new_frame(self, frame):
         if self.active:
+            if self.alter_image_shape:
+                rows, cols, a = frame.shape
+                M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
+                frame = cv2.warpAffine(frame, M, (cols, rows))
+            if not self.color_image:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imshow(self.name, frame)
             self.save_data(frame)
 
@@ -92,13 +111,27 @@ class CamObj:
     def set_fps(self, fps):
         self.fps = fps
 
+    def set_use_color(self, is_active):
+        self.color_image = is_active
+
+    def set_rotation(self, value):
+        self.rotate_angle = value
+
+    def get_current_rotation(self):
+        return self.rotate_angle
+
     def get_current_fps(self):
         return self.fps
 
     def set_frame_size(self, size):
-        self.frame_size = (size[0], size[1])
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[0])
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[1])
+        x = size[0]
+        y = size[1]
+        self.toggle_activity()
+        self.frame_size = (x, y)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, x)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, y)
+        self.close_window()
+        self.toggle_activity()
 
     def get_current_frame_size(self):
         return self.frame_size
