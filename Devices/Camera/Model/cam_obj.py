@@ -41,7 +41,6 @@ class CamObj:
         self.signals = CamObjSig()
         self.name = name
         self.frame_size = (cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        print("self.frame_size initialized to:", self.frame_size)
         self.fps = 30
         self.writer = None
         self.active = True
@@ -63,7 +62,7 @@ class CamObj:
             frame_size = self.frame_size
         if not fps:
             fps = self.fps
-        print(type(self.frame_size), type(self.fps))
+        # print(type(self.frame_size), type(self.fps))
         if self.active:
             self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                           cv2.VideoWriter_fourcc(*codec), fps, frame_size)
@@ -78,18 +77,12 @@ class CamObj:
             self.writing = False
         self.logger.debug("done")
 
-    # TODO: Program still sometimes crashing when changing resolution.
+    # TODO: Program still sometimes crashing when changing resolution. Some testing shows that frame comes out as None.
     def read_camera(self):
-        i = 0
-        while i < 20:
-            try:
-                return self.cap.read()
-            except:
-                self.frame_size = (640.0, 480.0)
-                self.set_frame_size(self.frame_size)
-                self.signals.frame_size_fail_sig.emit()
-            i += 1
-        return False, 0
+        ret, frame = self.cap.read()
+        if frame is None:
+            ret, frame = self.cap.read()
+        return ret, frame
 
     def save_data(self, frame):
         if self.writing:
@@ -139,12 +132,16 @@ class CamObj:
         x = float(size[0])
         y = float(size[1])
         self.toggle_activity()
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
-        new_x = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        new_y = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        self.frame_size = (new_x, new_y)
-        if not (x, y) == (new_x, new_y):
-            self.signals.frame_size_fail_sig.emit()
+        res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
+        res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
+        if not res1 or not res2:
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_size[0])
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_size[1])
+        else:
+            new_x = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+            new_y = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            self.frame_size = (new_x, new_y)
+        # if not (x, y) == (new_x, new_y):
+        #     self.signals.frame_size_fail_sig.emit()
         self.close_window()
         self.toggle_activity()

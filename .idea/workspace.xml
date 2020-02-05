@@ -6,9 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/RS_Device_Manager/rs_device_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/RS_Device_Manager/rs_device_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +56,28 @@
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.Test_cam_resolution_switcher">
+    <configuration name="Test_cam_resolution_switcher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/Test_cam_resolution_switcher.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="cam_controller_development" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -139,41 +162,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="signal_slot_example" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\phill\PycharmProjects\RedScientific\Companion\Unused\Tests\signal_slot_example.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.cam_controller_development" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.quick_test" />
       <item itemvalue="Python.rs_device_manager_development" />
-      <item itemvalue="Python.signal_slot_example" />
+      <item itemvalue="Python.Test_cam_resolution_switcher" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Test_cam_resolution_switcher" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.rs_device_manager_development" />
         <item itemvalue="Python.cam_controller_development" />
         <item itemvalue="Python.quick_test" />
-        <item itemvalue="Python.signal_slot_example" />
       </list>
     </recent_temporary>
   </component>
@@ -361,7 +363,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580837142462</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Only certain frame dimensions are supported. Further work and testing setting frame sizes.">
+      <created>1580842791217</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1580842791217</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -401,7 +410,8 @@
     <MESSAGE value="Added functionality to change size of frame being read from camera." />
     <MESSAGE value="Functionality to change size of frames and fps from list of presets now added. Some testing and refining still to do." />
     <MESSAGE value="Further work on camera options." />
-    <option name="LAST_COMMIT_MESSAGE" value="Further work on camera options." />
+    <MESSAGE value="Only certain frame dimensions are supported. Further work and testing setting frame sizes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Only certain frame dimensions are supported. Further work and testing setting frame sizes." />
   </component>
   <component name="WindowStateProjectService">
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
@@ -431,68 +441,68 @@
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="440" y="160" key="#xdebugger.evaluate/0.0.1368.912@0.0.1368.912" timestamp="1580323512767" />
-    <state x="533" y="134" key="CommitChangelistDialog2" timestamp="1580837140327">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="275" y="102" key="CommitChangelistDialog2" timestamp="1580842790296">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578943289402" />
     <state x="533" y="134" key="CommitChangelistDialog2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580837140327" />
-    <state x="275" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1580325542098" />
+    <state x="275" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1580842790296" />
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1580321275981" />
-    <state width="1348" height="197" key="GridCell.Tab.0.bottom" timestamp="1580842644204">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="243" key="GridCell.Tab.0.bottom" timestamp="1580876467503">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1899" height="245" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580837170772" />
-    <state width="1348" height="197" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1580842644204" />
+    <state width="1899" height="243" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580876467503" />
+    <state width="1348" height="288" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="246" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="197" key="GridCell.Tab.0.center" timestamp="1580842644204">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="243" key="GridCell.Tab.0.center" timestamp="1580876467503">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1899" height="245" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580837170772" />
-    <state width="1348" height="197" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1580842644204" />
+    <state width="1899" height="243" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580876467503" />
+    <state width="1348" height="288" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="246" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="197" key="GridCell.Tab.0.left" timestamp="1580842644204">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="243" key="GridCell.Tab.0.left" timestamp="1580876467503">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1899" height="245" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580837170772" />
-    <state width="1348" height="197" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1580842644204" />
+    <state width="1899" height="243" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580876467503" />
+    <state width="1348" height="288" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="246" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="197" key="GridCell.Tab.0.right" timestamp="1580842644204">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="243" key="GridCell.Tab.0.right" timestamp="1580876467503">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1899" height="245" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580837170772" />
-    <state width="1348" height="197" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1580842644204" />
+    <state width="1899" height="243" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580876467503" />
+    <state width="1348" height="288" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="246" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="288" key="GridCell.Tab.1.bottom" timestamp="1580841753560">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="352" key="GridCell.Tab.1.bottom" timestamp="1580873771628">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.1.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1900" height="354" key="GridCell.Tab.1.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580788976005" />
-    <state width="1348" height="288" key="GridCell.Tab.1.bottom/0.0.1368.912@0.0.1368.912" timestamp="1580841753560" />
+    <state width="1899" height="352" key="GridCell.Tab.1.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580873771628" />
+    <state width="1348" height="288" key="GridCell.Tab.1.bottom/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state width="1348" height="288" key="GridCell.Tab.1.center" timestamp="1580841753560">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="352" key="GridCell.Tab.1.center" timestamp="1580873771628">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.1.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1900" height="354" key="GridCell.Tab.1.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580788976005" />
-    <state width="1348" height="288" key="GridCell.Tab.1.center/0.0.1368.912@0.0.1368.912" timestamp="1580841753560" />
+    <state width="1899" height="352" key="GridCell.Tab.1.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580873771628" />
+    <state width="1348" height="288" key="GridCell.Tab.1.center/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="356" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state width="1348" height="288" key="GridCell.Tab.1.left" timestamp="1580841753559">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="352" key="GridCell.Tab.1.left" timestamp="1580873771628">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.1.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1900" height="354" key="GridCell.Tab.1.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580788976005" />
-    <state width="1348" height="288" key="GridCell.Tab.1.left/0.0.1368.912@0.0.1368.912" timestamp="1580841753559" />
+    <state width="1899" height="352" key="GridCell.Tab.1.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580873771628" />
+    <state width="1348" height="288" key="GridCell.Tab.1.left/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="356" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state width="1348" height="288" key="GridCell.Tab.1.right" timestamp="1580841753560">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1899" height="352" key="GridCell.Tab.1.right" timestamp="1580873771628">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="355" key="GridCell.Tab.1.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580237019184" />
-    <state width="1900" height="354" key="GridCell.Tab.1.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580788976005" />
-    <state width="1348" height="288" key="GridCell.Tab.1.right/0.0.1368.912@0.0.1368.912" timestamp="1580841753560" />
+    <state width="1899" height="352" key="GridCell.Tab.1.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580873771628" />
+    <state width="1348" height="288" key="GridCell.Tab.1.right/0.0.1368.912@0.0.1368.912" timestamp="1580842799424" />
     <state width="1899" height="356" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
     <state x="271" y="136" key="SettingsEditor" timestamp="1580411686966">
       <screen x="0" y="0" width="1368" height="912" />
@@ -535,9 +545,10 @@
     </state>
     <state x="599" y="120" key="refactoring.ChangeSignatureDialog/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579299020841" />
     <state x="427" y="101" key="refactoring.ChangeSignatureDialog/0.0.1368.912@0.0.1368.912" timestamp="1579198475029" />
-    <state x="445" y="199" width="672" height="573" key="search.everywhere.popup" timestamp="1580155105925">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state x="625" y="236" width="944" height="679" key="search.everywhere.popup" timestamp="1580876697727">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="625" y="236" width="944" height="679" key="search.everywhere.popup/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580876697727" />
     <state x="445" y="199" width="672" height="573" key="search.everywhere.popup/0.0.1368.912@0.0.1368.912" timestamp="1580155105925" />
     <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1580141874717" />
   </component>
@@ -566,8 +577,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Controller/controller.py</url>
-          <line>432</line>
+          <line>437</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py</url>
+          <line>137</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

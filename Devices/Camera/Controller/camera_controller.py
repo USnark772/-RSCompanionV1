@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtCore import QObject, Signal
+from PySide2.QtCore import QObject, Signal, QThread
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 # If too many usb cameras are on the same usb hub then they won't be able to be used due to power issues.
@@ -31,6 +31,7 @@ from Devices.abc_device_controller import ABCDeviceController
 
 class ControllerSig(QObject):
     toggle_signal = Signal()
+    settings_error = Signal(str)
 
 
 class CameraController(ABCDeviceController):
@@ -42,6 +43,7 @@ class CameraController(ABCDeviceController):
         self.signals = ControllerSig()
         self.cam_obj = cam_obj
         self.cam_thread = thread
+        self.cam_thread.signals.new_frame_sig.connect(self.cam_obj.handle_new_frame)
         self.save_dir = ''
         self.timestamp = None
         self.cam_active = True
@@ -51,10 +53,11 @@ class CameraController(ABCDeviceController):
         self.current_size = 0
         self.frame_sizes = []
         self.fps_values = []
-        self.cam_obj.signals.frame_size_fail_sig.connect(self.set_tab_frame_size)
+        self.cam_obj.signals.frame_size_fail_sig.connect(self.handle_resolution_error)
         self.__populate_sizes()
         self.__populate_fps_selections()
         self.__initialize_tab_values()
+        self.cam_thread.start(priority=QThread.LowestPriority)
         self.logger.debug("Initialized")
 
     def cleanup(self):
@@ -102,13 +105,15 @@ class CameraController(ABCDeviceController):
         self.logger.debug("done")
 
     # TODO: Alert user to failure?
-    def set_tab_frame_size(self):
+    def handle_resolution_error(self):
         new_size = self.cam_obj.get_current_frame_size()
-        self.tab.set_frame_size(self.__get_size_val_index(new_size))
+        size_index = self.__get_size_val_index(new_size)
+        self.tab.set_frame_size(size_index)
+        self.signals.settings_error.emit("Invalid resolution setting for this camera. Resolution set to: "
+                                         + str(new_size))
 
     def set_fps(self):
         self.logger.debug("running")
-        print(self.tab.get_fps(), type(self.tab.get_fps()))
         self.cam_obj.set_fps(self.tab.get_fps())
         self.logger.debug("done")
 
@@ -129,27 +134,58 @@ class CameraController(ABCDeviceController):
 
     def __populate_sizes(self):
         self.logger.debug("running")
-        self.frame_sizes.append(('1920, 1440', (1920, 1440)))
-        self.frame_sizes.append(('1920, 1200', (1920, 1200)))
-        self.frame_sizes.append(('1920, 1080', (1920, 1080)))
-        self.frame_sizes.append(('1856, 1392', (1856, 1392)))
-        self.frame_sizes.append(('1792, 1344', (1792, 1344)))
-        self.frame_sizes.append(('1680, 1050', (1680, 1050)))
-        self.frame_sizes.append(('1600, 1200', (1600, 1200)))
-        self.frame_sizes.append(('1600, 900', (1600, 900)))
-        self.frame_sizes.append(('1440, 1050', (1440, 1050)))
-        self.frame_sizes.append(('1440, 900', (1440, 900)))
-        self.frame_sizes.append(('1366, 768', (1366, 768)))
-        self.frame_sizes.append(('1360, 768', (1360, 768)))
-        self.frame_sizes.append(('1280, 1024', (1280, 1024)))
-        self.frame_sizes.append(('1280, 960', (1280, 960)))
-        self.frame_sizes.append(('1280, 800', (1280, 800)))
-        self.frame_sizes.append(('1280, 768', (1280, 768)))
-        self.frame_sizes.append(('1280, 720', (1280, 720)))
-        self.frame_sizes.append(('1152, 864', (1152, 864)))
-        self.frame_sizes.append(('1024, 768', (1024, 768)))
-        self.frame_sizes.append(('800, 600', (800, 600)))
-        self.frame_sizes.append(('640, 480', (640, 480)))
+
+        initial_size = self.cam_obj.get_current_frame_size()
+        large_size = (4000, 4000)
+        step = 100
+        self.cam_obj.set_frame_size(large_size)
+        max_size = self.cam_obj.get_current_frame_size()
+        current_size = initial_size
+
+        while current_size[0] <= max_size[0]:
+            self.cam_obj.set_frame_size(current_size)
+            result = self.cam_obj.get_current_frame_size()
+            new_tup = (str(result[0]) + ", " + str(result[1]), result)
+            if new_tup not in self.frame_sizes:
+                self.frame_sizes.append(new_tup)
+            new_x = current_size[0] + step
+            new_y = current_size[1] + step
+            if result[0] > new_x:
+                new_x = result[0] + step
+            if result[1] > new_y:
+                new_y = result[1] + step
+            current_size = (new_x, new_y)
+
+        self.cam_obj.set_frame_size(initial_size)
+
+        # self.frame_sizes.append(('1920, 1440', (2304, 1536)))
+        # self.frame_sizes.append(('1920, 1440', (1920, 1440)))
+        # self.frame_sizes.append(('1920, 1080', (1920, 1080)))
+        # self.frame_sizes.append(('1600, 900', (1600, 896)))
+        # self.frame_sizes.append(('1280, 720', (1280, 720)))
+        # self.frame_sizes.append(('1960, 720', (960, 720)))
+        # self.frame_sizes.append(('640, 480', (640, 640)))
+        # self.frame_sizes.append(('640, 480', (640, 480)))
+
+        # self.frame_sizes.append(('1920, 1280', (1920, 1280)))
+        # self.frame_sizes.append(('1920, 1200', (1920, 1200)))
+        # self.frame_sizes.append(('1856, 1392', (1856, 1392)))
+        # self.frame_sizes.append(('1792, 1344', (1792, 1344)))
+        # self.frame_sizes.append(('1680, 1050', (1680, 1050)))
+        # self.frame_sizes.append(('1600, 1200', (1600, 1200)))
+        # self.frame_sizes.append(('1600, 900', (1600, 900)))
+        # self.frame_sizes.append(('1440, 1050', (1440, 1050)))
+        # self.frame_sizes.append(('1440, 900', (1440, 900)))
+        # self.frame_sizes.append(('1366, 768', (1366, 768)))
+        # self.frame_sizes.append(('1360, 768', (1360, 768)))
+        # self.frame_sizes.append(('1280, 1024', (1280, 1024)))
+        # self.frame_sizes.append(('1280, 960', (1280, 960)))
+        # self.frame_sizes.append(('1280, 800', (1280, 800)))
+        # self.frame_sizes.append(('1280, 768', (1280, 768)))
+        # self.frame_sizes.append(('1152, 864', (1152, 864)))
+        # self.frame_sizes.append(('1024, 768', (1024, 768)))
+        # self.frame_sizes.append(('1960, 720', (960, 720)))
+        # self.frame_sizes.append(('800, 600', (800, 600)))
         self.tab.populate_frame_size_selector(self.frame_sizes)
         self.logger.debug("done")
 
@@ -170,11 +206,11 @@ class CameraController(ABCDeviceController):
         self.tab.set_fps(self.__get_fps_val_index(fps_val))
         self.tab.set_frame_size(self.__get_size_val_index(size_val))
 
+    # TODO: handle x not in list.
     def __get_size_val_index(self, value):
-        x = int(value[0])
-        y = int(value[1])
-        the_string = str(x) + ", " + str(y)
-        return self.frame_sizes.index((the_string, value))
+        for i in range(len(self.frame_sizes)):
+            if self.frame_sizes[i][1] == value:
+                return i
 
     def __get_fps_val_index(self, value):
         return self.fps_values.index((str(value), value))

@@ -167,6 +167,11 @@ class CompanionController:
         self.ui.show_help_window("Error", device_connection_error)
         self.logger.debug("done")
 
+    def alert_camera_error(self, error_message):
+        self.logger.debug("running")
+        self.ui.show_help_window("Error", error_message)
+        self.logger.debug("done")
+
     def save_device_data(self, device_name, device_line, timestamp=None):
         self.logger.debug("running")
         if not timestamp:
@@ -579,7 +584,7 @@ class CompanionController:
             # TODO: Push thread into controllers?
             cam_controller = CameraController(cam_obj, thread, self.ch)
             cam_controller.tab.setParent(self.tab_box)
-            thread.signals.new_frame_sig.connect(cam_obj.handle_new_frame)
+            cam_controller.signals.settings_error.connect(self.alert_camera_error)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return

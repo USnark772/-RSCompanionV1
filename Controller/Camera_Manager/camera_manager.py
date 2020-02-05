@@ -192,7 +192,7 @@ class CameraConnectionManager:
         self.active = True
         self.scanner_thread = CamScanner(self.cam_counter, self.ch)
         self.scanner_thread.signal.new_cam_sig.connect(self.handle_new_camera)
-        self.scanner_thread.start()
+        self.scanner_thread.start(priority=QThread.LowestPriority)
 
     def cleanup(self):
         self.logger.debug("running")
@@ -212,7 +212,7 @@ class CameraConnectionManager:
         self.cam_list.append(cam_obj)
         new_worker = CamWorker(cam_obj, self.cam_counter, self.ch)
         new_worker.signals.cleanup_sig.connect(self.cleanup_cam_and_thread)
-        new_worker.start()
+        # new_worker.start(priority=QThread.LowestPriority)
         self.worker_thread_list.append(new_worker)
         self.signals.new_cam_sig.emit(cam_obj, new_worker)
         self.logger.debug("done")
