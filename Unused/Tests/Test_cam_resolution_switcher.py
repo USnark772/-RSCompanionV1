@@ -1,14 +1,16 @@
 import cv2
 
 
+def get_frame_size(cap):
+    return cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+
+
 def set_frame_size(cap, x, y):
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
 
 
-def get_frame_size(cap):
-    return cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-
+initial_sizes = []
 num_cams = 2
 caps = []
 frame_sizes = []
@@ -21,12 +23,12 @@ for i in range(num_cams):
     caps.append(cv2.VideoCapture(i, cv2.CAP_DSHOW))
 
 for i in range(num_cams):
-    initial_size = get_frame_size(caps[i])
+    initial_sizes.append(get_frame_size(caps[i]))
     large_size = (4000, 4000)
     step = 100
     set_frame_size(caps[i], large_size[0], large_size[1])
     max_size = get_frame_size(caps[i])
-    current_size = initial_size
+    current_size = initial_sizes[i]
 
     while current_size[0] <= max_size[0]:
         set_frame_size(caps[i], current_size[0], current_size[1])
@@ -41,7 +43,7 @@ for i in range(num_cams):
             new_y = result[1] + step
         current_size = (new_x, new_y)
 
-    set_frame_size(caps[i], initial_size[0], initial_size[1])
+    set_frame_size(caps[i], initial_sizes[i][0], initial_sizes[i][1])
     print(frame_sizes[i])
 
 ret = False
@@ -49,18 +51,26 @@ frame = None
 running = True
 while running:
     # Capture frame-by-frame
+    if num_cams == 0:
+        running = False
     for i in range(num_cams):
+        print("Looping for cam:", i)
         ret, frame = caps[i].read()
-
-        # Our operations on the frame come here
-        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        # Display the resulting frame
+        if frame is None:
+            print("Frame is None for cam:", i)
+            caps[i].release()
+            del caps[i]
+            cv2.destroyWindow('frame' + str(i))
+            num_cams -= 1
+            break
+        if not ret:
+            break
         try:
             cv2.imshow('frame' + str(i), frame)
         except:
             print("Cam:", i, "That frame didn't work")
-            print(caps[i].isOpened())
+            print(caps[i].isOpened())  # Seems to still be open when it fails.
+            set_frame_size(caps[i], initial_sizes[i][0], initial_sizes[i][1])
             continue
         keypress = cv2.waitKey(1) & 0xFF
         if keypress == ord('q'):

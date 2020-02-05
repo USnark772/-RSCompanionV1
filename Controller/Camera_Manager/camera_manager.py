@@ -26,17 +26,17 @@ import logging
 import cv2
 from numpy import ndarray
 from PySide2.QtCore import QThread, QObject, QMutex, Signal, QWaitCondition
-from Devices.Camera.Model.cam_obj import CamObj
 
 
 class CamWorker(QThread):
-    def __init__(self, cam, cam_counter, ch):
+    def __init__(self, cap, index, cam_counter, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         QThread.__init__(self)
         self.signals = WorkerSig()
-        self.cam = cam
+        self.cap = cap
+        self.index = index
         self.cam_counter = cam_counter
         self.running = True
         self.reading = True
@@ -49,8 +49,10 @@ class CamWorker(QThread):
             if not self.reading:
                 self.signals.wcond.wait(self.signals.lock)
             self.signals.lock.unlock()
-            ret, frame = self.cam.read_camera()
-            if ret:
+            ret, frame = self.cap.read()
+            if frame is None:
+                continue
+            elif ret:
                 self.signals.new_frame_sig.emit(frame)
             else:
                 # Lost connection to camera.
@@ -61,10 +63,7 @@ class CamWorker(QThread):
     def cleanup(self):
         self.logger.debug("running")
         self.running = False
-        self.cam_counter.get_lock()
-        self.cam_counter.decrement_count()
-        self.cam_counter.release_lock()
-        self.signals.cleanup_sig.emit(self.cam)
+        self.signals.cleanup_sig.emit(self.index)
         self.logger.debug("done")
 
     def toggle(self):
@@ -73,7 +72,7 @@ class CamWorker(QThread):
 
 class WorkerSig(QObject):
     new_frame_sig = Signal(ndarray)
-    cleanup_sig = Signal(CamObj)
+    cleanup_sig = Signal(int)
     wcond = QWaitCondition()
     lock = QMutex()
 
@@ -112,10 +111,9 @@ class CamScanner(QThread):
             if cap is None or not cap.isOpened():
                 break
             else:
-                cam_obj = CamObj(cap, "CAM_" + str(index + 1), self.ch)
+                index += 1
                 self.__increment_cam_count()
-                self.signal.new_cam_sig.emit(cam_obj)
-            index += 1
+                self.signal.new_cam_sig.emit(cap, index)
         # self.logger.debug("done")
 
     def __increment_cam_count(self):
@@ -127,7 +125,7 @@ class CamScanner(QThread):
 
 
 class ScannerSig(QObject):
-    new_cam_sig = Signal(CamObj)
+    new_cam_sig = Signal(cv2.VideoCapture, int)
 
 
 class CamCounter:
@@ -164,8 +162,8 @@ class CamCounter:
 
 
 class CamConManSig(QObject):
-    new_cam_sig = Signal(CamObj, classmethod)
-    disconnect_sig = Signal(CamObj)
+    new_cam_sig = Signal(cv2.VideoCapture, int, classmethod)
+    disconnect_sig = Signal(cv2.VideoCapture)
 
 
 # TODO: Figure out how to number cameras better. If a camera fails and then plugs in again
@@ -203,31 +201,36 @@ class CameraConnectionManager:
         for worker in self.worker_thread_list:
             worker.running = False
             worker.wait()
-        for cam in self.cam_list:
-            cam.cleanup()
+        # for cam in self.cam_list:
+        #     cam.cleanup()
         self.logger.debug("done")
 
-    def handle_new_camera(self, cam_obj):
+    def handle_new_camera(self, cap, index):
         self.logger.debug("running")
-        self.cam_list.append(cam_obj)
-        new_worker = CamWorker(cam_obj, self.cam_counter, self.ch)
+        # cam_obj = CamObj(cap, "CAM_" + str(index + 1), self.ch)
+        # self.cam_list.append(cam_obj)
+        new_worker = CamWorker(cap, index, self.cam_counter, self.ch)
         new_worker.signals.cleanup_sig.connect(self.cleanup_cam_and_thread)
         # new_worker.start(priority=QThread.LowestPriority)
         self.worker_thread_list.append(new_worker)
-        self.signals.new_cam_sig.emit(cam_obj, new_worker)
+        self.signals.new_cam_sig.emit(cap, index, new_worker)
         self.logger.debug("done")
 
-    def cleanup_cam_and_thread(self, cam_obj):
+    def cleanup_cam_and_thread(self, index):
         self.logger.debug("running")
-        self.cam_list.remove(cam_obj)
-        cam_obj.cleanup()
-        self.signals.disconnect_sig.emit(cam_obj)
+        # self.cam_list.remove(cam_obj)
+        # cam_obj.cleanup()
+        self.signals.disconnect_sig.emit(index)
         for worker in self.worker_thread_list:
             if not worker.running:
                 self.worker_thread_list.remove(worker)
                 worker.wait()
-        del cam_obj
-        self.logger.debug("done, num cams left = " + str(len(self.cam_list)))
+        # del cam_obj
+        self.cam_counter.get_lock()
+        self.cam_counter.decrement_count()
+        self.cam_counter.release_lock()
+        # self.logger.debug("done, num cams left = " + str(len(self.cam_list)))
+        self.logger.debug("done")
 
     def stop_recording(self):
         self.logger.debug("running")

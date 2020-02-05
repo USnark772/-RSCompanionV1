@@ -28,7 +28,6 @@ from PySide2.QtWidgets import QApplication
 from Controller.controller import CompanionController
 from Controller.single_instance import SingleInstance
 
-
 def main():
     si = SingleInstance()
     try:

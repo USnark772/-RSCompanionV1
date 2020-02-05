@@ -11,6 +11,9 @@ class ABCDeviceController(ABC):
     def cleanup(self):
         pass
 
+    def get_name(self):
+        return ''
+
     def create_new_save_file(self, new_filename):
         pass
 

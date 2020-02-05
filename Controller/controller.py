@@ -51,11 +51,14 @@ from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
 from Devices.Camera.Controller.camera_controller import CameraController
+import Unused.Tests.tracemalloc_helper as trace
 
 
 class CompanionController:
     def __init__(self):
         """ Create elements of View and Controller """
+        trace.tracemalloc.start()
+        trace.display_top(trace.tracemalloc.take_snapshot())
         self.log_output = OutputWindow()
         self.settings = QSettings("Red Scientific", "Companion")
 
@@ -130,6 +133,7 @@ class CompanionController:
         self.__init_controller_classes()
 
         # self.__add_camera_tab()
+        trace.display_top(trace.tracemalloc.take_snapshot())
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -152,14 +156,18 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
-    def add_camera(self, cam_obj, thread):
+    def add_camera(self, cap, index, thread):
         self.logger.debug("running")
-        self.__create_camera_controller(cam_obj, thread)
+        trace.display_top(trace.tracemalloc.take_snapshot())
+        self.__create_camera_controller(cap, index, thread)
+        trace.display_top(trace.tracemalloc.take_snapshot())
         self.logger.debug("done")
 
-    def remove_camera(self, cam_obj):
+    def remove_camera(self, index):
         self.logger.debug("running")
-        self.__remove_camera(cam_obj)
+        trace.display_top(trace.tracemalloc.take_snapshot())
+        self.__remove_camera(index)
+        trace.display_top(trace.tracemalloc.take_snapshot())
         self.logger.debug("done")
 
     def alert_device_connection_failure(self):
@@ -578,24 +586,28 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_camera_controller(self, cam_obj, thread):
+    def __create_camera_controller(self, cap, index, thread):
         self.logger.debug("running")
         try:
             # TODO: Push thread into controllers?
-            cam_controller = CameraController(cam_obj, thread, self.ch)
+            cam_controller = CameraController(cap, index, thread, self.ch)
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.settings_error.connect(self.alert_camera_error)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return
-        self.__device_controllers[cam_obj.name] = cam_controller
+        self.__device_controllers[cam_controller.get_name()] = cam_controller
         self.tab_box.add_tab(cam_controller.get_tab_obj())
         self.logger.debug("done")
 
-    def __remove_camera(self, cam_obj):
+    def __remove_camera(self, index):
         self.logger.debug("running")
-        self.tab_box.remove_tab(cam_obj.name)
-        del self.__device_controllers[cam_obj.name]
+        for controller in self.__device_controllers.values():
+            ind_str = str(index)
+            if ind_str in controller.get_name():
+                self.tab_box.remove_tab(controller.get_name())
+                del self.__device_controllers[controller.get_name()]
+                break
         self.logger.debug("done")
 
     ########################################################################################
