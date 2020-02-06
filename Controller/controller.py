@@ -53,12 +53,13 @@ from Devices.VOG.View.vog_graph import VOGGraph
 from Devices.Camera.Controller.camera_controller import CameraController
 import Unused.Tests.tracemalloc_helper as trace
 
+trace_num = 5
+
 
 class CompanionController:
     def __init__(self):
-        """ Create elements of View and Controller """
         trace.tracemalloc.start()
-        trace.display_top(trace.tracemalloc.take_snapshot())
+        """ Create elements of View and Controller """
         self.log_output = OutputWindow()
         self.settings = QSettings("Red Scientific", "Companion")
 
@@ -99,7 +100,9 @@ class CompanionController:
         self.file_dialog = QFileDialog(self.ui)
 
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.cam_con_manager = CameraConnectionManager(self.ch)
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.__setup_managers()
         self.settings.beginGroup("Camera manager")
         try:
@@ -133,7 +136,6 @@ class CompanionController:
         self.__init_controller_classes()
 
         # self.__add_camera_tab()
-        trace.display_top(trace.tracemalloc.take_snapshot())
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -158,16 +160,14 @@ class CompanionController:
 
     def add_camera(self, cap, index, thread):
         self.logger.debug("running")
-        trace.display_top(trace.tracemalloc.take_snapshot())
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.__create_camera_controller(cap, index, thread)
-        trace.display_top(trace.tracemalloc.take_snapshot())
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.logger.debug("done")
 
     def remove_camera(self, index):
         self.logger.debug("running")
-        trace.display_top(trace.tracemalloc.take_snapshot())
         self.__remove_camera(index)
-        trace.display_top(trace.tracemalloc.take_snapshot())
         self.logger.debug("done")
 
     def alert_device_connection_failure(self):

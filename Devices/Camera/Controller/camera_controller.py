@@ -27,7 +27,6 @@ from PySide2.QtCore import QObject, Signal, QThread
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.Model.cam_obj import CamObj
-import Unused.Tests.tracemalloc_helper as tracer
 
 
 class ControllerSig(QObject):
@@ -37,8 +36,6 @@ class ControllerSig(QObject):
 
 class CameraController(ABCDeviceController):
     def __init__(self, cap, index, thread, ch):
-        tracer.tracemalloc.start()
-        tracer.display_top(tracer.tracemalloc.take_snapshot())
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -63,7 +60,6 @@ class CameraController(ABCDeviceController):
         self.__initialize_tab_values()
         self.cam_thread.start(priority=QThread.LowestPriority)
         self.logger.debug("Initialized")
-        tracer.display_top(tracer.tracemalloc.take_snapshot())
 
     def get_name(self):
         return self.cam_obj.name
