@@ -33,13 +33,14 @@ class CamObjSig(QObject):
 
 
 class CamObj:
-    def __init__(self, cap, name, ch):
+    def __init__(self, cap, name, thread, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.cap = cap
         self.signals = CamObjSig()
         self.name = name
+        self.thread = thread
         self.frame_size = (cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
@@ -62,7 +63,6 @@ class CamObj:
             frame_size = self.frame_size
         if not fps:
             fps = self.fps
-        # print(type(self.frame_size), type(self.fps))
         if self.active:
             self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
                                           cv2.VideoWriter_fourcc(*codec), fps, frame_size)
@@ -97,6 +97,7 @@ class CamObj:
             if not self.color_image:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imshow(self.name, frame)
+            self.thread.signals.wait_for_frame_handling.wakeAll()
             self.save_data(frame)
 
     def close_window(self):

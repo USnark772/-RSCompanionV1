@@ -27,7 +27,6 @@ from PySide2.QtCore import QObject, Signal, QThread
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.Model.cam_obj import CamObj
-import Unused.Tests.tracemalloc_helper as tracer
 
 
 class ControllerSig(QObject):
@@ -37,13 +36,11 @@ class ControllerSig(QObject):
 
 class CameraController(ABCDeviceController):
     def __init__(self, cap, index, thread, ch):
-        # tracer.start()
-        # tracer.show_stuff(2)
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.index = index
-        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), ch)
+        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch)
         super().__init__(CameraTab(name=self.cam_obj.name))
         self.signals = ControllerSig()
         self.cam_thread = thread
@@ -62,7 +59,6 @@ class CameraController(ABCDeviceController):
         self.__populate_fps_selections()
         self.__initialize_tab_values()
         self.cam_thread.start(priority=QThread.LowestPriority)
-        # tracer.show_stuff(2)
         self.logger.debug("Initialized")
 
     def get_name(self):
@@ -70,8 +66,7 @@ class CameraController(ABCDeviceController):
 
     def cleanup(self):
         self.logger.debug("running")
-        if not self.cam_active:
-            self.toggle_cam()
+        self.cam_obj.cleanup()
         self.logger.debug("done")
 
     def create_new_save_file(self, new_filename):
@@ -102,7 +97,7 @@ class CameraController(ABCDeviceController):
         self.cam_active = not self.cam_active
         self.cam_thread.reading = self.cam_active
         if self.cam_active:
-            self.cam_thread.signals.wcond.wakeAll()
+            self.cam_thread.signals.toggle.wakeAll()
         self.cam_obj.toggle_activity()
         self.logger.debug("done")
 
@@ -140,22 +135,16 @@ class CameraController(ABCDeviceController):
         self.tab.populate_fps_selector(self.fps_values)
         self.logger.debug("done")
 
+    # TODO: Can we thread this? main window hangs when running this.
     def __populate_sizes(self):
         self.logger.debug("running")
-        print("*******************************************__populate_sizes() for:", self.get_name())
-        # tracer.show_stuff(2)
         initial_size = self.cam_obj.get_current_frame_size()
         large_size = (1920, 1080)
         step = 100
         self.cam_obj.set_frame_size(large_size)
         max_size = self.cam_obj.get_current_frame_size()
         current_size = initial_size
-
-        print("*******************************************Before loop")
-        # tracer.show_stuff(2)
         while current_size[0] <= max_size[0]:
-            print("*******************************************Start of loop")
-            # tracer.show_stuff(2)
             self.cam_obj.set_frame_size(current_size)
             result = self.cam_obj.get_current_frame_size()
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
@@ -168,41 +157,7 @@ class CameraController(ABCDeviceController):
             if result[1] > new_y:
                 new_y = result[1] + step
             current_size = (new_x, new_y)
-            print("*******************************************End of loop")
-            # tracer.show_stuff(2)
-
-        print("*******************************************After loop")
-        # tracer.show_stuff(2)
         self.cam_obj.set_frame_size(initial_size)
-
-        # self.frame_sizes.append(('1920, 1440', (2304, 1536)))
-        # self.frame_sizes.append(('1920, 1440', (1920, 1440)))
-        # self.frame_sizes.append(('1920, 1080', (1920, 1080)))
-        # self.frame_sizes.append(('1600, 900', (1600, 896)))
-        # self.frame_sizes.append(('1280, 720', (1280, 720)))
-        # self.frame_sizes.append(('1960, 720', (960, 720)))
-        # self.frame_sizes.append(('640, 480', (640, 640)))
-        # self.frame_sizes.append(('640, 480', (640, 480)))
-
-        # self.frame_sizes.append(('1920, 1280', (1920, 1280)))
-        # self.frame_sizes.append(('1920, 1200', (1920, 1200)))
-        # self.frame_sizes.append(('1856, 1392', (1856, 1392)))
-        # self.frame_sizes.append(('1792, 1344', (1792, 1344)))
-        # self.frame_sizes.append(('1680, 1050', (1680, 1050)))
-        # self.frame_sizes.append(('1600, 1200', (1600, 1200)))
-        # self.frame_sizes.append(('1600, 900', (1600, 900)))
-        # self.frame_sizes.append(('1440, 1050', (1440, 1050)))
-        # self.frame_sizes.append(('1440, 900', (1440, 900)))
-        # self.frame_sizes.append(('1366, 768', (1366, 768)))
-        # self.frame_sizes.append(('1360, 768', (1360, 768)))
-        # self.frame_sizes.append(('1280, 1024', (1280, 1024)))
-        # self.frame_sizes.append(('1280, 960', (1280, 960)))
-        # self.frame_sizes.append(('1280, 800', (1280, 800)))
-        # self.frame_sizes.append(('1280, 768', (1280, 768)))
-        # self.frame_sizes.append(('1152, 864', (1152, 864)))
-        # self.frame_sizes.append(('1024, 768', (1024, 768)))
-        # self.frame_sizes.append(('1960, 720', (960, 720)))
-        # self.frame_sizes.append(('800, 600', (800, 600)))
         self.tab.populate_frame_size_selector(self.frame_sizes)
         self.logger.debug("done")
 

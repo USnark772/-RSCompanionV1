@@ -51,14 +51,10 @@ from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
 from Devices.Camera.Controller.camera_controller import CameraController
-import Unused.Tests.tracemalloc_helper as trace
-
-trace_num = 5
 
 
 class CompanionController:
     def __init__(self):
-        trace.tracemalloc.start()
         """ Create elements of View and Controller """
         self.log_output = OutputWindow()
         self.settings = QSettings("Red Scientific", "Companion")
@@ -100,9 +96,7 @@ class CompanionController:
         self.file_dialog = QFileDialog(self.ui)
 
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.cam_con_manager = CameraConnectionManager(self.ch)
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.__setup_managers()
         self.settings.beginGroup("Camera manager")
         try:
@@ -160,9 +154,7 @@ class CompanionController:
 
     def add_camera(self, cap, index, thread):
         self.logger.debug("running")
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.__create_camera_controller(cap, index, thread)
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.logger.debug("done")
 
     def remove_camera(self, index):
@@ -617,7 +609,6 @@ class CompanionController:
     def ui_close_event_handler(self):
         """ Shut down all devices before closing the app. """
         self.logger.debug("running")
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         for controller in self.__device_controllers.values():
             controller.cleanup()
         # if self.__exp_running:
@@ -632,10 +623,8 @@ class CompanionController:
         #             controller.end_exp()
         #     except Exception as e:
         #         self.logger.exception("Failed to end_exp_all")
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.dev_con_manager.cleanup()
         self.cam_con_manager.cleanup()
-        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.log_output.close()
         self.logger.debug("done")
 
