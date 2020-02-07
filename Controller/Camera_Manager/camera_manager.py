@@ -26,10 +26,16 @@ import logging
 import cv2
 from numpy import ndarray
 from PySide2.QtCore import QThread, QObject, QMutex, Signal, QWaitCondition
+import Unused.Tests.tracemalloc_helper as tracer
 
+cam_to_watch = 1
+# TODO: For some reason for each extra camera attached the memory usage seems exponential. 900 KiB for one cam,
+#  50k KiB for two cams
 
 class CamWorker(QThread):
     def __init__(self, cap, index, cam_counter, ch):
+        if index == cam_to_watch:
+            tracer.start()
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -45,11 +51,20 @@ class CamWorker(QThread):
     def run(self):
         self.logger.debug("running")
         while self.running:
+            frame = None
+            ret = False
             self.signals.lock.lock()
             if not self.reading:
                 self.signals.wcond.wait(self.signals.lock)
             self.signals.lock.unlock()
-            ret, frame = self.cap.read()
+            try:
+                if self.index == 1:
+                    tracer.show_stuff(2)
+                ret, frame = self.cap.read()
+                if self.index == 1:
+                    tracer.show_stuff(2)
+            except:
+                self.logger.exception("Bummer for cam: " + str(self.index))
             if frame is None:
                 continue
             elif ret:
@@ -92,8 +107,8 @@ class CamScanner(QThread):
     # Try to connect new cam from latest index and up
     def run(self):
         self.logger.debug("running")
-        while self.running:
-            self.__check_for_cams(self.__get_index())
+        # while self.running:
+        self.__check_for_cams(0)  # self.__get_index())
         self.logger.debug("done")
 
     def __get_index(self):
@@ -114,6 +129,7 @@ class CamScanner(QThread):
                 index += 1
                 self.__increment_cam_count()
                 self.signal.new_cam_sig.emit(cap, index)
+                # break
         # self.logger.debug("done")
 
     def __increment_cam_count(self):
@@ -167,7 +183,7 @@ class CamConManSig(QObject):
 
 
 # TODO: Figure out how to number cameras better. If a camera fails and then plugs in again
-#  then it will overwrite a cam that is currently plugged in since index would be the same.
+#  then it could override a cam that is currently plugged in under the same index.
 class CameraConnectionManager:
     def __init__(self, ch):
         self.logger = logging.getLogger(__name__)

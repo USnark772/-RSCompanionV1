@@ -135,8 +135,10 @@ class CamObj:
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
         if not res1 or not res2:
-            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_size[0])
-            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_size[1])
+            new_x = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+            new_y = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_size[0])
+            res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_size[1])
         else:
             new_x = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
             new_y = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)

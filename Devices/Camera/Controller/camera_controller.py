@@ -27,6 +27,7 @@ from PySide2.QtCore import QObject, Signal, QThread
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.Model.cam_obj import CamObj
+import Unused.Tests.tracemalloc_helper as tracer
 
 
 class ControllerSig(QObject):
@@ -36,6 +37,8 @@ class ControllerSig(QObject):
 
 class CameraController(ABCDeviceController):
     def __init__(self, cap, index, thread, ch):
+        # tracer.start()
+        # tracer.show_stuff(2)
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -59,6 +62,7 @@ class CameraController(ABCDeviceController):
         self.__populate_fps_selections()
         self.__initialize_tab_values()
         self.cam_thread.start(priority=QThread.LowestPriority)
+        # tracer.show_stuff(2)
         self.logger.debug("Initialized")
 
     def get_name(self):
@@ -138,15 +142,20 @@ class CameraController(ABCDeviceController):
 
     def __populate_sizes(self):
         self.logger.debug("running")
-
+        print("*******************************************__populate_sizes() for:", self.get_name())
+        # tracer.show_stuff(2)
         initial_size = self.cam_obj.get_current_frame_size()
-        large_size = (4000, 4000)
+        large_size = (1920, 1080)
         step = 100
         self.cam_obj.set_frame_size(large_size)
         max_size = self.cam_obj.get_current_frame_size()
         current_size = initial_size
 
+        print("*******************************************Before loop")
+        # tracer.show_stuff(2)
         while current_size[0] <= max_size[0]:
+            print("*******************************************Start of loop")
+            # tracer.show_stuff(2)
             self.cam_obj.set_frame_size(current_size)
             result = self.cam_obj.get_current_frame_size()
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
@@ -159,7 +168,11 @@ class CameraController(ABCDeviceController):
             if result[1] > new_y:
                 new_y = result[1] + step
             current_size = (new_x, new_y)
+            print("*******************************************End of loop")
+            # tracer.show_stuff(2)
 
+        print("*******************************************After loop")
+        # tracer.show_stuff(2)
         self.cam_obj.set_frame_size(initial_size)
 
         # self.frame_sizes.append(('1920, 1440', (2304, 1536)))

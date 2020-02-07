@@ -1,5 +1,14 @@
 import os, linecache, tracemalloc
 
+
+def start():
+    tracemalloc.start()
+
+
+def show_stuff(num_lines=1):
+    display_top(tracemalloc.take_snapshot(), limit=num_lines)
+
+
 def display_top(snapshot, key_type='lineno', limit=10):
     snapshot = snapshot.filter_traces((
         tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),

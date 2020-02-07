@@ -26,7 +26,7 @@ def set_frame_size(cap, x, y):
 
 
 initial_sizes = []
-num_cams = 2
+num_cams = 3
 caps = []
 frame_sizes = []
 indices = []
@@ -37,6 +37,7 @@ for i in range(num_cams):
 print("***** Before caps.append *****")
 tracer.display_top(tracer.tracemalloc.take_snapshot(), limit=trace_limit)
 for i in range(num_cams):
+    new_cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
     caps.append(cv2.VideoCapture(i, cv2.CAP_DSHOW))
 
 print("***** After caps.append and before resolution loop *****")
@@ -99,9 +100,12 @@ while running:
             print("***** After getting frame *****")
             tracer.display_top(tracer.tracemalloc.take_snapshot(), limit=trace_limit)
             cv2.imshow('frame' + str(i), frame)
-        except:
+        except Exception as e:
+
             print("***** Cam:", i, "That frame didn't work *****")
-            print(caps[i].isOpened())  # Seems to still be open when it fails.
+            # print(caps[i].isOpened())  # Seems to still be open when it fails.
+            print(e)
+            running = False
             tracer.display_top(tracer.tracemalloc.take_snapshot(), limit=trace_limit)
             set_frame_size(caps[i], initial_sizes[i][0], initial_sizes[i][1])
             continue

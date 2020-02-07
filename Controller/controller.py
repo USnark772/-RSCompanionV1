@@ -617,6 +617,7 @@ class CompanionController:
     def ui_close_event_handler(self):
         """ Shut down all devices before closing the app. """
         self.logger.debug("running")
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         for controller in self.__device_controllers.values():
             controller.cleanup()
         # if self.__exp_running:
@@ -631,8 +632,10 @@ class CompanionController:
         #             controller.end_exp()
         #     except Exception as e:
         #         self.logger.exception("Failed to end_exp_all")
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.dev_con_manager.cleanup()
         self.cam_con_manager.cleanup()
+        trace.display_top(trace.tracemalloc.take_snapshot(), limit=trace_num)
         self.log_output.close()
         self.logger.debug("done")
 
