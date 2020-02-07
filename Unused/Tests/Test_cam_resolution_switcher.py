@@ -113,6 +113,7 @@ while running:
         if keypress == ord('q'):
             running = False
         elif keypress == ord('n'):
+            # Something wrong here.
             indices[i] = (indices[i] + 1) % len(frame_sizes[i])
             set_frame_size(caps[i], frame_sizes[i][indices[i]][0], frame_sizes[i][indices[i]][1])
 

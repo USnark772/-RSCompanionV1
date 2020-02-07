@@ -59,16 +59,20 @@ class CamWorker(QThread):
             self.signals.lock.unlock()
             try:
                 if self.index == 1:
+                    print("***********************************BEFORE read()***********************************")
                     tracer.show_stuff(2)
                 ret, frame = self.cap.read()
                 if self.index == 1:
-                    tracer.show_stuff(2)
+                    print("***********************************AFTER read()***********************************")
+                    tracer.show_stuff(5)
             except:
                 self.logger.exception("Bummer for cam: " + str(self.index))
             if frame is None:
                 continue
             elif ret:
-                self.signals.new_frame_sig.emit(frame)
+                # Signal to too slow to handle the frame before next frame is retrieved?
+                # self.signals.new_frame_sig.emit(frame)
+                cv2.imshow("CAM_" + str(self.index), frame)
             else:
                 # Lost connection to camera.
                 break
