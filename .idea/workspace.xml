@@ -4,12 +4,12 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Up to three cameras will now successfully get available camera resolutions">
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Unused/Tests/fps_getter_tester.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +55,7 @@
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.fps_getter_tester">
     <configuration name="Test_cam_resolution_switcher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -98,6 +98,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="fps_getter_tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Companion" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/fps_getter_tester.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -111,27 +132,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Controller/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="quick_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/quick_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -165,16 +165,16 @@
       <item itemvalue="Python.Test_cam_resolution_switcher" />
       <item itemvalue="Python.cam_controller_development" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.quick_test" />
       <item itemvalue="Python.rs_device_manager_development" />
+      <item itemvalue="Python.fps_getter_tester" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.fps_getter_tester" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.Test_cam_resolution_switcher" />
         <item itemvalue="Python.rs_device_manager_development" />
         <item itemvalue="Python.cam_controller_development" />
-        <item itemvalue="Python.quick_test" />
       </list>
     </recent_temporary>
   </component>
@@ -390,7 +390,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581105384873</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Program will now successfully get available camera resolutions without crashing for up to three cameras. Camera resolutions can be changed at runtime without crashing. Needs stress tests.">
+      <created>1581117205301</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1581117205301</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -408,7 +415,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Finalize replacing all usages of QPushButton in code with custom QPushButton" />
     <MESSAGE value="." />
     <MESSAGE value="Saving is working but needs testing" />
     <MESSAGE value="Program now saves all data to one save file per experiment." />
@@ -433,7 +439,8 @@
     <MESSAGE value="Likely no memory leaks but this program is just using too much memory for video right now." />
     <MESSAGE value="Still working on it. Memory usage seems exponential for each extra camera attached." />
     <MESSAGE value="Maybe found one cause of the problem." />
-    <option name="LAST_COMMIT_MESSAGE" value="Maybe found one cause of the problem." />
+    <MESSAGE value="Program will now successfully get available camera resolutions without crashing for up to three cameras. Camera resolutions can be changed at runtime without crashing. Needs stress tests." />
+    <option name="LAST_COMMIT_MESSAGE" value="Program will now successfully get available camera resolutions without crashing for up to three cameras. Camera resolutions can be changed at runtime without crashing. Needs stress tests." />
   </component>
   <component name="WindowStateProjectService">
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
@@ -463,40 +470,40 @@
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="440" y="160" key="#xdebugger.evaluate/0.0.1368.912@0.0.1368.912" timestamp="1580323512767" />
-    <state x="239" y="102" key="CommitChangelistDialog2" timestamp="1581117031822">
+    <state x="239" y="102" key="CommitChangelistDialog2" timestamp="1581117204176">
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929825556" />
     <state x="533" y="134" key="CommitChangelistDialog2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098338208" />
-    <state x="239" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1581117031822" />
+    <state x="239" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1581117204176" />
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1580321275981" />
-    <state width="1348" height="297" key="GridCell.Tab.0.bottom" timestamp="1581117032995">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1900" height="363" key="GridCell.Tab.0.bottom" timestamp="1581127058257">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="352" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1899" height="238" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
-    <state width="1348" height="297" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1581117032995" />
+    <state width="1900" height="363" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
+    <state width="1348" height="297" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1581117217613" />
     <state width="1899" height="246" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="297" key="GridCell.Tab.0.center" timestamp="1581117032995">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1900" height="363" key="GridCell.Tab.0.center" timestamp="1581127058257">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="352" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1899" height="238" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
-    <state width="1348" height="297" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1581117032995" />
+    <state width="1900" height="363" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
+    <state width="1348" height="297" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1581117217613" />
     <state width="1899" height="246" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="297" key="GridCell.Tab.0.left" timestamp="1581117032995">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1900" height="363" key="GridCell.Tab.0.left" timestamp="1581127058257">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="352" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1899" height="238" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
-    <state width="1348" height="297" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1581117032995" />
+    <state width="1900" height="363" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
+    <state width="1348" height="297" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1581117217608" />
     <state width="1899" height="246" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1348" height="297" key="GridCell.Tab.0.right" timestamp="1581117032995">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state width="1900" height="363" key="GridCell.Tab.0.right" timestamp="1581127058257">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="2539" height="352" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1899" height="238" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
-    <state width="1348" height="297" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1581117032995" />
+    <state width="1900" height="363" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
+    <state width="1348" height="297" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1581117217613" />
     <state width="1899" height="246" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
     <state width="1348" height="213" key="GridCell.Tab.1.bottom" timestamp="1581105394158">
       <screen x="0" y="0" width="1368" height="912" />

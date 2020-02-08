@@ -29,11 +29,47 @@ from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.Model.cam_obj import CamObj
 
 
+class WorkerSig(QObject):
+    done_sig = Signal(list)
+
+
+class SizeGetter(QThread):
+    def __init__(self, cam_obj):
+        QThread.__init__(self)
+        self.cam_obj = cam_obj
+        self.signal = WorkerSig()
+
+    def run(self):
+        sizes = []
+        initial_size = self.cam_obj.get_current_frame_size()
+        large_size = (1920, 1080)
+        step = 100
+        self.cam_obj.set_frame_size(large_size)
+        max_size = self.cam_obj.get_current_frame_size()
+        current_size = initial_size
+        while current_size[0] <= max_size[0]:
+            self.cam_obj.set_frame_size(current_size)
+            result = self.cam_obj.get_current_frame_size()
+            new_tup = (str(result[0]) + ", " + str(result[1]), result)
+            if new_tup not in sizes:
+                sizes.append(new_tup)
+            new_x = current_size[0] + step
+            new_y = current_size[1] + step
+            if result[0] > new_x:
+                new_x = result[0] + step
+            if result[1] > new_y:
+                new_y = result[1] + step
+            current_size = (new_x, new_y)
+        self.cam_obj.set_frame_size(initial_size)
+        self.signal.done_sig.emit(sizes)
+
+
 class ControllerSig(QObject):
     toggle_signal = Signal()
     settings_error = Signal(str)
 
-
+# TODO: Figure out how to measure FPS at any given frame size. Larger frame sizes seem to give slower fps
+#  (See fps_getter_tester.py)
 class CameraController(ABCDeviceController):
     def __init__(self, cap, index, thread, ch):
         self.logger = logging.getLogger(__name__)
@@ -41,7 +77,10 @@ class CameraController(ABCDeviceController):
         self.logger.debug("Initializing")
         self.index = index
         self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch)
-        super().__init__(CameraTab(name=self.cam_obj.name))
+        self.worker = SizeGetter(self.cam_obj)
+        self.worker.signal.done_sig.connect(self.__complete_setup)
+        self.worker.start()
+        super().__init__(CameraTab(ch, name=self.cam_obj.name))
         self.signals = ControllerSig()
         self.cam_thread = thread
         self.cam_thread.signals.new_frame_sig.connect(self.cam_obj.handle_new_frame)
@@ -55,10 +94,7 @@ class CameraController(ABCDeviceController):
         self.frame_sizes = []
         self.fps_values = []
         self.cam_obj.signals.frame_size_fail_sig.connect(self.handle_resolution_error)
-        self.__populate_sizes()
-        self.__populate_fps_selections()
-        self.__initialize_tab_values()
-        self.cam_thread.start(priority=QThread.LowestPriority)
+        self.__add_loading_symbols_to_tab()
         self.logger.debug("Initialized")
 
     def get_name(self):
@@ -117,7 +153,8 @@ class CameraController(ABCDeviceController):
 
     def set_fps(self):
         self.logger.debug("running")
-        self.cam_obj.set_fps(self.tab.get_fps())
+        new_fps = self.tab.get_fps()
+        self.cam_obj.set_fps(new_fps)
         self.logger.debug("done")
 
     def toggle_color(self):
@@ -128,36 +165,24 @@ class CameraController(ABCDeviceController):
         new_rotation = self.tab.get_rotation()
         self.cam_obj.set_rotation(new_rotation)
 
+    def __add_loading_symbols_to_tab(self):
+        self.logger.debug("running")
+        self.tab.add_item_to_size_selector("Initializing...")
+        self.tab.add_item_to_fps_selector("Initializing...")
+        self.logger.debug("done")
+
     def __populate_fps_selections(self):
         self.logger.debug("running")
+        self.tab.empty_fps_selector()
         for i in range(11):
             self.fps_values.append((str(30 - i), 30-i))
         self.tab.populate_fps_selector(self.fps_values)
         self.logger.debug("done")
 
-    # TODO: Can we thread this? main window hangs when running this.
-    def __populate_sizes(self):
+    def __populate_sizes(self, sizes):
         self.logger.debug("running")
-        initial_size = self.cam_obj.get_current_frame_size()
-        large_size = (1920, 1080)
-        step = 100
-        self.cam_obj.set_frame_size(large_size)
-        max_size = self.cam_obj.get_current_frame_size()
-        current_size = initial_size
-        while current_size[0] <= max_size[0]:
-            self.cam_obj.set_frame_size(current_size)
-            result = self.cam_obj.get_current_frame_size()
-            new_tup = (str(result[0]) + ", " + str(result[1]), result)
-            if new_tup not in self.frame_sizes:
-                self.frame_sizes.append(new_tup)
-            new_x = current_size[0] + step
-            new_y = current_size[1] + step
-            if result[0] > new_x:
-                new_x = result[0] + step
-            if result[1] > new_y:
-                new_y = result[1] + step
-            current_size = (new_x, new_y)
-        self.cam_obj.set_frame_size(initial_size)
+        self.tab.empty_size_selector()
+        self.frame_sizes = sizes
         self.tab.populate_frame_size_selector(self.frame_sizes)
         self.logger.debug("done")
 
@@ -171,12 +196,24 @@ class CameraController(ABCDeviceController):
         self.logger.debug("done")
 
     def __initialize_tab_values(self):
+        self.logger.debug("running")
         rotation_val = self.cam_obj.get_current_rotation()
         fps_val = self.cam_obj.get_current_fps()
         size_val = self.cam_obj.get_current_frame_size()
         self.tab.set_rotation(rotation_val)
         self.tab.set_fps(self.__get_fps_val_index(fps_val))
         self.tab.set_frame_size(self.__get_size_val_index(size_val))
+        self.logger.debug("done")
+
+    def __complete_setup(self, sizes):
+        self.logger.debug("running")
+        self.worker.wait()
+        self.__populate_sizes(sizes)
+        self.__populate_fps_selections()
+        self.__initialize_tab_values()
+        self.cam_thread.start(priority=QThread.LowestPriority)
+        self.tab.set_tab_active(True)
+        self.logger.debug("done")
 
     # TODO: handle x not in list.
     def __get_size_val_index(self, value):

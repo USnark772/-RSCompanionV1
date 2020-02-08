@@ -41,7 +41,7 @@ class CamObj:
         self.signals = CamObjSig()
         self.name = name
         self.thread = thread
-        self.frame_size = (cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
         self.active = True
@@ -60,7 +60,7 @@ class CamObj:
     def setup_writer(self, timestamp, save_dir='', vid_ext='.avi', fps=None, frame_size=None, codec='DIVX'):
         self.logger.debug("running")
         if not frame_size:
-            frame_size = self.frame_size
+            frame_size = (int(self.frame_size[0]), int(self.frame_size[1]))
         if not fps:
             fps = self.fps
         if self.active:
@@ -141,9 +141,7 @@ class CamObj:
             res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_size[0])
             res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_size[1])
         else:
-            new_x = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-            new_y = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-            self.frame_size = (new_x, new_y)
+            self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         # if not (x, y) == (new_x, new_y):
         #     self.signals.frame_size_fail_sig.emit()
         self.close_window()
