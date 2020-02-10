@@ -7,8 +7,8 @@ if __name__ == '__main__':
     video = cv2.VideoCapture(0)
     x = 1920
     y = 1080
-    # res1 = video.set(cv2.CAP_PROP_FRAME_WIDTH, x)
-    # res2 = video.set(cv2.CAP_PROP_FRAME_HEIGHT, x)
+    res1 = video.set(cv2.CAP_PROP_FRAME_WIDTH, x)
+    res2 = video.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
 
     # Find OpenCV version
     (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
@@ -42,5 +42,7 @@ if __name__ == '__main__':
     fps = num_frames / seconds
     print("Estimated frames per second : {0}".format(fps))
 
+
+    print(video.get(cv2.CAP_PROP_FRAME_WIDTH), video.get(cv2.CAP_PROP_FRAME_HEIGHT))
     # Release video
     video.release()

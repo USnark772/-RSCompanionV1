@@ -33,7 +33,7 @@ from Devices.abc_device_controller import ABCDeviceController
 class VOGSig(QObject):
     send_device_msg_sig = Signal(str)
 
-
+# TODO: Add functionality to revert to previous custom config?
 class VOGController(ABCDeviceController):
     def __init__(self, device, thread, graph_callback, ch, save_callback):
         self.logger = logging.getLogger(__name__)
@@ -82,10 +82,6 @@ class VOGController(ABCDeviceController):
                 self.__save_data(msg_dict['values'], timestamp)
             elif msg_type == "settings":
                 self.__update_config(msg_dict['values'])
-
-    def cleanup(self):
-        self.end_block()
-        self.end_exp()
 
     def start_exp(self):
         self.__send_msg(self.__prepare_msg("do_expStart"))

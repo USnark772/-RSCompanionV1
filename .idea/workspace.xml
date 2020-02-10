@@ -4,12 +4,15 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Unused/Tests/fps_getter_tester.py" afterDir="false" />
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Threaded resolution list population. Found issue with FPS.">
+      <change beforePath="$PROJECT_DIR$/.idea/Companion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Companion.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/View/camera_tab.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/VOG/Controller/vog_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/Tests/fps_getter_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/fps_getter_tester.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/View/MainWindow/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/View/MainWindow/main_window.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +58,7 @@
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.fps_getter_tester">
+  <component name="RunManager" selected="Python.main">
     <configuration name="Test_cam_resolution_switcher" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -170,8 +173,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.fps_getter_tester" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.fps_getter_tester" />
         <item itemvalue="Python.Test_cam_resolution_switcher" />
         <item itemvalue="Python.rs_device_manager_development" />
         <item itemvalue="Python.cam_controller_development" />
@@ -397,7 +400,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581117205301</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Found issue with FPS.">
+      <created>1581127169858</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1581127169858</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -415,7 +425,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="." />
     <MESSAGE value="Saving is working but needs testing" />
     <MESSAGE value="Program now saves all data to one save file per experiment." />
     <MESSAGE value="Working prototype for handling camera plug/unplug events." />
@@ -440,14 +449,15 @@
     <MESSAGE value="Still working on it. Memory usage seems exponential for each extra camera attached." />
     <MESSAGE value="Maybe found one cause of the problem." />
     <MESSAGE value="Program will now successfully get available camera resolutions without crashing for up to three cameras. Camera resolutions can be changed at runtime without crashing. Needs stress tests." />
-    <option name="LAST_COMMIT_MESSAGE" value="Program will now successfully get available camera resolutions without crashing for up to three cameras. Camera resolutions can be changed at runtime without crashing. Needs stress tests." />
+    <MESSAGE value="Threaded resolution list population. Found issue with FPS." />
+    <option name="LAST_COMMIT_MESSAGE" value="Threaded resolution list population. Found issue with FPS." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578938648124">
-      <screen x="0" y="0" width="2560" height="1080" />
+    <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581352079446">
+      <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578938648124" />
-    <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1368.912@0.0.1368.912" timestamp="1578928378101" />
+    <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1368.912@0.0.1368.912" timestamp="1581352079446" />
     <state x="636" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1579192716983">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -470,40 +480,48 @@
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="440" y="160" key="#xdebugger.evaluate/0.0.1368.912@0.0.1368.912" timestamp="1580323512767" />
-    <state x="239" y="102" key="CommitChangelistDialog2" timestamp="1581117204176">
+    <state x="239" y="102" key="CommitChangelistDialog2" timestamp="1581353579869">
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929825556" />
-    <state x="533" y="134" key="CommitChangelistDialog2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098338208" />
-    <state x="239" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1581117204176" />
+    <state x="0" y="134" key="CommitChangelistDialog2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127169002" />
+    <state x="239" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1581353579869" />
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1580321275981" />
-    <state width="1900" height="363" key="GridCell.Tab.0.bottom" timestamp="1581127058257">
+    <state x="550" y="249" key="FileChooserDialogImpl" timestamp="1581351982286">
+      <screen x="0" y="0" width="1368" height="912" />
+    </state>
+    <state x="550" y="249" key="FileChooserDialogImpl/0.0.1368.912@0.0.1368.912" timestamp="1581351982286" />
+    <state x="318" y="414" width="797" height="199" key="GitRewordDialog" timestamp="1581127260864">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="2539" height="352" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1900" height="363" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
-    <state width="1348" height="297" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1581117217613" />
+    <state x="318" y="414" width="797" height="199" key="GitRewordDialog/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127260864" />
+    <state width="2539" height="362" key="GridCell.Tab.0.bottom" timestamp="1581362864163">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="2539" height="362" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581362864163" />
+    <state width="1900" height="363" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271714" />
+    <state width="1348" height="296" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1581353582843" />
     <state width="1899" height="246" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1900" height="363" key="GridCell.Tab.0.center" timestamp="1581127058257">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="2539" height="362" key="GridCell.Tab.0.center" timestamp="1581362864163">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="352" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1900" height="363" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
-    <state width="1348" height="297" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1581117217613" />
+    <state width="2539" height="362" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581362864163" />
+    <state width="1900" height="363" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271713" />
+    <state width="1348" height="296" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1581353582842" />
     <state width="1899" height="246" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1900" height="363" key="GridCell.Tab.0.left" timestamp="1581127058257">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="2539" height="362" key="GridCell.Tab.0.left" timestamp="1581362864163">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="352" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1900" height="363" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
-    <state width="1348" height="297" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1581117217608" />
+    <state width="2539" height="362" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581362864163" />
+    <state width="1900" height="363" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271713" />
+    <state width="1348" height="296" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1581353582840" />
     <state width="1899" height="246" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="1900" height="363" key="GridCell.Tab.0.right" timestamp="1581127058257">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="2539" height="362" key="GridCell.Tab.0.right" timestamp="1581362864163">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="352" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580929828638" />
-    <state width="1900" height="363" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127058257" />
-    <state width="1348" height="297" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1581117217613" />
+    <state width="2539" height="362" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581362864163" />
+    <state width="1900" height="363" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271714" />
+    <state width="1348" height="296" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1581353582842" />
     <state width="1899" height="246" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
     <state width="1348" height="213" key="GridCell.Tab.1.bottom" timestamp="1581105394158">
       <screen x="0" y="0" width="1368" height="912" />
@@ -533,12 +551,12 @@
     <state width="1899" height="238" key="GridCell.Tab.1.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
     <state width="1348" height="213" key="GridCell.Tab.1.right/0.0.1368.912@0.0.1368.912" timestamp="1581105394158" />
     <state width="1899" height="356" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state x="380" y="161" key="SettingsEditor" timestamp="1581091283942">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="798" y="173" key="SettingsEditor" timestamp="1581362863271">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="781" y="183" key="SettingsEditor/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578439423308" />
+    <state x="798" y="173" key="SettingsEditor/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581362863271" />
     <state x="380" y="161" key="SettingsEditor/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581091283942" />
-    <state x="271" y="136" key="SettingsEditor/0.0.1368.912@0.0.1368.912" timestamp="1581013218819" />
+    <state x="271" y="136" key="SettingsEditor/0.0.1368.912@0.0.1368.912" timestamp="1581353104188" />
     <state x="586" y="183" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1578762104673" />
     <state x="654" y="274" key="Vcs.Push.Dialog.v2" timestamp="1581098346875">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -605,11 +623,6 @@
           <url>file://$USER_HOME$/AppData/Local/Programs/Python/Python37-32/Lib/logging/config.py</url>
           <line>68</line>
           <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Controller/controller.py</url>
-          <line>437</line>
-          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

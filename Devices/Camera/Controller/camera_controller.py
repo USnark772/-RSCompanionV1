@@ -68,8 +68,13 @@ class ControllerSig(QObject):
     toggle_signal = Signal()
     settings_error = Signal(str)
 
-# TODO: Figure out how to measure FPS at any given frame size. Larger frame sizes seem to give slower fps
-#  (See fps_getter_tester.py)
+# TODO: Figure out how to best deal with larger frames causing lower fps.
+# Is measuring fps at any given time a good option?
+# Is waiting until file is written and then altering it to the proper fps a good option?
+#  (Look into ffmpeg for this, seems like using opencv won't be a good idea)
+# Maybe ffmpeg is a good option in place of opencv, maybe not.
+# Do we want to just let the user control the fps? (Seems like an easy way out and not a good user experience)
+# Actual fps will never be quite the same between machines because each machine will grab frames at different rates.
 class CameraController(ABCDeviceController):
     def __init__(self, cap, index, thread, ch):
         self.logger = logging.getLogger(__name__)

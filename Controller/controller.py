@@ -24,7 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-import logging.config
+# import logging.config
 from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QDir, QSize, QSettings
