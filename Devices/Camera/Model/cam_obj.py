@@ -27,13 +27,12 @@ import logging
 import cv2
 from PySide2.QtCore import QObject, Signal
 
-
 class CamObjSig(QObject):
     frame_size_fail_sig = Signal()
 
 
 class CamObj:
-    def __init__(self, cap, name, thread, ch):
+    def __init__(self, cap, name, thread, ch, frame_queue):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -41,13 +40,14 @@ class CamObj:
         self.signals = CamObjSig()
         self.name = name
         self.thread = thread
+        self.frame_queue = frame_queue
         self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
         self.active = True
         self.writing = False
         self.color_image = True
-        self.alter_image_shape = True
+        self.alter_image_shape = False
         self.rotate_angle = 0  # in degrees
         self.scale = 1  # negative values cause 180 degree rotation as well as scaling
         self.logger.debug("Initialized")
@@ -77,7 +77,6 @@ class CamObj:
             self.writing = False
         self.logger.debug("done")
 
-    # TODO: Program still sometimes crashing when changing resolution. Some testing shows that frame comes out as None.
     def read_camera(self):
         ret, frame = self.cap.read()
         if frame is None:
@@ -88,8 +87,9 @@ class CamObj:
         if self.writing:
             self.writer.write(frame)
 
-    def handle_new_frame(self, frame):
+    def handle_new_frame(self):
         if self.active:
+            frame = self.frame_queue.get()
             if self.alter_image_shape:
                 rows, cols, a = frame.shape
                 M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
@@ -97,7 +97,6 @@ class CamObj:
             if not self.color_image:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imshow(self.name, frame)
-            self.thread.signals.wait_for_frame_handling.wakeAll()
             self.save_data(frame)
 
     def close_window(self):

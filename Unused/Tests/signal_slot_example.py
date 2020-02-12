@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.centralwidget = QWidget(self)
         self.batchbutton = QPushButton('Start batch', self)
         self.longbutton = QPushButton('Start long (10 seconds) operation', self)
-        self.label1 = QLabel('Continuos batch')
+        self.label1 = QLabel('Continuous batch')
         self.label2 = QLabel('Long batch')
         self.vbox = QVBoxLayout()
         self.vbox.addWidget(self.batchbutton)

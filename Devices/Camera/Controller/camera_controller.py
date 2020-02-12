@@ -27,6 +27,10 @@ from PySide2.QtCore import QObject, Signal, QThread
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.Model.cam_obj import CamObj
+import Unused.Tests.tracemalloc_helper as tracer
+
+
+# tracer.start()
 
 
 class WorkerSig(QObject):
@@ -40,17 +44,22 @@ class SizeGetter(QThread):
         self.signal = WorkerSig()
 
     def run(self):
+        # tracer.show_stuff(3)
         sizes = []
         initial_size = self.cam_obj.get_current_frame_size()
-        large_size = (1920, 1080)
+        new_tup = (str(initial_size[0]) + ", " + str(initial_size[1]), initial_size)
+        sizes.append(new_tup)
+        large_size = (3000, 3000)
         step = 100
         self.cam_obj.set_frame_size(large_size)
         max_size = self.cam_obj.get_current_frame_size()
-        current_size = initial_size
+        current_size = (initial_size[0] + step, initial_size[1] + step)
+        # tracer.show_stuff(3)
         while current_size[0] <= max_size[0]:
             self.cam_obj.set_frame_size(current_size)
             result = self.cam_obj.get_current_frame_size()
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
+            # tracer.show_stuff(3)
             if new_tup not in sizes:
                 sizes.append(new_tup)
             new_x = current_size[0] + step
@@ -62,6 +71,7 @@ class SizeGetter(QThread):
             current_size = (new_x, new_y)
         self.cam_obj.set_frame_size(initial_size)
         self.signal.done_sig.emit(sizes)
+        # tracer.show_stuff(3)
 
 
 class ControllerSig(QObject):
@@ -76,12 +86,12 @@ class ControllerSig(QObject):
 # Do we want to just let the user control the fps? (Seems like an easy way out and not a good user experience)
 # Actual fps will never be quite the same between machines because each machine will grab frames at different rates.
 class CameraController(ABCDeviceController):
-    def __init__(self, cap, index, thread, ch):
+    def __init__(self, cap, index, thread, ch, frame_queue):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.index = index
-        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch)
+        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch, frame_queue)
         self.worker = SizeGetter(self.cam_obj)
         self.worker.signal.done_sig.connect(self.__complete_setup)
         self.worker.start()
@@ -148,7 +158,6 @@ class CameraController(ABCDeviceController):
         self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1])))
         self.logger.debug("done")
 
-    # TODO: Alert user to failure?
     def handle_resolution_error(self):
         new_size = self.cam_obj.get_current_frame_size()
         size_index = self.__get_size_val_index(new_size)
@@ -220,7 +229,6 @@ class CameraController(ABCDeviceController):
         self.tab.set_tab_active(True)
         self.logger.debug("done")
 
-    # TODO: handle x not in list.
     def __get_size_val_index(self, value):
         for i in range(len(self.frame_sizes)):
             if self.frame_sizes[i][1] == value:

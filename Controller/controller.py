@@ -152,9 +152,9 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
-    def add_camera(self, cap, index, thread):
+    def add_camera(self, cap, index, thread, frame_queue):
         self.logger.debug("running")
-        self.__create_camera_controller(cap, index, thread)
+        self.__create_camera_controller(cap, index, thread, frame_queue)
         self.logger.debug("done")
 
     def remove_camera(self, index):
@@ -578,11 +578,10 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_camera_controller(self, cap, index, thread):
+    def __create_camera_controller(self, cap, index, thread, frame_queue):
         self.logger.debug("running")
         try:
-            # TODO: Push thread into controllers?
-            cam_controller = CameraController(cap, index, thread, self.ch)
+            cam_controller = CameraController(cap, index, thread, self.ch, frame_queue)
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.settings_error.connect(self.alert_camera_error)
         except Exception as e:
@@ -724,8 +723,6 @@ class CompanionController:
             self.__graphs[device_type]['frame'].get_graph().refresh_self()
         self.logger.debug("done")
 
-    # TODO: Consider moving this logic to device controllers. Difficulty would be possible threading issues for
-    #  controllers later on.
     def add_data_to_graph(self, device, data):
         """ Pass data to device type graph along with specific device id. """
         self.logger.debug("running")

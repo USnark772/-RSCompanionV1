@@ -38,7 +38,7 @@ class CompanionWindow(QMainWindow):
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         super().__init__()
-        self.setMinimumSize(min_size)  # TODO: Change this to default size but allow for smaller.
+        self.setMinimumSize(min_size)  # TODO: Change this to default size but allow for smaller?
         font = QFont()
         font.setPointSize(10)
         self.setFont(font)
