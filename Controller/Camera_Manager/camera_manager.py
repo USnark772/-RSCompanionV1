@@ -221,6 +221,7 @@ class CameraConnectionManager:
         for worker in self.worker_thread_list:
             worker.running = False
             while not worker.wait(1):
+                worker.frame_queue.get()
                 worker.signals.toggle.wakeAll()
                 worker.signals.wait_for_frame_handling.wakeAll()
         self.logger.debug("done")
