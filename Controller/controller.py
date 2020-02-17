@@ -446,6 +446,7 @@ class CompanionController:
 
     @staticmethod
     def __get_save_dir_from_file_name(file_name):
+        # possibly use for get last used directory
         end_index = file_name.rfind('/')
         dir_name = file_name[:end_index + 1]
         return dir_name
