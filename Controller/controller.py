@@ -152,9 +152,9 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
-    def add_camera(self, cap, index, thread, frame_queue):
+    def add_camera(self, cap, index, thread):
         self.logger.debug("running")
-        self.__create_camera_controller(cap, index, thread, frame_queue)
+        self.__create_camera_controller(cap, index, thread)
         self.logger.debug("done")
 
     def remove_camera(self, index):
@@ -578,10 +578,10 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_camera_controller(self, cap, index, thread, frame_queue):
+    def __create_camera_controller(self, cap, index, thread):
         self.logger.debug("running")
         try:
-            cam_controller = CameraController(cap, index, thread, self.ch, frame_queue)
+            cam_controller = CameraController(cap, index, thread, self.ch)
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.settings_error.connect(self.alert_camera_error)
         except Exception as e:
@@ -610,18 +610,6 @@ class CompanionController:
         self.logger.debug("running")
         for controller in self.__device_controllers.values():
             controller.cleanup()
-        # if self.__exp_running:
-        #     try:
-        #         for controller in self.__device_controllers.values():
-        #             controller.end_block()
-        #     except Exception as e:
-        #         self.logger.exception("Failed to end_block_all")
-        # if self.__exp_created:
-        #     try:
-        #         for controller in self.__device_controllers.values():
-        #             controller.end_exp()
-        #     except Exception as e:
-        #         self.logger.exception("Failed to end_exp_all")
         self.dev_con_manager.cleanup()
         self.cam_con_manager.cleanup()
         self.log_output.close()

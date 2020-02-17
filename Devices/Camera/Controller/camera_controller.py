@@ -32,6 +32,33 @@ import Unused.Tests.tracemalloc_helper as tracer
 
 # tracer.start()
 
+from datetime import datetime, timedelta
+from functools import wraps
+class throttle(object):
+    """
+    Decorator that prevents a function from being called more than once every
+    time period.
+    To create a function that cannot be called more than once a minute:
+        @throttle(minutes=1)
+        def my_fun():
+            pass
+    """
+    def __init__(self, seconds=0, minutes=0, hours=0):
+        self.throttle_period = timedelta(seconds=seconds, minutes=minutes, hours=hours)
+        self.time_of_last_call = datetime.min
+
+    def __call__(self, fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            now = datetime.now()
+            time_since_last_call = now - self.time_of_last_call
+
+            if time_since_last_call > self.throttle_period:
+                self.time_of_last_call = now
+                return fn(*args, **kwargs)
+
+        return wrapper
+
 
 class WorkerSig(QObject):
     done_sig = Signal(list)
@@ -86,12 +113,12 @@ class ControllerSig(QObject):
 # Do we want to just let the user control the fps? (Seems like an easy way out and not a good user experience)
 # Actual fps will never be quite the same between machines because each machine will grab frames at different rates.
 class CameraController(ABCDeviceController):
-    def __init__(self, cap, index, thread, ch, frame_queue):
+    def __init__(self, cap, index, thread, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.index = index
-        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch, frame_queue)
+        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch)
         self.worker = SizeGetter(self.cam_obj)
         self.worker.signal.done_sig.connect(self.__complete_setup)
         self.worker.start()
@@ -146,10 +173,11 @@ class CameraController(ABCDeviceController):
     def toggle_cam(self):
         self.logger.debug("running")
         self.cam_active = not self.cam_active
-        self.cam_thread.reading = self.cam_active
+        self.cam_thread.toggle(self.cam_active)
         if self.cam_active:
             self.cam_thread.signals.toggle.wakeAll()
-        self.cam_obj.toggle_activity()
+            self.cam_thread.clear_queue()
+        self.cam_obj.toggle_activity(self.cam_active)
         self.logger.debug("done")
 
     def set_frame_size(self):
@@ -172,8 +200,9 @@ class CameraController(ABCDeviceController):
         self.logger.debug("done")
 
     def toggle_color(self):
-        self.color_image = not self.color_image
-        self.cam_obj.set_use_color(self.color_image)
+        # self.color_image = not self.color_image
+        # self.cam_obj.set_use_color(self.color_image)
+        self.cam_thread.clear_queue()
 
     def set_rotation(self):
         new_rotation = self.tab.get_rotation()

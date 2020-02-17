@@ -32,7 +32,7 @@ class CamObjSig(QObject):
 
 
 class CamObj:
-    def __init__(self, cap, name, thread, ch, frame_queue):
+    def __init__(self, cap, name, thread, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -40,7 +40,6 @@ class CamObj:
         self.signals = CamObjSig()
         self.name = name
         self.thread = thread
-        self.frame_queue = frame_queue
         self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
@@ -52,8 +51,8 @@ class CamObj:
         self.scale = 1  # negative values cause 180 degree rotation as well as scaling
         self.logger.debug("Initialized")
 
-    def toggle_activity(self):
-        self.active = not self.active
+    def toggle_activity(self, is_active):
+        self.active = is_active
         if not self.active:
             self.close_window()
 
@@ -89,7 +88,7 @@ class CamObj:
 
     def handle_new_frame(self):
         if self.active:
-            frame = self.frame_queue.get()
+            frame = self.thread.frame_queue.get()
             if self.alter_image_shape:
                 rows, cols, a = frame.shape
                 M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
@@ -131,7 +130,7 @@ class CamObj:
     def set_frame_size(self, size):
         x = float(size[0])
         y = float(size[1])
-        self.toggle_activity()
+        self.toggle_activity(False)
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
         if not res1 or not res2:
@@ -144,4 +143,4 @@ class CamObj:
         # if not (x, y) == (new_x, new_y):
         #     self.signals.frame_size_fail_sig.emit()
         self.close_window()
-        self.toggle_activity()
+        self.toggle_activity(True)
