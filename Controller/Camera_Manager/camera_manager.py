@@ -208,7 +208,6 @@ class CameraConnectionManager:
         self.logger.debug("Initialized")
 
     def deactivate(self):
-        # THIS is a Test!
         self.active = False
         self.cleanup()
 

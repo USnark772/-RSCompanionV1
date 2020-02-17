@@ -621,6 +621,15 @@ class CompanionController:
         self.settings.beginGroup("Camera manager")
         if not self.__exp_created:
             if self.cam_con_manager.active:
+                # TODO: Remove all camera controllers/objs.
+                to_remove = []
+                for device in self.__device_controllers:
+                    if "CAM" in device:
+                        to_remove.append(device)
+                        self.tab_box.remove_tab(self.__device_controllers[device].get_tab_obj().get_name())
+                        self.__device_controllers[device].cleanup()
+                for item in to_remove:
+                    del self.__device_controllers[item]
                 self.cam_con_manager.deactivate()
                 self.settings.setValue("active", "False")
                 self.menu_bar.set_cam_bool_checked(False)
