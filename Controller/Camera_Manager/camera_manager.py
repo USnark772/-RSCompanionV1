@@ -183,6 +183,8 @@ class CamCounter:
     def decrement_count(self):
         self.logger.debug("running")
         self.count -= 1
+        if self.count < 0:
+            self.count = 0
         self.logger.debug("done")
 
 
