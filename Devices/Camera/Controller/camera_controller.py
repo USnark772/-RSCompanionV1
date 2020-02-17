@@ -69,6 +69,7 @@ class SizeGetter(QThread):
         QThread.__init__(self)
         self.cam_obj = cam_obj
         self.signal = WorkerSig()
+        self.running = True
 
     def run(self):
         # tracer.show_stuff(3)
@@ -82,7 +83,7 @@ class SizeGetter(QThread):
         max_size = self.cam_obj.get_current_frame_size()
         current_size = (initial_size[0] + step, initial_size[1] + step)
         # tracer.show_stuff(3)
-        while current_size[0] <= max_size[0]:
+        while current_size[0] <= max_size[0] and self.running:
             self.cam_obj.set_frame_size(current_size)
             result = self.cam_obj.get_current_frame_size()
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
@@ -144,6 +145,9 @@ class CameraController(ABCDeviceController):
 
     def cleanup(self):
         self.logger.debug("running")
+        if self.worker:
+            self.worker.running = False
+            self.worker.wait()
         self.cam_obj.cleanup()
         self.logger.debug("done")
 
@@ -251,6 +255,7 @@ class CameraController(ABCDeviceController):
     def __complete_setup(self, sizes):
         self.logger.debug("running")
         self.worker.wait()
+        self.worker = None
         self.__populate_sizes(sizes)
         self.__populate_fps_selections()
         self.__initialize_tab_values()
