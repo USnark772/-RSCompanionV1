@@ -14,6 +14,7 @@ To deal with at some point:
 In progress:
     -   Add button that leads to last used directory for saving.
     Video:
+    -   Try to use multiprocessing to handle each attached camera.
     -   Device overlay is recorded with the video
     -   Device output will add a frame # for when that device output came in
     -   Figure out all the configuration ideas for cameras and put them in the tab.
