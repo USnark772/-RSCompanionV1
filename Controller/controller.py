@@ -128,7 +128,7 @@ class CompanionController:
         self.__current_cond_name = ""
         self.__device_controllers = dict()
         self.__save_file_name = ""
-        self.__save_dir = ""
+        self.__save_dir = QDir().homePath()
         self.__device_spacers = dict()
         self.__devices_to_add = dict()
 
@@ -679,6 +679,7 @@ class CompanionController:
     # Other handlers
     ########################################################################################
 
+    # TODO: Figure out why closing right after running app causes error.
     def ui_close_event_handler(self):
         """
         Shut down all devices before closing the app.
@@ -686,10 +687,10 @@ class CompanionController:
         """
 
         self.logger.debug("running")
+        self.cam_con_manager.cleanup()
+        self.dev_con_manager.cleanup()
         for controller in self.__device_controllers.values():
             controller.cleanup()
-        self.dev_con_manager.cleanup()
-        self.cam_con_manager.cleanup()
         self.log_output.close()
         self.logger.debug("done")
 
@@ -703,7 +704,6 @@ class CompanionController:
         self.settings.beginGroup("Camera manager")
         if not self.__exp_created:
             if self.cam_con_manager.active:
-                # TODO: Remove all camera controllers/objs.
                 to_remove = []
                 for device in self.__device_controllers:
                     if "CAM" in device:
@@ -719,6 +719,7 @@ class CompanionController:
                 self.cam_con_manager.activate()
                 self.settings.setValue("active", "True")
                 self.menu_bar.set_cam_bool_checked(True)
+        self.settings.endGroup()
         self.logger.debug("done")
 
     def __open_last_save_dir(self):

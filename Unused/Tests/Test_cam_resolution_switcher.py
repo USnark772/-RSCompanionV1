@@ -38,7 +38,7 @@ print("***** Before caps.append *****")
 tracer.display_top(tracer.tracemalloc.take_snapshot(), limit=trace_limit)
 for i in range(num_cams):
     new_cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
-    caps.append(cv2.VideoCapture(i, cv2.CAP_DSHOW))
+    caps.append(new_cap)
 
 print("***** After caps.append and before resolution loop *****")
 tracer.display_top(tracer.tracemalloc.take_snapshot(), limit=trace_limit)
