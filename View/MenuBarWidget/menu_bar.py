@@ -17,7 +17,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Author: Nathan Rogers
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
@@ -39,8 +40,8 @@ class MenuBar(QMenuBar):
         self.__file = QMenu(self)
         self.addAction((self.__file.menuAction()))
 
-        self.__open_save_dir = QAction(self)
-        self.__file.addAction(self.__open_save_dir)
+        self.__open_last_save_dir = QAction(self)
+        self.__file.addAction(self.__open_last_save_dir)
 
         self.__use_cameras = QAction(self)
         self.__use_cameras.setCheckable(True)
@@ -72,6 +73,11 @@ class MenuBar(QMenuBar):
         self.__use_cameras.triggered.connect(func)
         self.logger.debug("done")
 
+    def add_open_last_save_dir_handler(self, func):
+        self.logger.debug("running")
+        self.__open_last_save_dir.triggered.connect(func)
+        self.logger.debug("done")
+
     def add_about_app_handler(self, func):
         self.logger.debug("running")
         self.__about_app.triggered.connect(func)
@@ -95,7 +101,7 @@ class MenuBar(QMenuBar):
     def __set_texts(self):
         self.logger.debug("running")
         self.__file.setTitle("File")
-        self.__open_save_dir.setText("Open last save location")
+        self.__open_last_save_dir.setText("Open last save location")
         self.__use_cameras.setText("Use cameras")
         self.__help.setTitle("Help")
         self.__about_app.setText("About RS Companion")
