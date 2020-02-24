@@ -98,11 +98,9 @@ class CompanionController:
         self.cam_con_manager = CameraConnectionManager(self.ch)
         self.__setup_managers()
         self.settings.beginGroup("Camera manager")
-        try:
-            active = eval(self.settings.value("active", True))
-        except:
+        if not self.settings.contains("active"):
             self.settings.setValue("active", "True")
-            active = True
+        active = eval(self.settings.value("active"))
         if active:
             self.cam_con_manager.activate()
         self.menu_bar.set_cam_bool_checked(active)

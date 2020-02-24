@@ -6,7 +6,7 @@ To deal with at some point:
 -   Possibly use numpy for internal data storage.
 -   Design good way to calculate mean of each data type
     -   Let user set the bounds of the mean
--   When scrolling, the graphs move in their canvasas
+-   When scrolling, the graphs move in their canvases
 -   Some unexplained issues with ui sizing (Has to do with screen scaling)
 -   Add cpu resource monitor to code with possible color coding based on percentage. < 70% is green, 70% - 90% yellow, > 90% red.
 -   Add audio support. Does the camera mic come in separately or with the audio?
@@ -40,3 +40,6 @@ to get exceptions
 
 cam version we have:
 c920
+
+Info on dealing with video compression in opencv
+https://www.pyimagesearch.com/2017/02/06/faster-video-file-fps-with-cv2-videocapture-and-opencv/

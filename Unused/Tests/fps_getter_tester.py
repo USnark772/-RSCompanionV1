@@ -42,7 +42,6 @@ if __name__ == '__main__':
     fps = num_frames / seconds
     print("Estimated frames per second : {0}".format(fps))
 
-
     print(video.get(cv2.CAP_PROP_FRAME_WIDTH), video.get(cv2.CAP_PROP_FRAME_HEIGHT))
     # Release video
     video.release()
