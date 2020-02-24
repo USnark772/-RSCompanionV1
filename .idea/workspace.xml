@@ -4,10 +4,12 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="">
+    <list default="true" id="0b15e76d-e2c6-483f-afc7-7e75dfea3bc8" name="Default Changelist" comment="Beginning process of using multiprocessing for cameras.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/Camera_Manager/camera_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Controller/camera_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Devices/Camera/Model/cam_obj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unused/Tests/multi_process_cam_testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Unused/Tests/multi_process_cam_testing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +41,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -63,50 +65,8 @@
       <recent name="C:\Users\phill\PycharmProjects\RedScientific\Companion\For_setup" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="controller" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Controller" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Controller/controller.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="fps_getter_tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/fps_getter_tester.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.multi_process_cam_testing">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -127,7 +87,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="signal_slot_example" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="multi_process_cam_testing" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Companion" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -139,7 +99,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/signal_slot_example.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/multi_process_cam_testing.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -148,41 +108,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test_stacking_signals" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Companion" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Unused/Tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Unused/Tests/test_stacking_signals.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.fps_getter_tester" />
-      <item itemvalue="Python.signal_slot_example" />
-      <item itemvalue="Python.test_stacking_signals" />
-      <item itemvalue="Python.controller" />
-    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.multi_process_cam_testing" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.controller" />
-        <item itemvalue="Python.test_stacking_signals" />
-        <item itemvalue="Python.signal_slot_example" />
-        <item itemvalue="Python.fps_getter_tester" />
+        <item itemvalue="Python.multi_process_cam_testing" />
       </list>
     </recent_temporary>
   </component>
@@ -461,7 +391,28 @@
       <option name="project" value="LOCAL" />
       <updated>1581977790857</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Toggling use cameras now happens without crashing.">
+      <created>1581980802311</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1581980802311</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Beginning process of using multiprocessing for cameras.">
+      <created>1581984914769</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1581984914769</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Updates to test files. Minor edit to controller QSettings usage">
+      <created>1582565837538</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1582565837538</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -479,9 +430,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Working on specifics of basic saving of camera feeds." />
-    <MESSAGE value="Using QSettings, use of cameras is now saved across sessions." />
-    <MESSAGE value="Minor bug fix with VOG Config value changing and upload button not becoming available." />
     <MESSAGE value="Added functionality to toggle cameras only if they are not part of an experiment." />
     <MESSAGE value="Cameras do not toggle when there is an experiment." />
     <MESSAGE value="Minor edit" />
@@ -504,13 +452,16 @@
     <MESSAGE value="Did a thing" />
     <MESSAGE value="Toggling use cameras now works properly." />
     <MESSAGE value="Toggling use cameras now toggles properly but has issue if user toggles too quickly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Toggling use cameras now toggles properly but has issue if user toggles too quickly." />
+    <MESSAGE value="Toggling use cameras now happens without crashing." />
+    <MESSAGE value="Beginning process of using multiprocessing for cameras." />
+    <MESSAGE value="Updates to test files. Minor edit to controller QSettings usage" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updates to test files. Minor edit to controller QSettings usage" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581352079446">
-      <screen x="0" y="0" width="1368" height="912" />
+    <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582565149773">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1578938648124" />
+    <state x="262" y="133" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582565149773" />
     <state x="140" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1368.912@0.0.1368.912" timestamp="1581352079446" />
     <state x="636" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1579192716983">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -538,10 +489,10 @@
       <screen x="0" y="0" width="1368" height="912" />
     </state>
     <state x="440" y="160" key="#xdebugger.evaluate/0.0.1368.912@0.0.1368.912" timestamp="1580323512767" />
-    <state x="711" y="121" key="CommitChangelistDialog2" timestamp="1581980533936">
+    <state x="711" y="121" key="CommitChangelistDialog2" timestamp="1582572435228">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581980533936" />
+    <state x="711" y="121" key="CommitChangelistDialog2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582572435228" />
     <state x="0" y="134" key="CommitChangelistDialog2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127169002" />
     <state x="239" y="102" key="CommitChangelistDialog2/0.0.1368.912@0.0.1368.912" timestamp="1581353579869" />
     <state x="533" y="134" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1580321275981" />
@@ -557,73 +508,81 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="318" y="414" width="797" height="199" key="GitRewordDialog/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127260864" />
-    <state width="2539" height="275" key="GridCell.Tab.0.bottom" timestamp="1581980644687">
+    <state width="2539" height="274" key="GridCell.Tab.0.bottom" timestamp="1582571331774">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="275" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581980644687" />
+    <state width="2539" height="274" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582571331774" />
     <state width="1900" height="363" key="GridCell.Tab.0.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271714" />
-    <state width="1348" height="184" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1581375914411" />
+    <state width="1348" height="223" key="GridCell.Tab.0.bottom/0.0.1368.912@0.0.1368.912" timestamp="1582223528177" />
     <state width="1899" height="246" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="2539" height="275" key="GridCell.Tab.0.center" timestamp="1581980644687">
+    <state width="2539" height="274" key="GridCell.Tab.0.center" timestamp="1582571331774">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="275" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581980644687" />
+    <state width="2539" height="274" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582571331774" />
     <state width="1900" height="363" key="GridCell.Tab.0.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271713" />
-    <state width="1348" height="184" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1581375914411" />
+    <state width="1348" height="223" key="GridCell.Tab.0.center/0.0.1368.912@0.0.1368.912" timestamp="1582223528177" />
     <state width="1899" height="246" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="2539" height="275" key="GridCell.Tab.0.left" timestamp="1581980644687">
+    <state width="2539" height="274" key="GridCell.Tab.0.left" timestamp="1582571331774">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="275" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581980644687" />
+    <state width="2539" height="274" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582571331774" />
     <state width="1900" height="363" key="GridCell.Tab.0.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271713" />
-    <state width="1348" height="184" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1581375914411" />
+    <state width="1348" height="223" key="GridCell.Tab.0.left/0.0.1368.912@0.0.1368.912" timestamp="1582223528177" />
     <state width="1899" height="246" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="2539" height="275" key="GridCell.Tab.0.right" timestamp="1581980644687">
+    <state width="2539" height="274" key="GridCell.Tab.0.right" timestamp="1582571331774">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="275" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581980644687" />
+    <state width="2539" height="274" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582571331774" />
     <state width="1900" height="363" key="GridCell.Tab.0.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581127271714" />
-    <state width="1348" height="184" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1581375914411" />
+    <state width="1348" height="223" key="GridCell.Tab.0.right/0.0.1368.912@0.0.1368.912" timestamp="1582223528177" />
     <state width="1899" height="246" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1580321352487" />
-    <state width="2539" height="359" key="GridCell.Tab.1.bottom" timestamp="1581978417233">
+    <state width="2539" height="359" key="GridCell.Tab.1.bottom" timestamp="1581984931097">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="359" key="GridCell.Tab.1.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581978417233" />
+    <state width="2539" height="359" key="GridCell.Tab.1.bottom/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581984931097" />
     <state width="1899" height="238" key="GridCell.Tab.1.bottom/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
     <state width="1348" height="213" key="GridCell.Tab.1.bottom/0.0.1368.912@0.0.1368.912" timestamp="1581105394158" />
     <state width="1899" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state width="2539" height="359" key="GridCell.Tab.1.center" timestamp="1581978417233">
+    <state width="2539" height="359" key="GridCell.Tab.1.center" timestamp="1581984931097">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="359" key="GridCell.Tab.1.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581978417233" />
+    <state width="2539" height="359" key="GridCell.Tab.1.center/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581984931097" />
     <state width="1899" height="238" key="GridCell.Tab.1.center/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
     <state width="1348" height="213" key="GridCell.Tab.1.center/0.0.1368.912@0.0.1368.912" timestamp="1581105394158" />
     <state width="1899" height="356" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state width="2539" height="359" key="GridCell.Tab.1.left" timestamp="1581978417233">
+    <state width="2539" height="359" key="GridCell.Tab.1.left" timestamp="1581984931097">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="359" key="GridCell.Tab.1.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581978417233" />
+    <state width="2539" height="359" key="GridCell.Tab.1.left/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581984931097" />
     <state width="1899" height="238" key="GridCell.Tab.1.left/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
     <state width="1348" height="213" key="GridCell.Tab.1.left/0.0.1368.912@0.0.1368.912" timestamp="1581105394158" />
     <state width="1899" height="356" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state width="2539" height="359" key="GridCell.Tab.1.right" timestamp="1581978417233">
+    <state width="2539" height="359" key="GridCell.Tab.1.right" timestamp="1581984931097">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state width="2539" height="359" key="GridCell.Tab.1.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581978417233" />
+    <state width="2539" height="359" key="GridCell.Tab.1.right/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581984931097" />
     <state width="1899" height="238" key="GridCell.Tab.1.right/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098379175" />
     <state width="1348" height="213" key="GridCell.Tab.1.right/0.0.1368.912@0.0.1368.912" timestamp="1581105394158" />
     <state width="1899" height="356" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1579113137596" />
-    <state x="798" y="173" key="SettingsEditor" timestamp="1581975923957">
+    <state x="248" y="96" key="MergeDialog" timestamp="1582565993899">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="798" y="173" key="SettingsEditor/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581975923957" />
+    <state x="248" y="96" key="MergeDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582565993899" />
+    <state x="992" y="257" key="MultipleFileMergeDialog" timestamp="1582565993905">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="992" y="257" key="MultipleFileMergeDialog/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582565993905" />
+    <state x="798" y="173" key="SettingsEditor" timestamp="1582138112442">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state x="798" y="173" key="SettingsEditor/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582138112442" />
     <state x="380" y="161" key="SettingsEditor/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581091283942" />
     <state x="271" y="136" key="SettingsEditor/0.0.1368.912@0.0.1368.912" timestamp="1581374664137" />
     <state x="586" y="183" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1578762104673" />
-    <state x="872" y="274" key="Vcs.Push.Dialog.v2" timestamp="1581977800550">
+    <state x="872" y="274" key="Vcs.Push.Dialog.v2" timestamp="1582566010472">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="872" y="274" key="Vcs.Push.Dialog.v2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581977800550" />
+    <state x="872" y="274" key="Vcs.Push.Dialog.v2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582566010472" />
     <state x="654" y="274" key="Vcs.Push.Dialog.v2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1581098346875" />
     <state x="654" y="274" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1580321340082" />
     <state x="123" y="92" width="2315" height="896" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1581975326010">
@@ -640,15 +599,19 @@
     </state>
     <state x="696" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1580927579681" />
     <state x="522" y="143" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1580773434191" />
-    <state x="1025" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581975868458">
+    <state x="1025" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1582140429015">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
-    <state x="1025" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1581975868458" />
+    <state x="1025" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582140429015" />
     <state x="769" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-2736.10.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1579299764953" />
     <state x="656" y="272" width="607" height="536" key="find.popup" timestamp="1580141547591">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="656" y="272" width="607" height="536" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1580141547591" />
+    <state width="600" height="424" key="javadoc.popup" timestamp="1582572178555">
+      <screen x="0" y="0" width="2560" height="1080" />
+    </state>
+    <state width="600" height="424" key="javadoc.popup/-2736.0.1368.912/0.0.2560.1080@0.0.2560.1080" timestamp="1582572178555" />
     <state x="601" y="265" width="700" height="530" key="recent.locations.popup" timestamp="1579144222204">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>

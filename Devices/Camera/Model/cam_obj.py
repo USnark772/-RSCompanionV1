@@ -27,19 +27,15 @@ import logging
 import cv2
 from PySide2.QtCore import QObject, Signal
 
-class CamObjSig(QObject):
-    frame_size_fail_sig = Signal()
-
 
 class CamObj:
-    def __init__(self, cap, name, thread, ch):
+    def __init__(self, cap, name, ch):  # , thread, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.cap = cap
-        self.signals = CamObjSig()
         self.name = name
-        self.thread = thread
+        # self.thread = thread
         self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
@@ -86,9 +82,8 @@ class CamObj:
         if self.writing:
             self.writer.write(frame)
 
-    def handle_new_frame(self):
+    def handle_new_frame(self, frame):
         if self.active:
-            frame = self.thread.frame_queue.get()
             if self.alter_image_shape:
                 rows, cols, a = frame.shape
                 M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
@@ -140,7 +135,5 @@ class CamObj:
             res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_size[1])
         else:
             self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        # if not (x, y) == (new_x, new_y):
-        #     self.signals.frame_size_fail_sig.emit()
         self.close_window()
         self.toggle_activity(True)

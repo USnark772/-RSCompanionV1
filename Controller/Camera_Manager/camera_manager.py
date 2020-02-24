@@ -138,7 +138,8 @@ class CamScanner(QThread):
             else:
                 index += 1
                 self.__increment_cam_count()
-                self.signal.new_cam_sig.emit(cap, index)
+                cap.release()
+                self.signal.new_cam_sig.emit(index)
         # self.logger.debug("done")
 
     def __increment_cam_count(self):
@@ -150,7 +151,7 @@ class CamScanner(QThread):
 
 
 class ScannerSig(QObject):
-    new_cam_sig = Signal(cv2.VideoCapture, int)
+    new_cam_sig = Signal(int)
 
 
 class CamCounter:
@@ -230,7 +231,8 @@ class CameraConnectionManager:
             self.recover_thread(worker)
         self.logger.debug("done")
 
-    def handle_new_camera(self, cap, index):
+    # TODO: Remove threading
+    def handle_new_camera(self, index):
         self.logger.debug("running")
         frame_queue = Queue(maxsize=1)
         new_worker = CamWorker(cap, index, self.cam_counter, self.ch, frame_queue)

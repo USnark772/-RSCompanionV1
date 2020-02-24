@@ -23,17 +23,30 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+import cv2
+from multiprocessing import Process, Pipe
 from PySide2.QtCore import QObject, Signal, QThread
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.Model.cam_obj import CamObj
-import Unused.Tests.tracemalloc_helper as tracer
 
 
-# tracer.start()
+class PipeWatcherSig(QObject):
+    new_msg_sig = Signal()
 
-from datetime import datetime, timedelta
-from functools import wraps
+class PipeWatcher(QThread):
+    def __init__(self, pipe):
+        QThread.__init__(self)
+        self.pipe = pipe
+        self.signal = PipeWatcherSig()
+        self.running = True
+
+    def run(self):
+        while self.running:
+            waiting = self.pipe.poll(timeout=5)
+            print(waiting)
+            if waiting:
+                self.signal.new_msg_sig.emit()
 
 
 class WorkerSig(QObject):
@@ -78,6 +91,37 @@ class SizeGetter(QThread):
         # tracer.show_stuff(3)
 
 
+class CamWorker(Process):
+    def __init__(self, pipe, index, ch):
+        Process.__init__(self, target=self.run_camera, args=(index, ch,))
+        self.running = True
+        self.saving = False
+        self.pipe = pipe
+        self.pipe_watcher = PipeWatcher(pipe)
+        self.pipe_watcher.signal.new_msg_sig.connect(self.cleanup)
+
+    def run_camera(self, index: int, ch):
+        cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+        # Get frame sizes
+        cam_obj = CamObj(cap, "Cam_" + str(index), ch)
+        worker = SizeGetter(cam_obj)
+        worker.signal.done_sig.connect(self.got_sizes)
+        worker.start()
+        while self.running:
+            ret, frame = cam_obj.read_camera()
+            if ret and frame is not None:
+                cam_obj.handle_new_frame(frame)
+            else:
+                self.cleanup()
+        cap.release()
+
+    def got_sizes(self, sizes):
+        self.pipe.send((0, sizes))
+
+    def cleanup(self):
+        self.pipe.send((1,))
+
+
 class ControllerSig(QObject):
     toggle_signal = Signal()
     settings_error = Signal(str)
@@ -90,15 +134,13 @@ class ControllerSig(QObject):
 # Do we want to just let the user control the fps? (Seems like an easy way out and not a good user experience)
 # Actual fps will never be quite the same between machines because each machine will grab frames at different rates.
 class CameraController(ABCDeviceController):
-    def __init__(self, cap, index, thread, ch):
+    def __init__(self, index, thread, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.index = index
-        self.cam_obj = CamObj(cap, "CAM_" + str(self.index), thread, ch)
-        self.worker = SizeGetter(self.cam_obj)
-        self.worker.signal.done_sig.connect(self.__complete_setup)
-        self.worker.start()
+        self.pipe, temp = Pipe()
+        self.cam_worker = CamWorker(temp, index, ch)
         super().__init__(CameraTab(ch, name=self.cam_obj.name))
         self.signals = ControllerSig()
         self.cam_thread = thread

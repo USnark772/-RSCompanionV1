@@ -6,6 +6,9 @@ import time
 
 small = (640, 480)
 big = (1920, 1080)
+# Still not doing it the way I want. 5 fps from usb cams and 30 fps from builtin cams.
+# Threaded frame grabbing doesn't seem to make a difference.
+# Suspicion is that compression is the hangup
 
 
 def get_frames(cap_obj, frame_queue):
@@ -18,14 +21,11 @@ def get_frames(cap_obj, frame_queue):
             break
 
 
-# Still not doing it the way I want. 5 fps from usb cams and 30 fps from builtin cams.
-# Threaded frame grabbing doesn't seem to make a difference.
-# Suspicion is that compression is the hangup
-
 def show_feed(index: int):
     size = big
     print("running size:", size)
     cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+    # Get frame sizes
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
     # frame_queue = Queue(maxsize=25)
