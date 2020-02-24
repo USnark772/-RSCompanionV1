@@ -18,16 +18,18 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Author: Nathan Rogers
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import os
 import logging
 from tempfile import gettempdir
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QDir, QSize, QSettings
-from PySide2.QtGui import QKeyEvent
+from PySide2.QtCore import QDir, QSize, QSettings, QUrl
+from PySide2.QtGui import QKeyEvent, QDesktopServices
 from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
     error_checking_for_update, device_connection_error, current_version
@@ -54,7 +56,12 @@ from Devices.Camera.Controller.camera_controller import CameraController
 
 class CompanionController:
     def __init__(self):
-        """ Create elements of View and Controller """
+        """
+        Create elements of View and Controller
+        :return None:
+        """
+
+        # initialize logging for app
         self.log_output = OutputWindow()
         self.settings = QSettings("Red Scientific", "Companion")
 
@@ -76,6 +83,8 @@ class CompanionController:
 
         self.logger.info("RS Companion app version: " + str(current_version))
         self.logger.debug("Initializing")
+
+        # set up ui
         ui_min_size = QSize(950, 740)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
@@ -98,6 +107,7 @@ class CompanionController:
         self.cam_con_manager = CameraConnectionManager(self.ch)
         self.__setup_managers()
         self.settings.beginGroup("Camera manager")
+        # Handle first time running settings value
         if not self.settings.contains("active"):
             self.settings.setValue("active", "True")
         active = eval(self.settings.value("active"))
@@ -135,6 +145,17 @@ class CompanionController:
 
     # TODO: Figure out how to show device added but not allow use until next experiment
     def add_device(self, device_name, port_name, thread):
+        """
+        Handles a RS device being added during runtime
+        If no experiment running, device added
+        If experiment running, device put in a queue to add after experiment
+        :param device_name: Type of RS device
+        :param port_name: Specific device number
+        :param thread: Device communication thread
+        :return None:
+        """
+
+        print("port_name: ", port_name)
         self.logger.debug("running")
         if not self.__exp_created:
             self.__add_device((device_name, port_name), thread)
@@ -143,6 +164,13 @@ class CompanionController:
         self.logger.debug("done")
 
     def remove_device(self, device_name, port_name):
+        """
+        Handles a RS device being removed during runtime
+        :param device_name: Type of RS device
+        :param port_name: Specific device number
+        :return None:
+        """
+
         self.logger.debug("running")
         if (device_name, port_name) in self.__devices_to_add:
             del self.__devices_to_add[(device_name, port_name)]
@@ -150,26 +178,62 @@ class CompanionController:
         self.logger.debug("done")
 
     def add_camera(self, cap, index, thread):
+        """
+        Handles a camera being added during runtime
+        :param cap: VideoCapture object
+        :param index: Specific camera number
+        :param thread: Camera communication thread
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__create_camera_controller(cap, index, thread)
         self.logger.debug("done")
 
     def remove_camera(self, index):
+        """
+        Handles a camera being removed during runtime
+        :param index: Specific camera number
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__remove_camera(index)
         self.logger.debug("done")
 
     def alert_device_connection_failure(self):
+        """
+        Handles a connection failure with a device
+        Alerts user to connection failure
+        :return None:
+
+        """
+
         self.logger.debug("running")
         self.ui.show_help_window("Error", device_connection_error)
         self.logger.debug("done")
 
     def alert_camera_error(self, error_message):
+        """
+        Handles a connection error with a camera
+        Alerts user to connection error
+        :param error_message: Connection error message shown to user
+        :return None:
+        """
+
         self.logger.debug("running")
         self.ui.show_help_window("Error", error_message)
         self.logger.debug("done")
 
     def save_device_data(self, device_name, device_line, timestamp=None):
+        """
+        Saves experiment data from a device to a file
+        :param device_name: Type of device and specific device number
+        :param device_line: Data from device
+        :param timestamp: Time of data received
+        :return None:
+        """
+
         self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
@@ -201,6 +265,11 @@ class CompanionController:
     ########################################################################################
 
     def __setup_managers(self):
+        """
+        Sets up device connection managers
+        :return None:
+        """
+
         self.logger.debug("running")
         self.dev_con_manager.signals.new_device_sig.connect(self.add_device)
         self.dev_con_manager.signals.disconnect_sig.connect(self.remove_device)
@@ -210,7 +279,11 @@ class CompanionController:
         self.logger.debug("done")
 
     def __initialize_view(self):
-        """ Assembles the different View objects into a window. Initializes some handlers and controller functions """
+        """
+        Assembles the different View objects into a window. Initializes some handlers and controller functions
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__setup_file_dialog()
         self.__setup_handlers()
@@ -228,6 +301,7 @@ class CompanionController:
 
     # TODO: Add device controller destructors?
     def __populate_func_dicts(self):
+
         self.logger.debug("running")
         self.__controller_inits['drt'] = dict()
         self.__controller_inits['vog'] = dict()
@@ -266,6 +340,7 @@ class CompanionController:
         self.note_box.add_note_box_changed_handler(self.__check_toggle_post_button)
         self.note_box.add_post_handler(self.__post_handler)
         self.menu_bar.add_cam_bool_handler(self.__toggle_use_cameras)
+        self.menu_bar.add_open_last_save_dir_handler(self.__open_last_save_dir)
         self.menu_bar.add_about_app_handler(self.__about_app)
         self.menu_bar.add_about_company_handler(self.__about_company)
         self.menu_bar.add_update_handler(self.__check_for_updates_handler)
@@ -283,6 +358,7 @@ class CompanionController:
         Either begin or end an experiment. If beginning an experiment then get a dir path from the user to save
         experiment data and check output files. Path is required to continue.
         """
+
         self.logger.debug("running")
         if not self.__exp_created:
             self.logger.debug("creating experiment")
@@ -605,7 +681,11 @@ class CompanionController:
 
     # TODO: Figure out why closing right after running app causes error.
     def ui_close_event_handler(self):
-        """ Shut down all devices before closing the app. """
+        """
+        Shut down all devices before closing the app.
+        :return:
+        """
+
         self.logger.debug("running")
         self.cam_con_manager.cleanup()
         self.dev_con_manager.cleanup()
@@ -615,6 +695,11 @@ class CompanionController:
         self.logger.debug("done")
 
     def __toggle_use_cameras(self):
+        """
+        Toggles app level camera use.
+        :return:
+        """
+
         self.logger.debug("running")
         self.settings.beginGroup("Camera manager")
         if not self.__exp_created:
@@ -635,6 +720,20 @@ class CompanionController:
                 self.settings.setValue("active", "True")
                 self.menu_bar.set_cam_bool_checked(True)
         self.settings.endGroup()
+        self.logger.debug("done")
+
+    def __open_last_save_dir(self):
+        """
+        Opens native file manager to the last directory used for an experiment.
+        If no experiment has been performed, opens default home path.
+        :return:
+        """
+
+        self.logger.debug("running")
+        if self.__save_dir == "":
+            QDesktopServices.openUrl(QUrl.fromLocalFile(QDir().homePath()))
+        else:
+            QDesktopServices.openUrl(QUrl.fromLocalFile(self.__save_dir))
         self.logger.debug("done")
 
     def __about_company(self):

@@ -46,7 +46,7 @@ class DRTTab(QWidget):
         self.setMaximumHeight(400)
 
         self.config_horizontal_layout = QHBoxLayout()
-
+        # TODO: fix EasyFrame QLayout issue
         self.layout().addWidget(EasyFrame(line=True))
 
         """ Set configuration value display area"""
