@@ -24,138 +24,12 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 import cv2
-import Unused.Tests.tracemalloc_helper as tracer
-from queue import Queue
-from PySide2.QtCore import QThread, QObject, QMutex, Signal, QWaitCondition
-max_cams = 3
-
-
-class CamWorker(QThread):
-    def __init__(self, cap, index, cam_counter, ch, frame_queue):
-        # tracer.start()
-        self.logger = logging.getLogger(__name__)
-        self.logger.addHandler(ch)
-        self.logger.debug("Initializing")
-        QThread.__init__(self)
-        self.signals = WorkerSig()
-        self.frame_queue = frame_queue
-        self.cap = cap
-        self.index = index
-        self.cam_counter = cam_counter
-        self.running = True
-        self.reading = True
-        self.logger.debug("Initialized")
-
-    # TODO: Figure out why cams are freezing up.
-    def run(self):
-        self.logger.debug("running")
-        while self.running:
-            # tracer.show_stuff(2)
-            frame = None
-            ret = False
-            self.signals.lock.lock()
-            if not self.reading:
-                self.signals.toggle.wait(self.signals.lock)
-                self.clear_queue()
-            self.signals.lock.unlock()
-            if not self.running:
-                break
-            try:
-                ret, frame = self.cap.read()
-                # tracer.show_stuff(2)
-            except:
-                self.logger.exception("Cam: " + str(self.index) + " failed.")
-            if frame is None:
-                continue
-            elif ret:
-                self.frame_queue.put(frame)
-                self.signals.new_frame_sig.emit()
-            else:
-                break
-        self.cleanup()
-        self.signals.cleanup_sig.emit(self.index)
-        self.logger.debug("done")
-
-    def cleanup(self):
-        self.logger.debug("running")
-        self.running = False
-        self.clear_queue()
-        self.cam_counter.get_lock()
-        self.cam_counter.decrement_count()
-        self.cam_counter.release_lock()
-        self.logger.debug("done")
-
-    def clear_queue(self):
-        if not self.frame_queue.empty():
-            self.frame_queue.get()
-
-    def toggle(self, is_active):
-        self.reading = is_active
-
-
-class WorkerSig(QObject):
-    new_frame_sig = Signal()
-    cleanup_sig = Signal(int)
-    toggle = QWaitCondition()
-    lock = QMutex()
-
-
-class CamScanner(QThread):
-    def __init__(self, counter, ch):
-        self.ch = ch
-        self.logger = logging.getLogger(__name__)
-        self.logger.addHandler(ch)
-        self.logger.debug("Initializing")
-        QThread.__init__(self)
-        self.signal = ScannerSig()
-        self.cam_counter = counter
-        self.running = True
-        self.logger.debug("Initialized")
-
-    # Try to connect new cam from latest index and up
-    def run(self):
-        self.logger.debug("running")
-        while self.running:
-            self.__check_for_cams(self.__get_index())
-        self.logger.debug("done")
-
-    def __get_index(self):
-        # self.logger.debug("running")
-        self.cam_counter.get_lock()
-        i = self.cam_counter.get_count()
-        self.cam_counter.release_lock()
-        # self.logger.debug("done")
-        return i
-
-    def __check_for_cams(self, index=0):
-        # self.logger.debug("running")
-        while self.running:
-            if index >= max_cams:
-                break
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-            if cap is None or not cap.isOpened():
-                break
-            else:
-                index += 1
-                self.__increment_cam_count()
-                cap.release()
-                self.signal.new_cam_sig.emit(index)
-        # self.logger.debug("done")
-
-    def __increment_cam_count(self):
-        self.logger.debug("running")
-        self.cam_counter.get_lock()
-        self.cam_counter.increment_count()
-        self.cam_counter.release_lock()
-        self.logger.debug("done")
-
-
-class ScannerSig(QObject):
-    new_cam_sig = Signal(int)
+from PySide2.QtCore import QThread, QObject, QMutex, Signal
+max_cams = 1
 
 
 class CamCounter:
-    def __init__(self, ch):
+    def __init__(self, ch: logging.Handler):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -189,9 +63,62 @@ class CamCounter:
         self.logger.debug("done")
 
 
+class CamScanner(QThread):
+    def __init__(self, counter: CamCounter, ch: logging.Handler):
+        self.ch = ch
+        self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
+        self.logger.debug("Initializing")
+        QThread.__init__(self)
+        self.signal = ScannerSig()
+        self.cam_counter = counter
+        self.running = True
+        self.logger.debug("Initialized")
+
+    # Try to connect new cam from latest index and up
+    def run(self):
+        self.logger.debug("running")
+        while self.running:
+            self.__check_for_cams(self.__get_index())
+        self.logger.debug("done")
+
+    def __get_index(self):
+        # self.logger.debug("running")
+        self.cam_counter.get_lock()
+        i = self.cam_counter.get_count()
+        self.cam_counter.release_lock()
+        # self.logger.debug("done")
+        return i
+
+    def __check_for_cams(self, index: int = 0):
+        # self.logger.debug("running")
+        while self.running:
+            if index >= max_cams:
+                break
+            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            if cap is None or not cap.isOpened():
+                break
+            else:
+                index += 1
+                self.__increment_cam_count()
+                cap.release()
+                self.signal.new_cam_sig.emit(index)
+        # self.logger.debug("done")
+
+    def __increment_cam_count(self):
+        self.logger.debug("running")
+        self.cam_counter.get_lock()
+        self.cam_counter.increment_count()
+        self.cam_counter.release_lock()
+        self.logger.debug("done")
+
+
+class ScannerSig(QObject):
+    new_cam_sig = Signal(int)
+
+
 class CamConManSig(QObject):
-    new_cam_sig = Signal(cv2.VideoCapture, int, classmethod)
-    disconnect_sig = Signal(cv2.VideoCapture)
+    new_cam_sig = Signal(int)
 
 
 # TODO: Figure out how to number cameras better. If a camera fails and then plugs in again
@@ -226,37 +153,12 @@ class CameraConnectionManager:
             self.scanner_thread.running = False
             self.scanner_thread.wait()
             self.scanner_thread = None
-        for worker in self.worker_thread_list:
-            worker.cleanup()
-            self.recover_thread(worker)
         self.logger.debug("done")
 
-    # TODO: Remove threading
-    def handle_new_camera(self, index):
+    def handle_new_camera(self, index: int):
         self.logger.debug("running")
-        frame_queue = Queue(maxsize=1)
-        new_worker = CamWorker(cap, index, self.cam_counter, self.ch, frame_queue)
-        new_worker.signals.cleanup_sig.connect(self.cleanup_cam_and_thread)
-        self.worker_thread_list.append(new_worker)
-        self.signals.new_cam_sig.emit(cap, index, new_worker)
+        self.signals.new_cam_sig.emit(index)
         self.logger.debug("done")
 
-    def cleanup_cam_and_thread(self, index):
-        self.logger.debug("running")
-        self.signals.disconnect_sig.emit(index)
-        for worker in self.worker_thread_list:
-            if not worker.running:
-                self.worker_thread_list.remove(worker)
-                self.recover_thread(worker)
-        self.logger.debug("done")
-
-    def stop_recording(self):
-        self.logger.debug("running")
-        for cam in self.cam_list:
-            cam.destroy_writer()
-        self.logger.debug("done")
-
-    @staticmethod
-    def recover_thread(thread):
-        while not thread.wait(1):
-            thread.signals.toggle.wakeAll()
+    def decrement_cam_count(self):
+        self.cam_counter.decrement_count()

@@ -23,108 +23,18 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-import cv2
-from multiprocessing import Process, Pipe
-from PySide2.QtCore import QObject, Signal, QThread
-from Devices.Camera.View.camera_tab import CameraTab
+from datetime import datetime
+from multiprocessing import Process, Pipe, Value
+from PySide2.QtCore import QObject, Signal
 from Devices.abc_device_controller import ABCDeviceController
-from Devices.Camera.Model.cam_obj import CamObj
-
-
-class PipeWatcherSig(QObject):
-    new_msg_sig = Signal()
-
-class PipeWatcher(QThread):
-    def __init__(self, pipe):
-        QThread.__init__(self)
-        self.pipe = pipe
-        self.signal = PipeWatcherSig()
-        self.running = True
-
-    def run(self):
-        while self.running:
-            waiting = self.pipe.poll(timeout=5)
-            print(waiting)
-            if waiting:
-                self.signal.new_msg_sig.emit()
-
-
-class WorkerSig(QObject):
-    done_sig = Signal(list)
-
-
-class SizeGetter(QThread):
-    def __init__(self, cam_obj):
-        QThread.__init__(self)
-        self.cam_obj = cam_obj
-        self.signal = WorkerSig()
-        self.running = True
-
-    def run(self):
-        # tracer.show_stuff(3)
-        sizes = []
-        initial_size = self.cam_obj.get_current_frame_size()
-        new_tup = (str(initial_size[0]) + ", " + str(initial_size[1]), initial_size)
-        sizes.append(new_tup)
-        large_size = (3000, 3000)
-        step = 100
-        self.cam_obj.set_frame_size(large_size)
-        max_size = self.cam_obj.get_current_frame_size()
-        current_size = (initial_size[0] + step, initial_size[1] + step)
-        # tracer.show_stuff(3)
-        while current_size[0] <= max_size[0] and self.running:
-            self.cam_obj.set_frame_size(current_size)
-            result = self.cam_obj.get_current_frame_size()
-            new_tup = (str(result[0]) + ", " + str(result[1]), result)
-            # tracer.show_stuff(3)
-            if new_tup not in sizes:
-                sizes.append(new_tup)
-            new_x = current_size[0] + step
-            new_y = current_size[1] + step
-            if result[0] > new_x:
-                new_x = result[0] + step
-            if result[1] > new_y:
-                new_y = result[1] + step
-            current_size = (new_x, new_y)
-        self.cam_obj.set_frame_size(initial_size)
-        self.signal.done_sig.emit(sizes)
-        # tracer.show_stuff(3)
-
-
-class CamWorker(Process):
-    def __init__(self, pipe, index, ch):
-        Process.__init__(self, target=self.run_camera, args=(index, ch,))
-        self.running = True
-        self.saving = False
-        self.pipe = pipe
-        self.pipe_watcher = PipeWatcher(pipe)
-        self.pipe_watcher.signal.new_msg_sig.connect(self.cleanup)
-
-    def run_camera(self, index: int, ch):
-        cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-        # Get frame sizes
-        cam_obj = CamObj(cap, "Cam_" + str(index), ch)
-        worker = SizeGetter(cam_obj)
-        worker.signal.done_sig.connect(self.got_sizes)
-        worker.start()
-        while self.running:
-            ret, frame = cam_obj.read_camera()
-            if ret and frame is not None:
-                cam_obj.handle_new_frame(frame)
-            else:
-                self.cleanup()
-        cap.release()
-
-    def got_sizes(self, sizes):
-        self.pipe.send((0, sizes))
-
-    def cleanup(self):
-        self.pipe.send((1,))
+from Devices.Camera.View.camera_tab import CameraTab
+from Devices.Camera.Controller.pipe_watcher import PipeWatcher
+from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 
 
 class ControllerSig(QObject):
-    toggle_signal = Signal()
     settings_error = Signal(str)
+    cam_failed = Signal(int)
 
 # TODO: Figure out how to best deal with larger frames causing lower fps.
 # Is measuring fps at any given time a good option?
@@ -134,101 +44,106 @@ class ControllerSig(QObject):
 # Do we want to just let the user control the fps? (Seems like an easy way out and not a good user experience)
 # Actual fps will never be quite the same between machines because each machine will grab frames at different rates.
 class CameraController(ABCDeviceController):
-    def __init__(self, index, thread, ch):
+    def __init__(self, index: int, ch: logging.Handler):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.index = index
-        self.pipe, temp = Pipe()
-        self.cam_worker = CamWorker(temp, index, ch)
-        super().__init__(CameraTab(ch, name=self.cam_obj.name))
+        self.name = "CAM_" + str(index)
+        super().__init__(CameraTab(ch, name=self.name))
+        self.pipe, proc_pipe = Pipe()
+        self.pipe_watcher = PipeWatcher(self.pipe)
+        self.pipe_watcher.connect_to_sig(self.handle_pipe)
+        self.pipe_watcher.start()
+        self.proc_bool = Value('b', False)
+        self.cam_worker = Process(target=run_camera, args=(proc_pipe, self.index, self.name,))
+        self.cam_worker.start()
         self.signals = ControllerSig()
-        self.cam_thread = thread
-        self.cam_thread.signals.new_frame_sig.connect(self.cam_obj.handle_new_frame)
         self.save_dir = ''
         self.timestamp = None
         self.cam_active = True
         self.color_image = True
-        self.reading = True
         self.__setup_handlers()
         self.current_size = 0
         self.frame_sizes = []
         self.fps_values = []
-        self.cam_obj.signals.frame_size_fail_sig.connect(self.handle_resolution_error)
         self.__add_loading_symbols_to_tab()
         self.logger.debug("Initialized")
 
     def get_name(self):
-        return self.cam_obj.name
+        return self.name
 
     def cleanup(self):
         self.logger.debug("running")
-        if self.worker:
-            self.worker.running = False
-            self.worker.wait()
-        self.cam_obj.cleanup()
+        self.pipe_watcher.running = False
+        self.pipe_watcher.wait()
+        if not self.pipe.closed:
+            self.pipe.send((CEnum.CLEANUP,))
+            self.pipe.close()
+        if self.cam_worker.is_alive():
+            self.cam_worker.join()
         self.logger.debug("done")
 
-    def create_new_save_file(self, new_filename):
+    def handle_pipe(self, msg):
+        msg_type = msg[0]
+        if msg_type == CEnum.WORKER_DONE:
+            self.__complete_setup(msg[1])
+        elif msg_type == CEnum.CAM_FAILED:
+            self.signals.cam_failed.emit(self.index)
+            self.cleanup()
+        elif msg_type == CEnum.SET_RESOLUTION:
+            self.__set_tab_size_val(msg[1])
+        elif msg_type == CEnum.SET_FPS:
+            self.__set_tab_fps_val(msg[1])
+        elif msg_type == CEnum.SET_ROTATION:
+            self.__set_tab_rot_val(msg[1])
+
+    def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
         self.save_dir = new_filename
         self.logger.debug("done")
 
-    def set_start_time(self, timestamp):
+    def set_start_time(self, timestamp: datetime):
         self.logger.debug("running")
         self.timestamp = timestamp
         self.logger.debug("done")
 
     def start_exp(self):
         self.logger.debug("running")
-        if self.cam_obj.active:
-            self.cam_obj.setup_writer(save_dir=self.save_dir, timestamp=self.timestamp)
+        self.pipe.send((CEnum.START_SAVING,))
         self.tab.set_controls_active(False)
         self.logger.debug("done")
 
     def end_exp(self):
         self.logger.debug("running")
-        self.cam_obj.destroy_writer()
+        self.pipe.send((CEnum.STOP_SAVING,))
         self.tab.set_controls_active(True)
         self.logger.debug("done")
 
     def toggle_cam(self):
         self.logger.debug("running")
-        self.cam_active = not self.cam_active
-        self.cam_thread.toggle(self.cam_active)
-        if self.cam_active:
-            self.cam_thread.signals.toggle.wakeAll()
-            self.cam_thread.clear_queue()
-        self.cam_obj.toggle_activity(self.cam_active)
+        self.pipe.send((CEnum.ACTIVATE_CAM,))
         self.logger.debug("done")
 
     def set_frame_size(self):
         self.logger.debug("running")
         new_size = self.tab.get_frame_size()
-        self.cam_obj.set_frame_size((int(new_size[0]), int(new_size[1])))
+        self.pipe.send((CEnum.SET_RESOLUTION, new_size))
         self.logger.debug("done")
-
-    def handle_resolution_error(self):
-        new_size = self.cam_obj.get_current_frame_size()
-        size_index = self.__get_size_val_index(new_size)
-        self.tab.set_frame_size(size_index)
-        self.signals.settings_error.emit("Invalid resolution setting for this camera. Resolution set to: "
-                                         + str(new_size))
 
     def set_fps(self):
         self.logger.debug("running")
         new_fps = self.tab.get_fps()
-        self.cam_obj.set_fps(new_fps)
+        self.pipe.send((CEnum.SET_FPS, new_fps))
         self.logger.debug("done")
 
     def toggle_color(self):
-        # self.color_image = not self.color_image
-        # self.cam_obj.set_use_color(self.color_image)
-        self.cam_thread.clear_queue()
+        self.color_image = not self.color_image
+        self.pipe.send((CEnum.SET_BW,))
 
     def set_rotation(self):
         new_rotation = self.tab.get_rotation()
-        self.cam_obj.set_rotation(new_rotation)
+        self.pipe.send((CEnum.SET_ROTATION, new_rotation))
 
     def __add_loading_symbols_to_tab(self):
         self.logger.debug("running")
@@ -244,7 +159,7 @@ class CameraController(ABCDeviceController):
         self.tab.populate_fps_selector(self.fps_values)
         self.logger.debug("done")
 
-    def __populate_sizes(self, sizes):
+    def __populate_sizes(self, sizes: list):
         self.logger.debug("running")
         self.tab.empty_size_selector()
         self.frame_sizes = sizes
@@ -260,31 +175,35 @@ class CameraController(ABCDeviceController):
         self.tab.add_frame_rotation_handler(self.set_rotation)
         self.logger.debug("done")
 
-    def __initialize_tab_values(self):
+    def __get_initial_values(self):
         self.logger.debug("running")
-        rotation_val = self.cam_obj.get_current_rotation()
-        fps_val = self.cam_obj.get_current_fps()
-        size_val = self.cam_obj.get_current_frame_size()
-        self.tab.set_rotation(rotation_val)
-        self.tab.set_fps(self.__get_fps_val_index(fps_val))
-        self.tab.set_frame_size(self.__get_size_val_index(size_val))
+        self.pipe.send((CEnum.GET_RESOLUTION,))
+        self.pipe.send((CEnum.GET_FPS,))
         self.logger.debug("done")
 
-    def __complete_setup(self, sizes):
+    def __set_tab_fps_val(self, value: int):
+        self.tab.set_fps(self.__get_fps_val_index(value))
+
+    def __set_tab_size_val(self, value: tuple):
+        self.tab.set_frame_size(self.__get_size_val_index(value))
+
+    def __set_tab_rot_val(self, value: int):
+        self.tab.set_rotation(value)
+
+    def __complete_setup(self, sizes: list):
         self.logger.debug("running")
-        self.worker.wait()
-        self.worker = None
+        self.pipe.send((CEnum.WORKER_DONE,))
         self.__populate_sizes(sizes)
         self.__populate_fps_selections()
-        self.__initialize_tab_values()
-        self.cam_thread.start(priority=QThread.LowestPriority)
+        self.__get_initial_values()
+        self.pipe.send((CEnum.ACTIVATE_CAM,))
         self.tab.set_tab_active(True)
         self.logger.debug("done")
 
-    def __get_size_val_index(self, value):
+    def __get_size_val_index(self, value: tuple):
         for i in range(len(self.frame_sizes)):
             if self.frame_sizes[i][1] == value:
                 return i
 
-    def __get_fps_val_index(self, value):
+    def __get_fps_val_index(self, value: int):
         return self.fps_values.index((str(value), value))

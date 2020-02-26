@@ -177,7 +177,7 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
-    def add_camera(self, cap, index, thread):
+    def add_camera(self, index):
         """
         Handles a camera being added during runtime
         :param cap: VideoCapture object
@@ -187,7 +187,7 @@ class CompanionController:
         """
 
         self.logger.debug("running")
-        self.__create_camera_controller(cap, index, thread)
+        self.__create_camera_controller(index)
         self.logger.debug("done")
 
     def remove_camera(self, index):
@@ -215,9 +215,9 @@ class CompanionController:
 
     def alert_camera_error(self, error_message):
         """
-        Handles a connection error with a camera
-        Alerts user to connection error
-        :param error_message: Connection error message shown to user
+        Handles an error alert from a camera
+        Alerts user to an error
+        :param error_message: Error message shown to user
         :return None:
         """
 
@@ -275,7 +275,6 @@ class CompanionController:
         self.dev_con_manager.signals.disconnect_sig.connect(self.remove_device)
         self.dev_con_manager.signals.failed_con_sig.connect(self.alert_device_connection_failure)
         self.cam_con_manager.signals.new_cam_sig.connect(self.add_camera)
-        self.cam_con_manager.signals.disconnect_sig.connect(self.remove_camera)
         self.logger.debug("done")
 
     def __initialize_view(self):
@@ -652,12 +651,13 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_camera_controller(self, cap, index, thread):
+    def __create_camera_controller(self, index):
         self.logger.debug("running")
         try:
-            cam_controller = CameraController(cap, index, thread, self.ch)
+            cam_controller = CameraController(index, self.ch)
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.settings_error.connect(self.alert_camera_error)
+            cam_controller.signals.cam_failed.connect(self.__remove_camera)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return
@@ -669,9 +669,10 @@ class CompanionController:
         self.logger.debug("running")
         for controller in self.__device_controllers.values():
             ind_str = str(index)
-            if ind_str in controller.get_name():
-                self.tab_box.remove_tab(controller.get_name())
-                del self.__device_controllers[controller.get_name()]
+            name = controller.get_name()
+            if ind_str in name:
+                self.tab_box.remove_tab(name)
+                del self.__device_controllers[name]
                 break
         self.logger.debug("done")
 
