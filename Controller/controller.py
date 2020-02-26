@@ -24,9 +24,10 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import os
 import logging
+from typing import Tuple
 from tempfile import gettempdir
+from datetime import datetime
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QDir, QSize, QSettings, QUrl
 from PySide2.QtGui import QKeyEvent, QDesktopServices
@@ -45,7 +46,7 @@ from View.DisplayWidget.graph_frame import GraphFrame
 from View.TabWidget.device_tab_container import TabContainer
 from View.OutputLog.output_window import OutputWindow
 from Controller.version_checker import VersionChecker
-from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager
+from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager, PortWorker
 from Controller.Camera_Manager.camera_manager import CameraConnectionManager
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
@@ -55,7 +56,15 @@ from Devices.Camera.Controller.camera_controller import CameraController
 
 
 class CompanionController:
-    def __init__(self):
+    """
+    Main controller driving the companion app
+        Controls UI and experiments
+        Handles errors
+        Creates connection managers for RS devices and cameras
+        Creates device controllers
+        Formats and saves device and experiment data to a file
+    """
+    def __init__(self) -> None:
         """
         Create elements of View and Controller
         :return None:
@@ -144,9 +153,9 @@ class CompanionController:
     ########################################################################################
 
     # TODO: Figure out how to show device added but not allow use until next experiment
-    def add_device(self, device_name, port_name, thread):
+    def add_device(self, device_name: str, port_name: str, thread: PortWorker) -> None:
         """
-        Handles a RS device being added during runtime
+        Handles an RS device being added during runtime
         If no experiment running, device added
         If experiment running, device put in a queue to add after experiment
         :param device_name: Type of RS device
@@ -155,7 +164,10 @@ class CompanionController:
         :return None:
         """
 
-        print("port_name: ", port_name)
+        # print("port_name: ", port_name)
+        # print("device_name type: ", type(device_name))
+        # print("port_name type: ", type(port_name))
+        # print("thread type: ", type(thread))
         self.logger.debug("running")
         if not self.__exp_created:
             self.__add_device((device_name, port_name), thread)
@@ -163,9 +175,9 @@ class CompanionController:
             self.__devices_to_add[(device_name, port_name)] = thread
         self.logger.debug("done")
 
-    def remove_device(self, device_name, port_name):
+    def remove_device(self, device_name: str, port_name: str) -> None:
         """
-        Handles a RS device being removed during runtime
+        Handles an RS device being removed during runtime
         :param device_name: Type of RS device
         :param port_name: Specific device number
         :return None:
@@ -177,7 +189,7 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
-    def add_camera(self, index):
+    def add_camera(self, index: int) -> None:
         """
         Handles a camera being added during runtime
         :param cap: VideoCapture object
@@ -186,11 +198,12 @@ class CompanionController:
         :return None:
         """
 
+        # print("index type: ", type(index))
         self.logger.debug("running")
         self.__create_camera_controller(index)
         self.logger.debug("done")
 
-    def remove_camera(self, index):
+    def remove_camera(self, index: int) -> None:
         """
         Handles a camera being removed during runtime
         :param index: Specific camera number
@@ -201,7 +214,7 @@ class CompanionController:
         self.__remove_camera(index)
         self.logger.debug("done")
 
-    def alert_device_connection_failure(self):
+    def alert_device_connection_failure(self) -> None:
         """
         Handles a connection failure with a device
         Alerts user to connection failure
@@ -213,7 +226,7 @@ class CompanionController:
         self.ui.show_help_window("Error", device_connection_error)
         self.logger.debug("done")
 
-    def alert_camera_error(self, error_message):
+    def alert_camera_error(self, error_message: str) -> None:
         """
         Handles an error alert from a camera
         Alerts user to an error
@@ -221,11 +234,12 @@ class CompanionController:
         :return None:
         """
 
+        # print("error_message type: ", type(error_message))
         self.logger.debug("running")
         self.ui.show_help_window("Error", error_message)
         self.logger.debug("done")
 
-    def save_device_data(self, device_name, device_line, timestamp=None):
+    def save_device_data(self, device_name: Tuple[str, str], device_line: str, timestamp: datetime = None) -> None:
         """
         Saves experiment data from a device to a file
         :param device_name: Type of device and specific device number
@@ -234,6 +248,11 @@ class CompanionController:
         :return None:
         """
 
+        # print("device_name type: ", type(device_name))
+        # print("device_name[0] type: ", type(device_name[0]))
+        # print("device_name[1] type: ", type(device_name[1]))
+        # print("device_line type: ", type(device_line))
+        # print("timestamp type: ", type(timestamp))
         self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
@@ -264,7 +283,7 @@ class CompanionController:
     # initial setup
     ########################################################################################
 
-    def __setup_managers(self):
+    def __setup_managers(self) -> None:
         """
         Sets up device connection managers
         :return None:
@@ -277,7 +296,7 @@ class CompanionController:
         self.cam_con_manager.signals.new_cam_sig.connect(self.add_camera)
         self.logger.debug("done")
 
-    def __initialize_view(self):
+    def __initialize_view(self) -> None:
         """
         Assembles the different View objects into a window. Initializes some handlers and controller functions
         :return None:
@@ -299,7 +318,11 @@ class CompanionController:
         self.logger.debug("done")
 
     # TODO: Add device controller destructors?
-    def __populate_func_dicts(self):
+    def __populate_func_dicts(self) -> None:
+        """
+        creates dictionaries containing device controllers and device graphs functions
+        :return None:
+        """
 
         self.logger.debug("running")
         self.__controller_inits['drt'] = dict()
@@ -314,25 +337,37 @@ class CompanionController:
         self.__graph_inits['vog']['destructor'] = self.__destroy_vog_graph
         self.logger.debug("done")
 
-    def __init_controller_classes(self):
+    # TODO: move functionality to model, keep track of device count elsewhere
+    def __init_controller_classes(self) -> None:
+        """
+        Creates a dictionary for static method references, and device count
+        :return:
+        """
+
         self.logger.debug("running")
         self.__controller_classes["DRT"] = [DRTController, 0]
         self.__controller_classes["VOG"] = [VOGController, 0]
         self.logger.debug("done")
 
-    def __setup_file_dialog(self):
+    def __setup_file_dialog(self) -> None:
         """
         Sets up a file dialog for 1. saving data from experiments and 2. opening previous experiments.
         2. not implemented yet
+        :return None:
         """
+
         self.logger.debug("running")
         # self.file_dialog.setViewMode(QFileDialog.Detail)
         self.file_dialog.setDirectory(QDir().homePath())
         # self.file_dialog.setFileMode(QFileDialog.Directory)
         self.logger.debug("done")
 
-    def __setup_handlers(self):
-        """Wire up buttons etc. in the view."""
+    def __setup_handlers(self) -> None:
+        """
+        Wire up buttons etc. in the view.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.button_box.add_create_button_handler(self.__create_end_exp)
         self.button_box.add_start_button_handler(self.__start_stop_exp)
@@ -352,10 +387,11 @@ class CompanionController:
     # Experiment handling
     ########################################################################################
 
-    def __create_end_exp(self):
+    def __create_end_exp(self) -> None:
         """
         Either begin or end an experiment. If beginning an experiment then get a dir path from the user to save
         experiment data and check output files. Path is required to continue.
+        :return None:
         """
 
         self.logger.debug("running")
@@ -372,7 +408,12 @@ class CompanionController:
             self.__save_file_name = ""
         self.logger.debug("done")
 
-    def __create_exp(self):
+    def __create_exp(self) -> None:
+        """
+        Creates an experiment and updates the save file
+        :return None:
+        """
+
         self.logger.debug("running")
         date_time = get_current_time(device=True)
         self.__exp_created = True
@@ -396,7 +437,12 @@ class CompanionController:
         self.info_box.set_start_time(get_current_time(time=True, date_time=date_time))
         self.logger.debug("done")
 
-    def __end_exp(self):
+    def __end_exp(self) -> None:
+        """
+        Ends an experiment, and checks device backlog
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__exp_created = False
         self.button_box.toggle_create_button()
@@ -410,7 +456,11 @@ class CompanionController:
         self.__check_device_backlog()
         self.logger.debug("done")
 
-    def __start_stop_exp(self):
+    def __start_stop_exp(self) -> None:
+        """
+        Handler method to either start or stop an experiment.
+        :return None:
+        """
         self.logger.debug("running")
         if self.__exp_running:
             self.logger.debug("stopping experiment")
@@ -420,7 +470,11 @@ class CompanionController:
             self.__start_exp()
         self.logger.debug("done")
 
-    def __start_exp(self):
+    def __start_exp(self) -> None:
+        """
+        Starts an experiment
+        :return None:
+        """
         self.logger.debug("running")
         self.__exp_running = True
         devices_running = list()
