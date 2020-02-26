@@ -22,28 +22,41 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-
+import logging
 from multiprocessing.connection import Connection
 from PySide2.QtCore import QObject, QThread, Signal
 
 
 class PipeWatcherSig(QObject):
-    new_msg_sig = Signal(tuple)
+    new_msg_sig = Signal()
 
 
 class PipeWatcher(QThread):
-    def __init__(self, pipe: Connection):
+    def __init__(self, pipe: Connection, ch: logging.Handler):
+        self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
+        self.logger.debug("Initializing")
         QThread.__init__(self)
         self.setPriority(QThread.LowPriority)
         self.pipe = pipe
         self.signal = PipeWatcherSig()
         self.running = True
+        self.logger.debug("Initialized")
 
     def run(self):
+        self.logger.debug("running")
         while self.running:
-            waiting = self.pipe.poll()
-            if waiting:
-                self.signal.new_msg_sig.emit(self.pipe.recv())
+            try:
+                waiting = self.pipe.poll()
+                if waiting:
+                    self.signal.new_msg_sig.emit()
+            except BrokenPipeError as e:
+                self.logger.exception("Pipe failed")
+                break
+        self.logger.debug("done")
 
     def connect_to_sig(self, func: classmethod):
         self.signal.new_msg_sig.connect(func)
+
+    def send_msg(self, msg):
+        self.pipe.send(msg)

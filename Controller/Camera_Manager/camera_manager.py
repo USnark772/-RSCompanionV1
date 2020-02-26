@@ -25,7 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import cv2
 from PySide2.QtCore import QThread, QObject, QMutex, Signal
-max_cams = 1
+max_cams = 3
 
 
 class CamCounter:
@@ -130,8 +130,6 @@ class CameraConnectionManager:
         self.logger.debug("Initializing")
         self.ch = ch
         self.signals = CamConManSig()
-        self.cam_list = []
-        self.worker_thread_list = []
         self.cam_counter = CamCounter(ch)
         self.scanner_thread = None
         self.active = False

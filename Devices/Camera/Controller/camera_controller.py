@@ -35,6 +35,7 @@ from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 class ControllerSig(QObject):
     settings_error = Signal(str)
     cam_failed = Signal(int)
+    send_msg_sig = Signal(tuple)
 
 # TODO: Figure out how to best deal with larger frames causing lower fps.
 # Is measuring fps at any given time a good option?
@@ -52,7 +53,7 @@ class CameraController(ABCDeviceController):
         self.name = "CAM_" + str(index)
         super().__init__(CameraTab(ch, name=self.name))
         self.pipe, proc_pipe = Pipe()
-        self.pipe_watcher = PipeWatcher(self.pipe)
+        self.pipe_watcher = PipeWatcher(self.pipe, ch)
         self.pipe_watcher.connect_to_sig(self.handle_pipe)
         self.pipe_watcher.start()
         self.proc_bool = Value('b', False)
@@ -70,33 +71,44 @@ class CameraController(ABCDeviceController):
         self.__add_loading_symbols_to_tab()
         self.logger.debug("Initialized")
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
     def cleanup(self):
         self.logger.debug("running")
         self.pipe_watcher.running = False
         self.pipe_watcher.wait()
-        if not self.pipe.closed:
+        try:
             self.pipe.send((CEnum.CLEANUP,))
             self.pipe.close()
+        except BrokenPipeError as e:
+            pass
         if self.cam_worker.is_alive():
             self.cam_worker.join()
         self.logger.debug("done")
 
-    def handle_pipe(self, msg):
-        msg_type = msg[0]
-        if msg_type == CEnum.WORKER_DONE:
-            self.__complete_setup(msg[1])
-        elif msg_type == CEnum.CAM_FAILED:
-            self.signals.cam_failed.emit(self.index)
+    def handle_pipe(self):
+        msg = None
+        try:
+            if self.pipe.poll():
+                msg = self.pipe.recv()
+        except BrokenPipeError as e:
+            self.logger.exception("Pipe failed")
             self.cleanup()
-        elif msg_type == CEnum.SET_RESOLUTION:
-            self.__set_tab_size_val(msg[1])
-        elif msg_type == CEnum.SET_FPS:
-            self.__set_tab_fps_val(msg[1])
-        elif msg_type == CEnum.SET_ROTATION:
-            self.__set_tab_rot_val(msg[1])
+            return
+        if msg:
+            msg_type = msg[0]
+            if msg_type == CEnum.WORKER_DONE:
+                self.__complete_setup(msg[1])
+            elif msg_type == CEnum.CAM_FAILED:
+                self.signals.cam_failed.emit(self.index)
+                self.cleanup()
+            elif msg_type == CEnum.SET_RESOLUTION:
+                self.__set_tab_size_val(msg[1])
+            elif msg_type == CEnum.SET_FPS:
+                self.__set_tab_fps_val(msg[1])
+            elif msg_type == CEnum.SET_ROTATION:
+                self.__set_tab_rot_val(msg[1])
 
     def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
@@ -184,7 +196,9 @@ class CameraController(ABCDeviceController):
     def __set_tab_fps_val(self, value: int):
         self.tab.set_fps(self.__get_fps_val_index(value))
 
+    # TODO: Fix the error with the value being (0, 0). (0, 0) seems to happen if VideoCapture object fails.
     def __set_tab_size_val(self, value: tuple):
+        print(value)
         self.tab.set_frame_size(self.__get_size_val_index(value))
 
     def __set_tab_rot_val(self, value: int):

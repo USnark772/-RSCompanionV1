@@ -83,7 +83,7 @@ class SizeGetter(QThread):
             self.cam_obj.set_frame_size(initial_size)
             self.pipe.send((CEnum.WORKER_DONE, sizes))
 
-
+# TODO: Figure out if/how possible to add logging here
 def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handler):
     # logger = logging.getLogger(__name__)
     # logger.addHandler(ch)
@@ -95,6 +95,7 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
     running = False
     # logger.debug("Initialized")
     # logger.debug("running")
+    # pipe.send((CEnum.WORKER_DONE, [("(640, 480)", (640, 480))]))
     while True:
         if pipe.poll():  # Check for and handle message from controller
             msg = pipe.recv()
@@ -121,11 +122,12 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
                 cam_obj.handle_new_frame(frame)
                 cv2.waitKey(1)  # Required for frame to appear
             else:  # Camera failed, cleanup.
+                print("In proc, cam failed")
                 if size_getter_alive:
                     size_getter.running = False
                     size_getter.wait()
                 pipe.send((CEnum.CAM_FAILED,))
-                pipe.close()
+                # pipe.close()
                 cam_obj.cleanup()
                 break
     # logger.debug("done")

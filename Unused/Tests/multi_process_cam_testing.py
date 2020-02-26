@@ -35,7 +35,7 @@ def show_feed(index: int, pipe):
 
 if __name__ == '__main__':
     first_index = 0
-    last_index = 2
+    last_index = 3
     workers = []
     pipes = []
     for i in range(first_index, last_index):
