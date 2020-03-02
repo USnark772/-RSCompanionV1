@@ -152,7 +152,7 @@ class CompanionController:
         if not timestamp:
             timestamp = get_current_time(device=True)
         spacer = ", "
-        time = timestamp.strftime("%H:%M:%S")
+        time = timestamp.strftime("%H:%M:%S.%f")
         date = timestamp.strftime("%Y-%m-%d")
         block_num = self.info_box.get_block_num()
         cond_name = self.button_box.get_condition_name()
