@@ -1,4 +1,4 @@
--   Add new folder for build version (ex. Build 1.1) in RedScientific/CompanionApp
+-   Add new folder for build version (ex. Build 1.1) in RedScientific/Companion_Builds
 -   Add all needed modules to folder and rewrite all imports to point to same level
 -   Edit filepaths in general_defs.py to match new locations
 -   copy setup.py to build version directory
