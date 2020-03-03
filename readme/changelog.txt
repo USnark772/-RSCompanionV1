@@ -17,3 +17,7 @@ v1.07
     -Added functionality to post notes to the save file even when experiments are paused.
     -Added 2 minute x axis range limit to graphs so that it does not become unreadable in long experiments
     -Bug fixes.
+v1.08
+    -Bug fixes.
+v1.09
+    -Added microseconds to timestamp in experiment output file

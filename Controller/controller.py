@@ -18,12 +18,11 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Date: 2019-2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-from os import path
 import logging
 import logging.config
 import configparser
@@ -51,7 +50,6 @@ from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
-#from Devices.Camera.Controller.camera_controller import CameraController
 
 
 class CompanionController:
@@ -118,8 +116,6 @@ class CompanionController:
         # Assemble View objects
         self.__initialize_view()
         self.__init_controller_classes()
-
-        #self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -515,20 +511,6 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    '''
-    # TODO: Unfinished.
-    def __add_camera_tab(self):
-        self.logger.debug("running")
-        try:
-            controller = CameraController(self.tab_box, self.ch)
-        except Exception as e:
-            self.logger.exception("Failed to make camera_controller")
-            return
-        self.__device_controllers["cameras"] = controller
-        self.tab_box.add_tab(self.__device_controllers["cameras"].get_tab_obj(), "cameras")
-        self.graph_box.add_display(self.__device_controllers["cameras"].get_viewer())
-        self.logger.debug("done")
-    '''
 
     ########################################################################################
     # Other handlers
