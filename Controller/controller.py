@@ -461,6 +461,7 @@ class CompanionController:
         Handler method to either start or stop an experiment.
         :return None:
         """
+
         self.logger.debug("running")
         if self.__exp_running:
             self.logger.debug("stopping experiment")
@@ -475,6 +476,7 @@ class CompanionController:
         Starts an experiment
         :return None:
         """
+
         self.logger.debug("running")
         self.__exp_running = True
         devices_running = list()
@@ -496,7 +498,12 @@ class CompanionController:
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
 
-    def __stop_exp(self):
+    def __stop_exp(self) -> None:
+        """
+        Stops an experiment
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__exp_running = False
         try:
@@ -509,18 +516,32 @@ class CompanionController:
         self.logger.debug("done")
 
     # Depreciated
-    def __add_vert_lines_to_graphs(self):
+    def __add_vert_lines_to_graphs(self) -> None:
+        """
+        Adds to the Y-axis of a graph based on the current time
+        :return None:
+        """
+
         time = get_current_time(graph=True)
         for device_type in self.__graphs.values():
             device_type['frame'].get_graph().add_vert_lines(time)
 
-    def __add_break_in_graph_lines(self):
+    def __add_break_in_graph_lines(self) -> None:
+        """
+        Creates a break between times when the pause button is pressed
+        :return None:
+        """
+
         time = get_current_time(graph=True)
         for device_type in self.__graphs.values():
             device_type['frame'].get_graph().add_empty_point(time)
 
-    def __check_toggle_post_button(self):
-        """ If an experiment is created and running and there is a note then allow user access to post button. """
+    def __check_toggle_post_button(self) -> None:
+        """
+        If an experiment is created and running and there is a note then allow user access to post button.
+        :return None:
+        """
+
         self.logger.debug("running")
         if self.__exp_created and len(self.note_box.get_note()) > 0:  # and self.__exp_running:
             self.logger.debug("button = true")
@@ -530,7 +551,13 @@ class CompanionController:
             self.note_box.toggle_post_button(False)
         self.logger.debug("done")
 
-    def __send_save_data_to_cams(self, timestamp):
+    def __send_save_data_to_cams(self, timestamp: datetime) -> None:
+        """
+        Set up a save file for a camera to save captured video
+        :param timestamp: Start time of the experiment
+        :return None:
+        """
+
         for device in self.__device_controllers:
             if "CAM" in device:
                 self.__device_controllers[device].create_new_save_file(self.__save_dir)
@@ -540,8 +567,13 @@ class CompanionController:
     # Data saving
     ########################################################################################
 
-    def __key_press_handler(self, event):
-        """ Only act on alphabetical key presses """
+    def __key_press_handler(self, event: QKeyEvent) -> None:
+        """
+        Only act on alphabetical key presses
+        :return None:
+        """
+
+        # print("event type: ", type(event))
         self.logger.debug("running")
         if type(event) == QKeyEvent:
             if 0x41 <= event.key() <= 0x5a:
@@ -551,15 +583,24 @@ class CompanionController:
             event.ignore()
         self.logger.debug("done")
 
-    def __post_handler(self):
-        """ Write a given user note to all device output files. """
+    def __post_handler(self) -> None:
+        """
+        Write a given user note to all device output files.
+        :return None:
+        """
+
         self.logger.debug("running")
         note = self.note_box.get_note()
         self.note_box.clear_note()
         self.save_device_data("Note", note)
         self.logger.debug("done")
 
-    def __get_save_file_name(self):
+    def __get_save_file_name(self) -> bool:
+        """
+        Saves a save directory from a given file
+        :return bool: True if the file name is longer than 1 character
+        """
+
         self.logger.debug("running")
         self.__save_file_name = self.file_dialog.getSaveFileName(filter="*.txt")[0]
         self.logger.debug("1")
@@ -568,17 +609,34 @@ class CompanionController:
         if valid:
             self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
         self.logger.debug("done")
+        # print("_get_save_file_name return: ", valid)
+        # print(type(valid))
         return valid
 
     @staticmethod
-    def __get_save_dir_from_file_name(file_name):
+    def __get_save_dir_from_file_name(file_name: str) -> str:
+        """
+        Returns the directory for where a file is saved
+        :param file_name: Full file directory including file name
+        :return str: Directory to the file
+        """
+
         # possibly use for get last used directory
         end_index = file_name.rfind('/')
         dir_name = file_name[:end_index + 1]
+        # print("_get_save_dir_from_file_name:")
+        # print("input: ", file_name)
+        # print(type(file_name))
+        # print("return: ", dir_name)
+        # print(type(dir_name))
         return dir_name
 
-    def __check_for_updates_handler(self):
-        """ Ask VersionChecker if there is an update then alert user to result. """
+    def __check_for_updates_handler(self) -> None:
+        """
+        Ask VersionChecker if there is an update then alert user to result.
+        :return None:
+        """
+
         self.logger.debug("running")
         vc = VersionChecker()
         is_available = vc.check_version()
@@ -590,10 +648,20 @@ class CompanionController:
             self.ui.show_help_window("Error", error_checking_for_update)
         self.logger.debug("done")
 
-    def __log_window_handler(self):
+    def __log_window_handler(self) -> None:
+        """
+        Handler for the output log
+        :return None:
+        """
+
         self.log_output.show()
 
-    def __add_hdr_to_output(self):
+    def __add_hdr_to_output(self) -> None:
+        """
+        Adds the header line to the output file
+        :return None:
+        """
+
         line = 'Device ID, Time, Date, Block, Condition, Key Flag, '
         for key in self.__controller_classes:
             if self.__controller_classes[key][1] > 0:
@@ -602,27 +670,56 @@ class CompanionController:
         write_line_to_file(self.__save_file_name, line, new=True)
 
     @staticmethod
-    def __setup_log_output_file(file_name):
-        """ Create program output file to save log. """
+    def __setup_log_output_file(file_name: str) -> str:
+        """
+        Create program output file to save log.
+        :param file_name: Name of the save log
+        :return str: full directory to the save log, including the save log name
+        """
+
         fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
+        # print("_setup_log_output_file:")
+        # print("input: ", file_name)
+        # print(type(file_name))
+        # print("output: ", fname)
+        # print(type(fname))
         return fname
 
     ########################################################################################
     # generic device handling
     ########################################################################################
 
-    def __check_device_backlog(self):
+    def __check_device_backlog(self) -> None:
+        """
+        Adds device backlog to devices
+        :return None:
+        """
+
         for device in self.__devices_to_add:
             self.__add_device(device, self.__devices_to_add[device])
 
-    def __add_device(self, device, thread):
+    def __add_device(self, device: Tuple[str, str], thread: PortWorker) -> None:
         """
         Handles when a new device is found by the device manager and added to the program's scope.
         Creates a device type specific graph if needed and connects device specific controller to device graph and
-        device manager to let device controller handle device specific messages. Each device gets its own configure tab.
+        device manager to let device controller handle device specific messages.
+        Each device gets its own configure tab.
+        :param device: Device to add, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return None:
         """
+
+        # print("_add_device:")
+        # print("input:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -638,8 +735,19 @@ class CompanionController:
         self.__controller_classes[device[0].upper()][1] += 1
         self.logger.debug("done")
 
-    def __remove_device(self, device):
-        """ Removes device tab, graph link and device information """
+    def __remove_device(self, device: Tuple[str, str]) -> None:
+        """
+        Removes device tab, graph link and device information
+        :param device: Device to be removed, tuple of device type and name as strings
+        :return None:
+        """
+
+        # print("_remove_device:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -659,7 +767,23 @@ class CompanionController:
 
     # TODO: This and create drt controller functions could be merged. Perhaps different functions for the
     #  try except block.
-    def __create_drt_controller(self, device, thread):
+    def __create_drt_controller(self, device: Tuple[str, str], thread: PortWorker) -> bool:
+        """
+        Creates a controller for a DRT device
+        :param device: Device to create a controller for, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return bool: Returns true if a DRT controller is created
+        """
+
+        # print("_create_drt_controller:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
+
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -682,7 +806,23 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_vog_controller(self, device, thread):
+    def __create_vog_controller(self, device: Tuple[str, str], thread: PortWorker) -> bool:
+        """
+        Creates a controller for a VOG device
+        :param device: Device to create a controller for, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return bool: Returns true if a VOG controller is created
+        """
+
+        # print("_create_vog_controller:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
+
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -705,7 +845,17 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_camera_controller(self, index):
+    def __create_camera_controller(self, index: int) -> None:
+        """
+        Creates a controller for a camera device
+        :param index: index of the camera to be added
+        :return None:
+        """
+
+        # print("_create_camera_controller:")
+        # print("index: ", index)
+        # print(type(index))
+
         self.logger.debug("running")
         try:
             cam_controller = CameraController(index, self.ch)
@@ -719,7 +869,17 @@ class CompanionController:
         self.tab_box.add_tab(cam_controller.get_tab_obj())
         self.logger.debug("done")
 
-    def __remove_camera(self, index):
+    def __remove_camera(self, index: int) -> None:
+        """
+        Removes a camera
+        :param index: Index of the camera to be removed
+        :return None:
+        """
+
+        # print("_remove_camera:")
+        # print("index: ", index)
+        # print(type(index))
+
         self.logger.debug("running")
         for controller in self.__device_controllers.values():
             ind_str = str(index)
