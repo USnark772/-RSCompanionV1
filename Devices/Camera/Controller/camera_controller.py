@@ -50,7 +50,7 @@ class CameraController(ABCDeviceController):
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         self.index = index
-        self.name = "CAM_" + str(index)
+        self.name = "CAM_" + str(index + 1)
         super().__init__(CameraTab(ch, name=self.name))
         self.pipe, proc_pipe = Pipe()
         self.pipe_watcher = PipeWatcher(self.pipe, ch)

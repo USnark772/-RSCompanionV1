@@ -76,10 +76,14 @@ class CamScanner(QThread):
         self.logger.debug("Initialized")
 
     # Try to connect new cam from latest index and up
+    # TODO: Replace loop
     def run(self):
         self.logger.debug("running")
-        while self.running:
-            self.__check_for_cams(self.__get_index())
+        # while self.running:
+        #     self.__check_for_cams(self.__get_index())
+        self.signal.new_cam_sig.emit(0)
+        self.signal.new_cam_sig.emit(1)
+        self.signal.new_cam_sig.emit(2)
         self.logger.debug("done")
 
     def __get_index(self):
@@ -90,18 +94,19 @@ class CamScanner(QThread):
         # self.logger.debug("done")
         return i
 
+    # TODO: Should we send 0 based index or 1 based index?
     def __check_for_cams(self, index: int = 0):
         # self.logger.debug("running")
         while self.running:
             if index >= max_cams:
                 break
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            cap = cv2.VideoCapture(index)
             if cap is None or not cap.isOpened():
                 break
             else:
+                cap.release()
                 index += 1
                 self.__increment_cam_count()
-                cap.release()
                 self.signal.new_cam_sig.emit(index)
         # self.logger.debug("done")
 
