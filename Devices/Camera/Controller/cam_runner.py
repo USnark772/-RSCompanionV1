@@ -88,7 +88,7 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
     # logger = logging.getLogger(__name__)
     # logger.addHandler(ch)
     # logger.debug("Initializing")
-    cam_obj = CamObj(cv2.VideoCapture(index, cv2.CAP_DSHOW), name)  #, ch)
+    cam_obj = CamObj(index, name)  #, ch)
     size_getter = SizeGetter(cam_obj, pipe)
     size_getter.start()
     size_getter_alive = True
@@ -97,37 +97,42 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
     # logger.debug("running")
     # pipe.send((CEnum.WORKER_DONE, [("(640, 480)", (640, 480))]))
     while True:
-        if pipe.poll():  # Check for and handle message from controller
-            msg = pipe.recv()
-            msg_type = msg[0]
-            if msg_type == CEnum.ACTIVATE_CAM:
-                running = True
-            elif msg_type == CEnum.DEACTIVATE_CAM:
-                running = False
-            elif msg_type == CEnum.WORKER_DONE:
-                size_getter.wait()
-                size_getter_alive = False
-            elif msg_type == CEnum.CLEANUP:
-                if size_getter_alive:
-                    size_getter.running = False
+        try:
+            if pipe.poll():  # Check for and handle message from controller
+                msg = pipe.recv()
+                msg_type = msg[0]
+                if msg_type == CEnum.ACTIVATE_CAM:
+                    running = True
+                elif msg_type == CEnum.DEACTIVATE_CAM:
+                    running = False
+                elif msg_type == CEnum.WORKER_DONE:
                     size_getter.wait()
-                pipe.close()
-                cam_obj.cleanup()
-                break
-            else:
-                handle_pipe(msg, cam_obj, pipe)
+                    size_getter_alive = False
+                elif msg_type == CEnum.CLEANUP:
+                    if size_getter_alive:
+                        size_getter.running = False
+                        size_getter.wait()
+                    pipe.close()
+                    cam_obj.cleanup()
+                    break
+                else:
+                    handle_pipe(msg, cam_obj, pipe)
+        except BrokenPipeError as e:
+            cam_obj.cleanup()
+            if size_getter_alive:
+                size_getter.running = False
+                size_getter.wait()
+            break
         if running:  # Get and handle frame from camera
             ret, frame = cam_obj.read_camera()
             if ret and frame is not None:
                 cam_obj.handle_new_frame(frame)
                 cv2.waitKey(1)  # Required for frame to appear
             else:  # Camera failed, cleanup.
-                print("In proc, cam failed")
                 if size_getter_alive:
                     size_getter.running = False
                     size_getter.wait()
                 pipe.send((CEnum.CAM_FAILED,))
-                # pipe.close()
                 cam_obj.cleanup()
                 break
     # logger.debug("done")

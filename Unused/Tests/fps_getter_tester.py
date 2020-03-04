@@ -1,8 +1,8 @@
 import cv2
 import time
 
-if __name__ == '__main__':
 
+def show_feeds():
     # Start default camera
     video = cv2.VideoCapture(0)
     x = 1920
@@ -45,3 +45,16 @@ if __name__ == '__main__':
     print(video.get(cv2.CAP_PROP_FRAME_WIDTH), video.get(cv2.CAP_PROP_FRAME_HEIGHT))
     # Release video
     video.release()
+
+
+def show_backends():
+    backend_ids = cv2.videoio_registry.getBackends()
+    for backend in backend_ids:
+        print(cv2.videoio_registry.getBackendName(backend))
+
+def main():
+    # show_feeds()
+    show_backends()
+
+if __name__ == '__main__':
+    main()

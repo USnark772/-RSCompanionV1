@@ -29,11 +29,11 @@ from numpy import ndarray
 
 
 class CamObj:
-    def __init__(self, cap: cv2.VideoCapture, name: str):  # , ch: logging.Handler):
+    def __init__(self, index: int, name: str):  # , ch: logging.Handler):
         # self.logger = logging.getLogger(__name__)
         # self.logger.addHandler(ch)
         # self.logger.debug("Initializing")
-        self.cap = cap
+        self.cap = cv2.VideoCapture(index, cv2.CAP_MSMF)
         self.name = name
         self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
