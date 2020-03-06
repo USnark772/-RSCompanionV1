@@ -18,21 +18,22 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019-2020
+# Author: Nathan Rogers
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
 import logging
-import logging.config
-import configparser
+from typing import Tuple
 from tempfile import gettempdir
+from datetime import datetime
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QTimer, QDir, QSize
-from PySide2.QtGui import QKeyEvent
+from PySide2.QtCore import QDir, QSize, QSettings, QUrl
+from PySide2.QtGui import QKeyEvent, QDesktopServices
 from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    error_checking_for_update, device_connection_error, config_file_path, current_version_str
+    error_checking_for_update, device_connection_error, current_version_str
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -42,10 +43,11 @@ from View.DockWidget.note_box import NoteBox
 from View.MenuBarWidget.menu_bar import MenuBar
 from View.DisplayWidget.display_container import DisplayContainer
 from View.DisplayWidget.graph_frame import GraphFrame
-from View.TabWidget.device_tab import TabContainer
+from View.TabWidget.device_tab_container import TabContainer
 from View.OutputLog.output_window import OutputWindow
 from Controller.version_checker import VersionChecker
-from Controller.device_manager import DeviceManager
+from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager, PortWorker
+from Controller.Camera_Manager.camera_manager import CameraConnectionManager
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
@@ -53,19 +55,31 @@ from Devices.VOG.View.vog_graph import VOGGraph
 
 
 class CompanionController:
-    def __init__(self):
-        """ Creates the different element objects of the View and Controller """
-        self.log_output = OutputWindow()
+    """
+    Main controller driving the companion app
+        Controls UI and experiments
+        Handles errors
+        Creates connection managers for RS devices and cameras
+        Creates device controllers
+        Formats and saves device and experiment data to a file
+    """
+    def __init__(self) -> None:
+        """
+        Create elements of View and Controller
+        :return None:
+        """
 
-        config = configparser.ConfigParser()
-        try:
-            config.read(config_file_path)
-            logginglevel = eval('logging.' + config.get('logging', 'level'))
-            inierror = False
-        except configparser.NoSectionError as e:
-            logginglevel = logging.DEBUG
-            inierror = True
-        logging.basicConfig(filename=self.__setup_output_file("companion_app_log.txt"), filemode='w',
+        # initialize logging for app
+        self.log_output = OutputWindow()
+        self.settings = QSettings("Red Scientific", "Companion")
+
+        self.settings.beginGroup("logging")
+        if not self.settings.contains("loglevel"):
+            self.settings.setValue("loglevel", "DEBUG")
+        logginglevel = eval('logging.' + self.settings.value('loglevel'))
+        self.settings.endGroup()
+
+        logging.basicConfig(filename=self.__setup_log_output_file("companion_app_log.txt"), filemode='w',
                             level=logginglevel, format='%(levelname)s - %(name)s - %(funcName)s: %(message)s')
         self.logger = logging.getLogger(__name__)
 
@@ -76,9 +90,9 @@ class CompanionController:
         self.logger.addHandler(self.ch)
 
         self.logger.info("RS Companion app version: " + current_version_str)
-        if inierror:
-            self.logger.debug("Error reading config.ini, logging level set to debug")
         self.logger.debug("Initializing")
+
+        # set up ui
         ui_min_size = QSize(950, 740)
         dock_size = QSize(850, 160)
         button_box_size = QSize(205, 120)
@@ -96,8 +110,19 @@ class CompanionController:
         self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs, self.ch)
         self.tab_box = TabContainer(self.ui, tab_box_width_range, self.ch)
         self.file_dialog = QFileDialog(self.ui)
-        self.device_manager = DeviceManager(self.receive_msg_from_device_manager, self.ch)
 
+        self.dev_con_manager = RSDeviceConnectionManager(self.ch)
+        self.cam_con_manager = CameraConnectionManager(self.ch)
+        self.__setup_managers()
+        self.settings.beginGroup("Camera manager")
+        # Handle first time running settings value
+        if not self.settings.contains("active"):
+            self.settings.setValue("active", "True")
+        active = eval(self.settings.value("active"))
+        if active:
+            self.cam_con_manager.activate()
+        self.menu_bar.set_cam_bool_checked(active)
+        self.settings.endGroup()
         # Initialize storage and state
         self.__controller_classes = dict()
         self.__controller_inits = dict()
@@ -111,40 +136,123 @@ class CompanionController:
         self.__current_cond_name = ""
         self.__device_controllers = dict()
         self.__save_file_name = ""
+        self.__save_dir = QDir().homePath()
         self.__device_spacers = dict()
+        self.__devices_to_add = dict()
 
         # Assemble View objects
         self.__initialize_view()
         self.__init_controller_classes()
+
+        # self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
     # public functions
     ########################################################################################
 
-    def receive_msg_from_device_manager(self, msg_type=0, msg_string=None, timestamp=None, device=None):
+    # TODO: Figure out how to show device added but not allow use until next experiment
+    def add_device(self, device_name: str, port_name: str, thread: PortWorker) -> None:
         """
-        Receives a message from the device manager. msg is expected to be a string. Handles the msg depending on
-        what 'type' it is
+        Handles an RS device being added during runtime
+        If no experiment running, device added
+        If experiment running, device put in a queue to add after experiment
+        :param device_name: Type of RS device
+        :param port_name: Specific device number
+        :param thread: Device communication thread
+        :return None:
         """
+
+        # print("port_name: ", port_name)
+        # print("device_name type: ", type(device_name))
+        # print("port_name type: ", type(port_name))
+        # print("thread type: ", type(thread))
         self.logger.debug("running")
-        if msg_type == 1:  # Communication from a device
-            self.logger.debug("Passing msg to device controller. msg is: " + msg_string)
-            self.__device_controllers[device].handle_msg(msg_string, timestamp)
-        elif msg_type == 2:  # Adding a new device
-            self.logger.debug("Adding a new device")
-            self.__add_device(device)
-        elif msg_type == 3:  # Removing a device
-            self.logger.debug("Removing a device")
-            self.__remove_device(device)
-        elif msg_type == 4:  # Error connecting device
-            self.logger.debug("Error connecting device")
-            self.ui.show_help_window("Error", device_connection_error)
-        else:  # Unknown error
-            self.logger.error("This line should not be reached")
+        if not self.__exp_created:
+            self.__add_device((device_name, port_name), thread)
+        else:
+            self.__devices_to_add[(device_name, port_name)] = thread
         self.logger.debug("done")
 
-    def save_device_data(self, device_name, device_line, timestamp=None):
+    def remove_device(self, device_name: str, port_name: str) -> None:
+        """
+        Handles an RS device being removed during runtime
+        :param device_name: Type of RS device
+        :param port_name: Specific device number
+        :return None:
+        """
+
+        self.logger.debug("running")
+        if (device_name, port_name) in self.__devices_to_add:
+            del self.__devices_to_add[(device_name, port_name)]
+        self.__remove_device((device_name, port_name))
+        self.logger.debug("done")
+
+    def add_camera(self, index: int) -> None:
+        """
+        Handles a camera being added during runtime
+        :param cap: VideoCapture object
+        :param index: Specific camera number
+        :param thread: Camera communication thread
+        :return None:
+        """
+
+        # print("index type: ", type(index))
+        self.logger.debug("running")
+        self.__create_camera_controller(index)
+        self.logger.debug("done")
+
+    def remove_camera(self, index: int) -> None:
+        """
+        Handles a camera being removed during runtime
+        :param index: Specific camera number
+        :return None:
+        """
+
+        self.logger.debug("running")
+        self.__remove_camera(index)
+        self.logger.debug("done")
+
+    def alert_device_connection_failure(self) -> None:
+        """
+        Handles a connection failure with a device
+        Alerts user to connection failure
+        :return None:
+
+        """
+
+        self.logger.debug("running")
+        self.ui.show_help_window("Error", device_connection_error)
+        self.logger.debug("done")
+
+    def alert_camera_error(self, error_message: str) -> None:
+        """
+        Handles an error alert from a camera
+        Alerts user to an error
+        :param error_message: Error message shown to user
+        :return None:
+        """
+
+        # print("error_message type: ", type(error_message))
+        self.logger.debug("running")
+        self.ui.show_help_window("Error", error_message)
+        self.logger.debug("done")
+
+    def save_device_data(self, device_name: Tuple[str, str], device_line: str, timestamp: datetime = None) -> None:
+        """
+        Saves experiment data from a device to a file
+        :param device_name: Type of device and specific device number
+        :param device_line: Data from device
+        :param timestamp: Time of data received
+        :return None:
+        """
+
+        # print("device_name type: ", type(device_name))
+        # print("device_name[0] type: ", type(device_name[0]))
+        # print("device_name[1] type: ", type(device_name[1]))
+        # print("device_line type: ", type(device_line))
+        # print("timestamp type: ", type(timestamp))
+        self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
         spacer = ", "
@@ -168,17 +276,35 @@ class CompanionController:
                 elif self.__controller_classes[key][1] > 0:
                     line += self.__controller_classes[key][0].get_note_spacer()
         write_line_to_file(self.__save_file_name, line)
+        self.logger.debug("done")
 
     ########################################################################################
     # initial setup
     ########################################################################################
 
-    def __initialize_view(self):
-        """ Assembles the different View objects into a window. Initializes some handlers and controller functions """
+    def __setup_managers(self) -> None:
+        """
+        Sets up device connection managers
+        :return None:
+        """
+
+        self.logger.debug("running")
+        self.dev_con_manager.signals.new_device_sig.connect(self.add_device)
+        self.dev_con_manager.signals.disconnect_sig.connect(self.remove_device)
+        self.dev_con_manager.signals.failed_con_sig.connect(self.alert_device_connection_failure)
+        self.cam_con_manager.signals.new_cam_sig.connect(self.add_camera)
+        self.logger.debug("done")
+
+    def __initialize_view(self) -> None:
+        """
+        Assembles the different View objects into a window. Initializes some handlers and controller functions
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__setup_file_dialog()
         self.__setup_handlers()
-        self.__start_update_timer()
+        # self.__start_update_timer()
         self.control_dock.add_widget(self.button_box)
         self.control_dock.add_widget(self.flag_box)
         self.control_dock.add_widget(self.note_box)
@@ -191,7 +317,13 @@ class CompanionController:
         self.logger.debug("done")
 
     # TODO: Add device controller destructors?
-    def __populate_func_dicts(self):
+    def __populate_func_dicts(self) -> None:
+        """
+        creates dictionaries containing device controllers and device graphs functions
+        :return None:
+        """
+
+        self.logger.debug("running")
         self.__controller_inits['drt'] = dict()
         self.__controller_inits['vog'] = dict()
         self.__graph_inits['drt'] = dict()
@@ -202,29 +334,46 @@ class CompanionController:
         self.__graph_inits['drt']['destructor'] = self.__destroy_drt_graph
         self.__graph_inits['vog']['creator'] = self.__make_vog_graph
         self.__graph_inits['vog']['destructor'] = self.__destroy_vog_graph
+        self.logger.debug("done")
 
-    def __init_controller_classes(self):
+    # TODO: move functionality to model, keep track of device count elsewhere
+    def __init_controller_classes(self) -> None:
+        """
+        Creates a dictionary for static method references, and device count
+        :return:
+        """
+
+        self.logger.debug("running")
         self.__controller_classes["DRT"] = [DRTController, 0]
         self.__controller_classes["VOG"] = [VOGController, 0]
+        self.logger.debug("done")
 
-    def __setup_file_dialog(self):
+    def __setup_file_dialog(self) -> None:
         """
         Sets up a file dialog for 1. saving data from experiments and 2. opening previous experiments.
         2. not implemented yet
+        :return None:
         """
+
         self.logger.debug("running")
         # self.file_dialog.setViewMode(QFileDialog.Detail)
         self.file_dialog.setDirectory(QDir().homePath())
         # self.file_dialog.setFileMode(QFileDialog.Directory)
         self.logger.debug("done")
 
-    def __setup_handlers(self):
-        """Wire up buttons etc. in the view."""
+    def __setup_handlers(self) -> None:
+        """
+        Wire up buttons etc. in the view.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.button_box.add_create_button_handler(self.__create_end_exp)
         self.button_box.add_start_button_handler(self.__start_stop_exp)
         self.note_box.add_note_box_changed_handler(self.__check_toggle_post_button)
         self.note_box.add_post_handler(self.__post_handler)
+        self.menu_bar.add_cam_bool_handler(self.__toggle_use_cameras)
+        self.menu_bar.add_open_last_save_dir_handler(self.__open_last_save_dir)
         self.menu_bar.add_about_app_handler(self.__about_app)
         self.menu_bar.add_about_company_handler(self.__about_company)
         self.menu_bar.add_update_handler(self.__check_for_updates_handler)
@@ -233,31 +382,22 @@ class CompanionController:
         self.ui.add_close_handler(self.ui_close_event_handler)
         self.logger.debug("done")
 
-    def __start_update_timer(self):
-        self.__msg_timer = QTimer()
-        self.__msg_timer.setSingleShot(False)
-        self.__msg_timer.timeout.connect(self.device_manager.check_for_msgs)
-        self.__msg_timer.start(1)
-        self.__device_timer = QTimer()
-        self.__device_timer.setSingleShot(False)
-        self.__device_timer.timeout.connect(self.device_manager.update_devices)
-        self.__device_timer.start(200)
-
     ########################################################################################
     # Experiment handling
     ########################################################################################
 
-    def __create_end_exp(self):
+    def __create_end_exp(self) -> None:
         """
         Either begin or end an experiment. If beginning an experiment then get a dir path from the user to save
         experiment data and check output files. Path is required to continue.
+        :return None:
         """
+
         self.logger.debug("running")
         if not self.__exp_created:
             self.logger.debug("creating experiment")
             if not self.__get_save_file_name():
                 self.logger.debug("no save directory selected, done running __create_end_exp()")
-                print("Failed")
                 return
             self.__create_exp()
             self.logger.debug("done")
@@ -267,17 +407,24 @@ class CompanionController:
             self.__save_file_name = ""
         self.logger.debug("done")
 
-    def __create_exp(self):
+    def __create_exp(self) -> None:
+        """
+        Creates an experiment and updates the save file
+        :return None:
+        """
+
         self.logger.debug("running")
+        date_time = get_current_time(device=True)
         self.__exp_created = True
         self.button_box.toggle_create_button()
-        self.device_manager.set_check_for_updates(False)
         self.__add_hdr_to_output()
         devices_running = list()
+        self.__send_save_data_to_cams(get_current_time(date_time=date_time, save=True))
         try:
             for controller in self.__device_controllers.values():
-                controller.start_exp()
-                devices_running.append(controller)
+                if controller.active:
+                    controller.start_exp()
+                    devices_running.append(controller)
         except Exception as e:
             self.logger.exception("Failed trying to start_exp_all")
             self.button_box.toggle_create_button()
@@ -286,14 +433,18 @@ class CompanionController:
                 controller.end_exp()
             return
         self.__check_toggle_post_button()
-        self.info_box.set_start_time(get_current_time(time=True))
+        self.info_box.set_start_time(get_current_time(time=True, date_time=date_time))
         self.logger.debug("done")
 
-    def __end_exp(self):
+    def __end_exp(self) -> None:
+        """
+        Ends an experiment, and checks device backlog
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__exp_created = False
         self.button_box.toggle_create_button()
-        self.device_manager.set_check_for_updates(True)
         try:
             for controller in self.__device_controllers.values():
                 controller.end_exp()
@@ -301,9 +452,15 @@ class CompanionController:
             self.logger.exception("Failed trying to end_exp_all")
         self.__check_toggle_post_button()
         self.info_box.set_block_num(0)
+        self.__check_device_backlog()
         self.logger.debug("done")
 
-    def __start_stop_exp(self):
+    def __start_stop_exp(self) -> None:
+        """
+        Handler method to either start or stop an experiment.
+        :return None:
+        """
+
         self.logger.debug("running")
         if self.__exp_running:
             self.logger.debug("stopping experiment")
@@ -313,25 +470,39 @@ class CompanionController:
             self.__start_exp()
         self.logger.debug("done")
 
-    def __start_exp(self):
+    def __start_exp(self) -> None:
+        """
+        Starts an experiment
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__exp_running = True
+        devices_running = list()
         try:
             for controller in self.__device_controllers.values():
-                controller.start_block()
+                if controller.active:
+                    controller.start_block()
+                    devices_running.append(controller)
         except Exception as e:
             self.logger.exception("Failed trying to start_block_all")
             self.__exp_running = False
+            for controller in devices_running:
+                controller.end_exp()
             return
         self.info_box.set_block_num(str(int(self.info_box.get_block_num()) + 1))
         self.__current_cond_name = self.button_box.get_condition_name()
         self.__add_break_in_graph_lines()
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
-        # self.__add_vert_lines_to_graphs()
         self.logger.debug("done")
 
-    def __stop_exp(self):
+    def __stop_exp(self) -> None:
+        """
+        Stops an experiment
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__exp_running = False
         try:
@@ -343,18 +514,33 @@ class CompanionController:
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
 
-    def __add_vert_lines_to_graphs(self):
+    # Depreciated
+    def __add_vert_lines_to_graphs(self) -> None:
+        """
+        Adds to the Y-axis of a graph based on the current time
+        :return None:
+        """
+
         time = get_current_time(graph=True)
         for device_type in self.__graphs.values():
             device_type['frame'].get_graph().add_vert_lines(time)
 
-    def __add_break_in_graph_lines(self):
+    def __add_break_in_graph_lines(self) -> None:
+        """
+        Creates a break between times when the pause button is pressed
+        :return None:
+        """
+
         time = get_current_time(graph=True)
         for device_type in self.__graphs.values():
             device_type['frame'].get_graph().add_empty_point(time)
 
-    def __check_toggle_post_button(self):
-        """ If an experiment is created and running and there is a note then allow user access to post button. """
+    def __check_toggle_post_button(self) -> None:
+        """
+        If an experiment is created and running and there is a note then allow user access to post button.
+        :return None:
+        """
+
         self.logger.debug("running")
         if self.__exp_created and len(self.note_box.get_note()) > 0:  # and self.__exp_running:
             self.logger.debug("button = true")
@@ -364,12 +550,29 @@ class CompanionController:
             self.note_box.toggle_post_button(False)
         self.logger.debug("done")
 
+    def __send_save_data_to_cams(self, timestamp: datetime) -> None:
+        """
+        Set up a save file for a camera to save captured video
+        :param timestamp: Start time of the experiment
+        :return None:
+        """
+
+        for device in self.__device_controllers:
+            if "CAM" in device:
+                self.__device_controllers[device].create_new_save_file(self.__save_dir)
+                self.__device_controllers[device].set_start_time(timestamp)
+
     ########################################################################################
     # Data saving
     ########################################################################################
 
-    def __key_press_handler(self, event):
-        """ Only act on alphabetical key presses """
+    def __key_press_handler(self, event: QKeyEvent) -> None:
+        """
+        Only act on alphabetical key presses
+        :return None:
+        """
+
+        # print("event type: ", type(event))
         self.logger.debug("running")
         if type(event) == QKeyEvent:
             if 0x41 <= event.key() <= 0x5a:
@@ -379,20 +582,60 @@ class CompanionController:
             event.ignore()
         self.logger.debug("done")
 
-    def __post_handler(self):
-        """ Write a given user note to all device output files. """
+    def __post_handler(self) -> None:
+        """
+        Write a given user note to all device output files.
+        :return None:
+        """
+
         self.logger.debug("running")
         note = self.note_box.get_note()
         self.note_box.clear_note()
         self.save_device_data("Note", note)
         self.logger.debug("done")
 
-    def __get_save_file_name(self):
-        self.__save_file_name = self.file_dialog.getSaveFileName(filter="*.txt")[0]
-        return len(self.__save_file_name) > 1
+    def __get_save_file_name(self) -> bool:
+        """
+        Saves a save directory from a given file
+        :return bool: True if the file name is longer than 1 character
+        """
 
-    def __check_for_updates_handler(self):
-        """ Ask VersionChecker if there is an update then alert user to result. """
+        self.logger.debug("running")
+        self.__save_file_name = self.file_dialog.getSaveFileName(filter="*.txt")[0]
+        self.logger.debug("1")
+        valid = len(self.__save_file_name) > 1
+        self.logger.debug("2")
+        if valid:
+            self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
+        self.logger.debug("done")
+        # print("_get_save_file_name return: ", valid)
+        # print(type(valid))
+        return valid
+
+    @staticmethod
+    def __get_save_dir_from_file_name(file_name: str) -> str:
+        """
+        Returns the directory for where a file is saved
+        :param file_name: Full file directory including file name
+        :return str: Directory to the file
+        """
+
+        # possibly use for get last used directory
+        end_index = file_name.rfind('/')
+        dir_name = file_name[:end_index + 1]
+        # print("_get_save_dir_from_file_name:")
+        # print("input: ", file_name)
+        # print(type(file_name))
+        # print("return: ", dir_name)
+        # print(type(dir_name))
+        return dir_name
+
+    def __check_for_updates_handler(self) -> None:
+        """
+        Ask VersionChecker if there is an update then alert user to result.
+        :return None:
+        """
+
         self.logger.debug("running")
         vc = VersionChecker()
         is_available = vc.check_version()
@@ -404,10 +647,20 @@ class CompanionController:
             self.ui.show_help_window("Error", error_checking_for_update)
         self.logger.debug("done")
 
-    def __log_window_handler(self):
+    def __log_window_handler(self) -> None:
+        """
+        Handler for the output log
+        :return None:
+        """
+
         self.log_output.show()
 
-    def __add_hdr_to_output(self):
+    def __add_hdr_to_output(self) -> None:
+        """
+        Adds the header line to the output file
+        :return None:
+        """
+
         line = 'Device ID, Time, Date, Block, Condition, Key Flag, '
         for key in self.__controller_classes:
             if self.__controller_classes[key][1] > 0:
@@ -416,23 +669,56 @@ class CompanionController:
         write_line_to_file(self.__save_file_name, line, new=True)
 
     @staticmethod
-    def __setup_output_file(filename):
-        """ Create program output file to save log. """
-        fname = gettempdir() + "\\" + filename
+    def __setup_log_output_file(file_name: str) -> str:
+        """
+        Create program output file to save log.
+        :param file_name: Name of the save log
+        :return str: full directory to the save log, including the save log name
+        """
+
+        fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
+        # print("_setup_log_output_file:")
+        # print("input: ", file_name)
+        # print(type(file_name))
+        # print("output: ", fname)
+        # print(type(fname))
         return fname
 
     ########################################################################################
     # generic device handling
     ########################################################################################
 
-    def __add_device(self, device):
+    def __check_device_backlog(self) -> None:
+        """
+        Adds device backlog to devices
+        :return None:
+        """
+
+        for device in self.__devices_to_add:
+            self.__add_device(device, self.__devices_to_add[device])
+
+    def __add_device(self, device: Tuple[str, str], thread: PortWorker) -> None:
         """
         Handles when a new device is found by the device manager and added to the program's scope.
         Creates a device type specific graph if needed and connects device specific controller to device graph and
-        device manager to let device controller handle device specific messages. Each device gets its own configure tab.
+        device manager to let device controller handle device specific messages.
+        Each device gets its own configure tab.
+        :param device: Device to add, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return None:
         """
+
+        # print("_add_device:")
+        # print("input:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -440,16 +726,27 @@ class CompanionController:
         if device[0] not in self.__controller_inits.keys():
             self.logger.warning("Unknown device")
             return
-        if not self.__controller_inits[device[0]]['creator'](device):
+        if not self.__controller_inits[device[0]]['creator'](device, thread):
             self.logger.debug("Failed to make controller")
             return
         self.__graphs[device[0]]['frame'].get_graph().add_device(device[1][3:])
-        self.tab_box.add_tab(self.__device_controllers[device].get_tab_obj(), device[1])
+        self.tab_box.add_tab(self.__device_controllers[device].get_tab_obj())
         self.__controller_classes[device[0].upper()][1] += 1
         self.logger.debug("done")
 
-    def __remove_device(self, device):
-        """ Removes device tab, graph link and device information """
+    def __remove_device(self, device: Tuple[str, str]) -> None:
+        """
+        Removes device tab, graph link and device information
+        :param device: Device to be removed, tuple of device type and name as strings
+        :return None:
+        """
+
+        # print("_remove_device:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -458,16 +755,34 @@ class CompanionController:
         if device in self.__device_controllers:
             self.__graphs[device[0]]['num_devices'] -= 1
         else:
-            self.logger.debug("Unknown device: " + device[0] + " " + device[1])
+            self.logger.debug("Unknown device or already disconnected: " + device[0] + " " + device[1])
             return
-        self.tab_box.remove_tab(device[1])
+        self.tab_box.remove_tab(self.__device_controllers[device].get_tab_obj().get_name())
         self.__graphs[device[0]]['frame'].get_graph().remove_device(device[1][3:])
         del self.__device_controllers[device]
         self.__check_num_devices()
         self.__controller_classes[device[0].upper()][1] -= 1
         self.logger.debug("done")
 
-    def __create_drt_controller(self, device):
+    # TODO: This and create drt controller functions could be merged. Perhaps different functions for the
+    #  try except block.
+    def __create_drt_controller(self, device: Tuple[str, str], thread: PortWorker) -> bool:
+        """
+        Creates a controller for a DRT device
+        :param device: Device to create a controller for, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return bool: Returns true if a DRT controller is created
+        """
+
+        # print("_create_drt_controller:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
+
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -477,8 +792,9 @@ class CompanionController:
                 return False
         self.logger.debug("Making controller for drt")
         try:
-            device_controller = DRTController(self.tab_box, device, self.device_manager.handle_msg,
-                                              self.add_data_to_graph, self.ch, self.save_device_data)
+            device_controller = DRTController(device, thread, self.add_data_to_graph, self.ch,
+                                              self.save_device_data)
+            device_controller.get_tab_obj().setParent(self.tab_box)
         except Exception as e:
             self.logger.exception("failed to make device_controller for drt" + str(device))
             self.__check_num_devices()
@@ -489,7 +805,23 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __create_vog_controller(self, device):
+    def __create_vog_controller(self, device: Tuple[str, str], thread: PortWorker) -> bool:
+        """
+        Creates a controller for a VOG device
+        :param device: Device to create a controller for, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return bool: Returns true if a VOG controller is created
+        """
+
+        # print("_create_vog_controller:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
+
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -499,8 +831,9 @@ class CompanionController:
                 return False
         self.logger.debug("Making controller for vog")
         try:
-            device_controller = VOGController(self.tab_box, device, self.device_manager.handle_msg,
-                                              self.add_data_to_graph, self.ch, self.save_device_data)
+            device_controller = VOGController(device, thread, self.add_data_to_graph, self.ch,
+                                              self.save_device_data)
+            device_controller.get_tab_obj().setParent(self.tab_box)
         except Exception as e:
             self.logger.exception("failed to make device_controller for vog" + str(device))
             self.__check_num_devices()
@@ -511,27 +844,110 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
+    def __create_camera_controller(self, index: int) -> None:
+        """
+        Creates a controller for a camera device
+        :param index: index of the camera to be added
+        :return None:
+        """
+
+        # print("_create_camera_controller:")
+        # print("index: ", index)
+        # print(type(index))
+
+        self.logger.debug("running")
+        try:
+            cam_controller = CameraController(index, self.ch)
+            cam_controller.tab.setParent(self.tab_box)
+            cam_controller.signals.settings_error.connect(self.alert_camera_error)
+            cam_controller.signals.cam_failed.connect(self.__remove_camera)
+        except Exception as e:
+            self.logger.exception("Failed to make camera_controller")
+            return
+        self.__device_controllers[cam_controller.get_name()] = cam_controller
+        self.tab_box.add_tab(cam_controller.get_tab_obj())
+        self.logger.debug("done")
+
+    def __remove_camera(self, index: int) -> None:
+        """
+        Removes a camera
+        :param index: Index of the camera to be removed
+        :return None:
+        """
+
+        # print("_remove_camera:")
+        # print("index: ", index)
+        # print(type(index))
+
+        self.logger.debug("running")
+        for controller in self.__device_controllers.values():
+            ind_str = str(index)
+            name = controller.get_name()
+            if ind_str in name:
+                self.tab_box.remove_tab(name)
+                del self.__device_controllers[name]
+                break
+        self.logger.debug("done")
 
     ########################################################################################
     # Other handlers
     ########################################################################################
 
+    # TODO: Figure out why closing right after running app causes error.
     def ui_close_event_handler(self):
-        """ Shut down all devices before closing the app. """
+        """
+        Shut down all devices before closing the app.
+        :return:
+        """
+
         self.logger.debug("running")
-        if self.__exp_running:
-            try:
-                for controller in self.__device_controllers.values():
-                    controller.end_block()
-            except Exception as e:
-                self.logger.exception("Failed to end_block_all")
-        if self.__exp_created:
-            try:
-                for controller in self.__device_controllers.values():
-                    controller.end_exp()
-            except Exception as e:
-                self.logger.exception("Failed to end_exp_all")
+        self.cam_con_manager.cleanup()
+        self.dev_con_manager.cleanup()
+        for controller in self.__device_controllers.values():
+            controller.cleanup()
         self.log_output.close()
+        self.logger.debug("done")
+
+    def __toggle_use_cameras(self):
+        """
+        Toggles app level camera use.
+        :return:
+        """
+
+        self.logger.debug("running")
+        self.settings.beginGroup("Camera manager")
+        if not self.__exp_created:
+            if self.cam_con_manager.active:
+                to_remove = []
+                for device in self.__device_controllers:
+                    if "CAM" in device:
+                        to_remove.append(device)
+                        self.tab_box.remove_tab(self.__device_controllers[device].get_tab_obj().get_name())
+                        self.__device_controllers[device].cleanup()
+                for item in to_remove:
+                    del self.__device_controllers[item]
+                self.cam_con_manager.deactivate()
+                self.settings.setValue("active", "False")
+                self.menu_bar.set_cam_bool_checked(False)
+            else:
+                self.cam_con_manager.activate()
+                self.settings.setValue("active", "True")
+                self.menu_bar.set_cam_bool_checked(True)
+        self.settings.endGroup()
+        self.logger.debug("done")
+
+    def __open_last_save_dir(self):
+        """
+        Opens native file manager to the last directory used for an experiment.
+        If no experiment has been performed, opens default home path.
+        :return:
+        """
+
+        self.logger.debug("running")
+        if self.__save_dir == "":
+            QDesktopServices.openUrl(QUrl.fromLocalFile(QDir().homePath()))
+        else:
+            QDesktopServices.openUrl(QUrl.fromLocalFile(self.__save_dir))
         self.logger.debug("done")
 
     def __about_company(self):
@@ -616,8 +1032,6 @@ class CompanionController:
             self.__graphs[device_type]['frame'].get_graph().refresh_self()
         self.logger.debug("done")
 
-    # TODO: Consider moving this logic to device controllers. Difficulty would be possible threading issues for
-    #  controllers later on.
     def add_data_to_graph(self, device, data):
         """ Pass data to device type graph along with specific device id. """
         self.logger.debug("running")

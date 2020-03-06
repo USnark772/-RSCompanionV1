@@ -17,20 +17,27 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Date: 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import logging
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QFrame
+
+from PySide2.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PySide2.QtGui import QPixmap
 
 
-class CentralWidget(QWidget):
-    """ This code is the overall frame inside the app main window. All other parts will go inside this. """
-    def __init__(self, parent):
-        self.logger = logging.getLogger(__name__)
-        self.logger.debug("Initializing")
-        super().__init__(parent)
-        self.setLayout(QVBoxLayout(self))
-        self.logger.debug("Initialized")
+class CamViewer(QWidget):
+    def __init__(self, name):
+        super().__init__()
+        self.resize(400, 200)
+        self.move(100, 100)
+        self.setWindowTitle(name)
+        self.setLayout(QVBoxLayout())
+        self.image_display = QLabel()
+        self.image_display.resize(640, 480)
+        self.layout().addWidget(self.image_display)
+        self.show()
+
+    def set_image(self, frame):
+        self.image_display.setPixmap(QPixmap.fromImage(frame))

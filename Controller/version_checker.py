@@ -22,7 +22,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import traceback
 import logging
 from urllib3 import PoolManager
 from Model.general_defs import version_url, current_version

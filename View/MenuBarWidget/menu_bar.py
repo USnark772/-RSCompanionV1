@@ -17,7 +17,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Author: Nathan Rogers
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
@@ -36,6 +37,16 @@ class MenuBar(QMenuBar):
         super().__init__(parent)
         self.setGeometry(QRect(0, 0, 840, 22))
 
+        self.__file = QMenu(self)
+        self.addAction((self.__file.menuAction()))
+
+        self.__open_last_save_dir = QAction(self)
+        self.__file.addAction(self.__open_last_save_dir)
+
+        self.__use_cameras = QAction(self)
+        self.__use_cameras.setCheckable(True)
+        self.__file.addAction(self.__use_cameras)
+
         self.__help = QMenu(self)
         self.addAction(self.__help.menuAction())
 
@@ -53,6 +64,19 @@ class MenuBar(QMenuBar):
 
         self.__set_texts()
         self.logger.debug("Initialized")
+
+    def set_cam_bool_checked(self, checked):
+        self.__use_cameras.setChecked(checked)
+
+    def add_cam_bool_handler(self, func):
+        self.logger.debug("running")
+        self.__use_cameras.triggered.connect(func)
+        self.logger.debug("done")
+
+    def add_open_last_save_dir_handler(self, func):
+        self.logger.debug("running")
+        self.__open_last_save_dir.triggered.connect(func)
+        self.logger.debug("done")
 
     def add_about_app_handler(self, func):
         self.logger.debug("running")
@@ -76,6 +100,9 @@ class MenuBar(QMenuBar):
 
     def __set_texts(self):
         self.logger.debug("running")
+        self.__file.setTitle("File")
+        self.__open_last_save_dir.setText("Open last save location")
+        self.__use_cameras.setText("Use cameras")
         self.__help.setTitle("Help")
         self.__about_app.setText("About RS Companion")
         self.__about_company.setText("About Red Scientific")

@@ -43,7 +43,7 @@ class CompanionWindow(QMainWindow):
         font.setPointSize(10)
         self.setFont(font)
         self.setCentralWidget(CentralWidget(self))
-        self.__graph_and_tab_layout = QHBoxLayout(self)
+        self.__graph_and_tab_layout = QHBoxLayout()
         self.__graph_frame = QFrame(self)
         self.__graph_frame.setLayout(QHBoxLayout())
         self.__tab_frame = QFrame(self)

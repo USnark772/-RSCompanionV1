@@ -26,7 +26,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 """ Change these when building """
 image_file_path = '../View/Images/'  # new path should be 'Images/'
-config_file_path = '../config/config.ini'  # new path should be 'config/config.ini'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
 current_version = 1.091  # New version should be incremented.
 current_version_str = '1.09.1'
@@ -91,14 +90,12 @@ tab_line_edit_error_style = "QLineEdit { color: " \
                             + __font_size + "; }"
 
 # "QPushButton:pressed { background-color: rgb(150, 180, 200);
-button_pressed_style = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); " \
-                       "font: " + __font_size + "; }"
+button_pressed_style = "QPushButton:pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, " \
+                       "stop: 0 #dadbde, stop: 1 #f6f7fa); font: " + __font_size + "; }"
 
 # "background-color: rgb(230, 230, 230); " \
-button_normal_style = "QPushButton { border: 1px solid #8f8f91; " \
-                      "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f6f7fa, stop: 1 #dadbde); " \
-                      "min-height: 22px; " \
-                      "font: " + __font_size + "; }"
+button_normal_style = "QPushButton { border: 1px solid #8f8f91; background-color: qlineargradient(x1: 0, y1: 0, " \
+                      "x2: 0, y2: 1, stop: 0 #f6f7fa, stop: 1 #dadbde); min-height: 22px; font: " + __font_size + "; }"
 
 #################################################################################################################
 # device list for usb port detection

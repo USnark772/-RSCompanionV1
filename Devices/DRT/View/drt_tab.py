@@ -32,12 +32,12 @@ from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 
 class DRTTab(QWidget):
     """ This code is for helping the user interact with the configurations of the DRT device. """
-    def __init__(self, parent, device, ch):
+    def __init__(self, device, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         try:
-            super().__init__(parent)
+            super().__init__()
         except Exception as e:
             self.logger.exception("Error making DRTTab, passed in parent is invalid")
             return
@@ -46,8 +46,8 @@ class DRTTab(QWidget):
         self.setMaximumHeight(400)
 
         self.config_horizontal_layout = QHBoxLayout()
-
-        self.layout().addWidget(EasyFrame(True))
+        # TODO: fix EasyFrame QLayout issue
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set configuration value display area"""
         self.config_frame = EasyFrame()
@@ -60,7 +60,7 @@ class DRTTab(QWidget):
         self.config_layout.addWidget(self.config_val)
         self.layout().addWidget(self.config_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set preset button selection area. """
         self.presets_frame = EasyFrame()
@@ -69,7 +69,7 @@ class DRTTab(QWidget):
         self.presets_layout.addWidget(self.iso_button)
         self.layout().addWidget(self.presets_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set stim intensity settings display area. """
         self.slider_frame = EasyFrame()
@@ -92,7 +92,7 @@ class DRTTab(QWidget):
         self.slider_layout.addWidget(self.stim_intens_slider)
         self.layout().addWidget(self.slider_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set stim duration, upper isi and lower isi settings display area. """
         self.input_box_frame = EasyFrame()
@@ -114,13 +114,13 @@ class DRTTab(QWidget):
         self.input_box_layout.addWidget(self.lower_isi_label, 2, 0, 1, 1)
         self.layout().addWidget(self.input_box_frame)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         """ Set upload button selection area. """
         self.upload_settings_button = ClickAnimationButton()
         self.layout().addWidget(self.upload_settings_button)
 
-        self.layout().addWidget(EasyFrame(True))
+        self.layout().addWidget(EasyFrame(line=True))
 
         self.__graph_buttons = []
         self.device_info = device

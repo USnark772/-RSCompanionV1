@@ -59,7 +59,7 @@ class VOGGraph(CanvasObj):
             line1, = axes.plot(self.__data[port][0], self.__data[port][1], label=the_label_open, marker='o',
                                linestyle='None')
             line2, = axes.plot(self.__data[port][0], self.__data[port][2], color=line1.get_color(),
-                               label=the_label_closed, marker='s', linestyle='None')  # color=line1.get_color()
+                               label=the_label_closed, marker='s', linestyle='None')
             lines.append((the_label_open, line1))
             lines.append((the_label_closed, line2))
             if len(self.__data[port][0]) > 0:

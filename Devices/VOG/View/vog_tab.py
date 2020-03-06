@@ -32,12 +32,12 @@ from Model.general_defs import tab_line_edit_error_style, tab_line_edit_complian
 
 class VOGTab(QWidget):
     """ This code is for helping the user interact with the configurations of the VOG device. """
-    def __init__(self, parent, device, ch):
+    def __init__(self, device, ch):
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         try:
-            super().__init__(parent)
+            super().__init__()
         except Exception as e:
             self.logger.exception("Error making VOGTab, passed parent is invalid")
             return
