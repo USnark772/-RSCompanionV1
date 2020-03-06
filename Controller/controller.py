@@ -33,7 +33,7 @@ from PySide2.QtCore import QDir, QSize, QSettings, QUrl
 from PySide2.QtGui import QKeyEvent, QDesktopServices
 from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    error_checking_for_update, device_connection_error, current_version
+    error_checking_for_update, device_connection_error, current_version_str
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -90,7 +90,7 @@ class CompanionController:
         self.ch.setFormatter(self.formatter)
         self.logger.addHandler(self.ch)
 
-        self.logger.info("RS Companion app version: " + str(current_version))
+        self.logger.info("RS Companion app version: " + current_version_str)
         self.logger.debug("Initializing")
 
         # set up ui
@@ -961,7 +961,7 @@ class CompanionController:
         """ Display app information. """
         self.logger.debug("running")
         self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: "
-                                 + str(current_version))
+                                 + current_version_str)
         self.logger.debug("done")
 
     ########################################################################################
