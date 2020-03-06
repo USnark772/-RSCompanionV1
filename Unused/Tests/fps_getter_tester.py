@@ -1,14 +1,15 @@
 import cv2
 import time
 
+small = (640, 480)
+big = (1920, 1080)
 
 def show_feeds():
     # Start default camera
     video = cv2.VideoCapture(0)
-    x = 1920
-    y = 1080
-    res1 = video.set(cv2.CAP_PROP_FRAME_WIDTH, x)
-    res2 = video.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
+    size = small
+    res1 = video.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
+    res2 = video.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
 
     # Find OpenCV version
     (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
@@ -19,6 +20,9 @@ def show_feeds():
     fps = video.get(cv2.CAP_PROP_FPS)
     print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps))
 
+    print(video.set(cv2.CAP_PROP_FPS, 25.0))
+    new_fps = video.get(cv2.CAP_PROP_FPS)
+    print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(new_fps))
     # Number of frames to capture
     num_frames = 120
 
@@ -53,8 +57,9 @@ def show_backends():
         print(cv2.videoio_registry.getBackendName(backend))
 
 def main():
-    # show_feeds()
-    show_backends()
+    show_feeds()
+    # show_backends()
+
 
 if __name__ == '__main__':
     main()

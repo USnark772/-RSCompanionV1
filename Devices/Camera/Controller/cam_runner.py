@@ -108,6 +108,7 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
                 elif msg_type == CEnum.WORKER_DONE:
                     size_getter.wait()
                     size_getter_alive = False
+                    cam_obj.fourcc_bool = True
                 elif msg_type == CEnum.CLEANUP:
                     if size_getter_alive:
                         size_getter.running = False
@@ -127,7 +128,6 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
             ret, frame = cam_obj.read_camera()
             if ret and frame is not None:
                 cam_obj.handle_new_frame(frame)
-                cv2.waitKey(1)  # Required for frame to appear
             else:  # Camera failed, cleanup.
                 if size_getter_alive:
                     size_getter.running = False

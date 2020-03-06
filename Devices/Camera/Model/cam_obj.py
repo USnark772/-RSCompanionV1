@@ -26,6 +26,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # import logging
 import cv2
 from numpy import ndarray
+from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
 
 class CamObj:
@@ -33,7 +34,7 @@ class CamObj:
         # self.logger = logging.getLogger(__name__)
         # self.logger.addHandler(ch)
         # self.logger.debug("Initializing")
-        self.cap = cv2.VideoCapture(index, cv2.CAP_MSMF)
+        self.cap = cv2.VideoCapture(index, cap_backend)
         self.name = name
         self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
@@ -42,6 +43,7 @@ class CamObj:
         self.writing = False
         self.color_image = True
         self.alter_image_shape = False
+        self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
         self.scale = 1
         # self.logger.debug("Initialized")
@@ -52,7 +54,7 @@ class CamObj:
             self.close_window()
 
     def setup_writer(self, timestamp, save_dir: str = '', vid_ext: str = '.avi', fps: int = None,
-                     frame_size: tuple = None, codec: str = 'DIVX'):
+                     frame_size: tuple = None, codec: str = 'MJPG'):
         # self.logger.debug("running")
         if not frame_size:
             frame_size = (int(self.frame_size[0]), int(self.frame_size[1]))
@@ -60,7 +62,7 @@ class CamObj:
             fps = self.fps
         if self.active:
             self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
-                                          cv2.VideoWriter_fourcc(*codec), fps, frame_size)
+                                          cap_codec, fps, frame_size)
             self.writing = True
         # self.logger.debug("done")
 
@@ -91,6 +93,7 @@ class CamObj:
             if not self.color_image:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imshow(self.name, frame)
+            cv2.waitKey(1)  # Required for frame to appear
             self.save_data(frame)
 
     def close_window(self):
@@ -126,6 +129,8 @@ class CamObj:
         x = float(size[0])
         y = float(size[1])
         self.toggle_activity(False)
+        if self.fourcc_bool:
+            self.set_fourcc()
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
         if not res1 or not res2:
@@ -135,3 +140,7 @@ class CamObj:
             self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.close_window()
         self.toggle_activity(True)
+
+    def set_fourcc(self):
+        self.cap.set(cv2.CAP_PROP_FOURCC, cap_temp_codec)  # This line required because opencv is dumb
+        self.cap.set(cv2.CAP_PROP_FOURCC, cap_codec)

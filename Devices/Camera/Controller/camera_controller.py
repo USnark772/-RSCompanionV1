@@ -34,7 +34,7 @@ from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 
 class ControllerSig(QObject):
     settings_error = Signal(str)
-    cam_failed = Signal(int)
+    cam_failed = Signal(str)
     send_msg_sig = Signal(tuple)
 
 # TODO: Figure out how to best deal with larger frames causing lower fps.
@@ -81,7 +81,7 @@ class CameraController(ABCDeviceController):
         try:
             self.pipe.send((CEnum.CLEANUP,))
             self.pipe.close()
-        except BrokenPipeError as e:
+        except:
             pass
         if self.cam_worker.is_alive():
             self.cam_worker.join()
@@ -92,7 +92,7 @@ class CameraController(ABCDeviceController):
         try:
             if self.pipe.poll():
                 msg = self.pipe.recv()
-        except BrokenPipeError as e:
+        except:
             self.logger.exception("Pipe failed")
             self.cleanup()
             return
@@ -101,7 +101,7 @@ class CameraController(ABCDeviceController):
             if msg_type == CEnum.WORKER_DONE:
                 self.__complete_setup(msg[1])
             elif msg_type == CEnum.CAM_FAILED:
-                self.signals.cam_failed.emit(self.index)
+                self.signals.cam_failed.emit(self.name)
                 self.cleanup()
             elif msg_type == CEnum.SET_RESOLUTION:
                 self.__set_tab_size_val(msg[1])

@@ -25,8 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import cv2
 from PySide2.QtCore import QThread, QObject, QMutex, Signal
-max_cams = 3
-
+from Model.general_defs import cap_backend
 
 class CamCounter:
     def __init__(self, ch: logging.Handler):
@@ -76,14 +75,11 @@ class CamScanner(QThread):
         self.logger.debug("Initialized")
 
     # Try to connect new cam from latest index and up
-    # TODO: Replace loop
+    # TODO: Put loop back when done testing.
     def run(self):
         self.logger.debug("running")
-        # while self.running:
-        #     self.__check_for_cams(self.__get_index())
-        self.signal.new_cam_sig.emit(0)
-        self.signal.new_cam_sig.emit(1)
-        self.signal.new_cam_sig.emit(2)
+        while self.running:
+            self.__check_for_cams(self.__get_index())
         self.logger.debug("done")
 
     def __get_index(self):
@@ -94,20 +90,17 @@ class CamScanner(QThread):
         # self.logger.debug("done")
         return i
 
-    # TODO: Should we send 0 based index or 1 based index?
     def __check_for_cams(self, index: int = 0):
         # self.logger.debug("running")
         while self.running:
-            if index >= max_cams:
-                break
-            cap = cv2.VideoCapture(index)
+            cap = cv2.VideoCapture(index, cap_backend)
             if cap is None or not cap.isOpened():
                 break
             else:
                 cap.release()
-                index += 1
                 self.__increment_cam_count()
                 self.signal.new_cam_sig.emit(index)
+                index += 1
         # self.logger.debug("done")
 
     def __increment_cam_count(self):

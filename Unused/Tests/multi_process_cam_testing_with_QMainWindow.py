@@ -2,7 +2,6 @@ import cv2
 import imutils
 from multiprocessing import Process, Pipe
 from multiprocessing.connection import Connection
-from threading import Thread
 import time
 import sys
 from PySide2.QtWidgets import *
@@ -10,31 +9,33 @@ from View.MainWindow.central_widget import CentralWidget
 
 small = (640, 480)
 big = (1920, 1080)
-# backend = cv2.CAP_INTEL_MFX
-# backend = cv2.CAP_GSTREAMER
-# backend = cv2.CAP_IMAGES
-# backend = cv2.CAP_OPENCV_MJPEG
-# backend = cv2.CAP_FFMPEG
-backend = cv2.CAP_MSMF
-# backend = cv2.CAP_DSHOW
+backend = cv2.CAP_DSHOW
+
+cap_codec_one = cv2.VideoWriter_fourcc(*'mjpg')
+cap_codec = cv2.VideoWriter_fourcc(*'MJPG')
 
 
 def show_feed(index: int, pipe: Connection):
     name = "Cam " + str(index)
-    size = big
+    size = small
     print("running size:", size)
     cap = cv2.VideoCapture(index, backend)
+    ret = cap.set(cv2.CAP_PROP_FOURCC, cap_codec_one)  # TODO: Figure out wtf is going on here and how to integrate to project!
+    print(ret)
+    ret = cap.set(cv2.CAP_PROP_FOURCC, cap_codec)
+    print(ret)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
-    save_dir = "C:/users/phill/companion app save folder/"
-    vid_ext = ".avi"
-    codec = "DIVX"
-    frame_size = big
-    fps = 30
+    cap.set(cv2.CAP_PROP_SETTINGS, 1)
+    # save_dir = "C:/users/phill/companion app save folder/"
+    # vid_ext = ".avi"
+    # codec = "DIVX"
+    # frame_size = big
+    # fps = 30
 
-    writer = cv2.VideoWriter()
-    self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
-                                  cv2.VideoWriter_fourcc(*codec), fps, frame_size)
+    # writer = cv2.VideoWriter()
+    # self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
+    #                               cv2.VideoWriter_fourcc(*codec), fps, frame_size)
     start = time.time()
     num_frames = 0
     resize = 0
@@ -79,8 +80,8 @@ def show_feed(index: int, pipe: Connection):
 
 class Cams:
     def __init__(self):
-        self.first_index = 0
-        self.last_index = 1
+        self.first_index = 2
+        self.last_index = 3
         self.workers = []
         self.pipes = []
         self.make_workers()

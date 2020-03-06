@@ -22,6 +22,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+import cv2
+
 """ General definitions for the app """
 
 """ Change these when building """
@@ -111,3 +113,11 @@ devices = {'drt': {'probe': "get_name\n\r",
                    'name': 'VOG',
                    'pid': 1155,
                    'vid': 5824}}
+
+#################################################################################################################
+# opencv defs
+#################################################################################################################
+
+cap_backend = cv2.CAP_DSHOW
+cap_temp_codec = cv2.VideoWriter_fourcc(*'mjpg')
+cap_codec = cv2.VideoWriter_fourcc(*'MJPG')

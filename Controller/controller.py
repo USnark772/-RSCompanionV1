@@ -869,7 +869,7 @@ class CompanionController:
         self.tab_box.add_tab(cam_controller.get_tab_obj())
         self.logger.debug("done")
 
-    def __remove_camera(self, index: int) -> None:
+    def __remove_camera(self, index: str) -> None:
         """
         Removes a camera
         :param index: Index of the camera to be removed
@@ -880,11 +880,11 @@ class CompanionController:
         # print("index: ", index)
         # print(type(index))
 
+        print("Trying to remove cam:", index)
         self.logger.debug("running")
         for controller in self.__device_controllers.values():
-            ind_str = str(index)
             name = controller.get_name()
-            if ind_str in name:
+            if index in name:
                 self.tab_box.remove_tab(name)
                 del self.__device_controllers[name]
                 break
