@@ -4,6 +4,7 @@ from time import sleep
 from PySide2.QtCore import QObject, QThread, Signal
 from serial import Serial, SerialException
 from serial.tools import list_ports
+from serial.tools.list_ports_common import ListPortInfo
 from Model.general_defs import devices as dev_profs
 
 
@@ -13,7 +14,7 @@ class PortWorkerSig(QObject):
 
 
 class PortWorker(QThread):
-    def __init__(self, name, port):
+    def __init__(self, name: str, port: Serial):
         QThread.__init__(self)
         self.port = port
         self.device_name = name
@@ -22,9 +23,6 @@ class PortWorker(QThread):
 
     def run(self):
         while self.running:
-            # if not self.port.is_open:
-            #     self.signals.disconnect_sig.emit(self.device_name, self.port.name)
-            #     break
             self.__check_for_msg()
         self.cleanup()
 
@@ -37,7 +35,8 @@ class PortWorker(QThread):
             self.running = False
 
     def send_msg(self, msg):
-        self.port.write(str.encode(msg))
+        if self.port.is_open:
+            self.port.write(str.encode(msg))
 
     def cleanup(self):
         self.running = False
@@ -70,9 +69,10 @@ class PortScanner(QThread):
         for port in list_of_ports:
             if port not in self.known_ports:
                 for profile in dev_profs:
-                    if port.vid == dev_profs[profile]['vid'] and port.pid == dev_profs[profile]['pid']:
+                    if self.__verify_port(port, dev_profs[profile]):
                         ret_val, new_connection = self.__try_open_port(port)
                         if ret_val:
+                            print(type(new_connection))
                             self.signals.new_device_sig.emit(profile, new_connection)
                         else:
                             self.signals.device_connect_fail_sig.emit()
@@ -82,6 +82,10 @@ class PortScanner(QThread):
         for known_port in self.known_ports:
             if known_port not in list_of_ports:
                 self.known_ports.remove(known_port)
+
+    @staticmethod
+    def __verify_port(port: ListPortInfo, profile):
+        return port.vid == profile['vid'] and port.pid == profile['pid']
 
     @staticmethod
     def __try_open_port(port):
