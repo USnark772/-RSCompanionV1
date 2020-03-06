@@ -151,10 +151,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("port_name: ", port_name)
-        # print("device_name type: ", type(device_name))
-        # print("port_name type: ", type(port_name))
-        # print("thread type: ", type(thread))
         self.logger.debug("running")
         if not self.__exp_created:
             self.__add_device((device_name, port_name), thread)
@@ -188,7 +184,7 @@ class CompanionController:
         self.ui.show_help_window("Error", device_connection_error)
         self.logger.debug("done")
 
-    def save_device_data(self, device_name: Tuple[str, str], device_line: str, timestamp: datetime = None) -> None:
+    def save_device_data(self, device_name: Tuple[str, str], device_line: str = '', timestamp: datetime = None) -> None:
         """
         Saves experiment data from a device to a file
         :param device_name: Type of device and specific device number
@@ -197,11 +193,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("device_name type: ", type(device_name))
-        # print("device_name[0] type: ", type(device_name[0]))
-        # print("device_name[1] type: ", type(device_name[1]))
-        # print("device_line type: ", type(device_line))
-        # print("timestamp type: ", type(timestamp))
         self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
@@ -212,12 +203,13 @@ class CompanionController:
         cond_name = self.button_box.get_condition_name()
         flag = self.flag_box.get_flag()
         main_block = time + spacer + date + spacer + block_num + spacer + cond_name + spacer + flag
-        if device_name == "Note":
-            line = device_name + spacer + main_block + spacer
-            for val in self.__controller_classes.values():
-                if val[1] > 0:
-                    line += val[0].get_note_spacer()
+        if device_name[0] == "Note":
+            line = device_name[0] + spacer + main_block + spacer
+            line = self.__get_device_note_spacers(line)
             line += device_line
+        elif device_name[0] == "Keyflag":
+            line = device_name[0] + spacer + main_block
+            line = self.__get_device_note_spacers(line)
         else:
             line = device_name[0] + device_name[1] + spacer + main_block
             for key in self.__controller_classes:
@@ -227,6 +219,12 @@ class CompanionController:
                     line += self.__controller_classes[key][0].get_note_spacer()
         write_line_to_file(self.__save_file_name, line)
         self.logger.debug("done")
+
+    def __get_device_note_spacers(self, line: str):
+        for val in self.__controller_classes.values():
+            if val[1] > 0:
+                line += val[0].get_note_spacer()
+        return line
 
     ########################################################################################
     # initial setup
@@ -507,11 +505,12 @@ class CompanionController:
         :return None:
         """
 
-        # print("event type: ", type(event))
         self.logger.debug("running")
         if type(event) == QKeyEvent:
             if 0x41 <= event.key() <= 0x5a:
                 self.flag_box.set_flag(chr(event.key()))
+                if self.__exp_created:
+                    self.save_device_data(('Keyflag', ''))
             event.accept()
         else:
             event.ignore()
@@ -526,7 +525,7 @@ class CompanionController:
         self.logger.debug("running")
         note = self.note_box.get_note()
         self.note_box.clear_note()
-        self.save_device_data("Note", note)
+        self.save_device_data(("Note", ''), note)
         self.logger.debug("done")
 
     def __get_save_file_name(self) -> bool:
@@ -543,8 +542,6 @@ class CompanionController:
         if valid:
             self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
         self.logger.debug("done")
-        # print("_get_save_file_name return: ", valid)
-        # print(type(valid))
         return valid
 
     @staticmethod
@@ -558,11 +555,6 @@ class CompanionController:
         # possibly use for get last used directory
         end_index = file_name.rfind('/')
         dir_name = file_name[:end_index + 1]
-        # print("_get_save_dir_from_file_name:")
-        # print("input: ", file_name)
-        # print(type(file_name))
-        # print("return: ", dir_name)
-        # print(type(dir_name))
         return dir_name
 
     def __check_for_updates_handler(self) -> None:
@@ -614,11 +606,6 @@ class CompanionController:
         fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
-        # print("_setup_log_output_file:")
-        # print("input: ", file_name)
-        # print(type(file_name))
-        # print("output: ", fname)
-        # print(type(fname))
         return fname
 
     ########################################################################################
@@ -645,15 +632,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("_add_device:")
-        # print("input:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
-        # print("thread: ", thread)
-        # print(type(thread))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -676,12 +654,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("_remove_device:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -709,14 +681,6 @@ class CompanionController:
         :return bool: Returns true if a DRT controller is created
         """
 
-        # print("_create_drt_controller:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
-        # print("thread: ", thread)
-        # print(type(thread))
 
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
@@ -748,14 +712,6 @@ class CompanionController:
         :return bool: Returns true if a VOG controller is created
         """
 
-        # print("_create_vog_controller:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
-        # print("thread: ", thread)
-        # print(type(thread))
 
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])

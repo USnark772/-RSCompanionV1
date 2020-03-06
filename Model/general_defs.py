@@ -27,8 +27,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """ Change these when building """
 image_file_path = '../View/Images/'  # new path should be 'Images/'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
-current_version = 1.091  # New version should be incremented.
-current_version_str = '1.09.1'
+current_version = 1.10  # New version should be incremented.
+current_version_str = '1.10'
 
 #################################################################################################################
 # general
