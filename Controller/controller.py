@@ -33,7 +33,7 @@ from PySide2.QtCore import QDir, QSize, QSettings, QUrl
 from PySide2.QtGui import QKeyEvent, QDesktopServices
 from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    error_checking_for_update, device_connection_error, current_version_str
+    error_checking_for_update, device_connection_error, current_version
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
@@ -47,10 +47,12 @@ from View.TabWidget.device_tab_container import TabContainer
 from View.OutputLog.output_window import OutputWindow
 from Controller.version_checker import VersionChecker
 from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager, PortWorker
+from Controller.Camera_Manager.camera_manager import CameraConnectionManager
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
+from Devices.Camera.Controller.camera_controller import CameraController
 
 
 class CompanionController:
@@ -58,6 +60,7 @@ class CompanionController:
     Main controller driving the companion app
         Controls UI and experiments
         Handles errors
+        Creates connection managers for RS devices and cameras
         Creates device controllers
         Formats and saves device and experiment data to a file
     """
@@ -87,7 +90,7 @@ class CompanionController:
         self.ch.setFormatter(self.formatter)
         self.logger.addHandler(self.ch)
 
-        self.logger.info("RS Companion app version: " + current_version_str)
+        self.logger.info("RS Companion app version: " + str(current_version))
         self.logger.debug("Initializing")
 
         # set up ui
@@ -110,7 +113,16 @@ class CompanionController:
         self.file_dialog = QFileDialog(self.ui)
 
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
+        self.cam_con_manager = CameraConnectionManager(self.ch)
         self.__setup_managers()
+        self.settings.beginGroup("Camera manager")
+        # Handle first time running settings value
+        if not self.settings.contains("active"):
+            self.settings.setValue("active", "True")
+        active = eval(self.settings.value("active"))
+        if active:
+            self.cam_con_manager.activate()
+        self.menu_bar.set_cam_bool_checked(active)
         self.settings.endGroup()
         # Initialize storage and state
         self.__controller_classes = dict()
@@ -133,6 +145,7 @@ class CompanionController:
         self.__initialize_view()
         self.__init_controller_classes()
 
+        # self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -151,6 +164,10 @@ class CompanionController:
         :return None:
         """
 
+        # print("port_name: ", port_name)
+        # print("device_name type: ", type(device_name))
+        # print("port_name type: ", type(port_name))
+        # print("thread type: ", type(thread))
         self.logger.debug("running")
         if not self.__exp_created:
             self.__add_device((device_name, port_name), thread)
@@ -172,6 +189,31 @@ class CompanionController:
         self.__remove_device((device_name, port_name))
         self.logger.debug("done")
 
+    def add_camera(self, index: int) -> None:
+        """
+        Handles a camera being added during runtime
+        :param cap: VideoCapture object
+        :param index: Specific camera number
+        :param thread: Camera communication thread
+        :return None:
+        """
+
+        # print("index type: ", type(index))
+        self.logger.debug("running")
+        self.__create_camera_controller(index)
+        self.logger.debug("done")
+
+    def remove_camera(self, index: int) -> None:
+        """
+        Handles a camera being removed during runtime
+        :param index: Specific camera number
+        :return None:
+        """
+
+        self.logger.debug("running")
+        self.__remove_camera(index)
+        self.logger.debug("done")
+
     def alert_device_connection_failure(self) -> None:
         """
         Handles a connection failure with a device
@@ -184,7 +226,20 @@ class CompanionController:
         self.ui.show_help_window("Error", device_connection_error)
         self.logger.debug("done")
 
-    def save_device_data(self, device_name: Tuple[str, str], device_line: str = '', timestamp: datetime = None) -> None:
+    def alert_camera_error(self, error_message: str) -> None:
+        """
+        Handles an error alert from a camera
+        Alerts user to an error
+        :param error_message: Error message shown to user
+        :return None:
+        """
+
+        # print("error_message type: ", type(error_message))
+        self.logger.debug("running")
+        self.ui.show_help_window("Error", error_message)
+        self.logger.debug("done")
+
+    def save_device_data(self, device_name: Tuple[str, str], device_line: str, timestamp: datetime = None) -> None:
         """
         Saves experiment data from a device to a file
         :param device_name: Type of device and specific device number
@@ -193,23 +248,27 @@ class CompanionController:
         :return None:
         """
 
+        # print("device_name type: ", type(device_name))
+        # print("device_name[0] type: ", type(device_name[0]))
+        # print("device_name[1] type: ", type(device_name[1]))
+        # print("device_line type: ", type(device_line))
+        # print("timestamp type: ", type(timestamp))
         self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
         spacer = ", "
-        time = timestamp.strftime("%H:%M:%S.%f")
+        time = timestamp.strftime("%H:%M:%S")
         date = timestamp.strftime("%Y-%m-%d")
         block_num = self.info_box.get_block_num()
         cond_name = self.button_box.get_condition_name()
         flag = self.flag_box.get_flag()
         main_block = time + spacer + date + spacer + block_num + spacer + cond_name + spacer + flag
-        if device_name[0] == "Note":
-            line = device_name[0] + spacer + main_block + spacer
-            line = self.__get_device_note_spacers(line)
+        if device_name == "Note":
+            line = device_name + spacer + main_block + spacer
+            for val in self.__controller_classes.values():
+                if val[1] > 0:
+                    line += val[0].get_note_spacer()
             line += device_line
-        elif device_name[0] == "Keyflag":
-            line = device_name[0] + spacer + main_block
-            line = self.__get_device_note_spacers(line)
         else:
             line = device_name[0] + device_name[1] + spacer + main_block
             for key in self.__controller_classes:
@@ -219,12 +278,6 @@ class CompanionController:
                     line += self.__controller_classes[key][0].get_note_spacer()
         write_line_to_file(self.__save_file_name, line)
         self.logger.debug("done")
-
-    def __get_device_note_spacers(self, line: str):
-        for val in self.__controller_classes.values():
-            if val[1] > 0:
-                line += val[0].get_note_spacer()
-        return line
 
     ########################################################################################
     # initial setup
@@ -240,6 +293,7 @@ class CompanionController:
         self.dev_con_manager.signals.new_device_sig.connect(self.add_device)
         self.dev_con_manager.signals.disconnect_sig.connect(self.remove_device)
         self.dev_con_manager.signals.failed_con_sig.connect(self.alert_device_connection_failure)
+        self.cam_con_manager.signals.new_cam_sig.connect(self.add_camera)
         self.logger.debug("done")
 
     def __initialize_view(self) -> None:
@@ -319,6 +373,7 @@ class CompanionController:
         self.button_box.add_start_button_handler(self.__start_stop_exp)
         self.note_box.add_note_box_changed_handler(self.__check_toggle_post_button)
         self.note_box.add_post_handler(self.__post_handler)
+        self.menu_bar.add_cam_bool_handler(self.__toggle_use_cameras)
         self.menu_bar.add_open_last_save_dir_handler(self.__open_last_save_dir)
         self.menu_bar.add_about_app_handler(self.__about_app)
         self.menu_bar.add_about_company_handler(self.__about_company)
@@ -365,6 +420,7 @@ class CompanionController:
         self.button_box.toggle_create_button()
         self.__add_hdr_to_output()
         devices_running = list()
+        self.__send_save_data_to_cams(get_current_time(date_time=date_time, save=True))
         try:
             for controller in self.__device_controllers.values():
                 if controller.active:
@@ -495,6 +551,18 @@ class CompanionController:
             self.note_box.toggle_post_button(False)
         self.logger.debug("done")
 
+    def __send_save_data_to_cams(self, timestamp: datetime) -> None:
+        """
+        Set up a save file for a camera to save captured video
+        :param timestamp: Start time of the experiment
+        :return None:
+        """
+
+        for device in self.__device_controllers:
+            if "CAM" in device:
+                self.__device_controllers[device].create_new_save_file(self.__save_dir)
+                self.__device_controllers[device].set_start_time(timestamp)
+
     ########################################################################################
     # Data saving
     ########################################################################################
@@ -505,12 +573,11 @@ class CompanionController:
         :return None:
         """
 
+        # print("event type: ", type(event))
         self.logger.debug("running")
         if type(event) == QKeyEvent:
             if 0x41 <= event.key() <= 0x5a:
                 self.flag_box.set_flag(chr(event.key()))
-                if self.__exp_created:
-                    self.save_device_data(('Keyflag', ''))
             event.accept()
         else:
             event.ignore()
@@ -525,7 +592,7 @@ class CompanionController:
         self.logger.debug("running")
         note = self.note_box.get_note()
         self.note_box.clear_note()
-        self.save_device_data(("Note", ''), note)
+        self.save_device_data("Note", note)
         self.logger.debug("done")
 
     def __get_save_file_name(self) -> bool:
@@ -542,6 +609,8 @@ class CompanionController:
         if valid:
             self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
         self.logger.debug("done")
+        # print("_get_save_file_name return: ", valid)
+        # print(type(valid))
         return valid
 
     @staticmethod
@@ -555,6 +624,11 @@ class CompanionController:
         # possibly use for get last used directory
         end_index = file_name.rfind('/')
         dir_name = file_name[:end_index + 1]
+        # print("_get_save_dir_from_file_name:")
+        # print("input: ", file_name)
+        # print(type(file_name))
+        # print("return: ", dir_name)
+        # print(type(dir_name))
         return dir_name
 
     def __check_for_updates_handler(self) -> None:
@@ -606,6 +680,11 @@ class CompanionController:
         fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
+        # print("_setup_log_output_file:")
+        # print("input: ", file_name)
+        # print(type(file_name))
+        # print("output: ", fname)
+        # print(type(fname))
         return fname
 
     ########################################################################################
@@ -632,6 +711,15 @@ class CompanionController:
         :return None:
         """
 
+        # print("_add_device:")
+        # print("input:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -654,6 +742,12 @@ class CompanionController:
         :return None:
         """
 
+        # print("_remove_device:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -681,6 +775,14 @@ class CompanionController:
         :return bool: Returns true if a DRT controller is created
         """
 
+        # print("_create_drt_controller:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
 
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
@@ -712,6 +814,14 @@ class CompanionController:
         :return bool: Returns true if a VOG controller is created
         """
 
+        # print("_create_vog_controller:")
+        # print("device: ", device)
+        # print(type(device))
+        # print("tuple types:")
+        # print(type(device[0]))
+        # print(type(device[1]))
+        # print("thread: ", thread)
+        # print(type(thread))
 
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
@@ -735,6 +845,51 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
+    def __create_camera_controller(self, index: int) -> None:
+        """
+        Creates a controller for a camera device
+        :param index: index of the camera to be added
+        :return None:
+        """
+
+        # print("_create_camera_controller:")
+        # print("index: ", index)
+        # print(type(index))
+
+        self.logger.debug("running")
+        try:
+            cam_controller = CameraController(index, self.ch)
+            cam_controller.tab.setParent(self.tab_box)
+            cam_controller.signals.settings_error.connect(self.alert_camera_error)
+            cam_controller.signals.cam_failed.connect(self.__remove_camera)
+        except Exception as e:
+            self.logger.exception("Failed to make camera_controller")
+            return
+        self.__device_controllers[cam_controller.get_name()] = cam_controller
+        self.tab_box.add_tab(cam_controller.get_tab_obj())
+        self.logger.debug("done")
+
+    def __remove_camera(self, index: int) -> None:
+        """
+        Removes a camera
+        :param index: Index of the camera to be removed
+        :return None:
+        """
+
+        # print("_remove_camera:")
+        # print("index: ", index)
+        # print(type(index))
+
+        self.logger.debug("running")
+        for controller in self.__device_controllers.values():
+            ind_str = str(index)
+            name = controller.get_name()
+            if ind_str in name:
+                self.tab_box.remove_tab(name)
+                del self.__device_controllers[name]
+                break
+        self.logger.debug("done")
+
     ########################################################################################
     # Other handlers
     ########################################################################################
@@ -747,10 +902,39 @@ class CompanionController:
         """
 
         self.logger.debug("running")
+        self.cam_con_manager.cleanup()
         self.dev_con_manager.cleanup()
         for controller in self.__device_controllers.values():
             controller.cleanup()
         self.log_output.close()
+        self.logger.debug("done")
+
+    def __toggle_use_cameras(self):
+        """
+        Toggles app level camera use.
+        :return:
+        """
+
+        self.logger.debug("running")
+        self.settings.beginGroup("Camera manager")
+        if not self.__exp_created:
+            if self.cam_con_manager.active:
+                to_remove = []
+                for device in self.__device_controllers:
+                    if "CAM" in device:
+                        to_remove.append(device)
+                        self.tab_box.remove_tab(self.__device_controllers[device].get_tab_obj().get_name())
+                        self.__device_controllers[device].cleanup()
+                for item in to_remove:
+                    del self.__device_controllers[item]
+                self.cam_con_manager.deactivate()
+                self.settings.setValue("active", "False")
+                self.menu_bar.set_cam_bool_checked(False)
+            else:
+                self.cam_con_manager.activate()
+                self.settings.setValue("active", "True")
+                self.menu_bar.set_cam_bool_checked(True)
+        self.settings.endGroup()
         self.logger.debug("done")
 
     def __open_last_save_dir(self):
@@ -777,7 +961,7 @@ class CompanionController:
         """ Display app information. """
         self.logger.debug("running")
         self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: "
-                                 + current_version_str)
+                                 + str(current_version))
         self.logger.debug("done")
 
     ########################################################################################
