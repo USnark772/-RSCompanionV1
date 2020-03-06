@@ -40,8 +40,7 @@ build_exe_options = {'packages': ['os',
                      'excludes': ['tkinter'],
                      'include_files': [filepath + '/redist/',
                                        filepath + '/Companion/View/Images/',
-                                       filepath + '/Companion/readme/',
-                                       filepath + '/Companion/config/']}
+                                       filepath + '/Companion/readme/']}
 
 PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
 include_files = [os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'libcrypto-1_1.dll'),
