@@ -72,7 +72,6 @@ class PortScanner(QThread):
                     if self.__verify_port(port, dev_profs[profile]):
                         ret_val, new_connection = self.__try_open_port(port)
                         if ret_val:
-                            print(type(new_connection))
                             self.signals.new_device_sig.emit(profile, new_connection)
                         else:
                             self.signals.device_connect_fail_sig.emit()
