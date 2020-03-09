@@ -111,7 +111,7 @@ class CompanionController:
 
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
         self.__setup_managers()
-        self.settings.endGroup()
+        # self.settings.endGroup()
         # Initialize storage and state
         self.__controller_classes = dict()
         self.__controller_inits = dict()
@@ -220,7 +220,13 @@ class CompanionController:
         write_line_to_file(self.__save_file_name, line)
         self.logger.debug("done")
 
-    def __get_device_note_spacers(self, line: str):
+    def __get_device_note_spacers(self, line: str) -> str:
+        """
+        Helper function to get note spacers
+        :param line: string to add spacers
+        :return str: string with spacers added
+        """
+
         for val in self.__controller_classes.values():
             if val[1] > 0:
                 line += val[0].get_note_spacer()
@@ -287,7 +293,7 @@ class CompanionController:
     def __init_controller_classes(self) -> None:
         """
         Creates a dictionary for static method references, and device count
-        :return:
+        :return None:
         """
 
         self.logger.debug("running")
@@ -552,7 +558,6 @@ class CompanionController:
         :return str: Directory to the file
         """
 
-        # possibly use for get last used directory
         end_index = file_name.rfind('/')
         dir_name = file_name[:end_index + 1]
         return dir_name
@@ -681,7 +686,6 @@ class CompanionController:
         :return bool: Returns true if a DRT controller is created
         """
 
-
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -712,7 +716,6 @@ class CompanionController:
         :return bool: Returns true if a VOG controller is created
         """
 
-
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -740,10 +743,10 @@ class CompanionController:
     ########################################################################################
 
     # TODO: Figure out why closing right after running app causes error.
-    def ui_close_event_handler(self):
+    def ui_close_event_handler(self) -> None:
         """
         Shut down all devices before closing the app.
-        :return:
+        :return None:
         """
 
         self.logger.debug("running")
@@ -753,11 +756,11 @@ class CompanionController:
         self.log_output.close()
         self.logger.debug("done")
 
-    def __open_last_save_dir(self):
+    def __open_last_save_dir(self) -> None:
         """
         Opens native file manager to the last directory used for an experiment.
         If no experiment has been performed, opens default home path.
-        :return:
+        :return None:
         """
 
         self.logger.debug("running")
@@ -767,14 +770,22 @@ class CompanionController:
             QDesktopServices.openUrl(QUrl.fromLocalFile(self.__save_dir))
         self.logger.debug("done")
 
-    def __about_company(self):
-        """ Display company information. """
+    def __about_company(self) -> None:
+        """
+        Display company information.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.ui.show_help_window("About Red Scientific", about_RS_text)
         self.logger.debug("done")
 
-    def __about_app(self):
-        """ Display app information. """
+    def __about_app(self) -> None:
+        """
+        Display app information.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: "
                                  + current_version_str)
@@ -784,7 +795,13 @@ class CompanionController:
     # graph handling
     ########################################################################################
 
-    def __check_num_devices(self):
+    def __check_num_devices(self) -> None:
+        """
+        Checks number of devices for each device type.
+        If no devices of a type, remove graph
+        :return None:
+        """
+
         self.logger.debug("running")
         to_remove = list()
         for device_type in self.__graphs:
@@ -794,8 +811,12 @@ class CompanionController:
             self.__graph_inits[item]['destructor']()
         self.logger.debug("done")
 
-    def __make_drt_graph(self):
-        """ Create a drt type graph and add it to the display area. """
+    def __make_drt_graph(self) -> bool:
+        """
+        Create a drt type graph and add it to the display area.
+        :return bool: Return true if a DRT graph is created
+        """
+
         self.logger.debug("running")
         try:
             graph = DRTGraph(self.graph_box, self.ch)
@@ -810,16 +831,24 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __destroy_drt_graph(self):
-        """ Remove the drt graph. Typically called when all drt devices have been disconnected. """
+    def __destroy_drt_graph(self) -> None:
+        """
+        Remove the drt graph. Typically called when all drt devices have been disconnected.
+        :return None:
+        """
+
         self.logger.debug("running")
         if "drt" in self.__graphs.keys():
             self.graph_box.remove_display(self.__graphs["drt"]['frame'])
             del self.__graphs["drt"]
         self.logger.debug("done")
 
-    def __make_vog_graph(self):
-        """ Create a vog type graph and add it to the display area. """
+    def __make_vog_graph(self) -> bool:
+        """
+        Create a vog type graph and add it to the display area.
+        :return bool: Return true if a VOG graph is created
+        """
+
         self.logger.debug("running")
         try:
             graph = VOGGraph(self.graph_box, self.ch)
@@ -835,22 +864,41 @@ class CompanionController:
         self.logger.debug("done")
         return True
 
-    def __destroy_vog_graph(self):
-        """ Remove the vog graph. Typically called when all vog devices have been disconnected. """
+    def __destroy_vog_graph(self) -> None:
+        """
+        Remove the vog graph. Typically called when all vog devices have been disconnected.
+        :return None:
+        """
+
         self.logger.debug("running")
         if "vog" in self.__graphs.keys():
             self.graph_box.remove_display(self.__graphs["vog"]['frame'])
             del self.__graphs["vog"]
         self.logger.debug("done")
 
-    def __refresh_all_graphs(self):
+    def __refresh_all_graphs(self) -> None:
+        """
+        Updates all graphs
+        :return None:
+        """
+
         self.logger.debug("running")
         for device_type in self.__graphs:
             self.__graphs[device_type]['frame'].get_graph().refresh_self()
         self.logger.debug("done")
 
-    def add_data_to_graph(self, device, data):
-        """ Pass data to device type graph along with specific device id. """
+    def add_data_to_graph(self, device, data) -> None:
+        """
+        Pass data to device type graph along with specific device id.
+        :param device: Tuple[str, str] of device type and name
+        :param data: Tuple of data to be used for a graph
+            if device type is a DRT:
+                Tuple will be of [str, datetime, int]
+            if device type is a VOG:
+                Tuple will be of [datetime, int, int]
+        :return None:
+        """
+        
         self.logger.debug("running")
         if not check_device_tuple(device):
             return
