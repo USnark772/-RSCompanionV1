@@ -898,7 +898,7 @@ class CompanionController:
                 Tuple will be of [datetime, int, int]
         :return None:
         """
-        
+
         self.logger.debug("running")
         if not check_device_tuple(device):
             return
