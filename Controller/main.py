@@ -17,7 +17,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Author: Nathan Rogers
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
@@ -30,6 +31,11 @@ from Controller.single_instance import SingleInstance
 
 
 def main():
+    """
+    Handles running application
+    :return None:
+    """
+
     si = SingleInstance()
     try:
         if si.is_running:

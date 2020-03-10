@@ -17,7 +17,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Author: Nathan Rogers
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
@@ -28,16 +29,32 @@ from Model.general_defs import version_url, current_version
 
 
 class VersionChecker:
+    """
+    Checks version number against latest version from the site
+    """
+
     def __init__(self):
+        """
+        Initialize the version checker
+        :return None:
+        """
+
         self.logger = logging.getLogger(__name__)
         self.logger.debug("Initializing")
         self.latest_version = self.get_latest_version()
         self.logger.debug("Initialized")
 
-    def check_version(self):
-        """ Compare version numbers. """
+    def check_version(self) -> int:
+        """
+        Compare version numbers.
+        :return int:
+            return -1 if unable to get the latest version
+            return 1 if the latest version is newer than the app current version
+            return 0 otherwise
+        """
+
         self.logger.debug("running")
-        if not self.latest_version:
+        if self.latest_version < 0:
             self.logger.debug("done")
             return -1
         elif self.latest_version > current_version:
@@ -46,19 +63,25 @@ class VersionChecker:
         self.logger.debug("done")
         return 0
 
-    def get_latest_version(self):
-        """ Connect to site at version_url and retrieve latest version number. """
+    def get_latest_version(self) -> float:
+        """
+        Connect to site at version_url and retrieve latest version number.
+        :return float:
+            return -1.0 if unable to get version
+            return version number otherwise
+        """
+
         self.logger.debug("running")
         mgr = PoolManager()
         try:
             r = mgr.request("GET", version_url)
         except Exception:
             self.logger.exception("failed, could not connect to url")
-            return False
+            return -1.0
         data = str(r.data)
         if "Companion App Version:" in data:
             latest_version = data[data.index(":") + 1:].rstrip("\\n'")
             self.logger.debug("done, found version")
             return float(latest_version)
         self.logger.debug("done, didn't find version")
-        return False
+        return -1.0
