@@ -104,8 +104,8 @@ class CameraController(ABCDeviceController):
                 self.__set_tab_size_val(msg[1])
             elif msg_type == CEnum.SET_FPS:
                 self.__set_tab_fps_val(msg[1])
-            # elif msg_type == CEnum.SET_ROTATION:
-            #     self.__set_tab_rot_val(msg[1])
+            elif msg_type == CEnum.SET_ROTATION:
+                self.__set_tab_rot_val(msg[1])
 
     def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
@@ -153,9 +153,31 @@ class CameraController(ABCDeviceController):
     def open_settings(self):
         self.pipe.send((CEnum.OPEN_SETTINGS,))
 
-    # def set_rotation(self):
-    #     new_rotation = self.tab.get_rotation()
-    #     self.pipe.send((CEnum.SET_ROTATION, new_rotation))
+    def __rotation_entry_changed(self):
+        if self.__validate_rotation():
+            new_rotation = int(self.tab.get_rotation())
+            self.pipe.send((CEnum.SET_ROTATION, new_rotation))
+            self.tab.set_rotation_error(False)
+        else:
+            self.tab.set_rotation_error(True)
+
+    def __validate_rotation(self):
+        usr_input: str
+        negative = False
+        usr_input = self.tab.get_rotation()
+        if len(usr_input) > 0 and usr_input[0] == '-':
+            negative = True
+            usr_input = usr_input[1:]
+        if usr_input.isdigit():
+            if negative:
+                rot_value = 0 - int(usr_input)
+                self.tab.set_rotation(str(rot_value % -360))
+            else:
+                rot_value = int(usr_input)
+                self.tab.set_rotation(str(rot_value % 360))
+            return True
+        else:
+            return False
 
     def __add_loading_symbols_to_tab(self):
         self.logger.debug("running")
@@ -184,7 +206,7 @@ class CameraController(ABCDeviceController):
         self.tab.add_fps_selector_handler(self.set_fps)
         self.tab.add_frame_size_selector_handler(self.set_frame_size)
         self.tab.add_settings_toggle_button_handler(self.open_settings)
-        # self.tab.add_frame_rotation_handler(self.set_rotation)
+        self.tab.add_frame_rotation_handler(self.__rotation_entry_changed)
         self.logger.debug("done")
 
     def __get_initial_values(self):
@@ -199,8 +221,8 @@ class CameraController(ABCDeviceController):
     def __set_tab_size_val(self, value: tuple):
         self.tab.set_frame_size(self.__get_size_val_index(value))
 
-    # def __set_tab_rot_val(self, value: int):
-    #     self.tab.set_rotation(value)
+    def __set_tab_rot_val(self, value: int):
+        self.tab.set_rotation(str(value))
 
     def __complete_setup(self, sizes: list):
         self.logger.debug("running")
@@ -209,6 +231,7 @@ class CameraController(ABCDeviceController):
         self.__populate_fps_selections()
         self.__get_initial_values()
         self.pipe.send((CEnum.ACTIVATE_CAM,))
+        self.pipe.send((CEnum.GET_ROTATION,))
         self.tab.set_tab_active(True)
         self.logger.debug("done")
 

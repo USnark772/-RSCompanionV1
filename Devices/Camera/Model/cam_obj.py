@@ -42,7 +42,7 @@ class CamObj:
         self.active = True
         self.writing = False
         self.color_image = True
-        self.alter_image_shape = False
+        self.alter_image_shape = True
         self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
         self.scale = 1
