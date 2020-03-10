@@ -133,6 +133,7 @@ class CameraConnectionManager:
 
     def deactivate(self):
         self.active = False
+        self.cam_counter.count = 0
         self.cleanup()
 
     def activate(self):
