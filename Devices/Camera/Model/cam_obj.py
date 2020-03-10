@@ -25,7 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 # import logging
 import cv2
-from numpy import ndarray
+from numpy import ndarray, zeros, array_equal
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
 
@@ -46,6 +46,7 @@ class CamObj:
         self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
         self.scale = 1
+        self.prev_frame = zeros(3, dtype=int)
         # self.logger.debug("Initialized")
 
     def toggle_activity(self, is_active: bool):
@@ -155,10 +156,12 @@ class CamObj:
         if self.writing:
             self.writer.write(frame)
 
-    @staticmethod
-    def __check_frame(frame: ndarray):
+    def __check_frame(self, frame: ndarray):
+        ret = False
         if frame is not None:
             frame_output = frame.nonzero()
             if len(frame_output[0]) > 0 or len(frame_output[1]) > 0 or len(frame_output[2]) > 0:
-                return True
-        return False
+                if not array_equal(frame, self.prev_frame):
+                    self.prev_frame = frame
+                    ret = True
+        return ret
