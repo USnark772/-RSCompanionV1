@@ -27,7 +27,7 @@ import cv2
 """ General definitions for the app """
 
 """ Change these when building """
-image_file_path = '../View/Images/'  # new path should be 'Images/'
+image_file_path = '../View/Images/'  # Path for builds should be 'Images/'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
 current_version = 1.10  # New version should be incremented.
 current_version_str = '1.10'
@@ -69,7 +69,7 @@ update_available = "An update is available."
 up_to_date = "Your program is up to date."
 
 error_checking_for_update = "There was an unexpected error connecting to the repository. Please check" \
-                            " https://github.com/redscientific/CompanionApp manually" \
+                            " https://redscientific.com/downloads.html manually" \
                             " or contact Red Scientific directly."
 
 device_connection_error = "There was a problem connecting the device, please retry connection."

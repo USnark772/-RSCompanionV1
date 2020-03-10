@@ -1,10 +1,10 @@
 import logging
 from datetime import datetime
-from time import sleep
 from PySide2.QtCore import QObject, QThread, Signal
 from serial import Serial, SerialException
 from serial.tools import list_ports
 from serial.tools.list_ports_common import ListPortInfo
+from CompanionLib.companion_helpers import take_a_moment
 from Model.general_defs import devices as dev_profs
 
 
@@ -24,6 +24,7 @@ class PortWorker(QThread):
     def run(self):
         while self.running:
             self.__check_for_msg()
+            take_a_moment()
         self.cleanup()
 
     def __check_for_msg(self):
@@ -96,7 +97,7 @@ class PortScanner(QThread):
             try:
                 new_connection.open()
             except SerialException as e:
-                sleep(1)
+                take_a_moment(1)
         if not new_connection.is_open:  # Failed to connect
             return False, None
         return True, new_connection

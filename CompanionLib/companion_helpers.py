@@ -24,11 +24,16 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+from time import sleep
 from datetime import datetime, timedelta
 from PySide2.QtWidgets import QFrame, QPushButton
 from Model.general_defs import button_pressed_style, button_normal_style
 
 logger = logging.getLogger(__name__)
+
+
+def take_a_moment(time: float = 0.05):
+    sleep(time)
 
 
 def write_line_to_file(fname, line, new=False):

@@ -25,6 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from multiprocessing.connection import Connection
 from PySide2.QtCore import QObject, QThread, Signal
+from CompanionLib.companion_helpers import take_a_moment
 
 
 class PipeWatcherSig(QObject):
@@ -46,6 +47,7 @@ class PipeWatcher(QThread):
     def run(self):
         self.logger.debug("running")
         while self.running:
+            take_a_moment()
             try:
                 waiting = self.pipe.poll()
                 if waiting:

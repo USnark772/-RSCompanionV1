@@ -66,6 +66,9 @@ class CamObj:
             self.writing = True
         # self.logger.debug("done")
 
+    def open_settings_window(self):
+        self.cap.set(cv2.CAP_PROP_SETTINGS, 1)  # Seems like we can only open the window, not close it.
+
     def destroy_writer(self):
         # self.logger.debug("running")
         if self.writing:
@@ -74,27 +77,24 @@ class CamObj:
             self.writing = False
         # self.logger.debug("done")
 
-    def read_camera(self):
-        ret, frame = self.cap.read()
-        if frame is None:
-            ret, frame = self.cap.read()
-        return ret, frame
-
-    def save_data(self, frame: ndarray):
-        if self.writing:
-            self.writer.write(frame)
-
-    def handle_new_frame(self, frame: ndarray):
-        if self.active:
-            if self.alter_image_shape:
-                rows, cols, a = frame.shape
-                M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
-                frame = cv2.warpAffine(frame, M, (cols, rows))
-            if not self.color_image:
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            cv2.imshow(self.name, frame)
-            cv2.waitKey(1)  # Required for frame to appear
-            self.save_data(frame)
+    def update(self):
+        ret: bool
+        frame: ndarray
+        ret, frame = self.__read_camera()
+        if ret and self.__check_frame(frame):
+            if self.active:
+                if self.alter_image_shape:
+                    rows, cols, a = frame.shape
+                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
+                    frame = cv2.warpAffine(frame, M, (cols, rows))
+                if not self.color_image:
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                cv2.imshow(self.name, frame)
+                cv2.waitKey(1)  # Required for frame to appear
+                self.__save_data(frame)
+                return True
+        else:
+            return False
 
     def close_window(self):
         cv2.destroyWindow(self.name)
@@ -130,7 +130,7 @@ class CamObj:
         y = float(size[1])
         self.toggle_activity(False)
         if self.fourcc_bool:
-            self.set_fourcc()
+            self.__set_fourcc()
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
         if not res1 or not res2:
@@ -141,6 +141,24 @@ class CamObj:
         self.close_window()
         self.toggle_activity(True)
 
-    def set_fourcc(self):
+    def __set_fourcc(self):
         self.cap.set(cv2.CAP_PROP_FOURCC, cap_temp_codec)  # This line required because opencv is dumb
         self.cap.set(cv2.CAP_PROP_FOURCC, cap_codec)
+
+    def __read_camera(self):
+        ret, frame = self.cap.read()
+        if frame is None:
+            ret, frame = self.cap.read()
+        return ret, frame
+
+    def __save_data(self, frame: ndarray):
+        if self.writing:
+            self.writer.write(frame)
+
+    @staticmethod
+    def __check_frame(frame: ndarray):
+        if frame is not None:
+            frame_output = frame.nonzero()
+            if len(frame_output[0]) > 0 or len(frame_output[1]) > 0 or len(frame_output[2]) > 0:
+                return True
+        return False

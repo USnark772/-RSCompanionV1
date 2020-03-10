@@ -28,12 +28,14 @@ import cv2
 from multiprocessing.connection import Connection
 from enum import Enum, auto
 from PySide2.QtCore import QThread
+from CompanionLib.companion_helpers import take_a_moment
 from Devices.Camera.Model.cam_obj import CamObj
 
 
 class CEnum(Enum):
     WORKER_DONE = auto()
     CAM_FAILED = auto()
+    OPEN_SETTINGS = auto()
     GET_RESOLUTION = auto()
     SET_RESOLUTION = auto()
     GET_FPS = auto()
@@ -79,9 +81,14 @@ class SizeGetter(QThread):
             if result[1] > new_y:
                 new_y = result[1] + step
             current_size = (new_x, new_y)
+            take_a_moment()
         if self.running:
             self.cam_obj.set_frame_size(initial_size)
-            self.pipe.send((CEnum.WORKER_DONE, sizes))
+            try:
+                self.pipe.send((CEnum.WORKER_DONE, sizes))
+            except BrokenPipeError as e:
+                pass
+
 
 # TODO: Figure out if/how possible to add logging here
 def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handler):
@@ -105,6 +112,7 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
                     running = True
                 elif msg_type == CEnum.DEACTIVATE_CAM:
                     running = False
+                    cam_obj.close_window()
                 elif msg_type == CEnum.WORKER_DONE:
                     size_getter.wait()
                     size_getter_alive = False
@@ -124,11 +132,9 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
                 size_getter.running = False
                 size_getter.wait()
             break
+        take_a_moment()
         if running:  # Get and handle frame from camera
-            ret, frame = cam_obj.read_camera()
-            if ret and frame is not None:
-                cam_obj.handle_new_frame(frame)
-            else:  # Camera failed, cleanup.
+            if not cam_obj.update():
                 if size_getter_alive:
                     size_getter.running = False
                     size_getter.wait()
@@ -140,7 +146,9 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
 
 def handle_pipe(msg: tuple, cam_obj: CamObj, pipe: Connection):
     msg_type = msg[0]
-    if msg_type == CEnum.GET_RESOLUTION:
+    if msg_type == CEnum.OPEN_SETTINGS:
+        cam_obj.open_settings_window()
+    elif msg_type == CEnum.GET_RESOLUTION:
         pipe.send((CEnum.SET_RESOLUTION, cam_obj.get_current_frame_size()))
     elif msg_type == CEnum.SET_RESOLUTION:
         cam_obj.set_frame_size(msg[1])

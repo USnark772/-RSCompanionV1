@@ -75,6 +75,7 @@ class CompanionController:
         self.settings = QSettings("Red Scientific", "Companion")
 
         self.settings.beginGroup("logging")
+        # TODO: Give user control over logging level
         if not self.settings.contains("loglevel"):
             self.settings.setValue("loglevel", "DEBUG")
         logginglevel = eval('logging.' + self.settings.value('loglevel'))
@@ -164,10 +165,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("port_name: ", port_name)
-        # print("device_name type: ", type(device_name))
-        # print("port_name type: ", type(port_name))
-        # print("thread type: ", type(thread))
         self.logger.debug("running")
         if not self.__exp_created:
             self.__add_device((device_name, port_name), thread)
@@ -198,7 +195,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("index type: ", type(index))
         self.logger.debug("running")
         self.__create_camera_controller(index)
         self.logger.debug("done")
@@ -219,7 +215,6 @@ class CompanionController:
         Handles a connection failure with a device
         Alerts user to connection failure
         :return None:
-
         """
 
         self.logger.debug("running")
@@ -234,7 +229,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("error_message type: ", type(error_message))
         self.logger.debug("running")
         self.ui.show_help_window("Error", error_message)
         self.logger.debug("done")
@@ -248,11 +242,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("device_name type: ", type(device_name))
-        # print("device_name[0] type: ", type(device_name[0]))
-        # print("device_name[1] type: ", type(device_name[1]))
-        # print("device_line type: ", type(device_line))
-        # print("timestamp type: ", type(timestamp))
         self.logger.debug("running")
         if not timestamp:
             timestamp = get_current_time(device=True)
@@ -573,7 +562,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("event type: ", type(event))
         self.logger.debug("running")
         if type(event) == QKeyEvent:
             if 0x41 <= event.key() <= 0x5a:
@@ -609,8 +597,6 @@ class CompanionController:
         if valid:
             self.__save_dir = self.__get_save_dir_from_file_name(self.__save_file_name)
         self.logger.debug("done")
-        # print("_get_save_file_name return: ", valid)
-        # print(type(valid))
         return valid
 
     @staticmethod
@@ -621,14 +607,8 @@ class CompanionController:
         :return str: Directory to the file
         """
 
-        # possibly use for get last used directory
         end_index = file_name.rfind('/')
         dir_name = file_name[:end_index + 1]
-        # print("_get_save_dir_from_file_name:")
-        # print("input: ", file_name)
-        # print(type(file_name))
-        # print("return: ", dir_name)
-        # print(type(dir_name))
         return dir_name
 
     def __check_for_updates_handler(self) -> None:
@@ -680,11 +660,6 @@ class CompanionController:
         fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
             temp.write(program_output_hdr)
-        # print("_setup_log_output_file:")
-        # print("input: ", file_name)
-        # print(type(file_name))
-        # print("output: ", fname)
-        # print(type(fname))
         return fname
 
     ########################################################################################
@@ -711,15 +686,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("_add_device:")
-        # print("input:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
-        # print("thread: ", thread)
-        # print(type(thread))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -742,12 +708,6 @@ class CompanionController:
         :return None:
         """
 
-        # print("_remove_device:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
         self.logger.debug("running")
         if not check_device_tuple(device):
             self.logger.warning("expected tuple of two strings, got otherwise")
@@ -765,7 +725,7 @@ class CompanionController:
         self.__controller_classes[device[0].upper()][1] -= 1
         self.logger.debug("done")
 
-    # TODO: This and create drt controller functions could be merged. Perhaps different functions for the
+    # TODO: This and create vog controller functions could be merged. Perhaps different functions for the
     #  try except block.
     def __create_drt_controller(self, device: Tuple[str, str], thread: PortWorker) -> bool:
         """
@@ -774,15 +734,6 @@ class CompanionController:
         :param thread: Device communication thread
         :return bool: Returns true if a DRT controller is created
         """
-
-        # print("_create_drt_controller:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
-        # print("thread: ", thread)
-        # print(type(thread))
 
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
@@ -814,15 +765,6 @@ class CompanionController:
         :return bool: Returns true if a VOG controller is created
         """
 
-        # print("_create_vog_controller:")
-        # print("device: ", device)
-        # print(type(device))
-        # print("tuple types:")
-        # print(type(device[0]))
-        # print(type(device[1]))
-        # print("thread: ", thread)
-        # print(type(thread))
-
         self.logger.debug("running")
         self.logger.debug("Got " + device[0] + " " + device[1])
         if not device[0] in self.__graphs:
@@ -852,16 +794,12 @@ class CompanionController:
         :return None:
         """
 
-        # print("_create_camera_controller:")
-        # print("index: ", index)
-        # print(type(index))
-
         self.logger.debug("running")
         try:
             cam_controller = CameraController(index, self.ch)
             cam_controller.tab.setParent(self.tab_box)
-            cam_controller.signals.settings_error.connect(self.alert_camera_error)
-            cam_controller.signals.cam_failed.connect(self.__remove_camera)
+            cam_controller.signals.cam_failed.connect(self.alert_camera_error)
+            cam_controller.signals.cam_closed.connect(self.__remove_camera)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return
@@ -876,25 +814,20 @@ class CompanionController:
         :return None:
         """
 
-        # print("_remove_camera:")
-        # print("index: ", index)
-        # print(type(index))
-
-        print("Trying to remove cam:", index)
         self.logger.debug("running")
         for controller in self.__device_controllers.values():
             name = controller.get_name()
-            if index in name:
+            if index == name:
                 self.tab_box.remove_tab(name)
                 del self.__device_controllers[name]
                 break
+        self.cam_con_manager.decrement_cam_count()
         self.logger.debug("done")
 
     ########################################################################################
     # Other handlers
     ########################################################################################
 
-    # TODO: Figure out why closing right after running app causes error.
     def ui_close_event_handler(self):
         """
         Shut down all devices before closing the app.

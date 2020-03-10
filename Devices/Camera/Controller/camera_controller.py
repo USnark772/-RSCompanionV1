@@ -35,15 +35,10 @@ from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 class ControllerSig(QObject):
     settings_error = Signal(str)
     cam_failed = Signal(str)
+    cam_closed = Signal(str)
     send_msg_sig = Signal(tuple)
 
-# TODO: Figure out how to best deal with larger frames causing lower fps.
-# Is measuring fps at any given time a good option?
-# Is waiting until file is written and then altering it to the proper fps a good option?
-#  (Look into ffmpeg for this, seems like using opencv won't be a good idea)
-# Maybe ffmpeg is a good option in place of opencv, maybe not.
-# Do we want to just let the user control the fps? (Seems like an easy way out and not a good user experience)
-# Actual fps will never be quite the same between machines because each machine will grab frames at different rates.
+
 class CameraController(ABCDeviceController):
     def __init__(self, index: int, ch: logging.Handler):
         self.logger = logging.getLogger(__name__)
@@ -101,14 +96,16 @@ class CameraController(ABCDeviceController):
             if msg_type == CEnum.WORKER_DONE:
                 self.__complete_setup(msg[1])
             elif msg_type == CEnum.CAM_FAILED:
-                self.signals.cam_failed.emit(self.name)
+                self.signals.cam_failed.emit(self.name + " failed. Possible disconnect or other issue getting next"
+                                                         " frame")
+                self.signals.cam_closed.emit(self.name)
                 self.cleanup()
             elif msg_type == CEnum.SET_RESOLUTION:
                 self.__set_tab_size_val(msg[1])
             elif msg_type == CEnum.SET_FPS:
                 self.__set_tab_fps_val(msg[1])
-            elif msg_type == CEnum.SET_ROTATION:
-                self.__set_tab_rot_val(msg[1])
+            # elif msg_type == CEnum.SET_ROTATION:
+            #     self.__set_tab_rot_val(msg[1])
 
     def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
@@ -134,7 +131,11 @@ class CameraController(ABCDeviceController):
 
     def toggle_cam(self):
         self.logger.debug("running")
-        self.pipe.send((CEnum.ACTIVATE_CAM,))
+        if self.cam_active:
+            self.pipe.send((CEnum.DEACTIVATE_CAM,))
+        else:
+            self.pipe.send((CEnum.ACTIVATE_CAM,))
+        self.cam_active = not self.cam_active
         self.logger.debug("done")
 
     def set_frame_size(self):
@@ -149,13 +150,12 @@ class CameraController(ABCDeviceController):
         self.pipe.send((CEnum.SET_FPS, new_fps))
         self.logger.debug("done")
 
-    def toggle_color(self):
-        self.color_image = not self.color_image
-        self.pipe.send((CEnum.SET_BW,))
+    def open_settings(self):
+        self.pipe.send((CEnum.OPEN_SETTINGS,))
 
-    def set_rotation(self):
-        new_rotation = self.tab.get_rotation()
-        self.pipe.send((CEnum.SET_ROTATION, new_rotation))
+    # def set_rotation(self):
+    #     new_rotation = self.tab.get_rotation()
+    #     self.pipe.send((CEnum.SET_ROTATION, new_rotation))
 
     def __add_loading_symbols_to_tab(self):
         self.logger.debug("running")
@@ -183,8 +183,8 @@ class CameraController(ABCDeviceController):
         self.tab.add_use_cam_button_handler(self.toggle_cam)
         self.tab.add_fps_selector_handler(self.set_fps)
         self.tab.add_frame_size_selector_handler(self.set_frame_size)
-        self.tab.add_color_toggle_button_handler(self.toggle_color)
-        self.tab.add_frame_rotation_handler(self.set_rotation)
+        self.tab.add_settings_toggle_button_handler(self.open_settings)
+        # self.tab.add_frame_rotation_handler(self.set_rotation)
         self.logger.debug("done")
 
     def __get_initial_values(self):
@@ -196,13 +196,11 @@ class CameraController(ABCDeviceController):
     def __set_tab_fps_val(self, value: int):
         self.tab.set_fps(self.__get_fps_val_index(value))
 
-    # TODO: Fix the error with the value being (0, 0). (0, 0) seems to happen if VideoCapture object fails.
     def __set_tab_size_val(self, value: tuple):
-        print(value)
         self.tab.set_frame_size(self.__get_size_val_index(value))
 
-    def __set_tab_rot_val(self, value: int):
-        self.tab.set_rotation(value)
+    # def __set_tab_rot_val(self, value: int):
+    #     self.tab.set_rotation(value)
 
     def __complete_setup(self, sizes: list):
         self.logger.debug("running")

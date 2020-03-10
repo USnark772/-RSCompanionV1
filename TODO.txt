@@ -21,16 +21,13 @@ At some point
 -   Add audio support. Does the camera mic come in separately or with the audio?
 
 In progress:
-    -   Add button that leads to last used directory for saving.
     Video:
-    -   Try to use multiprocessing to handle each attached camera.
     -   Device overlay is recorded with the video
     -   Device output will add a frame # for when that device output came in
     -   Figure out all the configuration ideas for cameras and put them in the tab.
     -   Figure out bug with turning camman on or off. (Seems to be an issue with usb cams) (Can't seem to reproduce)
     -   Figure out bug with toggling cameras off and then clicking create exp (Seems to freeze the app indefinitely)
-    -   Figure out what to do about the memory requirements of this video stuff. 98 megabytes per frame is apparently
-        problematic.
+
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
     Using GPL 3.0 or later at this time.
