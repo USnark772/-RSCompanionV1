@@ -56,6 +56,7 @@ class CEnum(Enum):
 class SizeGetter(QThread):
     def __init__(self, cam_obj: CamObj, pipe: Connection):
         QThread.__init__(self)
+        self.setPriority(QThread.HighPriority)
         self.cam_obj = cam_obj
         self.pipe = pipe
         self.running = True

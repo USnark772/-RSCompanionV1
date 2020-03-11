@@ -78,6 +78,7 @@ class CamScanner(QThread):
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         QThread.__init__(self)
+        self.setPriority(QThread.LowestPriority)
         self.signal = ScannerSig()
         self.cam_counter = counter
         self.running = True
@@ -147,7 +148,7 @@ class CameraConnectionManager:
         self.active = True
         self.scanner_thread = CamScanner(self.cam_counter, self.ch)
         self.scanner_thread.signal.new_cam_sig.connect(self.handle_new_camera)
-        self.scanner_thread.start(priority=QThread.LowestPriority)
+        self.scanner_thread.start()
 
     def cleanup(self):
         self.logger.debug("running")
