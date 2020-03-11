@@ -25,21 +25,22 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+from psutil import cpu_count
 from typing import Tuple
 from tempfile import gettempdir
 from datetime import datetime
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QDir, QSize, QSettings, QUrl
+from PySide2.QtCore import QDir, QSettings, QUrl
 from PySide2.QtGui import QKeyEvent, QDesktopServices
 from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
-from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
-    error_checking_for_update, device_connection_error, current_version_str
+import Model.general_defs as model
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
 from View.DockWidget.button_box import ButtonBox
 from View.DockWidget.info_box import InfoBox
 from View.DockWidget.flag_box import FlagBox
 from View.DockWidget.note_box import NoteBox
+from View.DockWidget.resource_monitor_box import MonitorBox
 from View.MenuBarWidget.menu_bar import MenuBar
 from View.DisplayWidget.display_container import DisplayContainer
 from View.DisplayWidget.graph_frame import GraphFrame
@@ -48,6 +49,7 @@ from View.OutputLog.output_window import OutputWindow
 from Controller.version_checker import VersionChecker
 from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager, PortWorker
 from Controller.Camera_Manager.camera_manager import CameraConnectionManager
+from Controller.resource_monitor import ResourceMonitor
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
@@ -90,27 +92,20 @@ class CompanionController:
         self.ch.setLevel(logginglevel)
         self.ch.setFormatter(self.formatter)
         self.logger.addHandler(self.ch)
-
-        self.logger.info("RS Companion app version: " + current_version_str)
+        self.logger.info("RS Companion app version: " + model.current_version_str)
         self.logger.debug("Initializing")
 
         # set up ui
-        ui_min_size = QSize(950, 740)
-        dock_size = QSize(850, 160)
-        button_box_size = QSize(205, 120)
-        info_box_size = QSize(230, 120)
-        flag_box_size = QSize(80, 120)
-        note_box_size = QSize(250, 120)
-        tab_box_width_range = (350, 320)
-        self.ui = CompanionWindow(ui_min_size, self.ch)
+        self.ui = CompanionWindow(model.ui_min_size, self.ch)
         self.menu_bar = MenuBar(self.ui, self.ch)
-        self.control_dock = ControlDock(self.ui, dock_size, self.ch)
-        self.button_box = ButtonBox(self.control_dock, button_box_size, self.ch)
-        self.info_box = InfoBox(self.control_dock, info_box_size, self.ch)
-        self.flag_box = FlagBox(self.control_dock, flag_box_size, self.ch)
-        self.note_box = NoteBox(self.control_dock, note_box_size, self.ch)
+        self.control_dock = ControlDock(self.ui, model.dock_size, self.ch)
+        self.button_box = ButtonBox(self.control_dock, model.button_box_size, self.ch)
+        self.info_box = InfoBox(self.control_dock, model.info_box_size, self.ch)
+        self.flag_box = FlagBox(self.control_dock, model.flag_box_size, self.ch)
+        self.note_box = NoteBox(self.control_dock, model.note_box_size, self.ch)
+        self.monitor_box = MonitorBox(self.control_dock, model.monitor_box_size, self.ch)
         self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs, self.ch)
-        self.tab_box = TabContainer(self.ui, tab_box_width_range, self.ch)
+        self.tab_box = TabContainer(self.ui, model.tab_box_width_range, self.ch)
         self.file_dialog = QFileDialog(self.ui)
 
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
@@ -125,6 +120,11 @@ class CompanionController:
             self.cam_con_manager.activate()
         self.menu_bar.set_cam_bool_checked(active)
         self.settings.endGroup()
+
+        self.resource_monitor = ResourceMonitor(self.ch)
+        self.resource_monitor.signal.update_sig.connect(self.update_cpu_display)
+
+
         # Initialize storage and state
         self.__controller_classes = dict()
         self.__controller_inits = dict()
@@ -146,7 +146,6 @@ class CompanionController:
         self.__initialize_view()
         self.__init_controller_classes()
 
-        # self.__add_camera_tab()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -218,7 +217,7 @@ class CompanionController:
         """
 
         self.logger.debug("running")
-        self.ui.show_help_window("Error", device_connection_error)
+        self.ui.show_help_window("Error", model.device_connection_error)
         self.logger.debug("done")
 
     def alert_camera_error(self, error_message: str) -> None:
@@ -268,6 +267,9 @@ class CompanionController:
         write_line_to_file(self.__save_file_name, line)
         self.logger.debug("done")
 
+    def update_cpu_display(self, values):
+        self.monitor_box.update_values(values)
+
     def __get_device_note_spacers(self, line: str) -> str:
         """
         Helper function to get note spacers
@@ -311,6 +313,7 @@ class CompanionController:
         self.control_dock.add_widget(self.flag_box)
         self.control_dock.add_widget(self.note_box)
         self.control_dock.add_widget(self.info_box)
+        self.control_dock.add_widget(self.monitor_box)
         self.ui.add_menu_bar(self.menu_bar)
         self.ui.add_dock_widget(self.control_dock)
         self.ui.add_graph_container(self.graph_box)
@@ -633,11 +636,11 @@ class CompanionController:
         vc = VersionChecker()
         is_available = vc.check_version()
         if is_available == 1:
-            self.ui.show_help_window("Update", update_available)
+            self.ui.show_help_window("Update", model.update_available)
         elif is_available == 0:
-            self.ui.show_help_window("Update", up_to_date)
+            self.ui.show_help_window("Update", model.up_to_date)
         elif is_available == -1:
-            self.ui.show_help_window("Error", error_checking_for_update)
+            self.ui.show_help_window("Error", model.error_checking_for_update)
         self.logger.debug("done")
 
     def __log_window_handler(self) -> None:
@@ -671,7 +674,7 @@ class CompanionController:
 
         fname = gettempdir() + "\\" + file_name
         with open(fname, "w") as temp:
-            temp.write(program_output_hdr)
+            temp.write(model.program_output_hdr)
         return fname
 
     ########################################################################################
@@ -843,17 +846,26 @@ class CompanionController:
     # TODO: Figure out why closing right after running app causes error.
     def ui_close_event_handler(self) -> None:
         """
-        Shut down all devices before closing the app.
+        Handle any pre-close tasks
         :return None:
         """
 
         self.logger.debug("running")
+        self.__cleanup()
+        self.logger.debug("done")
+
+    def __cleanup(self):
+        """
+        Shut down all devices, managers, threads, and secondary windows before closing the app.
+        :return None:
+        """
+
+        self.resource_monitor.cleanup()
         self.cam_con_manager.cleanup()
         self.dev_con_manager.cleanup()
         for controller in self.__device_controllers.values():
             controller.cleanup()
         self.log_output.close()
-        self.logger.debug("done")
 
     def __toggle_use_cameras(self):
         """
@@ -904,7 +916,7 @@ class CompanionController:
         """
 
         self.logger.debug("running")
-        self.ui.show_help_window("About Red Scientific", about_RS_text)
+        self.ui.show_help_window("About Red Scientific", model.about_RS_text)
         self.logger.debug("done")
 
     def __about_app(self) -> None:
@@ -914,8 +926,8 @@ class CompanionController:
         """
 
         self.logger.debug("running")
-        self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: "
-                                 + current_version_str)
+        self.ui.show_help_window("About Red Scientific Companion App", model.about_RS_app_text + "\n\n Version: "
+                                 + model.current_version_str)
         self.logger.debug("done")
 
     ########################################################################################

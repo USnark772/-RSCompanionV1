@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import cv2
-
+from PySide2.QtCore import QSize
 """ General definitions for the app """
 
 """ Change these when building """
@@ -73,6 +73,19 @@ error_checking_for_update = "There was an unexpected error connecting to the rep
                             " or contact Red Scientific directly."
 
 device_connection_error = "There was a problem connecting the device, please retry connection."
+
+#################################################################################################################
+# UI definitions
+#################################################################################################################
+
+ui_min_size = QSize(950, 740)
+dock_size = QSize(850, 160)
+button_box_size = QSize(205, 120)
+info_box_size = QSize(230, 120)
+flag_box_size = QSize(80, 120)
+note_box_size = QSize(250, 120)
+monitor_box_size = QSize(150, 150)
+tab_box_width_range = (350, 320)
 
 __compliant_text_color = "rgb(0, 0, 0)"
 __error_text_color = "rgb(255, 0, 0)"
