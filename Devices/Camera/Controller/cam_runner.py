@@ -24,7 +24,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # import logging
-import cv2
 from multiprocessing.connection import Connection
 from enum import Enum, auto
 from PySide2.QtCore import QThread
@@ -56,7 +55,6 @@ class CEnum(Enum):
 class SizeGetter(QThread):
     def __init__(self, cam_obj: CamObj, pipe: Connection):
         QThread.__init__(self)
-        self.setPriority(QThread.HighPriority)
         self.cam_obj = cam_obj
         self.pipe = pipe
         self.running = True
@@ -101,7 +99,7 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
     # logger.debug("Initializing")
     cam_obj = CamObj(index, name)  #, ch)
     size_getter = SizeGetter(cam_obj, pipe)
-    size_getter.start()
+    size_getter.start(priority=QThread.HighPriority)
     size_getter_alive = True
     running = False
     # logger.debug("Initialized")

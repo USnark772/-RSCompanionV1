@@ -16,7 +16,6 @@ class PortWorkerSig(QObject):
 class PortWorker(QThread):
     def __init__(self, name: str, port: Serial):
         QThread.__init__(self)
-        self.setPriority(QThread.LowPriority)
         self.port = port
         self.device_name = name
         self.running = True
@@ -122,7 +121,7 @@ class RSDeviceConnectionManager:
         self.scanner_thread.signals.new_device_sig.connect(self.connect_port_to_thread)
         self.scanner_thread.signals.disconnect_sig.connect(self.remove_device_and_thread)
         self.scanner_thread.signals.device_connect_fail_sig.connect(self.alert_connection_failed)
-        self.scanner_thread.start()
+        self.scanner_thread.start(priority=QThread.LowestPriority)
         self.logger.debug("Initialized")
 
     def cleanup(self):
@@ -138,7 +137,7 @@ class RSDeviceConnectionManager:
         self.logger.debug("running")
         new_worker = PortWorker(name, port)
         new_worker.signals.cleanup_sig.connect(self.remove_device_and_thread)
-        new_worker.start()
+        new_worker.start(priority=QThread.LowPriority)
         self.worker_thread_list.append(new_worker)
         self.signals.new_device_sig.emit(name, port.name, new_worker)
         self.logger.debug("done")
