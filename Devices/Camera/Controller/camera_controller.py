@@ -119,7 +119,7 @@ class CameraController(ABCDeviceController):
 
     def start_exp(self):
         self.logger.debug("running")
-        self.pipe.send((CEnum.START_SAVING,))
+        self.pipe.send((CEnum.START_SAVING, self.timestamp, self.save_dir))
         self.tab.set_controls_active(False)
         self.logger.debug("done")
 
