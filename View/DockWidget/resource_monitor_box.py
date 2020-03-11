@@ -27,6 +27,7 @@ from psutil import cpu_count
 from PySide2.QtWidgets import QGroupBox, QGridLayout, QLabel
 from PySide2.QtCore import Qt
 
+
 class MonitorBox(QGroupBox):
     def __init__(self, parent, size, ch, num_labels: int = cpu_count()):
         self.logger = logging.getLogger(__name__)
@@ -42,11 +43,16 @@ class MonitorBox(QGroupBox):
         self.values = []
         self.labels = []
 
-        for i in range(num_labels):
+        for i in range(num_labels + 1):
             self.values.append(QLabel())
             self.labels.append(QLabel())
             self.layout().addWidget(self.labels[i], i + 1, 0, Qt.AlignLeft)
             self.layout().addWidget(self.values[i], i + 1, 1, Qt.AlignRight)
+
+        # self.tot_label = QLabel()
+        # self.layout().addWidget(self.tot_label, num_labels + 1, 0, Qt.AlignLeft)
+        # self.total = QLabel()
+        # self.layout().addWidget(self.total, num_labels + 1, 1, Qt.AlignRight)
 
         self.__set_texts()
 
@@ -62,4 +68,7 @@ class MonitorBox(QGroupBox):
         for value in self.values:
             self.set_cpu_value(value, 0)
         for i in range(len(self.labels)):
-            self.labels[i].setText('cpu ' + str(i) + ':')
+            if i == len(self.labels):
+                self.labels[i].setText("Total cpu")
+            else:
+                self.labels[i].setText('cpu ' + str(i) + ':')
