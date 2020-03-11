@@ -586,7 +586,7 @@ class DRTController(ABCDeviceController):
         :param msg:
         :return str:
         """
-        
+
         line = ""
         for i in drtv1_0_save_fields:
             line += ", " + str(msg[i])
