@@ -38,7 +38,7 @@ class CameraTab(QWidget):
         self.name = name
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setMaximumHeight(250)
+        self.setMaximumHeight(300)
 
         self.config_horizontal_layout = QHBoxLayout()
 
@@ -46,6 +46,9 @@ class CameraTab(QWidget):
 
         self.use_cam_button = ClickAnimationButton()
         self.layout().addWidget(self.use_cam_button)
+
+        self.show_cam_button = ClickAnimationButton()
+        self.layout().addWidget(self.show_cam_button)
 
         self.settings_toggle_button = ClickAnimationButton()
         self.layout().addWidget(self.settings_toggle_button)
@@ -102,6 +105,7 @@ class CameraTab(QWidget):
         self.frame_rotation_setting_entry_box.setEnabled(is_active)
         self.settings_toggle_button.setEnabled(is_active)
         self.use_cam_button.setEnabled(is_active)
+        self.show_cam_button.setEnabled(is_active)
         self.logger.debug("done")
 
     def set_controls_active(self, is_active):
@@ -114,6 +118,11 @@ class CameraTab(QWidget):
     def add_use_cam_button_handler(self, func):
         self.logger.debug("running")
         self.use_cam_button.clicked.connect(func)
+        self.logger.debug("done")
+
+    def add_show_cam_button_handler(self, func):
+        self.logger.debug("running")
+        self.show_cam_button.clicked.connect(func)
         self.logger.debug("done")
 
     def add_settings_toggle_button_handler(self, func):
@@ -205,7 +214,8 @@ class CameraTab(QWidget):
 
     def __set_texts(self):
         self.logger.debug("running")
-        self.use_cam_button.setText("Toggle Camera")
+        self.use_cam_button.setText("Toggle Camera Usage")
+        self.show_cam_button.setText("Toggle Camera Display")
         self.fps_selector_label.setText("FPS")
         self.frame_size_selector_label.setText("Frame size")
         self.settings_toggle_button.setText("Camera Settings")
@@ -217,9 +227,11 @@ class CameraTab(QWidget):
         fps_selector_tooltip = "Select frame rate for the saved footage"
         frame_size_tooltip = "Select resolution for this camera. Higher resolutions may cause issues."
         use_cam_tooltip = "Toggle whether this camera is being used."
+        show_cam_tooltip = "Toggle whether this camera feed is added to the UI. (Does not disable camera)"
         settings_window_tooltip = "Open a window with extra camera settings."
         rotation_tooltip = "Set rotation angle for video feed. -360 < value < 360."
         self.use_cam_button.setToolTip(use_cam_tooltip)
+        self.show_cam_button.setToolTip(show_cam_tooltip)
         self.settings_toggle_button.setToolTip(settings_window_tooltip)
         self.fps_selector_frame.setToolTip(fps_selector_tooltip)
         self.frame_size_selector_frame.setToolTip(frame_size_tooltip)

@@ -31,11 +31,13 @@ from Devices.Camera.View.camera_tab import CameraTab
 from Devices.Camera.Controller.pipe_watcher import PipeWatcher
 from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 
+# TODO: Add functionality to disable displaying of camera without disabling camera.
+
 
 class ControllerSig(QObject):
     settings_error = Signal(str)
     cam_failed = Signal(str)
-    cam_closed = Signal(str)
+    cam_closed = Signal(str, int)
     send_msg_sig = Signal(tuple)
 
 
@@ -58,6 +60,7 @@ class CameraController(ABCDeviceController):
         self.save_dir = ''
         self.timestamp = None
         self.cam_active = True
+        self.feed_active = True
         self.color_image = True
         self.__setup_handlers()
         self.current_size = 0
@@ -98,7 +101,7 @@ class CameraController(ABCDeviceController):
             elif msg_type == CEnum.CAM_FAILED:
                 self.signals.cam_failed.emit(self.name + " failed. Possible disconnect or other issue getting next"
                                                          " frame")
-                self.signals.cam_closed.emit(self.name)
+                self.signals.cam_closed.emit(self.name, self.index)
                 self.cleanup()
             elif msg_type == CEnum.SET_RESOLUTION:
                 self.__set_tab_size_val(msg[1])
@@ -129,7 +132,27 @@ class CameraController(ABCDeviceController):
         self.tab.set_controls_active(True)
         self.logger.debug("done")
 
-    def toggle_cam(self):
+    def __setup_handlers(self):
+        self.logger.debug("running")
+        self.tab.add_use_cam_button_handler(self.__toggle_cam)
+        self.tab.add_fps_selector_handler(self.__set_fps)
+        self.tab.add_frame_size_selector_handler(self.__set_frame_size)
+        self.tab.add_settings_toggle_button_handler(self.__open_settings)
+        self.tab.add_frame_rotation_handler(self.__rotation_entry_changed)
+        self.tab.add_show_cam_button_handler(self.__toggle_show_feed)
+        self.logger.debug("done")
+
+    def __complete_setup(self, sizes: list):
+        self.logger.debug("running")
+        self.pipe.send((CEnum.WORKER_DONE,))
+        self.__populate_sizes(sizes)
+        self.__populate_fps_selections()
+        self.__get_initial_values()
+        self.pipe.send((CEnum.ACTIVATE_CAM,))
+        self.tab.set_tab_active(True)
+        self.logger.debug("done")
+
+    def __toggle_cam(self):
         self.logger.debug("running")
         if self.cam_active:
             self.pipe.send((CEnum.DEACTIVATE_CAM,))
@@ -138,19 +161,28 @@ class CameraController(ABCDeviceController):
         self.cam_active = not self.cam_active
         self.logger.debug("done")
 
-    def set_frame_size(self):
+    def __toggle_show_feed(self):
+        self.logger.debug("running")
+        if self.feed_active:
+            self.pipe.send((CEnum.HIDE_FEED,))
+        else:
+            self.pipe.send((CEnum.SHOW_FEED,))
+        self.feed_active = not self.feed_active
+        self.logger.debug("done")
+
+    def __set_frame_size(self):
         self.logger.debug("running")
         new_size = self.tab.get_frame_size()
         self.pipe.send((CEnum.SET_RESOLUTION, new_size))
         self.logger.debug("done")
 
-    def set_fps(self):
+    def __set_fps(self):
         self.logger.debug("running")
         new_fps = self.tab.get_fps()
         self.pipe.send((CEnum.SET_FPS, new_fps))
         self.logger.debug("done")
 
-    def open_settings(self):
+    def __open_settings(self):
         self.pipe.send((CEnum.OPEN_SETTINGS,))
 
     def __rotation_entry_changed(self):
@@ -200,19 +232,11 @@ class CameraController(ABCDeviceController):
         self.tab.populate_frame_size_selector(self.frame_sizes)
         self.logger.debug("done")
 
-    def __setup_handlers(self):
-        self.logger.debug("running")
-        self.tab.add_use_cam_button_handler(self.toggle_cam)
-        self.tab.add_fps_selector_handler(self.set_fps)
-        self.tab.add_frame_size_selector_handler(self.set_frame_size)
-        self.tab.add_settings_toggle_button_handler(self.open_settings)
-        self.tab.add_frame_rotation_handler(self.__rotation_entry_changed)
-        self.logger.debug("done")
-
     def __get_initial_values(self):
         self.logger.debug("running")
         self.pipe.send((CEnum.GET_RESOLUTION,))
         self.pipe.send((CEnum.GET_FPS,))
+        self.pipe.send((CEnum.GET_ROTATION,))
         self.logger.debug("done")
 
     def __set_tab_fps_val(self, value: int):
@@ -223,17 +247,6 @@ class CameraController(ABCDeviceController):
 
     def __set_tab_rot_val(self, value: int):
         self.tab.set_rotation(str(value))
-
-    def __complete_setup(self, sizes: list):
-        self.logger.debug("running")
-        self.pipe.send((CEnum.WORKER_DONE,))
-        self.__populate_sizes(sizes)
-        self.__populate_fps_selections()
-        self.__get_initial_values()
-        self.pipe.send((CEnum.ACTIVATE_CAM,))
-        self.pipe.send((CEnum.GET_ROTATION,))
-        self.tab.set_tab_active(True)
-        self.logger.debug("done")
 
     def __get_size_val_index(self, value: tuple):
         for i in range(len(self.frame_sizes)):

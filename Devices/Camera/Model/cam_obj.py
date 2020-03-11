@@ -25,6 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 # import logging
 import cv2
+from time import time
 from numpy import ndarray, zeros, array_equal
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
@@ -42,16 +43,21 @@ class CamObj:
         self.active = True
         self.writing = False
         self.color_image = True
-        self.alter_image_shape = True
+        self.alter_image_shape = False
+        self.show_feed = True
         self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
         self.scale = 1
-        self.prev_frame = zeros(3, dtype=int)
         # self.logger.debug("Initialized")
 
     def toggle_activity(self, is_active: bool):
         self.active = is_active
         if not self.active:
+            self.close_window()
+
+    def set_show_feed(self, is_active):
+        self.show_feed = is_active
+        if not self.show_feed:
             self.close_window()
 
     def setup_writer(self, timestamp, save_dir: str = '', vid_ext: str = '.avi', fps: int = None,
@@ -79,23 +85,26 @@ class CamObj:
         # self.logger.debug("done")
 
     def update(self):
-        ret: bool
-        frame: ndarray
-        ret, frame = self.__read_camera()
-        if ret and self.__check_frame(frame):
-            if self.active:
-                if self.alter_image_shape:
+        if self.active:
+            ret: bool
+            frame: ndarray
+            start = time()
+            ret, frame = self.__read_camera()
+            end = time()
+            if end - start > 0.2:
+                return False
+            if ret and frame is not None:
+                if self.alter_image_shape:  # TODO: Figure out better way to do this. This causes too much lag.
                     rows, cols, a = frame.shape
                     M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
                     frame = cv2.warpAffine(frame, M, (cols, rows))
-                if not self.color_image:
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                cv2.imshow(self.name, frame)
-                cv2.waitKey(1)  # Required for frame to appear
+                if self.show_feed:
+                    cv2.imshow(self.name, frame)
+                    cv2.waitKey(1)  # Required for frame to appear
                 self.__save_data(frame)
-                return True
-        else:
-            return False
+            else:
+                return False
+        return True
 
     def close_window(self):
         cv2.destroyWindow(self.name)
@@ -155,13 +164,3 @@ class CamObj:
     def __save_data(self, frame: ndarray):
         if self.writing:
             self.writer.write(frame)
-
-    def __check_frame(self, frame: ndarray):
-        ret = False
-        if frame is not None:
-            frame_output = frame.nonzero()
-            if len(frame_output[0]) > 0 or len(frame_output[1]) > 0 or len(frame_output[2]) > 0:
-                if not array_equal(frame, self.prev_frame):
-                    self.prev_frame = frame
-                    ret = True
-        return ret

@@ -17,7 +17,7 @@ cap_codec = cv2.VideoWriter_fourcc(*'MJPG')
 
 def show_feed(index: int, pipe: Connection):
     name = "Cam " + str(index)
-    size = small
+    size = big
     print("running size:", size)
     cap = cv2.VideoCapture(index, backend)
     ret = cap.set(cv2.CAP_PROP_FOURCC, cap_codec_one)  # TODO: Figure out why this works

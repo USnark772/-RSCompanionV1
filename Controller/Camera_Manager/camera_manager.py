@@ -36,6 +36,7 @@ class CamCounter:
         self.logger.debug("Initializing")
         self.lock = QMutex()
         self.count = 0
+        self.indicies = []
         self.logger.debug("Initialized")
 
     def get_lock(self):
@@ -48,19 +49,25 @@ class CamCounter:
         self.lock.unlock()
         # self.logger.debug("done")
 
-    def get_count(self):
-        return self.count
+    def get_next_index(self):
+        if len(self.indicies) > 0:
+            return self.find_missing()[0]
+        else:
+            return 0
 
-    def increment_count(self):
+    def find_missing(self):
+        ret = sorted(set(range(0, self.indicies[-1] + 2)) - set(self.indicies))
+        return ret
+
+    def add_index(self, index):
         self.logger.debug("running")
-        self.count += 1
+        self.indicies.append(index)
+        self.indicies.sort()
         self.logger.debug("done")
 
-    def decrement_count(self):
+    def remove_index(self, index):
         self.logger.debug("running")
-        self.count -= 1
-        if self.count < 0:
-            self.count = 0
+        self.indicies.remove(index)
         self.logger.debug("done")
 
 
@@ -87,7 +94,7 @@ class CamScanner(QThread):
     def __get_index(self):
         # self.logger.debug("running")
         self.cam_counter.get_lock()
-        i = self.cam_counter.get_count()
+        i = self.cam_counter.get_next_index()
         self.cam_counter.release_lock()
         # self.logger.debug("done")
         return i
@@ -97,14 +104,14 @@ class CamScanner(QThread):
         cap = cv2.VideoCapture(index, cap_backend)
         if cap and cap.isOpened():
             cap.release()
-            self.__increment_cam_count()
+            self.__increment_cam_count(index)
             self.signal.new_cam_sig.emit(index)
         # self.logger.debug("done")
 
-    def __increment_cam_count(self):
+    def __increment_cam_count(self, index):
         self.logger.debug("running")
         self.cam_counter.get_lock()
-        self.cam_counter.increment_count()
+        self.cam_counter.add_index(index)
         self.cam_counter.release_lock()
         self.logger.debug("done")
 
@@ -155,5 +162,7 @@ class CameraConnectionManager:
         self.signals.new_cam_sig.emit(index)
         self.logger.debug("done")
 
-    def decrement_cam_count(self):
-        self.cam_counter.decrement_count()
+    def decrement_cam_count(self, index):
+        self.cam_counter.get_lock()
+        self.cam_counter.remove_index(index)
+        self.cam_counter.release_lock()

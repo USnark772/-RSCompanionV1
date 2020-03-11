@@ -46,6 +46,8 @@ class CEnum(Enum):
     SET_ROTATION = auto()
     ACTIVATE_CAM = auto()
     DEACTIVATE_CAM = auto()
+    SHOW_FEED = auto()
+    HIDE_FEED = auto()
     START_SAVING = auto()
     STOP_SAVING = auto()
     CLEANUP = auto()
@@ -83,6 +85,7 @@ class SizeGetter(QThread):
             current_size = (new_x, new_y)
             take_a_moment()
         if self.running:
+            self.cam_obj.fourcc_bool = True
             self.cam_obj.set_frame_size(initial_size)
             try:
                 self.pipe.send((CEnum.WORKER_DONE, sizes))
@@ -116,7 +119,6 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
                 elif msg_type == CEnum.WORKER_DONE:
                     size_getter.wait()
                     size_getter_alive = False
-                    cam_obj.fourcc_bool = True
                 elif msg_type == CEnum.CLEANUP:
                     if size_getter_alive:
                         size_getter.running = False
@@ -146,7 +148,11 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
 
 def handle_pipe(msg: tuple, cam_obj: CamObj, pipe: Connection):
     msg_type = msg[0]
-    if msg_type == CEnum.OPEN_SETTINGS:
+    if msg_type == CEnum.SHOW_FEED:
+        cam_obj.set_show_feed(True)
+    elif msg_type == CEnum.HIDE_FEED:
+        cam_obj.set_show_feed(False)
+    elif msg_type == CEnum.OPEN_SETTINGS:
         cam_obj.open_settings_window()
     elif msg_type == CEnum.GET_RESOLUTION:
         pipe.send((CEnum.SET_RESOLUTION, cam_obj.get_current_frame_size()))
