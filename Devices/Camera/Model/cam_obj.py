@@ -25,8 +25,9 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 # import logging
 import cv2
+from imutils import rotate
 from time import time
-from numpy import ndarray, zeros, array_equal
+from numpy import ndarray
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
 
@@ -91,13 +92,11 @@ class CamObj:
             start = time()
             ret, frame = self.__read_camera()
             end = time()
-            if end - start > 0.2:
+            if end - start > 0.5:
                 return False
             if ret and frame is not None:
-                if self.alter_image_shape:  # TODO: Figure out better way to do this. This causes too much lag.
-                    rows, cols, a = frame.shape
-                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), self.rotate_angle, self.scale)
-                    frame = cv2.warpAffine(frame, M, (cols, rows))
+                if self.rotate_angle != 0:
+                    frame = rotate(frame, self.rotate_angle)
                 if self.show_feed:
                     cv2.imshow(self.name, frame)
                     cv2.waitKey(1)  # Required for frame to appear
