@@ -60,17 +60,36 @@ class CamObj:
         self.file_fixer = None
         # self.logger.debug("Initialized")
 
-    def toggle_activity(self, is_active: bool):
+    def toggle_activity(self, is_active: bool) -> None:
+        """
+        Toggles whether or not this camera is actually being used.
+        :param is_active:
+        :return:
+        """
+
         self.active = is_active
         if not self.active:
             self.close_window()
 
-    def set_show_feed(self, is_active):
+    def set_show_feed(self, is_active: bool) -> None:
+        """
+        Toggles whether the video feed from this camera is shown on screen
+        :param is_active:
+        :return:
+        """
+
         self.show_feed = is_active
         if not self.show_feed:
             self.close_window()
 
-    def start_writing(self, timestamp: str, save_dir: str):
+    def start_writing(self, timestamp: str, save_dir: str) -> None:
+        """
+        If this camera is being used, make preparations for and begin saving frames to file.
+        :param timestamp: The current time to uniquely name the video with.
+        :param save_dir: The directory path to save video to.
+        :return:
+        """
+
         if self.active:
             self.total_frames = 0
             self.writer = self.__setup_writer(timestamp, save_dir)
@@ -79,6 +98,17 @@ class CamObj:
 
     def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
                        vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> cv2.VideoWriter:
+        """
+        Creates a VideoWriter object for saving this camera's video feed to file.
+        :param timestamp: For use with creating a unique file name.
+        :param save_dir: The filepath to be used in conjunction with timestamp.
+        :param save_file: A full filename/filepath. Overrides timestamp/save_dir.
+        :param vid_ext: The filetype of this camera's output.
+        :param fps: The playback speed for this video output.
+        :param res: The image resolution to use for this video file.
+        :return: A VideoCapture object.
+        """
+
         # self.logger.debug("running")
         if not res:
             res = (int(self.cur_res[0]), int(self.cur_res[1]))
@@ -93,13 +123,29 @@ class CamObj:
         return writer
         # self.logger.debug("done")
 
-    def open_settings_window(self):
+    def open_settings_window(self) -> None:
+        """
+        Opens a window with camera specific settings for the user.
+        :return:
+        """
+
         self.cap.set(cv2.CAP_PROP_SETTINGS, 1)  # Seems like we can only open the window, not close it.
 
-    def stop_writing(self):
+    def stop_writing(self) -> None:
+        """
+        Stop saving video from this camera to file.
+        :return:
+        """
+
         self.__destroy_writer()
 
-    def __destroy_writer(self):
+    def __destroy_writer(self) -> None:
+        """
+        If this camera feed is being saved, stop saving and record end time. Run thread to update output file
+        playback speed.
+        :return:
+        """
+
         # self.logger.debug("running")
         if self.writing:
             self.end_time = time()
@@ -110,7 +156,13 @@ class CamObj:
             self.file_fixer.start()
         # self.logger.debug("done")
 
-    def update(self):
+    def update(self) -> None:
+        """
+        If this camera is being used, read from camera and modify image in any specified way. Show image if applicable
+        and then save image if applicable.
+        :return:
+        """
+
         if self.active:
             ret: bool
             frame: ndarray
@@ -136,41 +188,95 @@ class CamObj:
                 return False
         return True
 
-    def close_window(self):
+    def close_window(self) -> None:
+        """
+        Close the ui window for this camera output. This does not deactivate the camera.
+        :return:
+        """
+
         cv2.destroyWindow(self.name)
 
-    def cleanup(self):
+    def cleanup(self) -> None:
+        """
+        Deal with any tasks that need to be finised and then clean up all lose ends.
+        :return:
+        """
+
         # self.logger.debug("running")
         self.active = False
         self.cap.release()
+        self.close_window()
         self.__destroy_writer()
         if self.file_fixer:
             self.file_fixer.join()
-        self.close_window()
         # self.logger.debug("done")
 
-    def set_bw(self, is_active: bool):
+    def set_bw(self, is_active: bool) -> None:
+        """
+        Toggle whether this camera video output is rendered in color or black and white.
+        :param is_active:
+        :return:
+        """
+
         self.bw_image = is_active
 
-    def get_bw(self):
+    def get_bw(self) -> bool:
+        """
+        Show whether this camera video feed is being rendered in color or black and white.
+        :return:
+        """
+
         return self.bw_image
 
-    def get_current_fps(self):
+    def get_current_fps(self) -> int:
+        """
+        Show the current fps to be used for save files.
+        :return: The current fps value
+        """
+
         return self.fps
 
-    def set_fps(self, fps):
+    def set_fps(self, fps) -> None:
+        """
+        Set the fps to be used for save files.
+        :param fps:
+        :return:
+        """
+
         self.fps = fps
 
-    def get_current_rotation(self):
+    def get_current_rotation(self) -> int:
+        """
+        Show what angle this video feed is being altered to.
+        :return: The current angle.
+        """
+
         return self.rotate_angle
 
-    def set_rotation(self, value):
+    def set_rotation(self, value) -> None:
+        """
+        Set the current angle this camera's video feed will be rotated to.
+        :param value: new rotation value.
+        :return:
+        """
+
         self.rotate_angle = value
 
-    def get_current_frame_size(self):
+    def get_current_frame_size(self) -> (int, int):
+        """
+        Get the current frame size to be used for this camera.
+        :return:
+        """
+
         return self.cur_res
 
-    def set_frame_size(self, size: tuple):
+    def set_frame_size(self, size: tuple) -> None:
+        """
+        Set the current image resolution this camera should be capturing at.
+        :param size:
+        :return:
+        """
+
         x = float(size[0])
         y = float(size[1])
         self.toggle_activity(False)
@@ -186,18 +292,33 @@ class CamObj:
         self.close_window()
         self.toggle_activity(True)
 
-    def __set_fourcc(self):
+    def __set_fourcc(self) -> None:
+        """
+        Required for compressed video feeds.
+        :return:
+        """
+
         self.cap.set(cv2.CAP_PROP_FOURCC, cap_temp_codec)  # This line required because opencv is dumb
         self.cap.set(cv2.CAP_PROP_FOURCC, cap_codec)
 
-    def __read_camera(self):
+    def __read_camera(self) -> (bool, ndarray):
+        """
+        Try to read video from this camera.
+        :return:
+        """
+
         ret, frame = self.cap.read()
         if frame is None:
             ret, frame = self.cap.read()
         return ret, frame
 
     # TODO: Figure out more accurate actual_fps
-    def __set_file_fps(self):
+    def __set_file_fps(self) -> bool:
+        """
+        Fix the playback speed of the output file from this camera.
+        :return:
+        """
+
         time_taken = self.end_time - self.start_time
         if time_taken <= 0:
             return False
