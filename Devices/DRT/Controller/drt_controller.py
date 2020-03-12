@@ -24,12 +24,15 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 from math import trunc, ceil
 import logging
+from typing import Tuple, Optional
+from datetime import datetime
 from PySide2.QtCore import QObject, Signal
 from Devices.DRT.View.drt_tab import DRTTab
 from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_max, drtv1_0_stim_dur_min, \
     drtv1_0_ISI_max, drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr, drtv1_0_config_fields, \
     drtv1_0_note_spacer, drtv1_0_save_fields
 from Devices.abc_device_controller import ABCDeviceController
+from Controller.RS_Device_Manager.rs_device_manager import PortWorker
 
 
 class DRTSig(QObject):
@@ -37,7 +40,32 @@ class DRTSig(QObject):
 
 
 class DRTController(ABCDeviceController):
-    def __init__(self, device, thread, graph_callback, ch, save_callback):
+    def __init__(self, device: Tuple[str, str], thread: PortWorker, graph_callback,
+                 ch: logging.StreamHandler, save_callback) -> None:
+        """
+        DRT controller
+        :param device: Tuple[str, str] of device type and name
+        :param thread: Device communication thread
+        :param graph_callback:
+        :param ch:
+        :param save_callback:
+        :return None:
+        """
+
+        # print("DRTController:")
+        # print("device: ", device)
+        # print("device type: ", type(device))
+        # print("device[0] type: ", type(device[0]))
+        # print("device[1] type: ", type(device[1]))
+        # print("thread: ", thread)
+        # print("thread type: ", type(thread))
+        # print("graph_callback: ", graph_callback)
+        # print("graph_callback type: ", type(graph_callback))
+        # print("ch: ", ch)
+        # print("ch type: ", type(ch))
+        # print("save_callback: ", save_callback)
+        # print("save_callback type: ", type(save_callback))
+
         self.logger = logging.getLogger(__name__)
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
@@ -60,7 +88,11 @@ class DRTController(ABCDeviceController):
         self.init_values()
         self.logger.debug("Initialized")
 
-    def cleanup(self):
+    def cleanup(self) -> None:
+        """
+
+        :return None:
+        """
         self.logger.debug("running")
         if self.exp:
             self.end_block()
@@ -69,7 +101,20 @@ class DRTController(ABCDeviceController):
     def get_tab_obj(self):
         return self.tab
 
-    def handle_msg(self, msg_string, timestamp):
+    def handle_msg(self, msg_string: str, timestamp: datetime) -> None:
+        """
+
+        :param msg_string:
+        :param timestamp:
+        :return None:
+        """
+
+        # print("handle_msg:")
+        # print("msg_string: ", msg_string)
+        # print("msg_string type: ", type(msg_string))
+        # print("timestamp: ", timestamp)
+        # print("timestamp type: ", type(timestamp))
+
         msg_dict = self.__parse_msg(msg_string)
         msg_type = msg_dict['type']
         if msg_type == "data":
@@ -78,53 +123,106 @@ class DRTController(ABCDeviceController):
         elif msg_type == "settings":
             self.__update_config(msg_dict['values'])
 
-    def start_block(self):
+    def start_block(self) -> None:
+        """
+
+        :return None:
+        """
+
         self.exp = True
         self.__send_msg(self.__prepare_msg("exp_start"))
 
-    def end_block(self):
+    def end_block(self) -> None:
+        """
+
+        :return None:
+        """
+
         self.exp = False
         self.__send_msg(self.__prepare_msg("exp_stop"))
 
-    def init_values(self):
+    def init_values(self) -> None:
+        """
+        Request current device settings.
+        :return None:
+        """
+
         self.logger.debug("running")
-        """ Request current device settings. """
         self.__send_msg(self.__prepare_msg("get_config"))
         self.logger.debug("done")
 
     @staticmethod
-    def get_save_file_hdr():
+    def get_save_file_hdr() -> str:
+        """
+        Gets the header for the save file
+        :return str: Header of the save file
+        """
+
         return drtv1_0_file_hdr
 
     @staticmethod
-    def get_note_spacer():
+    def get_note_spacer() -> str:
+        """
+
+        :return str:
+        """
+
         return drtv1_0_note_spacer
 
-    def __connect_signals(self, thread):
+    def __connect_signals(self, thread: PortWorker) -> None:
+        """
+
+        :param thread:
+        :return None:
+        """
+
         self.signals.send_device_msg_sig.connect(thread.send_msg)
         thread.signals.new_msg_sig.connect(self.handle_msg)
 
-    def __save_data(self, values, timestamp):
+    def __save_data(self, values: dict, timestamp: datetime) -> None:
+        """
+
+        :param values:
+        :param timestamp:
+        :return None:
+        """
+
         line = self.__format_output_for_save_file(values)
         self.__save_callback(self.device_name, line, timestamp)
 
-    def __add_data_to_graph(self, data, timestamp):
-        """ Send data from device to graph for display. Separate data types into their own calls. """
+    def __add_data_to_graph(self, data: dict, timestamp: datetime) -> None:
+        """
+        Send data from device to graph for display. Separate data types into their own calls.
+        :param data:
+        :param timestamp:
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__graph_callback(self.__device_info, (self.__data_types[0][0], timestamp, data[drtv1_0_output_fields[3]]))
         self.__graph_callback(self.__device_info, (self.__data_types[1][0], timestamp, data[drtv1_0_output_fields[2]]))
         self.logger.debug("done")
 
-    def __update_config(self, msg):
+    def __update_config(self, msg: dict) -> None:
+        """
+        Update device configuration display.
+        :param msg:
+        :return None:
+        """
+
         self.logger.debug("running")
-        """ Update device configuration display. """
         self.__updating_config = True
         for key in msg:
             self.__set_val(key, msg[key])
         self.__updating_config = False
         self.logger.debug("done")
 
-    def __set_handlers(self):
+    def __set_handlers(self) -> None:
+        """
+
+        :return None:
+        """
+
         self.logger.debug("running")
         self.tab.add_iso_button_handler(self.__iso)
         self.tab.add_upload_button_handler(self.__update_device)
@@ -134,56 +232,68 @@ class DRTController(ABCDeviceController):
         self.tab.add_lower_isi_entry_changed_handler(self.__lower_isi_entry_changed)
         self.logger.debug("done")
 
-    def __stim_dur_entry_changed(self):
+    def __stim_dur_entry_changed(self) -> None:
         """
         Handle when user changes the value in the stim duration field.
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
+        :return None:
         """
+
         self.logger.debug("running")
         if not self.__updating_config:
             self.__check_stim_dur_val()
             self.__set_upload_button(True)
         self.logger.debug("done")
 
-    def __stim_intens_entry_changed(self):
+    def __stim_intens_entry_changed(self) -> None:
         """
         Handle when user changes the value in the stim intensity field.
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
+        :return None:
         """
+
         self.logger.debug("running")
         if not self.__updating_config:
             self.__check_stim_intens_val()
             self.__set_upload_button(True)
         self.logger.debug("done")
 
-    def __upper_isi_entry_changed(self):
+    def __upper_isi_entry_changed(self) -> None:
         """
         Handle when user changes the value in the upper isi field.
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
+        :return None:
         """
+
         self.logger.debug("running")
         if not self.__updating_config:
             self.__check_upper_isi_val()
             self.__set_upload_button(True)
         self.logger.debug("done")
 
-    def __lower_isi_entry_changed(self):
+    def __lower_isi_entry_changed(self) -> None:
         """
         Handle when user changes the value in the lower isi field.
         Make sure it was user that changed the value that it was not changed programmatically.
         If changed by user, check validity of value and then allow user to commit change.
+        :return None:
         """
+
         self.logger.debug("running")
         if not self.__updating_config:
             self.__check_lower_isi_val()
             self.__set_upload_button(True)
         self.logger.debug("done")
 
-    def __check_stim_dur_val(self):
-        """ Check validity of value, if not valid then set error bool and set visual cue. """
+    def __check_stim_dur_val(self) -> None:
+        """
+        Check validity of value, if not valid then set error bool and set visual cue.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__errors[0] = True
         usr_input = self.tab.get_stim_dur_val()
@@ -195,16 +305,24 @@ class DRTController(ABCDeviceController):
         self.tab.set_stim_dur_val_error(self.__errors[0])
         self.logger.debug("done")
 
-    def __check_stim_intens_val(self):
-        """ Update value with new value from slider. This value will never be out of range due to set slider range. """
+    def __check_stim_intens_val(self) -> None:
+        """
+        Update value with new value from slider. This value will never be out of range due to set slider range.
+        :return None:
+        """
+
         self.logger.debug("running")
         new_val_percent = self.tab.get_stim_intens_val()
         self.tab.set_stim_intens_val_label(new_val_percent)
         self.__changed[1] = self.__calc_percent_to_val(new_val_percent) != self.__current_vals[1]
         self.logger.debug("done")
 
-    def __check_upper_isi_val(self):
-        """ Check validity of value, if not valid then set error bool and set visual cue. """
+    def __check_upper_isi_val(self) -> None:
+        """
+        Check validity of value, if not valid then set error bool and set visual cue.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__errors[1] = True
         usr_input = self.tab.get_upper_isi_val()
@@ -221,8 +339,12 @@ class DRTController(ABCDeviceController):
             self.__check_lower_isi_val()
         self.logger.debug("done")
 
-    def __check_lower_isi_val(self):
-        """ Check validity of value, if not valid then set error bool and set visual cue. """
+    def __check_lower_isi_val(self) -> None:
+        """
+        Check validity of value, if not valid then set error bool and set visual cue.
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__errors[2] = True
         usr_input = self.tab.get_lower_isi_val()
@@ -239,8 +361,13 @@ class DRTController(ABCDeviceController):
             self.__check_upper_isi_val()
         self.logger.debug("done")
 
-    def __set_upload_button(self, is_active):
-        """ Check to make sure no errors are set and that there are changes to be made. Activate button if needed. """
+    def __set_upload_button(self, is_active: bool) -> None:
+        """
+        Check to make sure no errors are set and that there are changes to be made. Activate button if needed.
+        :param is_active:
+        :return None:
+        """
+
         self.logger.debug("running")
         if (self.__changed[0] or self.__changed[1] or self.__changed[2] or self.__changed[3])\
                 and not (self.__errors[0] or self.__errors[1] or self.__errors[2]):
@@ -249,8 +376,12 @@ class DRTController(ABCDeviceController):
             self.tab.set_upload_button_activity(False)
         self.logger.debug("done")
 
-    def __update_device(self):
-        """ Send updated values to device. Only send uploads if needed, then set as custom and disable upload button """
+    def __update_device(self) -> None:
+        """
+        Send updated values to device. Only send uploads if needed, then set as custom and disable upload button
+        :return None:
+        """
+
         self.logger.debug("running")
         if self.__changed[0]:
             self.__set_device_stim_duration(self.tab.get_stim_dur_val())
@@ -265,14 +396,25 @@ class DRTController(ABCDeviceController):
         self.__set_upload_button(False)
         self.logger.debug("done")
 
-    def __set_change_bools_false(self):
+    def __set_change_bools_false(self) -> None:
+        """
+
+        :return None:
+        """
+
         self.logger.debug("running")
         for i in self.__changed:
             self.__changed[i] = False
         self.logger.debug("done")
 
-    def __set_val(self, var, val):
-        """ Set display value of var to val. """
+    def __set_val(self, var: str, val: int) -> None:
+        """
+        Set display value of var to val.
+        :param var:
+        :param val:
+        :return None:
+        """
+
         self.logger.debug("running")
         if var == "stimDur":
             self.__current_vals[0] = int(val)
@@ -291,8 +433,11 @@ class DRTController(ABCDeviceController):
             self.tab.set_lower_isi_val_error(False)
         self.logger.debug("done")
 
-    def __iso(self):
-        """ Upload ISO Standards to device. """
+    def __iso(self) -> None:
+        """
+        Upload ISO Standards to device.
+        :return None:
+        """
         self.logger.debug("running")
         self.tab.set_config_val("ISO")
         self.__set_device_upper_isi("5000")
@@ -302,48 +447,89 @@ class DRTController(ABCDeviceController):
         self.__set_upload_button(False)
         self.logger.debug("done")
 
-    def __set_device_stim_duration(self, val):
-        """ Upload current setting from user to device. """
+    def __set_device_stim_duration(self, val: str) -> None:
+        """
+        Upload current setting from user to device.
+        :param val:
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__send_msg(self.__prepare_msg("set_stimDur", str(val)))
         self.logger.debug("done")
 
-    def __set_device_stim_intensity(self, val):
-        """ Upload current setting from user to device. """
+    def __set_device_stim_intensity(self, val: int) -> None:
+        """
+        Upload current setting from user to device.
+        :param val:
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__send_msg(self.__prepare_msg("set_intensity", str(self.__calc_percent_to_val(val))))
         self.logger.debug("done")
 
-    def __set_device_upper_isi(self, val):
-        """ Upload current setting from user to device. """
+    def __set_device_upper_isi(self, val: str) -> None:
+        """
+        Upload current setting from user to device.
+        :param val:
+        :return None:
+        """
+
         self.logger.debug("running")
         self.__send_msg(self.__prepare_msg("set_upperISI", str(val)))
         self.logger.debug("done")
 
-    def __set_device_lower_isi(self, val):
-        """ Upload current setting from user to device. """
+    def __set_device_lower_isi(self, val: str) -> None:
+        """
+        Upload current setting from user to device.
+        :param val:
+        :return None:
+        """
+        
         self.logger.debug("running")
         self.__send_msg(self.__prepare_msg("set_lowerISI", str(val)))
         self.logger.debug("done")
 
-    def __send_msg(self, msg):
-        """ Send message to device. """
+    def __send_msg(self, msg: str) -> None:
+        """
+        Send message to device.
+        :param msg:
+        :return None:
+        """
+
         self.logger.debug("running")
         self.signals.send_device_msg_sig.emit(msg)
         self.logger.debug("done")
 
     @staticmethod
-    def __calc_val_to_percent(val):
-        """ Calculate the value of stim intensity from device. """
+    def __calc_val_to_percent(val: int) -> int:
+        """
+        Calculate the value of stim intensity from device.
+        :param val:
+        :return int:
+        """
+
         return trunc(val / drtv1_0_intensity_max * 100)
 
     @staticmethod
-    def __calc_percent_to_val(val):
-        """ Calculate the value of stim intensity for device"""
+    def __calc_percent_to_val(val: int) -> int:
+        """
+        Calculate the value of stim intensity for device.
+        :param val:
+        :return int:
+        """
+
         return ceil(val / 100 * drtv1_0_intensity_max)
 
     @staticmethod
-    def __parse_msg(msg_string):
+    def __parse_msg(msg_string: str) -> dict:
+        """
+
+        :param msg_string:
+        :return:
+        """
+
         ret = dict()
         ret['values'] = {}
         if msg_string[0:4] == "cfg>":
@@ -379,8 +565,14 @@ class DRTController(ABCDeviceController):
         return ret
 
     @staticmethod
-    def __prepare_msg(cmd, arg=None):
-        """ Create string using drt syntax. """
+    def __prepare_msg(cmd: str, arg: Optional[str] = None) -> str:
+        """
+        Create string using drt syntax.
+        :param cmd:
+        :param arg:
+        :return str:
+        """
+
         if arg:
             msg_to_send = cmd + " " + arg + "\n"
         else:
@@ -388,8 +580,13 @@ class DRTController(ABCDeviceController):
         return msg_to_send
 
     @staticmethod
-    def __format_output_for_save_file(msg):
-        """ Format and return device output. Typically used for saving data to file. """
+    def __format_output_for_save_file(msg: dict) -> str:
+        """
+        Format and return device output. Typically used for saving data to file.
+        :param msg:
+        :return str:
+        """
+
         line = ""
         for i in drtv1_0_save_fields:
             line += ", " + str(msg[i])
