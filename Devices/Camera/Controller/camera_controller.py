@@ -31,8 +31,6 @@ from Devices.Camera.View.camera_tab import CameraTab
 from Devices.Camera.Controller.pipe_watcher import PipeWatcher
 from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 
-# TODO: Add functionality to disable displaying of camera without disabling camera.
-
 
 class ControllerSig(QObject):
     settings_error = Signal(str)
@@ -123,13 +121,13 @@ class CameraController(ABCDeviceController):
     def start_exp(self):
         self.logger.debug("running")
         self.pipe.send((CEnum.START_SAVING, self.timestamp, self.save_dir))
-        self.tab.set_controls_active(False)
+        self.tab.set_tab_active(False)
         self.logger.debug("done")
 
     def end_exp(self):
         self.logger.debug("running")
         self.pipe.send((CEnum.STOP_SAVING,))
-        self.tab.set_controls_active(True)
+        self.tab.set_tab_active(True)
         self.logger.debug("done")
 
     def __setup_handlers(self):
@@ -156,8 +154,10 @@ class CameraController(ABCDeviceController):
         self.logger.debug("running")
         if self.cam_active:
             self.pipe.send((CEnum.DEACTIVATE_CAM,))
+            self.tab.set_tab_active(False, toggle_toggler=False)
         else:
             self.pipe.send((CEnum.ACTIVATE_CAM,))
+            self.tab.set_tab_active(True, toggle_toggler=False)
         self.cam_active = not self.cam_active
         self.logger.debug("done")
 

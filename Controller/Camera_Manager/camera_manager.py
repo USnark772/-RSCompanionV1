@@ -124,8 +124,6 @@ class CamConManSig(QObject):
     new_cam_sig = Signal(int)
 
 
-# TODO: Figure out how to number cameras better. If a camera fails and then plugs in again
-#  then it could override a cam that is currently plugged in under the same index.
 class CameraConnectionManager:
     def __init__(self, ch):
         self.logger = logging.getLogger(__name__)

@@ -99,20 +99,11 @@ class CameraTab(QWidget):
     def get_name(self):
         return self.name
 
-    def set_tab_active(self, is_active):
+    def set_tab_active(self, is_active, toggle_toggler: bool = True):
         self.logger.debug("running")
-        self.set_controls_active(is_active)
-        self.frame_rotation_setting_entry_box.setEnabled(is_active)
-        self.settings_toggle_button.setEnabled(is_active)
-        self.use_cam_button.setEnabled(is_active)
-        self.show_cam_button.setEnabled(is_active)
-        self.logger.debug("done")
-
-    def set_controls_active(self, is_active):
-        self.logger.debug("running")
-        self.frame_size_selector.setEnabled(is_active)
-        self.fps_selector.setEnabled(is_active)
-        self.use_cam_button.setEnabled(is_active)
+        self.__set_controls_active(is_active)
+        if toggle_toggler:
+            self.use_cam_button.setEnabled(is_active)
         self.logger.debug("done")
 
     def add_use_cam_button_handler(self, func):
@@ -161,6 +152,9 @@ class CameraTab(QWidget):
         self.frame_size_selector.setCurrentIndex(index)
         self.logger.debug("done")
 
+    def get_rotation(self):
+        return self.frame_rotation_setting_entry_box.text()
+
     def set_rotation(self, value: str):
         self.logger.debug("running")
         self.frame_rotation_setting_entry_box.setText(value)
@@ -174,9 +168,6 @@ class CameraTab(QWidget):
         else:
             self.frame_rotation_setting_entry_box.setStyleSheet(tab_line_edit_compliant_style)
         self.logger.debug("done")
-
-    def get_rotation(self):
-        return self.frame_rotation_setting_entry_box.text()
 
     def populate_fps_selector(self, values):
         self.logger.debug("running")
@@ -210,6 +201,15 @@ class CameraTab(QWidget):
         self.logger.debug("running")
         for i in range(self.fps_selector.count()):
             self.fps_selector.removeItem(i)
+        self.logger.debug("done")
+
+    def __set_controls_active(self, is_active):
+        self.logger.debug("running")
+        self.frame_size_selector.setEnabled(is_active)
+        self.fps_selector.setEnabled(is_active)
+        self.frame_rotation_setting_entry_box.setEnabled(is_active)
+        self.settings_toggle_button.setEnabled(is_active)
+        self.show_cam_button.setEnabled(is_active)
         self.logger.debug("done")
 
     def __set_texts(self):
