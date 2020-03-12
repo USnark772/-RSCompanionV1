@@ -28,11 +28,14 @@ import cv2
 from os import remove
 from imutils import rotate, resize
 from time import time
+from datetime import datetime
 from numpy import ndarray
 from threading import Thread
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
-
+# TODO: Maybe cap.grab in the loop and then cap.read somewhere else when timing isn't so important? Would not be
+#  able to view the video feed in real time but maybe would be the same number of frames per camera per duration of
+#  recording.
 class CamObj:
     def __init__(self, index: int, name: str):  # , ch: logging.Handler):
         # self.logger = logging.getLogger(__name__)
@@ -53,8 +56,8 @@ class CamObj:
         self.save_file = str()
         self.temp_save_file = str()
         self.total_frames = 0
-        self.start_time = 0
-        self.end_time = 0
+        self.start_time: datetime = datetime.now()
+        self.end_time: datetime = datetime.now()
         self.actual_fps = 0
         self.saved_resolution = (0, 0)
         self.file_fixer = None
@@ -93,8 +96,9 @@ class CamObj:
         if self.active:
             self.total_frames = 0
             self.writer = self.__setup_writer(timestamp, save_dir)
-            self.start_time = time()
             self.writing = True
+            self.start_time = datetime.now()
+            print(self.start_time)
 
     def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
                        vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> cv2.VideoWriter:
@@ -148,10 +152,11 @@ class CamObj:
 
         # self.logger.debug("running")
         if self.writing:
-            self.end_time = time()
+            self.writing = False
             self.writer.release()
             self.writer = None
-            self.writing = False
+            self.end_time = datetime.now()
+            print(self.end_time)
             self.file_fixer = Thread(target=self.__set_file_fps)
             self.file_fixer.start()
         # self.logger.debug("done")
@@ -319,10 +324,11 @@ class CamObj:
         :return:
         """
 
-        time_taken = self.end_time - self.start_time
+        time_taken = (self.end_time - self.start_time).total_seconds()
         if time_taken <= 0:
             return False
-        actual_fps = int(self.total_frames / time_taken)
+        actual_fps = round(self.total_frames / time_taken)
+        print(actual_fps, self.total_frames, time_taken)
         from_file = cv2.VideoCapture(self.temp_save_file)
         to_file = self.__setup_writer(save_file=self.save_file, fps=actual_fps)
         ret, frame = from_file.read()
