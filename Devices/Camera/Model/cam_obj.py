@@ -25,9 +25,11 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 # import logging
 import cv2
-from imutils import rotate
+from os import remove
+from imutils import rotate, resize
 from time import time
 from numpy import ndarray
+from threading import Thread
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
 
@@ -38,17 +40,24 @@ class CamObj:
         # self.logger.debug("Initializing")
         self.cap = cv2.VideoCapture(index, cap_backend)
         self.name = name
-        self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.cur_res = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
         self.active = True
         self.writing = False
-        self.color_image = True
-        self.alter_image_shape = False
+        self.bw_image = False
         self.show_feed = True
         self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
-        self.scale = 1
+        # self.scale = .5  # TODO: Figure out if this is different than setting frame size differently.
+        self.save_file = str()
+        self.temp_save_file = str()
+        self.total_frames = 0
+        self.start_time = 0
+        self.end_time = 0
+        self.actual_fps = 0
+        self.saved_resolution = (0, 0)
+        self.file_fixer = None
         # self.logger.debug("Initialized")
 
     def toggle_activity(self, is_active: bool):
@@ -61,28 +70,44 @@ class CamObj:
         if not self.show_feed:
             self.close_window()
 
-    def setup_writer(self, timestamp, save_dir: str = '', vid_ext: str = '.avi', fps: int = None,
-                     frame_size: tuple = None, codec: str = 'MJPG'):
-        # self.logger.debug("running")
-        if not frame_size:
-            frame_size = (int(self.frame_size[0]), int(self.frame_size[1]))
-        if not fps:
-            fps = self.fps
+    def start_writing(self, timestamp: str, save_dir: str):
         if self.active:
-            self.writer = cv2.VideoWriter(save_dir + timestamp + self.name + '_output' + vid_ext,
-                                          cap_codec, fps, frame_size)
+            self.total_frames = 0
+            self.writer = self.__setup_writer(timestamp, save_dir)
+            self.start_time = time()
             self.writing = True
+
+    def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
+                       vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> cv2.VideoWriter:
+        # self.logger.debug("running")
+        if not res:
+            res = (int(self.cur_res[0]), int(self.cur_res[1]))
+            self.saved_resolution = res
+        if not save_file:
+            self.temp_save_file = save_dir + 'temp_' + timestamp + '_' + self.name + '_output' + vid_ext
+            self.save_file = save_dir + timestamp + '_' + self.name + '_output' + vid_ext
+            file_name = self.temp_save_file
+        else:
+            file_name = save_file
+        writer = cv2.VideoWriter(file_name, cap_codec, fps, res)
+        return writer
         # self.logger.debug("done")
 
     def open_settings_window(self):
         self.cap.set(cv2.CAP_PROP_SETTINGS, 1)  # Seems like we can only open the window, not close it.
 
-    def destroy_writer(self):
+    def stop_writing(self):
+        self.__destroy_writer()
+
+    def __destroy_writer(self):
         # self.logger.debug("running")
         if self.writing:
+            self.end_time = time()
             self.writer.release()
             self.writer = None
             self.writing = False
+            self.file_fixer = Thread(target=self.__set_file_fps)
+            self.file_fixer.start()
         # self.logger.debug("done")
 
     def update(self):
@@ -95,12 +120,18 @@ class CamObj:
             if end - start > 0.5:
                 return False
             if ret and frame is not None:
+                if self.bw_image:
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                # if self.scale != 1:
+                #     frame = resize(frame, round(self.frame_size[0] * self.scale))
                 if self.rotate_angle != 0:
                     frame = rotate(frame, self.rotate_angle)
                 if self.show_feed:
                     cv2.imshow(self.name, frame)
                     cv2.waitKey(1)  # Required for frame to appear
-                self.__save_data(frame)
+                if self.writing:
+                    self.writer.write(frame)
+                    self.total_frames += 1
             else:
                 return False
         return True
@@ -112,12 +143,17 @@ class CamObj:
         # self.logger.debug("running")
         self.active = False
         self.cap.release()
-        self.destroy_writer()
+        self.__destroy_writer()
+        if self.file_fixer:
+            self.file_fixer.join()
         self.close_window()
         # self.logger.debug("done")
 
-    def set_use_color(self, is_active: bool):
-        self.color_image = is_active
+    def set_bw(self, is_active: bool):
+        self.bw_image = is_active
+
+    def get_bw(self):
+        return self.bw_image
 
     def get_current_fps(self):
         return self.fps
@@ -132,7 +168,7 @@ class CamObj:
         self.rotate_angle = value
 
     def get_current_frame_size(self):
-        return self.frame_size
+        return self.cur_res
 
     def set_frame_size(self, size: tuple):
         x = float(size[0])
@@ -143,10 +179,10 @@ class CamObj:
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
         if not res1 or not res2:
-            res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_size[0])
-            res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_size[1])
+            res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.cur_res[0])
+            res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cur_res[1])
         else:
-            self.frame_size = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            self.cur_res = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.close_window()
         self.toggle_activity(True)
 
@@ -160,6 +196,19 @@ class CamObj:
             ret, frame = self.cap.read()
         return ret, frame
 
-    def __save_data(self, frame: ndarray):
-        if self.writing:
-            self.writer.write(frame)
+    # TODO: Figure out more accurate actual_fps
+    def __set_file_fps(self):
+        time_taken = self.end_time - self.start_time
+        if time_taken <= 0:
+            return False
+        actual_fps = int(self.total_frames / time_taken)
+        from_file = cv2.VideoCapture(self.temp_save_file)
+        to_file = self.__setup_writer(save_file=self.save_file, fps=actual_fps)
+        ret, frame = from_file.read()
+        while ret and frame is not None:
+            to_file.write(frame)
+            ret, frame = from_file.read()
+        from_file.release()
+        to_file.release()
+        remove(self.temp_save_file)
+        return True

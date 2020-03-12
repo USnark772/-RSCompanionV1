@@ -166,10 +166,10 @@ def handle_pipe(msg: tuple, cam_obj: CamObj, pipe: Connection):
     elif msg_type == CEnum.SET_FPS:
         cam_obj.set_fps(msg[1])
     elif msg_type == CEnum.START_SAVING:
-        cam_obj.setup_writer(msg[1], msg[2])
+        cam_obj.start_writing(msg[1], msg[2])
     elif msg_type == CEnum.STOP_SAVING:
-        cam_obj.destroy_writer()
+        cam_obj.stop_writing()
     elif msg_type == CEnum.GET_BW:
-        pipe.send((CEnum.SET_BW, False))  # replace False with cam_obj.get_bw()
+        pipe.send((CEnum.SET_BW, cam_obj.get_bw()))  # replace False with cam_obj.get_bw()
     elif msg_type == CEnum.SET_BW:
-        pass  # cam_obj.set_bw(msg[1])
+        cam_obj.set_bw(msg[1])

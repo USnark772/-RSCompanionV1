@@ -552,7 +552,7 @@ class CompanionController:
             self.note_box.toggle_post_button(False)
         self.logger.debug("done")
 
-    def __send_save_data_to_cams(self, timestamp: datetime) -> None:
+    def __send_save_data_to_cams(self, timestamp: str) -> None:
         """
         Set up a save file for a camera to save captured video
         :param timestamp: Start time of the experiment
