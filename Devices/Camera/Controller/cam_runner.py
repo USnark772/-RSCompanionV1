@@ -62,16 +62,21 @@ class SizeGetter(QThread):
     def run(self):
         sizes = []
         initial_size = self.cam_obj.get_current_frame_size()
+        print("initial_size: ", initial_size)
         new_tup = (str(initial_size[0]) + ", " + str(initial_size[1]), initial_size)
         sizes.append(new_tup)
-        large_size = (3000, 3000)
+        # large_size = (3000, 3000)
+        large_size = (1920, 1080)
         step = 100
         self.cam_obj.set_frame_size(large_size)
         max_size = self.cam_obj.get_current_frame_size()
+        print("max_size: ", max_size)
         current_size = (initial_size[0] + step, initial_size[1] + step)
+        print("current_size: ", current_size)
         while current_size[0] <= max_size[0] and self.running:
-            self.cam_obj.set_frame_size(current_size)
+            print("while loop fs: ", self.cam_obj.set_frame_size(current_size))
             result = self.cam_obj.get_current_frame_size()
+            print("while result: ", result)
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
             if new_tup not in sizes:
                 sizes.append(new_tup)
@@ -99,7 +104,7 @@ def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handle
     # logger.debug("Initializing")
     cam_obj = CamObj(index, name)  #, ch)
     size_getter = SizeGetter(cam_obj, pipe)
-    size_getter.start(priority=QThread.HighPriority)
+    size_getter.start()  # priority=QThread.HighPriority)
     size_getter_alive = True
     running = False
     # logger.debug("Initialized")

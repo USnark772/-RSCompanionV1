@@ -17,6 +17,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
+# Author: Nathan Rogers
 # Date: 2020
 # Project: Companion App
 # Company: Red Scientific
@@ -32,6 +33,7 @@ from datetime import datetime
 from numpy import ndarray
 from threading import Thread
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
+from CompanionLib.companion_helpers import take_a_moment
 
 # TODO: Maybe cap.grab in the loop and then cap.read somewhere else when timing isn't so important? Would not be
 #  able to view the video feed in real time but maybe would be the same number of frames per camera per duration of
@@ -61,6 +63,8 @@ class CamObj:
         self.actual_fps = 0
         self.saved_resolution = (0, 0)
         self.file_fixer = None
+        # TODO: remove next line when done debugging
+        self.index = index
         # self.logger.debug("Initialized")
 
     def toggle_activity(self, is_active: bool) -> None:
@@ -98,7 +102,7 @@ class CamObj:
             self.writer = self.__setup_writer(timestamp, save_dir)
             self.writing = True
             self.start_time = datetime.now()
-            print(self.start_time)
+            self.check_index(self.start_time)
 
     def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
                        vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> cv2.VideoWriter:
@@ -156,7 +160,7 @@ class CamObj:
             self.writer.release()
             self.writer = None
             self.end_time = datetime.now()
-            print(self.end_time)
+            self.check_index(self.end_time)
             self.file_fixer = Thread(target=self.__set_file_fps)
             self.file_fixer.start()
         # self.logger.debug("done")
@@ -175,6 +179,7 @@ class CamObj:
             ret, frame = self.__read_camera()
             end = time()
             if end - start > 0.5:
+                self.check_index("update failed at end - start > 1")
                 return False
             if ret and frame is not None:
                 if self.bw_image:
@@ -190,6 +195,9 @@ class CamObj:
                     self.writer.write(frame)
                     self.total_frames += 1
             else:
+                self.check_index("update failed with ret or frame problem")
+                self.check_index("ret: " + str(ret))
+                self.check_index("frame: " + str(frame))
                 return False
         return True
 
@@ -288,12 +296,22 @@ class CamObj:
         if self.fourcc_bool:
             self.__set_fourcc()
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
+        take_a_moment(1)
+        # TODO: usb cam is having trouble with this line
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
+        print("res1: ", res1)
+        print("res2: ", res2)
         if not res1 or not res2:
             res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.cur_res[0])
             res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cur_res[1])
+            print("res3: ", res3)
+            print("res4: ", res4)
         else:
-            self.cur_res = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            curWidth = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+            curHeight = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            print("curWidth: ", curWidth)
+            print("curHeight: ", curHeight)
+            self.cur_res = (curWidth, curHeight)
         self.close_window()
         self.toggle_activity(True)
 
@@ -313,8 +331,12 @@ class CamObj:
         """
 
         ret, frame = self.cap.read()
+        self.check_index("ret1: " + str(ret))
+        self.check_index("frame1: " + str(frame))
         if frame is None:
             ret, frame = self.cap.read()
+            self.check_index("ret2: " + str(ret))
+            self.check_index("frame2: " + str(frame))
         return ret, frame
 
     # TODO: Figure out more accurate actual_fps
@@ -328,7 +350,7 @@ class CamObj:
         if time_taken <= 0:
             return False
         actual_fps = round(self.total_frames / time_taken)
-        print(actual_fps, self.total_frames, time_taken)
+        # self.check_index(actual_fps, self.total_frames, time_taken)
         from_file = cv2.VideoCapture(self.temp_save_file)
         to_file = self.__setup_writer(save_file=self.save_file, fps=actual_fps)
         ret, frame = from_file.read()
@@ -339,3 +361,8 @@ class CamObj:
         to_file.release()
         remove(self.temp_save_file)
         return True
+
+    def check_index(self, msg):
+        return
+        if self.index == 2:
+            print(msg)

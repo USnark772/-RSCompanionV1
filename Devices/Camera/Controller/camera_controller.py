@@ -17,6 +17,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
+# Author: Nathan Rogers
 # Date: 2020
 # Project: Companion App
 # Company: Red Scientific
@@ -97,8 +98,7 @@ class CameraController(ABCDeviceController):
             if msg_type == CEnum.WORKER_DONE:
                 self.__complete_setup(msg[1])
             elif msg_type == CEnum.CAM_FAILED:
-                self.signals.cam_failed.emit(self.name + " failed. Possible disconnect or other issue getting next"
-                                                         " frame")
+                self.signals.cam_failed.emit(self.name + " failed. Possible disconnect.")
                 self.signals.cam_closed.emit(self.name, self.index)
                 self.cleanup()
             elif msg_type == CEnum.SET_RESOLUTION:
@@ -198,7 +198,11 @@ class CameraController(ABCDeviceController):
     def __rotation_entry_changed(self):
         if self.__validate_rotation():
             new_rotation = int(self.tab.get_rotation())
-            self.pipe.send((CEnum.SET_ROTATION, new_rotation))
+            try:
+                self.pipe.send((CEnum.SET_ROTATION, new_rotation))
+            except BrokenPipeError as e:
+                self.logger.exception("Broken pipe")
+                return
             self.tab.set_rotation_error(False)
         else:
             self.tab.set_rotation_error(True)

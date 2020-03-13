@@ -10,6 +10,7 @@ from View.MainWindow.central_widget import CentralWidget
 small = (640, 480)
 big = (1920, 1080)
 backend = cv2.CAP_DSHOW
+superBig = (3000, 3000)
 
 cap_codec_one = cv2.VideoWriter_fourcc(*'mjpg')
 cap_codec = cv2.VideoWriter_fourcc(*'MJPG')
@@ -26,6 +27,8 @@ def show_feed(index: int, pipe: Connection):
     print(ret)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
+    print("width: ", cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    print("height: ", cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     cap.set(cv2.CAP_PROP_SETTINGS, 1)
     # save_dir = "C:/users/phill/companion app save folder/"
     # vid_ext = ".avi"
@@ -80,7 +83,7 @@ def show_feed(index: int, pipe: Connection):
 
 class Cams:
     def __init__(self):
-        self.first_index = 2
+        self.first_index = 0
         self.last_index = 3
         self.workers = []
         self.pipes = []

@@ -1,3 +1,28 @@
+""" Licensed under GNU GPL-3.0-or-later """
+"""
+This file is part of RS Companion.
+
+RS Companion is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RS Companion is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
+# Author: Phillip Riskin
+# Author: Nathan Rogers
+# Date: 2019 - 2020
+# Project: Companion App
+# Company: Red Scientific
+# https://redscientific.com/index.html
+
 import logging
 from datetime import datetime
 from PySide2.QtCore import QObject, QThread, Signal
@@ -54,7 +79,7 @@ class PortScannerSig(QObject):
 class PortScanner(QThread):
     def __init__(self):
         QThread.__init__(self)
-        self.setPriority(QThread.LowestPriority)
+        # self.setPriority(QThread.LowestPriority)
         self.running = True
         self.signals = PortScannerSig()
         self.known_ports = []
@@ -121,7 +146,7 @@ class RSDeviceConnectionManager:
         self.scanner_thread.signals.new_device_sig.connect(self.connect_port_to_thread)
         self.scanner_thread.signals.disconnect_sig.connect(self.remove_device_and_thread)
         self.scanner_thread.signals.device_connect_fail_sig.connect(self.alert_connection_failed)
-        self.scanner_thread.start(priority=QThread.LowestPriority)
+        self.scanner_thread.start()  # priority=QThread.LowestPriority)
         self.logger.debug("Initialized")
 
     def cleanup(self):
@@ -137,7 +162,7 @@ class RSDeviceConnectionManager:
         self.logger.debug("running")
         new_worker = PortWorker(name, port)
         new_worker.signals.cleanup_sig.connect(self.remove_device_and_thread)
-        new_worker.start(priority=QThread.LowPriority)
+        new_worker.start()  # priority=QThread.LowPriority)
         self.worker_thread_list.append(new_worker)
         self.signals.new_device_sig.emit(name, port.name, new_worker)
         self.logger.debug("done")

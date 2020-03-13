@@ -38,7 +38,7 @@ class PipeWatcher(QThread):
         self.logger.addHandler(ch)
         self.logger.debug("Initializing")
         QThread.__init__(self)
-        self.setPriority(QThread.LowPriority)
+        # self.setPriority(QThread.LowPriority)
         self.pipe = pipe
         self.signal = PipeWatcherSig()
         self.running = True
