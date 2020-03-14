@@ -46,6 +46,7 @@ class PipeWatcher(QThread):
 
     def run(self):
         self.logger.debug("running")
+        self.setPriority(QThread.LowPriority)
         while self.running:
             take_a_moment()
             try:

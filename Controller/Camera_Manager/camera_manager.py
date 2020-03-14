@@ -86,10 +86,11 @@ class CamScanner(QThread):
     # Try to connect new cam from latest index and up
     def run(self):
         self.logger.debug("running")
-        # while self.running:
-        #     self.__check_for_cams(self.__get_index())
-        #     take_a_moment()
-        self.signal.new_cam_sig.emit(2)
+        self.setPriority(QThread.LowestPriority)
+        while self.running:
+            self.__check_for_cams(self.__get_index())
+            take_a_moment()
+        # self.signal.new_cam_sig.emit(2)
         self.logger.debug("done")
 
     def __get_index(self):

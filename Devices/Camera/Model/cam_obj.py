@@ -35,9 +35,7 @@ from threading import Thread
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 from CompanionLib.companion_helpers import take_a_moment
 
-# TODO: Maybe cap.grab in the loop and then cap.read somewhere else when timing isn't so important? Would not be
-#  able to view the video feed in real time but maybe would be the same number of frames per camera per duration of
-#  recording.
+
 class CamObj:
     def __init__(self, index: int, name: str):  # , ch: logging.Handler):
         # self.logger = logging.getLogger(__name__)
@@ -297,7 +295,7 @@ class CamObj:
             self.__set_fourcc()
         res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
         take_a_moment(1)
-        # TODO: usb cam is having trouble with this line
+        # TODO: usb cam is having trouble with this line on certain machines. Have we checked .isOpen?
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
         print("res1: ", res1)
         print("res2: ", res2)

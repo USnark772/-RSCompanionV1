@@ -77,20 +77,25 @@ class PortScannerSig(QObject):
 
 
 class PortScanner(QThread):
-    def __init__(self):
+    def __init__(self, ch):
+        self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
+        self.logger.debug("Initializing")
         QThread.__init__(self)
-        # self.setPriority(QThread.LowestPriority)
         self.running = True
         self.signals = PortScannerSig()
         self.known_ports = []
 
     def run(self):
+        self.logger.debug("running")
+        self.setPriority(QThread.LowPriority)
         while self.running:
             x = list_ports.comports()
             if len(x) > len(self.known_ports):
                 self.__try_attach_devices(x)
             elif len(x) < len(self.known_ports):
                 self.__check_for_disconnects(x)
+        self.logger.debug("done")
 
     def __try_attach_devices(self, list_of_ports):
         for port in list_of_ports:
@@ -142,7 +147,7 @@ class RSDeviceConnectionManager:
         self.logger.debug("Initializing")
         self.signals = DevConManSig()
         self.worker_thread_list = []
-        self.scanner_thread = PortScanner()
+        self.scanner_thread = PortScanner(ch)
         self.scanner_thread.signals.new_device_sig.connect(self.connect_port_to_thread)
         self.scanner_thread.signals.disconnect_sig.connect(self.remove_device_and_thread)
         self.scanner_thread.signals.device_connect_fail_sig.connect(self.alert_connection_failed)
