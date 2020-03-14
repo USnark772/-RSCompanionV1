@@ -63,7 +63,7 @@ class SizeGetter(QThread):
         self.setPriority(QThread.HighestPriority)
         sizes = []
         initial_size = self.cam_obj.get_current_frame_size()
-        print("initial_size: ", initial_size)
+        # print("initial_size: ", initial_size)
         new_tup = (str(initial_size[0]) + ", " + str(initial_size[1]), initial_size)
         sizes.append(new_tup)
         # large_size = (3000, 3000)
@@ -71,13 +71,13 @@ class SizeGetter(QThread):
         step = 100
         self.cam_obj.set_frame_size(large_size)
         max_size = self.cam_obj.get_current_frame_size()
-        print("max_size: ", max_size)
+        # print("max_size: ", max_size)
         current_size = (initial_size[0] + step, initial_size[1] + step)
-        print("current_size: ", current_size)
+        # print("current_size: ", current_size)
         while current_size[0] <= max_size[0] and self.running:
             self.cam_obj.set_frame_size(current_size)
             result = self.cam_obj.get_current_frame_size()
-            print("while result: ", result)
+            # print("while result: ", result)
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
             if new_tup not in sizes:
                 sizes.append(new_tup)

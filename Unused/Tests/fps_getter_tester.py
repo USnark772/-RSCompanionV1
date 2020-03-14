@@ -7,7 +7,7 @@ big = (1920, 1080)
 def show_feeds():
     # Start default camera
     video = cv2.VideoCapture(0)
-    size = small
+    size = big
     res1 = video.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
     res2 = video.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
 
@@ -34,6 +34,8 @@ def show_feeds():
     # Grab a few frames
     for i in range(0, num_frames):
         ret, frame = video.read()
+        pos = video.get(cv2.CAP_PROP_POS_MSEC)
+        print(pos)
 
     # End time
     end = time.time()

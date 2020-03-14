@@ -55,9 +55,9 @@ class CamObj:
         # self.scale = .5  # TODO: Figure out if this is different than setting frame size differently.
         self.save_file = str()
         self.temp_save_file = str()
-        self.total_frames = 0
         self.start_time: datetime = datetime.now()
-        self.end_time: datetime = datetime.now()
+        self.end_time: datetime = self.start_time
+        self.last_timestampe: datetime = self.start_time
         self.actual_fps = 0
         self.saved_resolution = (0, 0)
         self.file_fixer = None
@@ -100,7 +100,7 @@ class CamObj:
             self.writer = self.__setup_writer(timestamp, save_dir)
             self.writing = True
             self.start_time = datetime.now()
-            self.check_index(self.start_time)
+            # self.print_by_index(self.start_time)
 
     def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
                        vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> cv2.VideoWriter:
@@ -158,12 +158,11 @@ class CamObj:
             self.writer.release()
             self.writer = None
             self.end_time = datetime.now()
-            self.check_index(self.end_time)
             self.file_fixer = Thread(target=self.__set_file_fps)
             self.file_fixer.start()
         # self.logger.debug("done")
 
-    def update(self) -> None:
+    def update(self) -> bool:
         """
         If this camera is being used, read from camera and modify image in any specified way. Show image if applicable
         and then save image if applicable.
@@ -176,8 +175,9 @@ class CamObj:
             start = time()
             ret, frame = self.__read_camera()
             end = time()
+            # self.print_by_index("end - start:  " + str(end - start))
             if end - start > 0.5:
-                self.check_index("update failed at end - start > 1")
+                # self.print_by_index("update failed at end - start > 1")
                 return False
             if ret and frame is not None:
                 if self.bw_image:
@@ -191,11 +191,10 @@ class CamObj:
                     cv2.waitKey(1)  # Required for frame to appear
                 if self.writing:
                     self.writer.write(frame)
-                    self.total_frames += 1
             else:
-                self.check_index("update failed with ret or frame problem")
-                self.check_index("ret: " + str(ret))
-                self.check_index("frame: " + str(frame))
+                # self.print_by_index("update failed with ret or frame problem")
+                # self.print_by_index("ret: " + str(ret))
+                # self.print_by_index("frame: " + str(frame))
                 return False
         return True
 
@@ -297,18 +296,18 @@ class CamObj:
         take_a_moment(1)
         # TODO: usb cam is having trouble with this line on certain machines. Have we checked .isOpen?
         res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
-        print("res1: ", res1)
-        print("res2: ", res2)
+        # self.print_by_index("res1: " + str(res1))
+        # self.print_by_index("res2: " + str(res2))
         if not res1 or not res2:
             res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.cur_res[0])
             res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cur_res[1])
-            print("res3: ", res3)
-            print("res4: ", res4)
+            # self.print_by_index("res3: " + str(res3))
+            # self.print_by_index("res4: " + str(res4))
         else:
             curWidth = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
             curHeight = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-            print("curWidth: ", curWidth)
-            print("curHeight: ", curHeight)
+            # self.print_by_index("curWidth: " + str(curWidth))
+            # self.print_by_index("curHeight: " + str(curHeight))
             self.cur_res = (curWidth, curHeight)
         self.close_window()
         self.toggle_activity(True)
@@ -329,12 +328,12 @@ class CamObj:
         """
 
         ret, frame = self.cap.read()
-        self.check_index("ret1: " + str(ret))
-        self.check_index("frame1: " + str(frame))
+        # self.print_by_index("ret1: " + str(ret))
+        # self.print_by_index("frame1: " + str(frame))
         if frame is None:
             ret, frame = self.cap.read()
-            self.check_index("ret2: " + str(ret))
-            self.check_index("frame2: " + str(frame))
+            # self.print_by_index("ret2: " + str(ret))
+            # self.print_by_index("frame2: " + str(frame))
         return ret, frame
 
     # TODO: Figure out more accurate actual_fps
@@ -344,12 +343,14 @@ class CamObj:
         :return:
         """
 
+        from_file = cv2.VideoCapture(self.temp_save_file)
+        total_frames = from_file.get(cv2.CAP_PROP_FRAME_COUNT)
         time_taken = (self.end_time - self.start_time).total_seconds()
         if time_taken <= 0:
             return False
-        actual_fps = round(self.total_frames / time_taken)
-        # self.check_index(actual_fps, self.total_frames, time_taken)
-        from_file = cv2.VideoCapture(self.temp_save_file)
+        actual_fps = total_frames / time_taken
+        print('cam: ' + str(self.index) + ', actual_fps: ' + str(actual_fps) + ', total_frames: ' + str(total_frames) + ', time_taken: '
+              + str(time_taken))
         to_file = self.__setup_writer(save_file=self.save_file, fps=actual_fps)
         ret, frame = from_file.read()
         while ret and frame is not None:
@@ -360,7 +361,6 @@ class CamObj:
         remove(self.temp_save_file)
         return True
 
-    def check_index(self, msg):
-        return
+    def print_by_index(self, msg):
         if self.index == 2:
             print(msg)
