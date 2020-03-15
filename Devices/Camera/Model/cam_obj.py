@@ -25,13 +25,15 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # import logging
-import cv2
+from sys import executable
+from subprocess import Popen, CREATE_NO_WINDOW, CREATE_NEW_CONSOLE
+from cv2 import VideoWriter, VideoCapture, cvtColor, imshow, waitKey, destroyWindow, CAP_PROP_FRAME_WIDTH, \
+    CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_COUNT, CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
 from os import remove
-from imutils import rotate, resize
+from imutils import rotate
 from time import time
 from datetime import datetime
 from numpy import ndarray
-from threading import Thread
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 from CompanionLib.companion_helpers import take_a_moment
 
@@ -41,9 +43,9 @@ class CamObj:
         # self.logger = logging.getLogger(__name__)
         # self.logger.addHandler(ch)
         # self.logger.debug("Initializing")
-        self.cap = cv2.VideoCapture(index, cap_backend)
+        self.cap = VideoCapture(index, cap_backend)
         self.name = name
-        self.cur_res = (self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.cur_res = (self.cap.get(CAP_PROP_FRAME_WIDTH), self.cap.get(CAP_PROP_FRAME_HEIGHT))
         self.fps = 30
         self.writer = None
         self.active = True
@@ -103,7 +105,7 @@ class CamObj:
             # self.print_by_index(self.start_time)
 
     def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
-                       vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> cv2.VideoWriter:
+                       vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> VideoWriter:
         """
         Creates a VideoWriter object for saving this camera's video feed to file.
         :param timestamp: For use with creating a unique file name.
@@ -125,7 +127,7 @@ class CamObj:
             file_name = self.temp_save_file
         else:
             file_name = save_file
-        writer = cv2.VideoWriter(file_name, cap_codec, fps, res)
+        writer = VideoWriter(file_name, cap_codec, fps, res)
         return writer
         # self.logger.debug("done")
 
@@ -135,7 +137,7 @@ class CamObj:
         :return:
         """
 
-        self.cap.set(cv2.CAP_PROP_SETTINGS, 1)  # Seems like we can only open the window, not close it.
+        self.cap.set(CAP_PROP_SETTINGS, 1)  # Seems like we can only open the window, not close it.
 
     def stop_writing(self) -> None:
         """
@@ -158,8 +160,12 @@ class CamObj:
             self.writer.release()
             self.writer = None
             self.end_time = datetime.now()
-            self.file_fixer = Thread(target=self.__set_file_fps)
-            self.file_fixer.start()
+            total_secs = (self.end_time - self.start_time).total_seconds()
+            exec_path = 'C:/RSDev/Companion/Unused/Tests/alter_file_fps.py'
+            print(exec_path, self.temp_save_file, self.save_file, total_secs)
+            Popen(args=[executable, exec_path, self.temp_save_file, self.save_file, str(total_secs), 'True'],
+                  creationflags=CREATE_NEW_CONSOLE)
+            print('proc should be going')
         # self.logger.debug("done")
 
     def update(self) -> bool:
@@ -181,14 +187,14 @@ class CamObj:
                 return False
             if ret and frame is not None:
                 if self.bw_image:
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                    frame = cvtColor(frame, COLOR_BGR2GRAY)
                 # if self.scale != 1:
                 #     frame = resize(frame, round(self.frame_size[0] * self.scale))
                 if self.rotate_angle != 0:
                     frame = rotate(frame, self.rotate_angle)
                 if self.show_feed:
-                    cv2.imshow(self.name, frame)
-                    cv2.waitKey(1)  # Required for frame to appear
+                    imshow(self.name, frame)
+                    waitKey(1)  # Required for frame to appear
                 if self.writing:
                     self.writer.write(frame)
             else:
@@ -204,7 +210,7 @@ class CamObj:
         :return:
         """
 
-        cv2.destroyWindow(self.name)
+        destroyWindow(self.name)
 
     def cleanup(self) -> None:
         """
@@ -217,8 +223,6 @@ class CamObj:
         self.cap.release()
         self.close_window()
         self.__destroy_writer()
-        if self.file_fixer:
-            self.file_fixer.join()
         # self.logger.debug("done")
 
     def set_bw(self, is_active: bool) -> None:
@@ -292,20 +296,20 @@ class CamObj:
         self.toggle_activity(False)
         if self.fourcc_bool:
             self.__set_fourcc()
-        res1 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, x)
+        res1 = self.cap.set(CAP_PROP_FRAME_WIDTH, x)
         take_a_moment(1)
         # TODO: usb cam is having trouble with this line on certain machines. Have we checked .isOpen?
-        res2 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, y)
+        res2 = self.cap.set(CAP_PROP_FRAME_HEIGHT, y)
         # self.print_by_index("res1: " + str(res1))
         # self.print_by_index("res2: " + str(res2))
         if not res1 or not res2:
-            res3 = self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.cur_res[0])
-            res4 = self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cur_res[1])
+            res3 = self.cap.set(CAP_PROP_FRAME_WIDTH, self.cur_res[0])
+            res4 = self.cap.set(CAP_PROP_FRAME_HEIGHT, self.cur_res[1])
             # self.print_by_index("res3: " + str(res3))
             # self.print_by_index("res4: " + str(res4))
         else:
-            curWidth = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-            curHeight = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            curWidth = self.cap.get(CAP_PROP_FRAME_WIDTH)
+            curHeight = self.cap.get(CAP_PROP_FRAME_HEIGHT)
             # self.print_by_index("curWidth: " + str(curWidth))
             # self.print_by_index("curHeight: " + str(curHeight))
             self.cur_res = (curWidth, curHeight)
@@ -318,8 +322,8 @@ class CamObj:
         :return:
         """
 
-        self.cap.set(cv2.CAP_PROP_FOURCC, cap_temp_codec)  # This line required because opencv is dumb
-        self.cap.set(cv2.CAP_PROP_FOURCC, cap_codec)
+        self.cap.set(CAP_PROP_FOURCC, cap_temp_codec)  # This line required because opencv is dumb
+        self.cap.set(CAP_PROP_FOURCC, cap_codec)
 
     def __read_camera(self) -> (bool, ndarray):
         """
@@ -336,31 +340,31 @@ class CamObj:
             # self.print_by_index("frame2: " + str(frame))
         return ret, frame
 
-    # TODO: Figure out more accurate actual_fps
-    def __set_file_fps(self) -> bool:
-        """
-        Fix the playback speed of the output file from this camera.
-        :return:
-        """
+    def print_by_index(self, msg):
+        if self.index == 2:
+            print(msg)
 
-        from_file = cv2.VideoCapture(self.temp_save_file)
-        total_frames = from_file.get(cv2.CAP_PROP_FRAME_COUNT)
-        time_taken = (self.end_time - self.start_time).total_seconds()
-        if time_taken <= 0:
-            return False
-        actual_fps = total_frames / time_taken
-        print('cam: ' + str(self.index) + ', actual_fps: ' + str(actual_fps) + ', total_frames: ' + str(total_frames) + ', time_taken: '
-              + str(time_taken))
-        to_file = self.__setup_writer(save_file=self.save_file, fps=actual_fps)
+
+def set_file_playback_speed(from_file_name: str, to_file_name: str, total_secs: float, cleanup: bool) -> bool:
+    from_file = VideoCapture(from_file_name)
+    from_res = (int(from_file.get(CAP_PROP_FRAME_WIDTH)), int(from_file.get(CAP_PROP_FRAME_HEIGHT)))
+    total_frames = from_file.get(CAP_PROP_FRAME_COUNT)
+    actual_fps = total_frames / total_secs
+    to_file = VideoWriter(to_file_name, cap_codec, actual_fps, from_res)
+    to_file.set(CAP_PROP_FRAME_WIDTH, from_res[0])
+    to_file.set(CAP_PROP_FRAME_HEIGHT, from_res[1])
+    try:
         ret, frame = from_file.read()
         while ret and frame is not None:
             to_file.write(frame)
             ret, frame = from_file.read()
+    except:
         from_file.release()
         to_file.release()
-        remove(self.temp_save_file)
-        return True
-
-    def print_by_index(self, msg):
-        if self.index == 2:
-            print(msg)
+        remove(to_file_name)
+        return False
+    from_file.release()
+    to_file.release()
+    if cleanup:
+        remove(from_file_name)
+    return True

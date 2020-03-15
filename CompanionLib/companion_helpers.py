@@ -27,7 +27,7 @@ import logging
 from time import sleep
 from datetime import datetime, timedelta
 from PySide2.QtWidgets import QFrame, QPushButton
-from Model.general_defs import button_pressed_style, button_normal_style
+from Model.general_defs import button_pressed_style, button_normal_style, cap_codec
 
 logger = logging.getLogger(__name__)
 
