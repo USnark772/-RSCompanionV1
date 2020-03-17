@@ -34,7 +34,7 @@ from imutils import rotate
 from time import time
 from datetime import datetime
 from numpy import ndarray
-from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
+from Model.general_defs import cap_backend, cap_temp_codec, cap_codec, exec_path
 from CompanionLib.companion_helpers import take_a_moment
 
 
@@ -157,15 +157,12 @@ class CamObj:
         # self.logger.debug("running")
         if self.writing:
             self.writing = False
+            self.end_time = datetime.now()
             self.writer.release()
             self.writer = None
-            self.end_time = datetime.now()
             total_secs = (self.end_time - self.start_time).total_seconds()
-            exec_path = 'C:/RSDev/Companion/Unused/Tests/alter_file_fps.py'
-            print(exec_path, self.temp_save_file, self.save_file, total_secs)
-            Popen(args=[executable, exec_path, self.temp_save_file, self.save_file, str(total_secs), 'True'],
+            Popen(args=[executable, exec_path, str(self.temp_save_file), str(self.save_file), str(total_secs), str(True)],
                   creationflags=CREATE_NEW_CONSOLE)
-            print('proc should be going')
         # self.logger.debug("done")
 
     def update(self) -> bool:
@@ -343,6 +340,11 @@ class CamObj:
     def print_by_index(self, msg):
         if self.index == 2:
             print(msg)
+
+
+def finalize_output_file(from_file_name, to_file_name, vid_len):
+    Popen(args=[executable, exec_path, from_file_name, to_file_name, str(vid_len), 'True'],
+          creationflags=CREATE_NEW_CONSOLE)
 
 
 def set_file_playback_speed(from_file_name: str, to_file_name: str, total_secs: float, cleanup: bool) -> bool:

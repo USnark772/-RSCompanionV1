@@ -24,6 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # import logging
+from sys import stdin, stdout
 from multiprocessing.connection import Connection
 from enum import Enum, auto
 from PySide2.QtCore import QThread

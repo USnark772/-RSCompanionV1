@@ -24,6 +24,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import sys
+from os import getpid, getppid, devnull
+import multiprocessing as mp
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
 from Controller.controller import CompanionController
@@ -36,17 +38,20 @@ def main():
     :return None:
     """
 
-    si = SingleInstance()
-    try:
-        if si.is_running:
-            sys.exit("This app is already running!")
-        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-        app = QApplication(sys.argv)
-        controller = CompanionController()  # Need reference else garbage collector has too much fun
-        sys.exit(app.exec_())
-    finally:
-        si.clean_up()
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+    app = QApplication(sys.argv)
+    controller = CompanionController()  # Need reference else garbage collector has too much fun
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
-    main()
+    if sys.platform == 'win32':  # This app currently only available for windows
+        sys.stdin = open(0)
+        sys.stdout = open(1)
+        mp.set_start_method('spawn')
+        si = SingleInstance()
+        if not si.is_running:
+            main()
+        else:
+            sys.exit('The app is already running!')
+        si.clean_up()

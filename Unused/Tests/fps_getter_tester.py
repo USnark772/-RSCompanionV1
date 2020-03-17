@@ -1,5 +1,6 @@
 import cv2
 import time
+from sys import platform
 
 small = (640, 480)
 big = (1920, 1080)
@@ -58,9 +59,15 @@ def show_backends():
     for backend in backend_ids:
         print(cv2.videoio_registry.getBackendName(backend))
 
+
+def show_platform():
+    print(platform)
+
+
 def main():
-    show_feeds()
+    # show_feeds()
     # show_backends()
+    show_platform()
 
 
 if __name__ == '__main__':

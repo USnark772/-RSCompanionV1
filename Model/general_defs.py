@@ -17,19 +17,21 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Date: 2019-2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
-import cv2
+from cv2 import VideoWriter_fourcc, CAP_DSHOW
 
 """ General definitions for the app """
 
-""" Change these when building """
-image_file_path = '../View/Images/'  # Path for builds should be 'Images/'
+# TODO: Switch image_file_path for build
+image_file_path = '../View/Images/'
+# image_file_path = '/Images/'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
-current_version = 1.10  # New version should be incremented.
+# TODO: Increment version number for build
+current_version = 1.10
 current_version_str = '1.10'
 
 #################################################################################################################
@@ -115,9 +117,12 @@ devices = {'drt': {'probe': "get_name\n\r",
                    'vid': 5824}}
 
 #################################################################################################################
-# opencv defs
+# cameras defs
 #################################################################################################################
 
-cap_backend = cv2.CAP_DSHOW
-cap_temp_codec = cv2.VideoWriter_fourcc(*'mjpg')
-cap_codec = cv2.VideoWriter_fourcc(*'MJPG')
+cap_backend = CAP_DSHOW
+cap_temp_codec = VideoWriter_fourcc(*'mjpg')
+cap_codec = VideoWriter_fourcc(*'MJPG')
+# TODO: Switch exec_path for build
+exec_path = 'C:/RSDev/Companion/Devices/Camera/Controller/alter_file_fps.py'
+# exec_path = 'alter_file_fps.py'
