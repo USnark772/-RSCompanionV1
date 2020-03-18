@@ -24,7 +24,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from multiprocessing import Process, Pipe, Value
+from multiprocessing import Process, Pipe
+from threading import Thread
 from PySide2.QtCore import QObject, Signal
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.camera_tab import CameraTab
@@ -51,7 +52,8 @@ class CameraController(ABCDeviceController):
         self.pipe_watcher = PipeWatcher(self.pipe, ch)
         self.pipe_watcher.connect_to_sig(self.handle_pipe)
         self.pipe_watcher.start()
-        self.cam_worker = Process(target=run_camera, args=(proc_pipe, self.index, self.name,))
+        proc_args = (proc_pipe, self.index, self.name)
+        self.cam_worker = Thread(target=run_camera, args=proc_args)
         self.cam_worker.start()
         self.signals = ControllerSig()
         self.save_dir = ''

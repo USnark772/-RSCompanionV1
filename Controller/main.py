@@ -24,7 +24,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import sys
-from os import getpid, getppid, devnull
 import multiprocessing as mp
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
@@ -45,9 +44,7 @@ def main():
 
 
 if __name__ == "__main__":
-    if sys.platform == 'win32':  # This app currently only available for windows
-        sys.stdin = open(0)
-        sys.stdout = open(1)
+    if sys.platform.startswith('win'):  # This app currently only available for windows
         mp.set_start_method('spawn')
         si = SingleInstance()
         if not si.is_running:
@@ -55,3 +52,5 @@ if __name__ == "__main__":
         else:
             sys.exit('The app is already running!')
         si.clean_up()
+    else:
+        sys.exit('This app is does not yet support your platform.')

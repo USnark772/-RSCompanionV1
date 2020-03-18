@@ -848,6 +848,10 @@ class CompanionController:
         """
 
         self.logger.debug("running")
+        if self.__exp_running:
+            self.__stop_exp()
+        if self.__exp_created:
+            self.__end_exp()
         self.cam_con_manager.cleanup()
         self.dev_con_manager.cleanup()
         for controller in self.__device_controllers.values():

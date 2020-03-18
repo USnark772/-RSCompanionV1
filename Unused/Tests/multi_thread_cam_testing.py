@@ -1,6 +1,7 @@
 import cv2
 from threading import Thread
 import time
+from Model.general_defs import cap_codec, cap_temp_codec
 
 small = (640, 480)
 big = (1920, 1080)
@@ -10,6 +11,8 @@ def show_feed(index: int):
     size = big
     print("running size:", size)
     cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+    cap.set(cv2.CAP_PROP_FOURCC, cap_temp_codec)
+    cap.set(cv2.CAP_PROP_FOURCC, cap_codec)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
     start = time.time()
@@ -34,7 +37,7 @@ def show_feed(index: int):
 
 if __name__ == '__main__':
     first_index = 0
-    last_index = 4
+    last_index = 3
     workers = []
     for i in range(first_index, last_index):
         print("Making thread:", i)

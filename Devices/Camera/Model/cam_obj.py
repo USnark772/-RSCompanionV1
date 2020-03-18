@@ -27,6 +27,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # import logging
 from sys import executable
 from subprocess import Popen, CREATE_NO_WINDOW, CREATE_NEW_CONSOLE
+from threading import Thread
 from cv2 import VideoWriter, VideoCapture, cvtColor, imshow, waitKey, destroyWindow, CAP_PROP_FRAME_WIDTH, \
     CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_COUNT, CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
 from os import remove
@@ -36,6 +37,7 @@ from datetime import datetime
 from numpy import ndarray
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec, exec_path
 from CompanionLib.companion_helpers import take_a_moment
+from Devices.Camera.Controller.alter_file_fps import set_file_playback_speed
 
 
 class CamObj:
@@ -161,8 +163,12 @@ class CamObj:
             self.writer.release()
             self.writer = None
             total_secs = (self.end_time - self.start_time).total_seconds()
-            Popen(args=[executable, exec_path, str(self.temp_save_file), str(self.save_file), str(total_secs), str(True)],
-                  creationflags=CREATE_NEW_CONSOLE)
+            print(total_secs)
+            # Popen(args=[executable, exec_path, str(self.temp_save_file), str(self.save_file), str(total_secs), str(True)],
+            #       creationflags=CREATE_NEW_CONSOLE)
+            thread_args = (self.temp_save_file, self.save_file, total_secs, True)
+            self.file_fixer = Thread(target=set_file_playback_speed, args=thread_args)
+            self.file_fixer.start()
         # self.logger.debug("done")
 
     def update(self) -> bool:
@@ -220,6 +226,8 @@ class CamObj:
         self.cap.release()
         self.close_window()
         self.__destroy_writer()
+        if self.file_fixer:
+            self.file_fixer.join()
         # self.logger.debug("done")
 
     def set_bw(self, is_active: bool) -> None:
