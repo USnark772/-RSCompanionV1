@@ -24,13 +24,18 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from multiprocessing import Process, Pipe
+from multiprocessing import Pipe
 from threading import Thread
 from PySide2.QtCore import QObject, Signal
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.Camera.Controller.pipe_watcher import PipeWatcher
 from Devices.Camera.Controller.cam_runner import run_camera, CEnum
+
+# TODO: Fix crash bug when changing cam3 res to higher than 1080p (unsupported resolutions) Some issue with threading
+#  memory corruption.
+#  Process finished with exit code -1073740940 (0xC0000374)
+#  Process finished with exit code -1073741819 (0xC0000005)
 
 
 class ControllerSig(QObject):
