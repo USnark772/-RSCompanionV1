@@ -302,8 +302,6 @@ class CamObj:
         if self.fourcc_bool:
             self.__set_fourcc()
         res1 = self.cap.set(CAP_PROP_FRAME_WIDTH, x)
-        take_a_moment(1)
-        # TODO: usb cam is having trouble with this line on certain machines. Have we checked .isOpen?
         res2 = self.cap.set(CAP_PROP_FRAME_HEIGHT, y)
         # self.print_by_index("res1: " + str(res1))
         # self.print_by_index("res2: " + str(res2))
@@ -348,33 +346,3 @@ class CamObj:
     def print_by_index(self, msg):
         if self.index == 2:
             print(msg)
-
-
-def finalize_output_file(from_file_name, to_file_name, vid_len):
-    Popen(args=[executable, exec_path, from_file_name, to_file_name, str(vid_len), 'True'],
-          creationflags=CREATE_NEW_CONSOLE)
-
-
-def set_file_playback_speed(from_file_name: str, to_file_name: str, total_secs: float, cleanup: bool) -> bool:
-    from_file = VideoCapture(from_file_name)
-    from_res = (int(from_file.get(CAP_PROP_FRAME_WIDTH)), int(from_file.get(CAP_PROP_FRAME_HEIGHT)))
-    total_frames = from_file.get(CAP_PROP_FRAME_COUNT)
-    actual_fps = total_frames / total_secs
-    to_file = VideoWriter(to_file_name, cap_codec, actual_fps, from_res)
-    to_file.set(CAP_PROP_FRAME_WIDTH, from_res[0])
-    to_file.set(CAP_PROP_FRAME_HEIGHT, from_res[1])
-    try:
-        ret, frame = from_file.read()
-        while ret and frame is not None:
-            to_file.write(frame)
-            ret, frame = from_file.read()
-    except:
-        from_file.release()
-        to_file.release()
-        remove(to_file_name)
-        return False
-    from_file.release()
-    to_file.release()
-    if cleanup:
-        remove(from_file_name)
-    return True

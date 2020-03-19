@@ -26,7 +26,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from multiprocessing import Pipe
 from threading import Thread
-from PySide2.QtCore import QObject, Signal
+from PySide2.QtCore import QObject, Signal, QSettings
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.Camera.Controller.pipe_watcher import PipeWatcher
@@ -57,7 +57,13 @@ class CameraController(ABCDeviceController):
         self.pipe_watcher = PipeWatcher(self.pipe, ch)
         self.pipe_watcher.connect_to_sig(self.handle_pipe)
         self.pipe_watcher.start()
-        proc_args = (proc_pipe, self.index, self.name)
+        # TODO: Add settings access for user.
+        # settings = QSettings("Red Scientific", "Companion")
+        # settings.beginGroup('Camera settings')
+        # if not settings.contains("Experimental"):
+        #     settings.setValue("Experimental", "False")
+        # proc_args = (proc_pipe, self.index, self.name, eval(settings.value('Experimental')))
+        proc_args = (proc_pipe, self.index, self.name, True)
         self.cam_worker = Thread(target=run_camera, args=proc_args)
         self.cam_worker.start()
         self.signals = ControllerSig()
@@ -69,6 +75,7 @@ class CameraController(ABCDeviceController):
         self.__setup_handlers()
         self.current_size = 0
         self.frame_sizes = []
+        self.worker_max_tries = 0
         # self.fps_values = []
         self.__add_loading_symbols_to_tab()
         self.logger.debug("Initialized")
@@ -112,6 +119,10 @@ class CameraController(ABCDeviceController):
             #     self.__set_tab_fps_val(msg[1])
             elif msg_type == CEnum.SET_ROTATION:
                 self.__set_tab_rot_val(msg[1])
+            elif msg_type == CEnum.WORKER_MAX_TRIES:
+                self.worker_max_tries = msg[1]
+            elif msg_type == CEnum.WORKER_STATUS_UPDATE:
+                self.tab.set_init_progress_bar_val((self.worker_max_tries - msg[1]) / self.worker_max_tries * 100)
 
     def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
@@ -159,10 +170,10 @@ class CameraController(ABCDeviceController):
         self.logger.debug("running")
         self.pipe.send((CEnum.WORKER_DONE,))
         self.__populate_sizes(sizes)
-        # self.__populate_fps_selections()
         self.__get_initial_values()
         self.pipe.send((CEnum.ACTIVATE_CAM,))
         self.tab.set_tab_active(True)
+        self.tab.remove_init_prog_bar()
         self.logger.debug("done")
 
     def __toggle_cam(self):

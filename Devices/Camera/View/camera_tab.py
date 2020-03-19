@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QLineEdit, QCheckBox
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QLineEdit, QProgressBar
 from PySide2.QtCore import QRect, Qt
 from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
@@ -38,9 +38,21 @@ class CameraTab(QWidget):
         self.name = name
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setMaximumHeight(260)
+        self.setMaximumHeight(350)
 
         self.config_horizontal_layout = QHBoxLayout()
+
+        self.initialization_bar_frame = EasyFrame()
+        self.initialization_bar_layout = QVBoxLayout(self.initialization_bar_frame)
+        self.initialization_bar_label = QLabel(self.initialization_bar_frame)
+        self.initialization_bar_layout.addWidget(self.initialization_bar_label)
+        self.initialization_bar = QProgressBar(self.initialization_bar_frame)
+        self.initialization_bar.setTextVisible(True)
+        self.initialization_bar.setAlignment(Qt.AlignHCenter)
+        self.initialization_bar.setMaximumHeight(15)
+        self.initialization_bar_layout.addWidget(self.initialization_bar)
+
+        self.layout().addWidget(self.initialization_bar_frame)
 
         self.layout().addWidget(EasyFrame(line=True))
 
@@ -57,17 +69,6 @@ class CameraTab(QWidget):
         self.layout().addWidget(self.settings_toggle_button)
 
         self.layout().addWidget(EasyFrame(line=True))
-
-        # self.fps_selector_frame = EasyFrame()
-        # self.fps_selector_layout = QHBoxLayout(self.fps_selector_frame)
-        # self.fps_selector_label = QLabel(self.fps_selector_frame)
-        # self.fps_selector_label.setAlignment(Qt.AlignCenter)
-        # self.fps_selector_layout.addWidget(self.fps_selector_label)
-        # self.fps_selector_layout.addWidget(EasyFrame(vert=True))
-        # self.fps_selector = QComboBox(self.fps_selector_frame)
-        # self.fps_selector_layout.addWidget(self.fps_selector)
-        #
-        # self.layout().addWidget(self.fps_selector_frame)
 
         self.frame_size_selector_frame = EasyFrame()
         self.frame_size_selector_layout = QHBoxLayout(self.frame_size_selector_frame)
@@ -129,11 +130,6 @@ class CameraTab(QWidget):
         self.settings_toggle_button.clicked.connect(func)
         self.logger.debug("done")
 
-    # def add_fps_selector_handler(self, func):
-    #     self.logger.debug("running")
-    #     self.fps_selector.activated.connect(func)
-    #     self.logger.debug("done")
-
     def add_frame_size_selector_handler(self, func):
         self.logger.debug("running")
         self.frame_size_selector.activated.connect(func)
@@ -143,14 +139,6 @@ class CameraTab(QWidget):
         self.logger.debug("running")
         self.frame_rotation_setting_entry_box.textChanged.connect(func)
         self.logger.debug("done")
-
-    # def get_fps(self):
-    #     return self.fps_selector.currentData()
-
-    # def set_fps(self, index):
-    #     self.logger.debug("running")
-    #     self.fps_selector.setCurrentIndex(index)
-    #     self.logger.debug("done")
 
     def get_frame_size(self):
         return self.frame_size_selector.currentData()
@@ -177,12 +165,6 @@ class CameraTab(QWidget):
             self.frame_rotation_setting_entry_box.setStyleSheet(tab_line_edit_compliant_style)
         self.logger.debug("done")
 
-    # def populate_fps_selector(self, values):
-    #     self.logger.debug("running")
-    #     for i in range(len(values)):
-    #         self.fps_selector.insertItem(i, values[i][0], values[i][1])
-    #     self.logger.debug("done")
-
     def populate_frame_size_selector(self, values):
         self.logger.debug("running")
         for i in range(len(values)):
@@ -194,27 +176,22 @@ class CameraTab(QWidget):
         self.frame_size_selector.insertItem(self.frame_size_selector.count(), item)
         self.logger.debug("done")
 
-    # def add_item_to_fps_selector(self, item):
-    #     self.logger.debug("running")
-    #     self.fps_selector.insertItem(self.fps_selector.count(), item)
-    #     self.logger.debug("done")
-
     def empty_size_selector(self):
         self.logger.debug("running")
         for i in range(self.frame_size_selector.count()):
             self.frame_size_selector.removeItem(i)
         self.logger.debug("done")
 
-    # def empty_fps_selector(self):
-    #     self.logger.debug("running")
-    #     for i in range(self.fps_selector.count()):
-    #         self.fps_selector.removeItem(i)
-    #     self.logger.debug("done")
+    def set_init_progress_bar_val(self, value):
+        self.initialization_bar.setValue(value)
+
+    def remove_init_prog_bar(self):
+        self.initialization_bar_frame.hide()
+        self.setMaximumHeight(260)
 
     def __set_controls_active(self, is_active):
         self.logger.debug("running")
         self.frame_size_selector.setEnabled(is_active)
-        # self.fps_selector.setEnabled(is_active)
         self.frame_rotation_setting_entry_box.setEnabled(is_active)
         self.settings_toggle_button.setEnabled(is_active)
         self.show_cam_button.setEnabled(is_active)
@@ -223,10 +200,11 @@ class CameraTab(QWidget):
 
     def __set_texts(self):
         self.logger.debug("running")
+        self.initialization_bar_label.setText('Initialization progress')
+        self.initialization_bar.setValue(0)
         self.use_cam_button.setText("Toggle Camera Usage")
         self.show_cam_button.setText("Toggle Camera Display")
         self.bw_button.setText("Toggle B&W image")
-        # self.fps_selector_label.setText("FPS")
         self.frame_size_selector_label.setText("Frame size")
         self.settings_toggle_button.setText("Camera Settings")
         self.frame_rotation_setting_label.setText("Image rotation degrees")
@@ -234,7 +212,6 @@ class CameraTab(QWidget):
 
     def __set_tooltips(self):
         self.logger.debug("running")
-        # fps_selector_tooltip = "Select frame rate for the saved footage"
         frame_size_tooltip = "Select resolution for this camera. Higher resolutions may cause issues."
         use_cam_tooltip = "Toggle whether this camera is being used."
         show_cam_tooltip = "Toggle whether this camera feed is added to the UI. (Does not disable camera)"
@@ -245,7 +222,6 @@ class CameraTab(QWidget):
         self.show_cam_button.setToolTip(show_cam_tooltip)
         self.settings_toggle_button.setToolTip(settings_window_tooltip)
         self.bw_button.setToolTip(bw_tooltip)
-        # self.fps_selector_frame.setToolTip(fps_selector_tooltip)
         self.frame_size_selector_frame.setToolTip(frame_size_tooltip)
         self.frame_rotation_setting_frame.setToolTip(rotation_tooltip)
         self.logger.debug("done")

@@ -90,7 +90,6 @@ class CamScanner(QThread):
         while self.running:
             self.__check_for_cams(self.__get_index())
             take_a_moment()
-        # self.signal.new_cam_sig.emit(2)
         self.logger.debug("done")
 
     def __get_index(self):

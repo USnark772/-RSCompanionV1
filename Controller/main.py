@@ -24,7 +24,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import sys
-import multiprocessing as mp
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
 from Controller.controller import CompanionController
@@ -45,7 +44,6 @@ def main():
 
 if __name__ == "__main__":
     if sys.platform.startswith('win'):  # This app currently only available for windows
-        mp.set_start_method('spawn')
         si = SingleInstance()
         if not si.is_running:
             main()

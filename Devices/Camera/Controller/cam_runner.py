@@ -30,8 +30,29 @@ from PySide2.QtCore import QThread
 from CompanionLib.companion_helpers import take_a_moment
 from Devices.Camera.Model.cam_obj import CamObj
 
+list_of_common_sizes = \
+    [
+        (640.0, 480.0),
+        (640.0, 640.0),
+        (800.0, 600.0),
+        (960.0, 720.0),
+        (1024.0, 768.0),
+        (1248.0, 1536.0),
+        (1280.0, 720.0),
+        (1280.0, 960.0),
+        (1440.0, 1080.0),
+        (1600.0, 900.0),
+        (1600.0, 1200.0),
+        (1920.0, 1080.0),
+        (2048.0, 1536.0),
+        (2560.0, 1440.0),
+        (3840.0, 2160.0),
+    ]
+
 
 class CEnum(Enum):
+    WORKER_MAX_TRIES = auto()
+    WORKER_STATUS_UPDATE = auto()
     WORKER_DONE = auto()
     CAM_FAILED = auto()
     OPEN_SETTINGS = auto()
@@ -52,7 +73,7 @@ class CEnum(Enum):
     CLEANUP = auto()
 
 
-class SizeGetter(QThread):
+class SizeGetterFixed(QThread):
     def __init__(self, cam_obj: CamObj, pipe: Connection):
         QThread.__init__(self)
         self.cam_obj = cam_obj
@@ -63,21 +84,63 @@ class SizeGetter(QThread):
         self.setPriority(QThread.HighestPriority)
         sizes = []
         initial_size = self.cam_obj.get_current_frame_size()
-        # print("initial_size: ", initial_size)
+        if initial_size in list_of_common_sizes:
+            new_tup = (str(initial_size[0]) + ", " + str(initial_size[1]), initial_size)
+            sizes.append(new_tup)
+        list_index = list_of_common_sizes.index(initial_size) + 1
+        try:
+            self.pipe.send((CEnum.WORKER_MAX_TRIES, len(list_of_common_sizes) - list_index))
+        except BrokenPipeError as e:
+            return
+        while list_index < len(list_of_common_sizes) and self.running:
+            print("trying:", list_of_common_sizes[list_index])
+            self.cam_obj.set_frame_size(list_of_common_sizes[list_index])
+            result = self.cam_obj.get_current_frame_size()
+            if result in list_of_common_sizes:
+                new_tup = (str(result[0]) + ", " + str(result[1]), result)
+                if new_tup not in sizes:
+                    sizes.append(new_tup)
+            list_index += 1
+            try:
+                self.pipe.send((CEnum.WORKER_STATUS_UPDATE, len(list_of_common_sizes) - list_index))
+            except BrokenPipeError as e:
+                return
+            take_a_moment()
+        if self.running:
+            self.cam_obj.fourcc_bool = True
+            self.cam_obj.set_frame_size(initial_size)
+            try:
+                self.pipe.send((CEnum.WORKER_DONE, sizes))
+            except BrokenPipeError as e:
+                return
+
+
+class SizeGetterFlexible(QThread):
+    def __init__(self, cam_obj: CamObj, pipe: Connection):
+        QThread.__init__(self)
+        self.cam_obj = cam_obj
+        self.pipe = pipe
+        self.running = True
+
+    def run(self):
+        self.setPriority(QThread.HighestPriority)
+        sizes = []
+        initial_size = self.cam_obj.get_current_frame_size()
         new_tup = (str(initial_size[0]) + ", " + str(initial_size[1]), initial_size)
         sizes.append(new_tup)
-        # large_size = (3000, 3000)
         large_size = (8000, 8000)
         step = 100
         self.cam_obj.set_frame_size(large_size)
         max_size = self.cam_obj.get_current_frame_size()
-        # print("max_size: ", max_size)
+        max_tries = (max_size[0] - initial_size[0]) / step
+        try:
+            self.pipe.send((CEnum.WORKER_MAX_TRIES, max_tries))
+        except BrokenPipeError as e:
+            return
         current_size = (initial_size[0] + step, initial_size[1] + step)
-        # print("current_size: ", current_size)
         while current_size[0] <= max_size[0] and self.running:
             self.cam_obj.set_frame_size(current_size)
             result = self.cam_obj.get_current_frame_size()
-            # print("while result: ", result)
             new_tup = (str(result[0]) + ", " + str(result[1]), result)
             if new_tup not in sizes:
                 sizes.append(new_tup)
@@ -88,6 +151,11 @@ class SizeGetter(QThread):
             if result[1] > new_y:
                 new_y = result[1] + step
             current_size = (new_x, new_y)
+            tries_left = (max_size[0] - current_size[0]) / step
+            try:
+                self.pipe.send((CEnum.WORKER_STATUS_UPDATE, tries_left))
+            except BrokenPipeError as e:
+                break
             take_a_moment()
         if self.running:
             self.cam_obj.fourcc_bool = True
@@ -95,16 +163,19 @@ class SizeGetter(QThread):
             try:
                 self.pipe.send((CEnum.WORKER_DONE, sizes))
             except BrokenPipeError as e:
-                pass
+                return
 
 
 # TODO: Figure out if/how possible to add logging here
-def run_camera(pipe: Connection, index: int, name: str):  # , ch: logging.Handler):
+def run_camera(pipe: Connection, index: int, name: str, flexi: bool = False):  # , ch: logging.Handler):
     # logger = logging.getLogger(__name__)
     # logger.addHandler(ch)
     # logger.debug("Initializing")
     cam_obj = CamObj(index, name)  #, ch)
-    size_getter = SizeGetter(cam_obj, pipe)
+    if flexi:
+        size_getter = SizeGetterFlexible(cam_obj, pipe)
+    else:
+        size_getter = SizeGetterFixed(cam_obj, pipe)
     size_getter.start()  # priority=QThread.HighPriority)
     size_getter_alive = True
     running = False
@@ -176,6 +247,6 @@ def handle_pipe(msg: tuple, cam_obj: CamObj, pipe: Connection):
     elif msg_type == CEnum.STOP_SAVING:
         cam_obj.stop_writing()
     elif msg_type == CEnum.GET_BW:
-        pipe.send((CEnum.SET_BW, cam_obj.get_bw()))  # replace False with cam_obj.get_bw()
+        pipe.send((CEnum.SET_BW, cam_obj.get_bw()))
     elif msg_type == CEnum.SET_BW:
         cam_obj.set_bw(msg[1])
