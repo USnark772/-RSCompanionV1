@@ -5,9 +5,9 @@
 #define MyAppPublisher "Red Scientific"
 #define MyAppURL "https://redscientific.com/index.html"
 #define MyAppExeName "Companion.exe"
-#define MyAppVersion "1.10"
-#define OutputName "companion_app_v1_10"
-#define FilePath "C:\RSDev\Builds\Version 1\Build 1.10\build\exe.win32-3.7\"
+#define MyAppVersion "2.0"
+#define OutputName "companion_app_v2_0"
+#define FilePath "C:\RSDev\Builds\Version 2\Build 2.0\build\exe.win32-3.7\"
 #define FilePathStar FilePath + "*"
 #define FilePathExe FilePath + "Companion.exe"
 

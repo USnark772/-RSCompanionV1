@@ -31,8 +31,8 @@ image_file_path = '../View/Images/'
 # image_file_path = '/Images/'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
 # TODO: Increment version number for build
-current_version = 1.11
-current_version_str = '1.11'
+current_version = 2.0
+current_version_str = '2.0'
 
 #################################################################################################################
 # general
