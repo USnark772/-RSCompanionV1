@@ -107,7 +107,7 @@ class CompanionWindow(QMainWindow):
         self.logger.debug("running")
         self.setWindowTitle("RS Companion App")
         self.checker.setWindowTitle("Closing App")
-        self.checker.setText("Are you sure? Unsaved progress will be lost!")
+        self.checker.setText("Are you sure? Any unsaved progress will be lost!")
         self.logger.debug("done")
 
     def __setup_checker_buttons(self):

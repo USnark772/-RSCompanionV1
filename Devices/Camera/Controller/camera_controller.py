@@ -38,6 +38,8 @@ from Devices.Camera.Controller.edit_vid_playback_speed import FileFixer
 #  Process finished with exit code -1073740940 (0xC0000374)
 #  Process finished with exit code -1073741819 (0xC0000005)
 
+# TODO: Add FPS overlay for each camera.
+#  Add actual user FPS control. If user selects 10 fps, video will be read/saved at 10fps.
 
 class ControllerSig(QObject):
     settings_error = Signal(str)
