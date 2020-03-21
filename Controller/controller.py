@@ -450,7 +450,9 @@ class CompanionController:
         self.__exp_created = False
         self.button_box.toggle_create_button()
         self.settings.beginGroup("Camera manager")
-        if eval(self.settings.value('active')):
+        use_cams = eval(self.settings.value('active'))
+        self.settings.endGroup()
+        if use_cams:
             self.__show_video_save_prog_bar()
         try:
             for controller in self.__device_controllers.values():

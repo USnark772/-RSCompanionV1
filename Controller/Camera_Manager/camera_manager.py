@@ -39,6 +39,10 @@ class CamCounter:
         self.indicies = []
         self.logger.debug("Initialized")
 
+    def reset(self):
+        self.count = 0
+        self.indicies = []
+
     def get_lock(self):
         # self.logger.debug("running")
         self.lock.lock()
@@ -138,15 +142,17 @@ class CameraConnectionManager:
         self.logger.debug("Initialized")
 
     def deactivate(self):
+        print("Stopping cams")
         self.active = False
-        self.cam_counter.count = 0
+        self.cam_counter.reset()
         self.cleanup()
 
     def activate(self):
+        print("Starting cams")
         self.active = True
         self.scanner_thread = CamScanner(self.cam_counter, self.ch)
         self.scanner_thread.signal.new_cam_sig.connect(self.handle_new_camera)
-        self.scanner_thread.start()  # priority=QThread.LowestPriority)
+        self.scanner_thread.start()
 
     def cleanup(self):
         self.logger.debug("running")

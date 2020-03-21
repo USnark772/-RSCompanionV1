@@ -28,7 +28,7 @@ from cv2 import VideoWriter_fourcc, CAP_DSHOW
 
 # TODO: Switch image_file_path for build
 image_file_path = '../View/Images/'
-# image_file_path = '/Images/'
+# image_file_path = 'Images/'
 version_url = "https://raw.githubusercontent.com/redscientific/CompanionApp/master/Version.txt"
 # TODO: Increment version number for build
 current_version = 2.0
@@ -123,6 +123,3 @@ devices = {'drt': {'probe': "get_name\n\r",
 cap_backend = CAP_DSHOW
 cap_temp_codec = VideoWriter_fourcc(*'mjpg')
 cap_codec = VideoWriter_fourcc(*'MJPG')
-# TODO: Switch exec_path for build
-exec_path = '/Devices/Camera/Controller/edit_vid_playback_speed.py'
-# exec_path = 'edit_vid_playback_speed.py'

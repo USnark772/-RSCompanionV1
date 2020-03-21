@@ -27,6 +27,7 @@ In progress:
     -   Figure out all the configuration ideas for cameras and put them in the tab.
     -   Figure out bug with turning camman on or off. (Seems to be an issue with usb cams) (Can't seem to reproduce)
     -   Figure out bug with toggling cameras off and then clicking create exp (Seems to freeze the app indefinitely)
+    -   In case user closes app before video files get converted, do we want to allow user to have access to the convert utility?
 
 Dealt with:
 -   Think about how to manage licenses ( Is this software worth protecting or is it useless without our specific devices? )
