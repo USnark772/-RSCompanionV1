@@ -41,6 +41,8 @@ from Devices.Camera.Controller.edit_vid_playback_speed import FileFixer
 # TODO: Add FPS overlay for each camera.
 #  Add actual user FPS control. If user selects 10 fps, video will be read/saved at 10fps.
 
+# TODO: Figure out why camera might not initialize after turning cam_man off and on again
+
 class ControllerSig(QObject):
     settings_error = Signal(str)
     cam_failed = Signal(str)
