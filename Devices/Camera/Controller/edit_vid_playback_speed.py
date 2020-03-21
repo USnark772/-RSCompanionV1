@@ -90,38 +90,3 @@ class FileFixer(QThread):
                 pass
             self.signal.done_sig.emit(True)
             return
-
-
-def set_file_playback_speed(from_file_name: str, to_file_name: str, total_secs: float, cleanup: bool) -> bool:
-    from_file = VideoCapture(from_file_name)
-    if not from_file.isOpened():
-        return False
-    from_res = (int(from_file.get(CAP_PROP_FRAME_WIDTH)), int(from_file.get(CAP_PROP_FRAME_HEIGHT)))
-    total_frames = from_file.get(CAP_PROP_FRAME_COUNT)
-    actual_fps = total_frames / total_secs
-    to_file = VideoWriter(to_file_name, cap_codec, actual_fps, from_res)
-    to_file.set(CAP_PROP_FRAME_WIDTH, from_res[0])
-    to_file.set(CAP_PROP_FRAME_HEIGHT, from_res[1])
-    frames_handled = 0
-    try:
-        ret, frame = from_file.read()
-        while ret and frame is not None:
-            to_file.write(frame)
-            frames_handled += 1
-            ret, frame = from_file.read()
-    except Exception as e:
-        from_file.release()
-        to_file.release()
-        try:
-            remove(to_file_name)
-        except Exception as e:
-            pass
-        return False
-    from_file.release()
-    to_file.release()
-    if cleanup:
-        try:
-            remove(from_file_name)
-        except Exception as e:
-            pass
-    return True

@@ -451,7 +451,7 @@ class CompanionController:
         self.button_box.toggle_create_button()
         self.settings.beginGroup("Camera manager")
         if eval(self.settings.value('active')):
-            self.__show_save_prog_bar()
+            self.__show_video_save_prog_bar()
         try:
             for controller in self.__device_controllers.values():
                 controller.end_exp()
@@ -521,13 +521,13 @@ class CompanionController:
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
 
-    def __show_save_prog_bar(self):
+    def __show_video_save_prog_bar(self):
         self.button_box.toggle_show_prog_bar(True)
 
-    def __hide_save_prog_bar(self):
+    def __hide_video_save_prog_bar(self):
         self.button_box.toggle_show_prog_bar(False)
 
-    def __update_save_prog_bar(self, cam_index: int, value: int):
+    def __update_video_save_prog_bar(self, cam_index: int, value: int):
         self.__save_prog[cam_index] = value
         total = 0
         for percent in self.__save_prog.values():
@@ -833,7 +833,7 @@ class CompanionController:
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.cam_failed.connect(self.alert_camera_error)
             cam_controller.signals.cam_closed.connect(self.__remove_camera)
-            cam_controller.signals.update_save_prog.connect(self.__update_save_prog_bar)
+            cam_controller.signals.update_save_prog.connect(self.__update_video_save_prog_bar)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return

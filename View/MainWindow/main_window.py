@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame
+from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame, QMessageBox
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QFont, QIcon
 from View.MainWindow.help_window import HelpWindow
@@ -53,17 +53,20 @@ class CompanionWindow(QMainWindow):
         self.centralWidget().layout().addLayout(self.__graph_and_tab_layout)
 
         self.__icon = QIcon(image_file_path + "rs_icon.png")
+        self.checker = QMessageBox()
         self.setWindowIcon(self.__icon)
         self.close_callback = None
         self.__help_window = None
         self.__set_texts()
+        self.__setup_checker_buttons()
         self.logger.debug("Initialized")
 
-    # TODO: Check if user wants to lose data before closing, else close and lose everything not yet saved.
     def closeEvent(self, event):
         """ Alert controller if desired to the app closing event"""
         self.logger.debug("running")
-        if self.close_callback:
+        if not self.checker.exec_() == QMessageBox.Yes:
+            event.ignore()
+        elif self.close_callback:
             self.close_callback()
         self.logger.debug("done")
 
@@ -103,4 +106,11 @@ class CompanionWindow(QMainWindow):
     def __set_texts(self):
         self.logger.debug("running")
         self.setWindowTitle("RS Companion App")
+        self.checker.setWindowTitle("Closing App")
+        self.checker.setText("Are you sure? Unsaved progress will be lost!")
         self.logger.debug("done")
+
+    def __setup_checker_buttons(self):
+        self.checker.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        self.checker.setDefaultButton(QMessageBox.Cancel)
+        self.checker.setEscapeButton(QMessageBox.Cancel)

@@ -165,11 +165,10 @@ class CameraController(ABCDeviceController):
         if success:
             self.signals.update_save_prog.emit(self.index, 100)
         else:
-            print("Oops")
+            pass  # TODO: Figure out what to do here.
 
     def __emit_save_update(self, completed, total):
         perc = round(completed / total * 100)
-        print('cam:', self.index, ' Percent done:', perc)
         self.signals.update_save_prog.emit(self.index, perc)
 
     def __toggle_bw(self):
