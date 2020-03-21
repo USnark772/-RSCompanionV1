@@ -116,15 +116,15 @@ class CompanionController:
         self.dev_con_manager = RSDeviceConnectionManager(self.ch)
         self.cam_con_manager = CameraConnectionManager(self.ch)
         self.__setup_managers()
-        self.settings.beginGroup("Camera manager")
         # Handle first time running settings value
+        self.settings.beginGroup("Camera manager")
         if not self.settings.contains("active"):
             self.settings.setValue("active", "True")
         active = eval(self.settings.value("active"))
+        self.settings.endGroup()
         if active:
             self.cam_con_manager.activate()
         self.menu_bar.set_cam_bool_checked(active)
-        self.settings.endGroup()
         # Initialize storage and state
         self.__controller_classes = dict()
         self.__controller_inits = dict()
@@ -141,6 +141,8 @@ class CompanionController:
         self.__save_dir = QDir().homePath()
         self.__device_spacers = dict()
         self.__devices_to_add = dict()
+
+        self.__save_prog = dict()
 
         # Assemble View objects
         self.__initialize_view()
@@ -306,7 +308,6 @@ class CompanionController:
         self.logger.debug("running")
         self.__setup_file_dialog()
         self.__setup_handlers()
-        # self.__start_update_timer()
         self.control_dock.add_widget(self.button_box)
         self.control_dock.add_widget(self.flag_box)
         self.control_dock.add_widget(self.note_box)
@@ -316,6 +317,7 @@ class CompanionController:
         self.ui.add_graph_container(self.graph_box)
         self.ui.add_tab_widget(self.tab_box)
         self.ui.show()
+        self.button_box.toggle_show_prog_bar(False)
         self.logger.debug("done")
 
     # TODO: Add device controller destructors?
@@ -447,6 +449,9 @@ class CompanionController:
         self.logger.debug("running")
         self.__exp_created = False
         self.button_box.toggle_create_button()
+        self.settings.beginGroup("Camera manager")
+        if eval(self.settings.value('active')):
+            self.__show_save_prog_bar()
         try:
             for controller in self.__device_controllers.values():
                 controller.end_exp()
@@ -515,6 +520,22 @@ class CompanionController:
         self.button_box.toggle_start_button()
         self.button_box.toggle_condition_name_box()
         self.logger.debug("done")
+
+    def __show_save_prog_bar(self):
+        self.button_box.toggle_show_prog_bar(True)
+
+    def __hide_save_prog_bar(self):
+        self.button_box.toggle_show_prog_bar(False)
+
+    def __update_save_prog_bar(self, cam_index: int, value: int):
+        self.__save_prog[cam_index] = value
+        total = 0
+        for percent in self.__save_prog.values():
+            total += percent
+        total = round(total / len(self.__save_prog))
+        self.button_box.update_prog_bar_value(int(total))
+        if total == 100:
+            self.button_box.toggle_show_prog_bar(False)
 
     # Depreciated
     def __add_vert_lines_to_graphs(self) -> None:
@@ -812,6 +833,7 @@ class CompanionController:
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.cam_failed.connect(self.alert_camera_error)
             cam_controller.signals.cam_closed.connect(self.__remove_camera)
+            cam_controller.signals.update_save_prog.connect(self.__update_save_prog_bar)
         except Exception as e:
             self.logger.exception("Failed to make camera_controller")
             return

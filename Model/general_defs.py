@@ -124,5 +124,5 @@ cap_backend = CAP_DSHOW
 cap_temp_codec = VideoWriter_fourcc(*'mjpg')
 cap_codec = VideoWriter_fourcc(*'MJPG')
 # TODO: Switch exec_path for build
-exec_path = 'C:/RSDev/Companion/Devices/Camera/Controller/alter_file_fps.py'
-# exec_path = 'alter_file_fps.py'
+exec_path = '/Devices/Camera/Controller/edit_vid_playback_speed.py'
+# exec_path = 'edit_vid_playback_speed.py'

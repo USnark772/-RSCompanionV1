@@ -24,13 +24,14 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from multiprocessing import Pipe, Process
+from multiprocessing import Pipe
 from threading import Thread
-from PySide2.QtCore import QObject, Signal, QSettings
+from PySide2.QtCore import QObject, Signal
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.Camera.Controller.pipe_watcher import PipeWatcher
 from Devices.Camera.Controller.cam_runner import run_camera, CEnum
+from Devices.Camera.Controller.edit_vid_playback_speed import FileFixer
 
 # TODO: Fix crash bug when changing cam3 res to higher than 1080p (unsupported resolutions) Some issue with threading
 #  memory corruption.
@@ -43,6 +44,7 @@ class ControllerSig(QObject):
     cam_failed = Signal(str)
     cam_closed = Signal(str, int)
     send_msg_sig = Signal(tuple)
+    update_save_prog = Signal(int, int)
 
 
 class CameraController(ABCDeviceController):
@@ -66,6 +68,8 @@ class CameraController(ABCDeviceController):
         proc_args = (proc_pipe, self.index, self.name, True)
         self.cam_worker = Thread(target=run_camera, args=proc_args)
         self.cam_worker.start()
+        self.file_fixer: FileFixer = FileFixer('', '', 0, False)
+        self.file_fixer_running = False
         self.signals = ControllerSig()
         self.save_dir = ''
         self.timestamp = None
@@ -87,6 +91,9 @@ class CameraController(ABCDeviceController):
         self.logger.debug("running")
         self.pipe_watcher.running = False
         self.pipe_watcher.wait()
+        if self.file_fixer_running:
+            self.file_fixer.running = False
+            self.file_fixer.wait()
         try:
             self.pipe.send((CEnum.CLEANUP,))
             self.pipe.close()
@@ -115,14 +122,20 @@ class CameraController(ABCDeviceController):
                 self.cleanup()
             elif msg_type == CEnum.SET_RESOLUTION:
                 self.__set_tab_size_val(msg[1])
-            # elif msg_type == CEnum.SET_FPS:
-            #     self.__set_tab_fps_val(msg[1])
             elif msg_type == CEnum.SET_ROTATION:
                 self.__set_tab_rot_val(msg[1])
             elif msg_type == CEnum.WORKER_MAX_TRIES:
                 self.worker_max_tries = msg[1]
             elif msg_type == CEnum.WORKER_STATUS_UPDATE:
                 self.tab.set_init_progress_bar_val((self.worker_max_tries - msg[1]) / self.worker_max_tries * 100)
+            elif msg_type == CEnum.STOP_SAVING:
+                if self.file_fixer_running:
+                    self.file_fixer.wait()
+                self.file_fixer = FileFixer(msg[1], msg[2], msg[3], True)
+                self.file_fixer.signal.update_sig.connect(self.__emit_save_update)
+                self.file_fixer.signal.done_sig.connect(self.__emit_save_complete)
+                self.file_fixer_running = True
+                self.file_fixer.start()
 
     def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
@@ -138,6 +151,8 @@ class CameraController(ABCDeviceController):
         self.logger.debug("running")
         self.pipe.send((CEnum.START_SAVING, self.timestamp, self.save_dir))
         self.tab.set_tab_active(False)
+        if self.file_fixer_running:
+            self.file_fixer.wait()
         self.logger.debug("done")
 
     def end_exp(self):
@@ -145,6 +160,17 @@ class CameraController(ABCDeviceController):
         self.pipe.send((CEnum.STOP_SAVING,))
         self.tab.set_tab_active(True)
         self.logger.debug("done")
+
+    def __emit_save_complete(self, success):
+        if success:
+            self.signals.update_save_prog.emit(self.index, 100)
+        else:
+            print("Oops")
+
+    def __emit_save_update(self, completed, total):
+        perc = round(completed / total * 100)
+        print('cam:', self.index, ' Percent done:', perc)
+        self.signals.update_save_prog.emit(self.index, perc)
 
     def __toggle_bw(self):
         self.logger.debug("running")

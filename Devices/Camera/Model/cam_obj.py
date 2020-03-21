@@ -25,7 +25,6 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # import logging
-from threading import Thread
 from cv2 import VideoWriter, VideoCapture, cvtColor, imshow, waitKey, destroyWindow, CAP_PROP_FRAME_WIDTH, \
     CAP_PROP_FRAME_HEIGHT, CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
 from imutils import rotate
@@ -33,7 +32,6 @@ from time import time
 from datetime import datetime
 from numpy import ndarray
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
-from Devices.Camera.Controller.alter_file_fps import set_file_playback_speed
 
 
 class CamObj:
@@ -55,6 +53,7 @@ class CamObj:
         # self.scale = .5  # TODO: Figure out if this is different than setting frame size differently.
         self.save_file = str()
         self.temp_save_file = str()
+        self.total_secs = 0
         self.start_time: datetime = datetime.now()
         self.end_time: datetime = self.start_time
         self.last_timestampe: datetime = self.start_time
@@ -158,13 +157,7 @@ class CamObj:
             self.end_time = datetime.now()
             self.writer.release()
             self.writer = None
-            total_secs = (self.end_time - self.start_time).total_seconds()
-            print(total_secs)
-            # Popen(args=[executable, exec_path, str(self.temp_save_file), str(self.save_file), str(total_secs), str(True)],
-            #       creationflags=CREATE_NEW_CONSOLE)
-            thread_args = (self.temp_save_file, self.save_file, total_secs, True)
-            self.file_fixer = Thread(target=set_file_playback_speed, args=thread_args)
-            self.file_fixer.start()
+            self.total_secs = (self.end_time - self.start_time).total_seconds()
         # self.logger.debug("done")
 
     def update(self) -> bool:
@@ -222,8 +215,6 @@ class CamObj:
         self.cap.release()
         self.close_window()
         self.__destroy_writer()
-        if self.file_fixer:
-            self.file_fixer.join()
         # self.logger.debug("done")
 
     def set_bw(self, is_active: bool) -> None:

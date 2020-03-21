@@ -23,11 +23,11 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLineEdit, QProgressBar
+from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLineEdit, QProgressBar, QLabel
 from PySide2.QtGui import QIcon, QPixmap
-from PySide2.QtCore import QSize
+from PySide2.QtCore import QSize, Qt
 from Model.general_defs import image_file_path
-from CompanionLib.companion_helpers import ClickAnimationButton
+from CompanionLib.companion_helpers import ClickAnimationButton, EasyFrame
 
 
 class ButtonBox(QGroupBox):
@@ -57,17 +57,13 @@ class ButtonBox(QGroupBox):
         self.__pause_icon.addPixmap(QPixmap(image_file_path + "red_vertical_bars.png"))
         self.__playing = False
 
-        self.initialization_bar_frame = EasyFrame()
-        self.initialization_bar_layout = QVBoxLayout(self.initialization_bar_frame)
-        self.initialization_bar_label = QLabel(self.initialization_bar_frame)
-        self.initialization_bar_layout.addWidget(self.initialization_bar_label)
-        self.initialization_bar = QProgressBar(self.initialization_bar_frame)
+        self.initialization_bar_label = QLabel()
+        self.initialization_bar = QProgressBar()
         self.initialization_bar.setTextVisible(True)
         self.initialization_bar.setAlignment(Qt.AlignHCenter)
-        self.initialization_bar.setMaximumHeight(15)
-        self.initialization_bar_layout.addWidget(self.initialization_bar)
-
-        self.layout().addWidget(self.initialization_bar_frame)
+        self.initialization_bar.setMaximumHeight(12)
+        self.layout().addWidget(self.initialization_bar_label)
+        self.layout().addWidget(self.initialization_bar)
 
         self.__set_texts()
         self.__set_button_states()
@@ -96,7 +92,6 @@ class ButtonBox(QGroupBox):
         """ Set create button to either create or end depending on what state any current experiment is in. """
         self.logger.debug("running")
         state = self.__create_button.text()
-        #print(self.state == "Create")
         if state == "Create":
             self.__create_button.setText("End")
             self.__create_button.setToolTip("End experiment")
@@ -125,6 +120,17 @@ class ButtonBox(QGroupBox):
             self.__start_button.setToolTip("Pause experiment")
         self.logger.debug("done")
 
+    def toggle_show_prog_bar(self, is_visible):
+        if is_visible:
+            self.initialization_bar.show()
+            self.initialization_bar_label.show()
+        else:
+            self.initialization_bar.hide()
+            self.initialization_bar_label.hide()
+
+    def update_prog_bar_value(self, value: int):
+        self.initialization_bar.setValue(value)
+
     def __set_texts(self):
         self.logger.debug("running")
         self.setTitle("Experiment")
@@ -132,6 +138,8 @@ class ButtonBox(QGroupBox):
         self.__create_button.setText("Create")
         self.__start_button.setIcon(self.__play_icon)
         self.__start_button.setIconSize(QSize(32, 32))
+        self.initialization_bar_label.setText("Saving video...")
+        self.initialization_bar.setValue(0)
         self.logger.debug("done")
 
     def __set_button_states(self):

@@ -54,6 +54,7 @@ class CEnum(Enum):
     WORKER_MAX_TRIES = auto()
     WORKER_STATUS_UPDATE = auto()
     WORKER_DONE = auto()
+    SAVE_STATUS_UPDATE = auto()
     CAM_FAILED = auto()
     OPEN_SETTINGS = auto()
     GET_RESOLUTION = auto()
@@ -199,8 +200,8 @@ def run_camera(pipe: Connection, index: int, name: str, flexi: bool = False):  #
                     if size_getter_alive:
                         size_getter.running = False
                         size_getter.wait()
-                    pipe.close()
                     cam_obj.cleanup()
+                    pipe.close()
                     break
                 else:
                     handle_pipe(msg, cam_obj, pipe)
@@ -246,6 +247,7 @@ def handle_pipe(msg: tuple, cam_obj: CamObj, pipe: Connection):
         cam_obj.start_writing(msg[1], msg[2])
     elif msg_type == CEnum.STOP_SAVING:
         cam_obj.stop_writing()
+        pipe.send((CEnum.STOP_SAVING, cam_obj.temp_save_file, cam_obj.save_file, cam_obj.total_secs))
     elif msg_type == CEnum.GET_BW:
         pipe.send((CEnum.SET_BW, cam_obj.get_bw()))
     elif msg_type == CEnum.SET_BW:
