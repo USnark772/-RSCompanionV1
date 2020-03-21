@@ -29,6 +29,9 @@ from cv2 import VideoCapture, VideoWriter, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_
 from Model.general_defs import cap_codec
 
 
+# TODO: If app is closed during this, check with user if they really want to close and then just cut.
+#  Else if no, then finish work and leave open
+#  Else if end exp, show progress of this.
 def set_file_playback_speed(from_file_name: str, to_file_name: str, total_secs: float, cleanup: bool) -> bool:
     from_file = VideoCapture(from_file_name)
     if not from_file.isOpened():

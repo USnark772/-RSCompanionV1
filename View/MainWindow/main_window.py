@@ -59,6 +59,7 @@ class CompanionWindow(QMainWindow):
         self.__set_texts()
         self.logger.debug("Initialized")
 
+    # TODO: Check if user wants to lose data before closing, else close and lose everything not yet saved.
     def closeEvent(self, event):
         """ Alert controller if desired to the app closing event"""
         self.logger.debug("running")

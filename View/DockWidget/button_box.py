@@ -23,7 +23,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLineEdit
+from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLineEdit, QProgressBar
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QSize
 from Model.general_defs import image_file_path
@@ -56,6 +56,18 @@ class ButtonBox(QGroupBox):
         self.__pause_icon = QIcon()
         self.__pause_icon.addPixmap(QPixmap(image_file_path + "red_vertical_bars.png"))
         self.__playing = False
+
+        self.initialization_bar_frame = EasyFrame()
+        self.initialization_bar_layout = QVBoxLayout(self.initialization_bar_frame)
+        self.initialization_bar_label = QLabel(self.initialization_bar_frame)
+        self.initialization_bar_layout.addWidget(self.initialization_bar_label)
+        self.initialization_bar = QProgressBar(self.initialization_bar_frame)
+        self.initialization_bar.setTextVisible(True)
+        self.initialization_bar.setAlignment(Qt.AlignHCenter)
+        self.initialization_bar.setMaximumHeight(15)
+        self.initialization_bar_layout.addWidget(self.initialization_bar)
+
+        self.layout().addWidget(self.initialization_bar_frame)
 
         self.__set_texts()
         self.__set_button_states()

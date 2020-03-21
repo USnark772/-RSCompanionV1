@@ -25,18 +25,14 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # import logging
-from sys import executable
-from subprocess import Popen, CREATE_NO_WINDOW, CREATE_NEW_CONSOLE
 from threading import Thread
 from cv2 import VideoWriter, VideoCapture, cvtColor, imshow, waitKey, destroyWindow, CAP_PROP_FRAME_WIDTH, \
-    CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_COUNT, CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
-from os import remove
+    CAP_PROP_FRAME_HEIGHT, CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
 from imutils import rotate
 from time import time
 from datetime import datetime
 from numpy import ndarray
-from Model.general_defs import cap_backend, cap_temp_codec, cap_codec, exec_path
-from CompanionLib.companion_helpers import take_a_moment
+from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 from Devices.Camera.Controller.alter_file_fps import set_file_playback_speed
 
 

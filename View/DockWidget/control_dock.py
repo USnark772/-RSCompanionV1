@@ -17,7 +17,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Date: 2019-2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html

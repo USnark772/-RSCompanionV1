@@ -93,7 +93,7 @@ class SizeGetterFixed(QThread):
         except BrokenPipeError as e:
             return
         while list_index < len(list_of_common_sizes) and self.running:
-            print("trying:", list_of_common_sizes[list_index])
+            # print("trying:", list_of_common_sizes[list_index])
             self.cam_obj.set_frame_size(list_of_common_sizes[list_index])
             result = self.cam_obj.get_current_frame_size()
             if result in list_of_common_sizes:

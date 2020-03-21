@@ -24,7 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from multiprocessing import Pipe
+from multiprocessing import Pipe, Process
 from threading import Thread
 from PySide2.QtCore import QObject, Signal, QSettings
 from Devices.abc_device_controller import ABCDeviceController
