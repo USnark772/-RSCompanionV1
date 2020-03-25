@@ -5,10 +5,17 @@ from sys import platform
 small = (640, 480)
 big = (1920, 1080)
 
+cap_backend = cv2.CAP_DSHOW
+cap_temp_codec = cv2.VideoWriter_fourcc(*'mjpg')
+cap_codec = cv2.VideoWriter_fourcc(*'MJPG')
+
+
 def show_feeds():
     # Start default camera
-    video = cv2.VideoCapture(0)
+    video = cv2.VideoCapture(2, cap_backend)
     size = big
+    video.set(cv2.CAP_PROP_FOURCC, cap_temp_codec)  # This line required because opencv is dumb
+    video.set(cv2.CAP_PROP_FOURCC, cap_codec)
     res1 = video.set(cv2.CAP_PROP_FRAME_WIDTH, size[0])
     res2 = video.set(cv2.CAP_PROP_FRAME_HEIGHT, size[1])
 
@@ -17,15 +24,15 @@ def show_feeds():
 
     # With webcam get(CV_CAP_PROP_FPS) does not work.
     # Let's see for ourselves.
-
-    fps = video.get(cv2.CAP_PROP_FPS)
-    print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps))
-
-    print(video.set(cv2.CAP_PROP_FPS, 25.0))
-    new_fps = video.get(cv2.CAP_PROP_FPS)
-    print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(new_fps))
+    #
+    # fps = video.get(cv2.CAP_PROP_FPS)
+    # print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps))
+    #
+    # print(video.set(cv2.CAP_PROP_FPS, 25.0))
+    # new_fps = video.get(cv2.CAP_PROP_FPS)
+    # print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(new_fps))
     # Number of frames to capture
-    num_frames = 120
+    num_frames = 3000
 
     print("Capturing {0} frames".format(num_frames))
 
@@ -34,9 +41,7 @@ def show_feeds():
 
     # Grab a few frames
     for i in range(0, num_frames):
-        ret, frame = video.read()
-        pos = video.get(cv2.CAP_PROP_POS_MSEC)
-        print(pos)
+        video.read()
 
     # End time
     end = time.time()
@@ -65,9 +70,9 @@ def show_platform():
 
 
 def main():
-    # show_feeds()
+    show_feeds()
     # show_backends()
-    show_platform()
+    # show_platform()
 
 
 if __name__ == '__main__':

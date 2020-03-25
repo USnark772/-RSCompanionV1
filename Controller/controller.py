@@ -29,9 +29,10 @@ from typing import Tuple
 from tempfile import gettempdir
 from datetime import datetime
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import QDir, QSize, QSettings, QUrl
+from PySide2.QtCore import QDir, QSize, QSettings, QUrl, QTimer
 from PySide2.QtGui import QKeyEvent, QDesktopServices
-from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file
+from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file, \
+    get_remaining_disk_size
 from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
     error_checking_for_update, device_connection_error, current_version_str
 from View.MainWindow.main_window import CompanionWindow
@@ -40,6 +41,7 @@ from View.DockWidget.button_box import ButtonBox
 from View.DockWidget.info_box import InfoBox
 from View.DockWidget.flag_box import FlagBox
 from View.DockWidget.note_box import NoteBox
+from View.DockWidget.drive_info_box import DriveInfoBox
 from View.MenuBarWidget.menu_bar import MenuBar
 from View.DisplayWidget.display_container import DisplayContainer
 from View.DisplayWidget.graph_frame import GraphFrame
@@ -102,11 +104,13 @@ class CompanionController:
         flag_box_size = QSize(80, 120)
         note_box_size = QSize(250, 120)
         tab_box_width_range = (350, 320)
+        drive_info_box_size = QSize(250, 120)
         self.ui = CompanionWindow(ui_min_size, self.ch)
         self.menu_bar = MenuBar(self.ui, self.ch)
         self.control_dock = ControlDock(self.ui, dock_size, self.ch)
         self.button_box = ButtonBox(self.control_dock, button_box_size, self.ch)
         self.info_box = InfoBox(self.control_dock, info_box_size, self.ch)
+        self.d_info_box = DriveInfoBox(self.control_dock, drive_info_box_size, self.ch)
         self.flag_box = FlagBox(self.control_dock, flag_box_size, self.ch)
         self.note_box = NoteBox(self.control_dock, note_box_size, self.ch)
         self.graph_box = DisplayContainer(self.ui, self.__refresh_all_graphs, self.ch)
@@ -148,7 +152,10 @@ class CompanionController:
         self.__initialize_view()
         self.__init_controller_classes()
 
-        # self.__add_camera_tab()
+        self.__drive_info_timer = QTimer()
+        self.__drive_info_timer.setInterval(20000)
+        self.__drive_info_timer.timeout.connect(self.__update_drive_info_box)
+        self.__drive_info_timer.start()
         self.logger.debug("Initialized")
 
     ########################################################################################
@@ -235,6 +242,18 @@ class CompanionController:
         self.ui.show_help_window("Error", error_message)
         self.logger.debug("done")
 
+    def alert_failed_camera_save(self, cam_name: str, error_message: str) -> None:
+        """
+        Handles an error alert from a camera
+        Alerts user to an error
+        :param cam_name:
+        :param error_message:
+        :return:
+        """
+        self.logger.debug("running")
+        self.ui.show_help_window(cam_name + " error", error_message)
+        self.logger.debug("done")
+
     def save_device_data(self, device_name: Tuple[str, str], device_line: str, timestamp: datetime = None) -> None:
         """
         Saves experiment data from a device to a file
@@ -312,12 +331,14 @@ class CompanionController:
         self.control_dock.add_widget(self.flag_box)
         self.control_dock.add_widget(self.note_box)
         self.control_dock.add_widget(self.info_box)
+        self.control_dock.add_widget(self.d_info_box)
         self.ui.add_menu_bar(self.menu_bar)
         self.ui.add_dock_widget(self.control_dock)
         self.ui.add_graph_container(self.graph_box)
         self.ui.add_tab_widget(self.tab_box)
         self.ui.show()
         self.button_box.toggle_show_prog_bar(False)
+        self.__update_drive_info_box()
         self.logger.debug("done")
 
     # TODO: Add device controller destructors?
@@ -418,6 +439,8 @@ class CompanionController:
         """
 
         self.logger.debug("running")
+        self.__update_drive_info_box()
+        self.menu_bar.set_cam_action_enabled(False)
         date_time = get_current_time(device=True)
         self.__exp_created = True
         self.button_box.toggle_create_button()
@@ -448,10 +471,9 @@ class CompanionController:
 
         self.logger.debug("running")
         self.__exp_created = False
+        self.menu_bar.set_cam_action_enabled(True)
         self.button_box.toggle_create_button()
-        self.settings.beginGroup("Camera manager")
-        use_cams = eval(self.settings.value('active'))
-        self.settings.endGroup()
+        use_cams = eval(self.settings.value('Camera manager/active'))
         if use_cams:
             self.__show_video_save_prog_bar()
         try:
@@ -462,6 +484,9 @@ class CompanionController:
         self.__check_toggle_post_button()
         self.info_box.set_block_num(0)
         self.__check_device_backlog()
+        self.__update_drive_info_box()
+        if eval(self.settings.value("Camera manager/active")):
+            self.button_box.setEnabled(False)
         self.logger.debug("done")
 
     def __start_stop_exp(self) -> None:
@@ -538,6 +563,7 @@ class CompanionController:
         self.button_box.update_prog_bar_value(int(total))
         if total == 100:
             self.button_box.toggle_show_prog_bar(False)
+            self.button_box.setEnabled(True)
 
     # Depreciated
     def __add_vert_lines_to_graphs(self) -> None:
@@ -841,6 +867,7 @@ class CompanionController:
             return
         self.__device_controllers[cam_controller.get_name()] = cam_controller
         self.tab_box.add_tab(cam_controller.get_tab_obj())
+        self.menu_bar.add_cam_action(cam_controller.name, cam_controller.toggle_cam)
         self.logger.debug("done")
 
     def __remove_camera(self, cam_name: str, index: int) -> None:
@@ -858,13 +885,13 @@ class CompanionController:
                 del self.__device_controllers[name]
                 break
         self.cam_con_manager.decrement_cam_count(index)
+        self.menu_bar.remove_cam_action(cam_name)
         self.logger.debug("done")
 
     ########################################################################################
     # Other handlers
     ########################################################################################
 
-    # TODO: Figure out why closing right after running app causes error.
     def ui_close_event_handler(self) -> None:
         """
         Shut down all devices before closing the app.
@@ -883,13 +910,14 @@ class CompanionController:
         self.log_output.close()
         self.logger.debug("done")
 
-    def __toggle_use_cameras(self):
+    def __toggle_use_cameras(self, is_active: bool):
         """
         Toggles app level camera use.
         :return:
         """
 
         self.logger.debug("running")
+        self.menu_bar.set_use_cams_action_active(False)
         self.settings.beginGroup("Camera manager")
         if not self.__exp_created:
             if self.cam_con_manager.active:
@@ -909,6 +937,7 @@ class CompanionController:
                 self.settings.setValue("active", "True")
                 self.menu_bar.set_cam_bool_checked(True)
         self.settings.endGroup()
+        self.menu_bar.set_use_cams_action_active(True)
         self.logger.debug("done")
 
     def __open_last_save_dir(self):
@@ -945,6 +974,15 @@ class CompanionController:
         self.ui.show_help_window("About Red Scientific Companion App", about_RS_app_text + "\n\n Version: "
                                  + current_version_str)
         self.logger.debug("done")
+
+    def __update_drive_info_box(self, filename: str = ''):
+        if filename == '' and not self.__save_dir == "":
+            filename = self.__save_dir
+        info = get_remaining_disk_size(filename)
+        self.d_info_box.set_name_val(str(info[0]))
+        self.d_info_box.set_perc_val(str(info[1]))
+        self.d_info_box.set_gb_val(str(info[2]))
+        self.d_info_box.set_mb_val(str(info[3]))
 
     ########################################################################################
     # graph handling

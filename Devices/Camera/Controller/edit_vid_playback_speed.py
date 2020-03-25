@@ -45,7 +45,7 @@ class FileFixer(QThread):
         self.running = True
 
     def run(self):
-        self.setPriority(QThread.HighestPriority)
+        self.setPriority(QThread.LowPriority)
         from_file = VideoCapture(self.from_file)
         if not from_file.isOpened():
             self.signal.done_sig.emit(False)

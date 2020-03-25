@@ -17,7 +17,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 # Author: Phillip Riskin
-# Date: 2019
+# Date: 2019 - 2020
 # Project: Companion App
 # Company: Red Scientific
 # https://redscientific.com/index.html
@@ -42,6 +42,7 @@ class TabContainer(QTabWidget):
         size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(size_policy)
         self.__tabs = {}
+        self.setMovable(True)
         self.logger.debug("Initialized")
 
     def add_tab(self, contents):
@@ -49,9 +50,8 @@ class TabContainer(QTabWidget):
         new_tab = self.__Tab()
         new_tab.add_contents(contents)
         self.setUpdatesEnabled(False)
-        index = self.addTab(new_tab, "")
+        self.addTab(new_tab, contents.get_name())
         self.__tabs[contents.get_name()] = new_tab
-        self.setTabText(index, contents.get_name())
         self.setUpdatesEnabled(True)
         self.logger.debug("done")
 
@@ -62,6 +62,18 @@ class TabContainer(QTabWidget):
             self.removeTab(QTabWidget.indexOf(self, the_tab))
             del self.__tabs[name]
         self.logger.debug("done")
+
+    # TODO: Finish this?
+    def set_tab_visibility(self, name: str, is_visible: bool) -> None:
+        """
+        Set whether or not the tab is show in the ui.
+        :param name: tab name.
+        :param is_visible: Whether or not to show the tab.
+        :return: None
+        """
+        if name in self.__tabs.keys():
+            the_tab = self.__tabs[name]
+            the_tab.setVisibility(is_visible)
 
     class __Tab(QWidget):
         """ This code is for showing device specific items. This is just a scrollable display area. """

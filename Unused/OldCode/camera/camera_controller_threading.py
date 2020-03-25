@@ -31,11 +31,6 @@ from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.camera_tab import CameraTab
 from Unused.OldCode.camera.cam_threads import CamUpdater, SizeGetter
 
-# TODO: Fix crash bug when changing cam3 res to higher than 1080p (unsupported resolutions) Some issue with threading
-#  memory corruption.
-#  Process finished with exit code -1073740940 (0xC0000374)
-#  Process finished with exit code -1073741819 (0xC0000005)
-
 
 class ControllerSig(QObject):
     settings_error = Signal(str)

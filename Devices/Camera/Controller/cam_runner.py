@@ -44,9 +44,9 @@ list_of_common_sizes = \
         (1600.0, 900.0),
         (1600.0, 1200.0),
         (1920.0, 1080.0),
-        (2048.0, 1536.0),
-        (2560.0, 1440.0),
-        (3840.0, 2160.0),
+        # (2048.0, 1536.0),
+        # (2560.0, 1440.0),
+        # (3840.0, 2160.0),
     ]
 
 
@@ -94,7 +94,6 @@ class SizeGetterFixed(QThread):
         except BrokenPipeError as e:
             return
         while list_index < len(list_of_common_sizes) and self.running:
-            # print("trying:", list_of_common_sizes[list_index])
             self.cam_obj.set_frame_size(list_of_common_sizes[list_index])
             result = self.cam_obj.get_current_frame_size()
             if result in list_of_common_sizes:
@@ -168,21 +167,26 @@ class SizeGetterFlexible(QThread):
 
 
 # TODO: Figure out if/how possible to add logging here
-def run_camera(pipe: Connection, index: int, name: str, flexi: bool = False):  # , ch: logging.Handler):
+def run_camera(pipe: Connection, index: int, name: str, flexi: bool = False, frame_sig_handler: classmethod = None,
+               fps_sig_handler: classmethod = None):  # , ch: logging.Handler):
     # logger = logging.getLogger(__name__)
     # logger.addHandler(ch)
     # logger.debug("Initializing")
     cam_obj = CamObj(index, name)  #, ch)
+    # TODO: These signals will need to be redone for multiprocessing.
+    if frame_sig_handler:
+        cam_obj.signal.new_frame_sig.connect(frame_sig_handler)
+    if fps_sig_handler:
+        cam_obj.signal.fps_sig.connect(fps_sig_handler)
     if flexi:
         size_getter = SizeGetterFlexible(cam_obj, pipe)
     else:
         size_getter = SizeGetterFixed(cam_obj, pipe)
-    size_getter.start()  # priority=QThread.HighPriority)
+    size_getter.start()
     size_getter_alive = True
     running = False
     # logger.debug("Initialized")
     # logger.debug("running")
-    # pipe.send((CEnum.WORKER_DONE, [("(640, 480)", (640, 480))]))
     while True:
         try:
             if pipe.poll():  # Check for and handle message from controller
@@ -211,7 +215,6 @@ def run_camera(pipe: Connection, index: int, name: str, flexi: bool = False):  #
                 size_getter.running = False
                 size_getter.wait()
             break
-        take_a_moment()
         if running:  # Get and handle frame from camera
             if not cam_obj.update():
                 if size_getter_alive:

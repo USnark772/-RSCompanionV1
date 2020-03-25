@@ -21,7 +21,7 @@ def show_feed(index: int, pipe: Connection):
     size = big
     print("running size:", size)
     cap = cv2.VideoCapture(index, backend)
-    ret = cap.set(cv2.CAP_PROP_FOURCC, cap_codec_one)  # TODO: Figure out why this works
+    ret = cap.set(cv2.CAP_PROP_FOURCC, cap_codec_one)
     print(ret)
     ret = cap.set(cv2.CAP_PROP_FOURCC, cap_codec)
     print(ret)

@@ -53,7 +53,6 @@ class CamObj:
         self.show_feed = True
         self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
-        # self.scale = .5  # TODO: Figure out if this is different than setting frame size differently.
         self.save_file = str()
         self.temp_save_file = str()
         self.start_time: datetime = datetime.now()
@@ -62,7 +61,6 @@ class CamObj:
         self.actual_fps = 0
         self.saved_resolution = (0, 0)
         self.file_fixer = None
-        # TODO: remove next line when done debugging
         self.index = index
         self.logger.debug("Initialized")
 
@@ -317,7 +315,6 @@ class CamObj:
             self.__set_fourcc()
         res1 = self.cap.set(CAP_PROP_FRAME_WIDTH, x)
         take_a_moment(1)
-        # TODO: usb cam is having trouble with this line on certain machines. Have we checked .isOpen?
         res2 = self.cap.set(CAP_PROP_FRAME_HEIGHT, y)
         # self.print_by_index("res1: " + str(res1))
         # self.print_by_index("res2: " + str(res2))

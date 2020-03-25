@@ -25,8 +25,9 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # import logging
-from cv2 import VideoWriter, VideoCapture, cvtColor, imshow, waitKey, destroyWindow, CAP_PROP_FRAME_WIDTH, \
-    CAP_PROP_FRAME_HEIGHT, CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
+from cv2 import VideoWriter, VideoCapture, cvtColor, destroyWindow, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_HEIGHT,\
+    CAP_PROP_FOURCC, CAP_PROP_SETTINGS, COLOR_BGR2GRAY
+from PySide2.QtCore import QObject, Signal
 from imutils import rotate
 from time import time
 from datetime import datetime
@@ -34,11 +35,17 @@ from numpy import ndarray
 from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
 
 
+class CamObjSig(QObject):
+    new_frame_sig = Signal(ndarray)
+    fps_sig = Signal(int)
+
+
 class CamObj:
     def __init__(self, index: int, name: str):  # , ch: logging.Handler):
         # self.logger = logging.getLogger(__name__)
         # self.logger.addHandler(ch)
         # self.logger.debug("Initializing")
+        self.signal = CamObjSig()
         self.cap = VideoCapture(index, cap_backend)
         self.name = name
         self.cur_res = (self.cap.get(CAP_PROP_FRAME_WIDTH), self.cap.get(CAP_PROP_FRAME_HEIGHT))
@@ -46,22 +53,16 @@ class CamObj:
         self.writer = None
         self.active = True
         self.writing = False
-        self.bw_image = False
         self.show_feed = True
         self.fourcc_bool = False
         self.rotate_angle = 0  # in degrees
-        # self.scale = .5  # TODO: Figure out if this is different than setting frame size differently.
         self.save_file = str()
         self.temp_save_file = str()
         self.total_secs = 0
         self.start_time: datetime = datetime.now()
         self.end_time: datetime = self.start_time
-        self.last_timestampe: datetime = self.start_time
-        self.actual_fps = 0
-        self.saved_resolution = (0, 0)
-        self.file_fixer = None
-        # TODO: remove next line when done debugging
-        self.index = index
+        self.checkpoint_time: datetime = self.start_time
+        self.num_frames_handled = 0
         # self.logger.debug("Initialized")
 
     def toggle_activity(self, is_active: bool) -> None:
@@ -99,7 +100,6 @@ class CamObj:
             self.writer = self.__setup_writer(timestamp, save_dir)
             self.writing = True
             self.start_time = datetime.now()
-            # self.print_by_index(self.start_time)
 
     def __setup_writer(self, timestamp: str = None, save_dir: str = None, save_file: str = None,
                        vid_ext: str = '.avi', fps: int = 30, res: tuple = None) -> VideoWriter:
@@ -117,7 +117,6 @@ class CamObj:
         # self.logger.debug("running")
         if not res:
             res = (int(self.cur_res[0]), int(self.cur_res[1]))
-            self.saved_resolution = res
         if not save_file:
             self.temp_save_file = save_dir + 'temp_' + timestamp + '_' + self.name + '_output' + vid_ext
             self.save_file = save_dir + timestamp + '_' + self.name + '_output' + vid_ext
@@ -173,26 +172,22 @@ class CamObj:
             start = time()
             ret, frame = self.__read_camera()
             end = time()
-            # self.print_by_index("end - start:  " + str(end - start))
             if end - start > 0.5:
-                # self.print_by_index("update failed at end - start > 1")
                 return False
             if ret and frame is not None:
-                if self.bw_image:
-                    frame = cvtColor(frame, COLOR_BGR2GRAY)
-                # if self.scale != 1:
-                #     frame = resize(frame, round(self.frame_size[0] * self.scale))
                 if self.rotate_angle != 0:
                     frame = rotate(frame, self.rotate_angle)
                 if self.show_feed:
-                    imshow(self.name, frame)
-                    waitKey(1)  # Required for frame to appear
+                    self.signal.new_frame_sig.emit(frame)
                 if self.writing:
                     self.writer.write(frame)
+                self.num_frames_handled += 1
+                new_checkpoint = datetime.now()
+                if (new_checkpoint - self.checkpoint_time).total_seconds() > 1:
+                    self.signal.fps_sig.emit(self.num_frames_handled)
+                    self.num_frames_handled = 0
+                    self.checkpoint_time = new_checkpoint
             else:
-                # self.print_by_index("update failed with ret or frame problem")
-                # self.print_by_index("ret: " + str(ret))
-                # self.print_by_index("frame: " + str(frame))
                 return False
         return True
 
@@ -290,18 +285,12 @@ class CamObj:
             self.__set_fourcc()
         res1 = self.cap.set(CAP_PROP_FRAME_WIDTH, x)
         res2 = self.cap.set(CAP_PROP_FRAME_HEIGHT, y)
-        # self.print_by_index("res1: " + str(res1))
-        # self.print_by_index("res2: " + str(res2))
         if not res1 or not res2:
             res3 = self.cap.set(CAP_PROP_FRAME_WIDTH, self.cur_res[0])
             res4 = self.cap.set(CAP_PROP_FRAME_HEIGHT, self.cur_res[1])
-            # self.print_by_index("res3: " + str(res3))
-            # self.print_by_index("res4: " + str(res4))
         else:
             curWidth = self.cap.get(CAP_PROP_FRAME_WIDTH)
             curHeight = self.cap.get(CAP_PROP_FRAME_HEIGHT)
-            # self.print_by_index("curWidth: " + str(curWidth))
-            # self.print_by_index("curHeight: " + str(curHeight))
             self.cur_res = (curWidth, curHeight)
         self.close_window()
         self.toggle_activity(True)
@@ -322,14 +311,6 @@ class CamObj:
         """
 
         ret, frame = self.cap.read()
-        # self.print_by_index("ret1: " + str(ret))
-        # self.print_by_index("frame1: " + str(frame))
         if frame is None:
             ret, frame = self.cap.read()
-            # self.print_by_index("ret2: " + str(ret))
-            # self.print_by_index("frame2: " + str(frame))
         return ret, frame
-
-    def print_by_index(self, msg):
-        if self.index == 2:
-            print(msg)

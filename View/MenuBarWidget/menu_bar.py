@@ -37,75 +37,152 @@ class MenuBar(QMenuBar):
         super().__init__(parent)
         self.setGeometry(QRect(0, 0, 840, 22))
 
-        self.__file = QMenu(self)
-        self.addAction((self.__file.menuAction()))
+        self.__file_menu = QMenu(self)
+        self.addAction((self.__file_menu.menuAction()))
 
-        self.__open_last_save_dir = QAction(self)
-        self.__file.addAction(self.__open_last_save_dir)
+        self.__open_last_save_dir_action = QAction(self)
+        self.__file_menu.addAction(self.__open_last_save_dir_action)
 
-        self.__use_cameras = QAction(self)
-        self.__use_cameras.setCheckable(True)
-        self.__file.addAction(self.__use_cameras)
+        self.__cam_list_menu = QMenu(self)
+        self.__file_menu.addMenu(self.__cam_list_menu)
 
-        self.__help = QMenu(self)
-        self.addAction(self.__help.menuAction())
+        self.__use_cams_action = QAction(self)
+        self.__use_cams_action.setCheckable(True)
+        self.__cam_list_menu.addAction(self.__use_cams_action)
 
-        self.__about_app = QAction(self)
-        self.__help.addAction(self.__about_app)
+        sep = self.__cam_list_menu.addSeparator()
 
-        self.__about_company = QAction(self)
-        self.__help.addAction(self.__about_company)
+        self.__help_menu = QMenu(self)
+        self.addAction(self.__help_menu.menuAction())
 
-        self.__update = QAction(self)
-        self.__help.addAction(self.__update)
+        self.__about_app_action = QAction(self)
+        self.__help_menu.addAction(self.__about_app_action)
 
-        self.__log_window = QAction(self)
-        self.__help.addAction(self.__log_window)
+        self.__about_company_action = QAction(self)
+        self.__help_menu.addAction(self.__about_company_action)
+
+        self.__update_action = QAction(self)
+        self.__help_menu.addAction(self.__update_action)
+
+        self.__log_window_action = QAction(self)
+        self.__help_menu.addAction(self.__log_window_action)
+
+        self.__cam_actions = {}
+
+        # self.add_cam_action('test action', self.temp_handler)
+        # self.remove_cam_action('test action')
 
         self.__set_texts()
         self.logger.debug("Initialized")
 
-    def set_cam_bool_checked(self, checked):
-        self.__use_cameras.setChecked(checked)
+    # def temp_handler(self, is_active: bool):
+    #     print('test action is now:', is_active)
+
+    def set_cam_action_enabled(self, is_active: bool) -> None:
+        """
+        Set whether or not the camera actions can be used.
+        :param is_active: can be used.
+        :return: None
+        """
+
+        self.__use_cams_action.setEnabled(is_active)
+        for action in self.__cam_actions.values():
+            action.setEnabled(is_active)
+
+    def set_cam_bool_checked(self, is_active: bool) -> None:
+        """
+        Set whether or not this action is checked.
+        :param is_active: whether or not this action should be checked.
+        :return: None
+        """
+        self.__use_cams_action.setChecked(is_active)
+        self.empty_cam_actions()
 
     def add_cam_bool_handler(self, func):
         self.logger.debug("running")
-        self.__use_cameras.triggered.connect(func)
+        self.__use_cams_action.toggled.connect(func)
         self.logger.debug("done")
+
+    def set_use_cams_action_active(self, is_active: bool) -> None:
+        """
+        Set whether or not this action is usable.
+        :param is_active: whether or not to let this action be usable.
+        :return: None
+        """
+
+        self.__use_cams_action.setEnabled(is_active)
 
     def add_open_last_save_dir_handler(self, func):
         self.logger.debug("running")
-        self.__open_last_save_dir.triggered.connect(func)
+        self.__open_last_save_dir_action.triggered.connect(func)
         self.logger.debug("done")
 
     def add_about_app_handler(self, func):
         self.logger.debug("running")
-        self.__about_app.triggered.connect(func)
+        self.__about_app_action.triggered.connect(func)
         self.logger.debug("done")
 
     def add_about_company_handler(self, func):
         self.logger.debug("running")
-        self.__about_company.triggered.connect(func)
+        self.__about_company_action.triggered.connect(func)
         self.logger.debug("done")
 
     def add_update_handler(self, func):
         self.logger.debug("running")
-        self.__update.triggered.connect(func)
+        self.__update_action.triggered.connect(func)
         self.logger.debug("done")
 
     def add_log_window_handler(self, func):
         self.logger.debug("running")
-        self.__log_window.triggered.connect(func)
+        self.__log_window_action.triggered.connect(func)
         self.logger.debug("done")
+
+    def add_cam_action(self, name: str, handler: classmethod, is_active: bool = True) -> None:
+        """
+        Add a new action in the camera menu by name.
+        :param name: The name of the camera being added.
+        :param handler: The button handler.
+        :param is_active: Whether or not this camera is considered active.
+        :return: None
+        """
+
+        new_cam_action = QAction(self)
+        new_cam_action.setText(name)
+        new_cam_action.setCheckable(True)
+        new_cam_action.setChecked(is_active)
+        new_cam_action.toggled.connect(handler)
+        self.__cam_actions[name] = new_cam_action
+        self.__cam_list_menu.addAction(new_cam_action)
+        # self.__default_cam_option.setVisible(False)
+
+    def remove_cam_action(self, name: str) -> None:
+        """
+        Remove a cam action by name.
+        :param name: The name of the camera being removed.
+        :return:
+        """
+
+        if name in self.__cam_actions.keys():
+            self.__cam_list_menu.removeAction(self.__cam_actions[name])
+            del self.__cam_actions[name]
+        # if len(self.__cam_selectors) == 0:
+        #     self.__default_cam_option.setVisible(True)
 
     def __set_texts(self):
         self.logger.debug("running")
-        self.__file.setTitle("File")
-        self.__open_last_save_dir.setText("Open last save location")
-        self.__use_cameras.setText("Use cameras")
-        self.__help.setTitle("Help")
-        self.__about_app.setText("About RS Companion")
-        self.__about_company.setText("About Red Scientific")
-        self.__update.setText("Check For Updates")
-        self.__log_window.setText("Show log window")
+        self.__file_menu.setTitle("File")
+        self.__open_last_save_dir_action.setText("Open last save location")
+        self.__cam_list_menu.setTitle("Attached Cameras")
+        self.__use_cams_action.setText("Use cameras")
+        self.__help_menu.setTitle("Help")
+        self.__about_app_action.setText("About RS Companion")
+        self.__about_company_action.setText("About Red Scientific")
+        self.__update_action.setText("Check For Updates")
+        self.__log_window_action.setText("Show log window")
         self.logger.debug("done")
+
+    def empty_cam_actions(self):
+        for name in self.__cam_actions.keys():
+            self.__cam_list_menu.removeAction(self.__cam_actions[name])
+        self.__cam_actions = {}
+

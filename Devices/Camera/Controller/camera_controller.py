@@ -26,22 +26,16 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from multiprocessing import Pipe
 from threading import Thread
-from PySide2.QtCore import QObject, Signal
+from PySide2.QtGui import QImage, QPixmap
+from PySide2.QtCore import QObject, Signal, Qt
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.camera_tab import CameraTab
 from Devices.Camera.Controller.pipe_watcher import PipeWatcher
 from Devices.Camera.Controller.cam_runner import run_camera, CEnum
 from Devices.Camera.Controller.edit_vid_playback_speed import FileFixer
+from numpy import ndarray
+from cv2 import cvtColor, COLOR_BGR2RGB
 
-# TODO: Fix crash bug when changing cam3 res to higher than 1080p (unsupported resolutions) Some issue with threading
-#  memory corruption.
-#  Process finished with exit code -1073740940 (0xC0000374)
-#  Process finished with exit code -1073741819 (0xC0000005)
-
-# TODO: Add FPS overlay for each camera.
-#  Add actual user FPS control. If user selects 10 fps, video will be read/saved at 10fps.
-
-# TODO: Figure out why camera might not initialize after turning cam_man off and on again
 
 class ControllerSig(QObject):
     settings_error = Signal(str)
@@ -69,7 +63,7 @@ class CameraController(ABCDeviceController):
         # if not settings.contains("Experimental"):
         #     settings.setValue("Experimental", "False")
         # proc_args = (proc_pipe, self.index, self.name, eval(settings.value('Experimental')))
-        proc_args = (proc_pipe, self.index, self.name, True)
+        proc_args = (proc_pipe, self.index, self.name, False, self.handle_new_frame, self.display_fps)
         self.cam_worker = Thread(target=run_camera, args=proc_args)
         self.cam_worker.start()
         self.file_fixer: FileFixer = FileFixer('', '', 0, False)
@@ -79,12 +73,12 @@ class CameraController(ABCDeviceController):
         self.timestamp = None
         self.cam_active = True
         self.feed_active = True
-        self.color_image = True
+        self.__in_experiment = False
+        self.__cam_ready = False
         self.__setup_handlers()
         self.current_size = 0
         self.frame_sizes = []
         self.worker_max_tries = 0
-        # self.fps_values = []
         self.__add_loading_symbols_to_tab()
         self.logger.debug("Initialized")
 
@@ -132,7 +126,7 @@ class CameraController(ABCDeviceController):
                 self.worker_max_tries = msg[1]
             elif msg_type == CEnum.WORKER_STATUS_UPDATE:
                 self.tab.set_init_progress_bar_val((self.worker_max_tries - msg[1]) / self.worker_max_tries * 100)
-            elif msg_type == CEnum.STOP_SAVING:
+            elif msg_type == CEnum.STOP_SAVING and self.__in_experiment:
                 if self.file_fixer_running:
                     self.file_fixer.wait()
                 self.file_fixer = FileFixer(msg[1], msg[2], msg[3], True)
@@ -140,6 +134,7 @@ class CameraController(ABCDeviceController):
                 self.file_fixer.signal.done_sig.connect(self.__emit_save_complete)
                 self.file_fixer_running = True
                 self.file_fixer.start()
+                self.__in_experiment = False
 
     def create_new_save_file(self, new_filename: str):
         self.logger.debug("running")
@@ -153,10 +148,12 @@ class CameraController(ABCDeviceController):
 
     def start_exp(self):
         self.logger.debug("running")
-        self.pipe.send((CEnum.START_SAVING, self.timestamp, self.save_dir))
-        self.tab.set_tab_active(False)
-        if self.file_fixer_running:
-            self.file_fixer.wait()
+        if self.__cam_ready:
+            self.pipe.send((CEnum.START_SAVING, self.timestamp, self.save_dir))
+            self.tab.set_tab_active(False)
+            if self.file_fixer_running:
+                self.file_fixer.wait()
+            self.__in_experiment = True
         self.logger.debug("done")
 
     def end_exp(self):
@@ -165,11 +162,32 @@ class CameraController(ABCDeviceController):
         self.tab.set_tab_active(True)
         self.logger.debug("done")
 
+    def toggle_cam(self, is_active: bool):
+        self.logger.debug("running")
+        if is_active:
+            self.pipe.send((CEnum.ACTIVATE_CAM,))
+            self.tab.set_tab_active(is_active, feed=True)
+        else:
+            self.pipe.send((CEnum.DEACTIVATE_CAM,))
+            self.tab.set_tab_active(is_active, feed=True)
+        self.logger.debug("done")
+
+    def handle_new_frame(self, frame: ndarray):
+        rgb_image = cvtColor(frame, COLOR_BGR2RGB)
+        h, w, ch = rgb_image.shape
+        bytes_per_line = ch * w
+        convert_to_qt_format = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format_RGB888)
+        p = convert_to_qt_format.scaled(248, 186, Qt.KeepAspectRatio)
+        self.tab.update_feed(QPixmap.fromImage(p))
+
+    def display_fps(self, fps: int):
+        self.tab.update_fps_value(fps)
+
     def __emit_save_complete(self, success):
         if success:
             self.signals.update_save_prog.emit(self.index, 100)
         else:
-            pass  # TODO: Figure out what to do here.
+            self.signals.cam_failed.emit(self.name + ' Failure to save video file.')
 
     def __emit_save_update(self, completed, total):
         perc = round(completed / total * 100)
@@ -186,13 +204,12 @@ class CameraController(ABCDeviceController):
 
     def __setup_handlers(self):
         self.logger.debug("running")
-        self.tab.add_use_cam_button_handler(self.__toggle_cam)
-        # self.tab.add_fps_selector_handler(self.__set_fps)
+        # self.tab.add_use_cam_button_handler(self.__toggle_cam)
         self.tab.add_frame_size_selector_handler(self.__set_frame_size)
-        self.tab.add_settings_toggle_button_handler(self.__open_settings)
+        # self.tab.add_settings_toggle_button_handler(self.__open_settings)
         self.tab.add_frame_rotation_handler(self.__rotation_entry_changed)
         self.tab.add_show_cam_button_handler(self.__toggle_show_feed)
-        self.tab.add_bw_button_handler(self.__toggle_bw)
+        # self.tab.add_bw_button_handler(self.__toggle_bw)
         self.logger.debug("done")
 
     def __complete_setup(self, sizes: list):
@@ -201,28 +218,18 @@ class CameraController(ABCDeviceController):
         self.__populate_sizes(sizes)
         self.__get_initial_values()
         self.pipe.send((CEnum.ACTIVATE_CAM,))
-        self.tab.set_tab_active(True)
+        self.tab.set_tab_active(True, feed=True)
         self.tab.remove_init_prog_bar()
+        self.__cam_ready = True
         self.logger.debug("done")
 
-    def __toggle_cam(self):
+    def __toggle_show_feed(self, is_active: bool):
         self.logger.debug("running")
-        if self.cam_active:
-            self.pipe.send((CEnum.DEACTIVATE_CAM,))
-            self.tab.set_tab_active(False, toggle_toggler=False)
-        else:
-            self.pipe.send((CEnum.ACTIVATE_CAM,))
-            self.tab.set_tab_active(True, toggle_toggler=False)
-        self.cam_active = not self.cam_active
-        self.logger.debug("done")
-
-    def __toggle_show_feed(self):
-        self.logger.debug("running")
-        if self.feed_active:
-            self.pipe.send((CEnum.HIDE_FEED,))
-        else:
+        if is_active:
             self.pipe.send((CEnum.SHOW_FEED,))
-        self.feed_active = not self.feed_active
+        else:
+            self.pipe.send((CEnum.HIDE_FEED,))
+        self.tab.show_feed(is_active)
         self.logger.debug("done")
 
     def __set_frame_size(self):
@@ -230,12 +237,6 @@ class CameraController(ABCDeviceController):
         new_size = self.tab.get_frame_size()
         self.pipe.send((CEnum.SET_RESOLUTION, new_size))
         self.logger.debug("done")
-
-    # def __set_fps(self):
-    #     self.logger.debug("running")
-    #     new_fps = self.tab.get_fps()
-    #     self.pipe.send((CEnum.SET_FPS, new_fps))
-    #     self.logger.debug("done")
 
     def __open_settings(self):
         self.pipe.send((CEnum.OPEN_SETTINGS,))
@@ -256,6 +257,9 @@ class CameraController(ABCDeviceController):
         usr_input: str
         negative = False
         usr_input = self.tab.get_rotation()
+        if len(usr_input) == 0:
+            self.tab.set_rotation('0')
+            return True
         if len(usr_input) > 0 and usr_input[0] == '-':
             negative = True
             usr_input = usr_input[1:]
@@ -273,16 +277,7 @@ class CameraController(ABCDeviceController):
     def __add_loading_symbols_to_tab(self):
         self.logger.debug("running")
         self.tab.add_item_to_size_selector("Initializing...")
-        # self.tab.add_item_to_fps_selector("Initializing...")
         self.logger.debug("done")
-
-    # def __populate_fps_selections(self):
-    #     self.logger.debug("running")
-    #     self.tab.empty_fps_selector()
-    #     for i in range(11):
-    #         self.fps_values.append((str(30 - i), 30-i))
-    #     self.tab.populate_fps_selector(self.fps_values)
-    #     self.logger.debug("done")
 
     def __populate_sizes(self, sizes: list):
         self.logger.debug("running")
@@ -294,12 +289,8 @@ class CameraController(ABCDeviceController):
     def __get_initial_values(self):
         self.logger.debug("running")
         self.pipe.send((CEnum.GET_RESOLUTION,))
-        # self.pipe.send((CEnum.GET_FPS,))
         self.pipe.send((CEnum.GET_ROTATION,))
         self.logger.debug("done")
-
-    # def __set_tab_fps_val(self, value: int):
-    #     self.tab.set_fps(self.__get_fps_val_index(value))
 
     def __set_tab_size_val(self, value: tuple):
         self.tab.set_frame_size(self.__get_size_val_index(value))
@@ -311,6 +302,3 @@ class CameraController(ABCDeviceController):
         for i in range(len(self.frame_sizes)):
             if self.frame_sizes[i][1] == value:
                 return i
-
-    # def __get_fps_val_index(self, value: int):
-    #     return self.fps_values.index((str(value), value))

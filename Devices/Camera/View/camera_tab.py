@@ -23,10 +23,16 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QLineEdit, QProgressBar
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QLineEdit, QProgressBar, QCheckBox,\
+    QSpacerItem, QSizePolicy
+from PySide2.QtGui import QPixmap
 from PySide2.QtCore import QRect, Qt
 from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
 from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
+
+
+max_height = 500
+combo_box_height = 22
 
 
 class CameraTab(QWidget):
@@ -38,7 +44,7 @@ class CameraTab(QWidget):
         self.name = name
         self.setLayout(QVBoxLayout())
         self.setGeometry(QRect(0, 0, 200, 500))
-        self.setMaximumHeight(350)
+        self.setMaximumHeight(max_height)
 
         self.config_horizontal_layout = QHBoxLayout()
 
@@ -51,49 +57,73 @@ class CameraTab(QWidget):
         self.initialization_bar.setAlignment(Qt.AlignHCenter)
         self.initialization_bar.setMaximumHeight(15)
         self.initialization_bar_layout.addWidget(self.initialization_bar)
+        self.initialization_bar_frame.setMaximumHeight(70)
 
-        self.layout().addWidget(self.initialization_bar_frame)
-
-        self.layout().addWidget(EasyFrame(line=True))
-
-        self.use_cam_button = ClickAnimationButton()
-        self.layout().addWidget(self.use_cam_button)
-
-        self.show_cam_button = ClickAnimationButton()
-        self.layout().addWidget(self.show_cam_button)
-
-        self.bw_button = ClickAnimationButton()
-        self.layout().addWidget(self.bw_button)
-
-        self.settings_toggle_button = ClickAnimationButton()
-        self.layout().addWidget(self.settings_toggle_button)
-
-        self.layout().addWidget(EasyFrame(line=True))
+        self.show_cam_checkbox_frame = EasyFrame()
+        self.show_cam_checkbox_layout = QHBoxLayout(self.show_cam_checkbox_frame)
+        self.show_cam_checkbox_label = QLabel(self.show_cam_checkbox_frame)
+        self.show_cam_checkbox_label.setAlignment(Qt.AlignLeft)
+        self.show_cam_checkbox_layout.addWidget(self.show_cam_checkbox_label)
+        self.show_cam_checkbox_layout.addWidget(EasyFrame(vert=True))
+        self.show_cam_checkbox = QCheckBox()
+        self.show_cam_checkbox.setChecked(True)
+        self.show_cam_checkbox.setLayoutDirection(Qt.RightToLeft)
+        self.show_cam_checkbox_layout.addWidget(self.show_cam_checkbox)
+        self.show_cam_checkbox_frame.setMaximumHeight(50)
 
         self.frame_size_selector_frame = EasyFrame()
         self.frame_size_selector_layout = QHBoxLayout(self.frame_size_selector_frame)
         self.frame_size_selector_label = QLabel(self.frame_size_selector_frame)
-        self.frame_size_selector_label.setAlignment(Qt.AlignCenter)
+        self.frame_size_selector_label.setAlignment(Qt.AlignLeft)
         self.frame_size_selector_layout.addWidget(self.frame_size_selector_label)
         self.frame_size_selector_layout.addWidget(EasyFrame(vert=True))
         self.frame_size_selector = QComboBox(self.frame_size_selector_frame)
+        self.frame_size_selector.setMaximumHeight(combo_box_height)
         self.frame_size_selector_layout.addWidget(self.frame_size_selector)
-
-        self.layout().addWidget(self.frame_size_selector_frame)
+        self.frame_size_selector_frame.setMaximumHeight(50)
 
         self.frame_rotation_setting_frame = EasyFrame()
         self.frame_rotation_setting_layout = QHBoxLayout(self.frame_rotation_setting_frame)
         self.frame_rotation_setting_label = QLabel(self.frame_rotation_setting_frame)
+        self.frame_rotation_setting_label.setAlignment(Qt.AlignLeft)
         self.frame_rotation_setting_layout.addWidget(self.frame_rotation_setting_label)
         self.frame_rotation_setting_layout.addWidget(EasyFrame(vert=True))
         self.frame_rotation_setting_entry_box = QLineEdit(self.frame_rotation_setting_frame)
         self.frame_rotation_setting_entry_box.setMaximumSize(90, 20)
         self.frame_rotation_setting_entry_box.setAlignment(Qt.AlignRight)
         self.frame_rotation_setting_layout.addWidget(self.frame_rotation_setting_entry_box)
+        self.frame_rotation_setting_frame.setMaximumHeight(50)
 
-        self.layout().addWidget(self.frame_rotation_setting_frame)
+        self.image_display_frame = EasyFrame()
+        self.image_display_layout = QVBoxLayout(self.image_display_frame)
+        self.image_display_label = QLabel(self.image_display_frame)
+        self.image_display_label.setAlignment(Qt.AlignHCenter)
+        self.image_display_layout.addWidget(self.image_display_label)
+        self.image_display = QLabel(self.image_display_frame)
+        self.image_display.setAlignment(Qt.AlignHCenter)
+        self.image_display_layout.addWidget(self.image_display)
 
+        self.fps_display_frame = EasyFrame()
+        self.fps_display_layout = QHBoxLayout(self.fps_display_frame)
+        self.fps_display_label = QLabel(self.fps_display_frame)
+        self.fps_display_label.setAlignment(Qt.AlignRight)
+        self.fps_display_layout.addWidget(self.fps_display_label)
+        self.fps_display_value = QLabel(self.fps_display_frame)
+        self.fps_display_value.setAlignment(Qt.AlignLeft)
+        self.fps_display_layout.addWidget(self.fps_display_value)
+
+        spacer = QSpacerItem(1, 1, vData=QSizePolicy.Expanding)
+
+        self.layout().addWidget(self.initialization_bar_frame)
         self.layout().addWidget(EasyFrame(line=True))
+        self.layout().addWidget(self.frame_size_selector_frame)
+        self.layout().addWidget(self.frame_rotation_setting_frame)
+        self.layout().addWidget(EasyFrame(line=True))
+        self.layout().addWidget(self.show_cam_checkbox_frame)
+        self.layout().addWidget(self.image_display_frame)
+        self.layout().addWidget(self.fps_display_frame)
+        self.layout().addWidget(EasyFrame(line=True))
+        self.layout().addItem(spacer)
 
         self.__set_texts()
         self.__set_tooltips()
@@ -103,11 +133,11 @@ class CameraTab(QWidget):
     def get_name(self):
         return self.name
 
-    def set_tab_active(self, is_active, toggle_toggler: bool = True):
+    def set_tab_active(self, is_active, feed=False):
         self.logger.debug("running")
         self.__set_controls_active(is_active)
-        if toggle_toggler:
-            self.use_cam_button.setEnabled(is_active)
+        if feed:
+            self.show_feed(is_active)
         self.logger.debug("done")
 
     def add_use_cam_button_handler(self, func):
@@ -117,7 +147,7 @@ class CameraTab(QWidget):
 
     def add_show_cam_button_handler(self, func):
         self.logger.debug("running")
-        self.show_cam_button.clicked.connect(func)
+        self.show_cam_checkbox.toggled.connect(func)
         self.logger.debug("done")
 
     def add_bw_button_handler(self, func):
@@ -139,6 +169,16 @@ class CameraTab(QWidget):
         self.logger.debug("running")
         self.frame_rotation_setting_entry_box.textChanged.connect(func)
         self.logger.debug("done")
+
+    def update_feed(self, image: QPixmap):
+        self.image_display.setPixmap(image)
+
+    def show_feed(self, is_active: bool):
+        if not is_active:
+            self.image_display_label.setText('Preview unavailable')
+        else:
+            self.image_display_label.setText('Preview')
+        self.image_display.setVisible(is_active)
 
     def get_frame_size(self):
         return self.frame_size_selector.currentData()
@@ -187,41 +227,41 @@ class CameraTab(QWidget):
 
     def remove_init_prog_bar(self):
         self.initialization_bar_frame.hide()
-        self.setMaximumHeight(260)
+
+    def update_fps_value(self, value: int):
+        self.fps_display_value.setText(str(value))
 
     def __set_controls_active(self, is_active):
         self.logger.debug("running")
         self.frame_size_selector.setEnabled(is_active)
         self.frame_rotation_setting_entry_box.setEnabled(is_active)
-        self.settings_toggle_button.setEnabled(is_active)
-        self.show_cam_button.setEnabled(is_active)
-        self.bw_button.setEnabled(is_active)
+        self.show_cam_checkbox.setEnabled(is_active)
         self.logger.debug("done")
 
     def __set_texts(self):
         self.logger.debug("running")
         self.initialization_bar_label.setText('Initialization progress')
         self.initialization_bar.setValue(0)
-        self.use_cam_button.setText("Toggle Camera Usage")
-        self.show_cam_button.setText("Toggle Camera Display")
-        self.bw_button.setText("Toggle B&W image")
+        self.image_display_label.setText("Preview")
+        self.image_display.setText("Initializing")
+        self.show_cam_checkbox_label.setText("Show feed")
         self.frame_size_selector_label.setText("Frame size")
-        self.settings_toggle_button.setText("Camera Settings")
-        self.frame_rotation_setting_label.setText("Image rotation degrees")
+        self.frame_rotation_setting_label.setText("Rotate image")
+        self.fps_display_label.setText("FPS:")
+        self.fps_display_value.setText("0")
         self.logger.debug("done")
 
     def __set_tooltips(self):
         self.logger.debug("running")
-        frame_size_tooltip = "Select resolution for this camera. Higher resolutions may cause issues."
-        use_cam_tooltip = "Toggle whether this camera is being used."
-        show_cam_tooltip = "Toggle whether this camera feed is added to the UI. (Does not disable camera)"
-        bw_tooltip = "Toggle whether this video feed is color or greyscale"
-        settings_window_tooltip = "Open a window with extra camera settings."
-        rotation_tooltip = "Set rotation angle for video feed. -360 < value < 360."
-        self.use_cam_button.setToolTip(use_cam_tooltip)
-        self.show_cam_button.setToolTip(show_cam_tooltip)
-        self.settings_toggle_button.setToolTip(settings_window_tooltip)
-        self.bw_button.setToolTip(bw_tooltip)
+        frame_size_tooltip = "Select resolution for this camera."
+        show_cam_tooltip = "Show or hide camera feed preview. (Does not disable camera)"
+        fps_display_tooltip = "The approximate fps this cam is performing at. This value can be affected by the load "\
+                              "your computer is currently under."
+        rotation_tooltip = "Set degree of rotation for video feed. -360 < value < 360."
+        image_display_tooltip = "Preview of camera feed."
+        self.show_cam_checkbox_frame.setToolTip(show_cam_tooltip)
         self.frame_size_selector_frame.setToolTip(frame_size_tooltip)
         self.frame_rotation_setting_frame.setToolTip(rotation_tooltip)
+        self.image_display_frame.setToolTip(image_display_tooltip)
+        self.fps_display_frame.setToolTip(fps_display_tooltip)
         self.logger.debug("done")

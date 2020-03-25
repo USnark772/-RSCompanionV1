@@ -24,16 +24,29 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # https://redscientific.com/index.html
 
 import logging
+import os
+from shutil import disk_usage
 from time import sleep
 from datetime import datetime, timedelta
 from PySide2.QtWidgets import QFrame, QPushButton
-from Model.general_defs import button_pressed_style, button_normal_style, cap_codec
+from Model.general_defs import button_pressed_style, button_normal_style
 
 logger = logging.getLogger(__name__)
 
 
 def take_a_moment(time: float = 0.05):
     sleep(time)
+
+
+def get_remaining_disk_size(path: str = ''):
+    if path == '':
+        path = os.path.abspath(os.sep)
+    drive_name = os.path.splitdrive(path)[0]
+    info = disk_usage(path)
+    mb = round(info[2] / (1024 ** 2))
+    gb = round(info[2] / (1024 ** 3))
+    percentage = round(info[2] / info[0] * 100)
+    return drive_name, percentage, gb, mb
 
 
 def write_line_to_file(fname, line, new=False):

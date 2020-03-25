@@ -25,7 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from PySide2.QtWidgets import QMainWindow, QHBoxLayout, QFrame, QMessageBox
 from PySide2.QtCore import Qt
-from PySide2.QtGui import QFont, QIcon
+from PySide2.QtGui import QFont, QIcon, QCloseEvent
 from View.MainWindow.help_window import HelpWindow
 from View.MainWindow.central_widget import CentralWidget
 from Model.general_defs import image_file_path
@@ -61,16 +61,22 @@ class CompanionWindow(QMainWindow):
         self.__setup_checker_buttons()
         self.logger.debug("Initialized")
 
-    def closeEvent(self, event):
-        """ Alert controller if desired to the app closing event"""
+    def closeEvent(self, event: QCloseEvent) -> None:
+        """
+        Check if user really wants to close the app and only if so alert close and close.
+        :param event: The close event
+        :return: None
+        """
         self.logger.debug("running")
-        if not self.checker.exec_() == QMessageBox.Yes:
+        if self.checker.exec_() == QMessageBox.Yes:
+            if self.close_callback:
+                self.close_callback()
+            event.accept()
+        else:
             event.ignore()
-        elif self.close_callback:
-            self.close_callback()
         self.logger.debug("done")
 
-    def add_close_handler(self, func):
+    def add_close_handler(self, func: classmethod) -> None:
         self.logger.debug("running")
         self.close_callback = func
         self.logger.debug("done")
