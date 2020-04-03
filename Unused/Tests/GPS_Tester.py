@@ -4,8 +4,10 @@ from serial.tools.list_ports_common import ListPortInfo
 import time
 import adafruit_gps
 
+cont = True
+
 uart = Serial("COM3", baudrate=9600, timeout=10)
-print(uart.name)
+print(uart)
 
 gps = adafruit_gps.GPS(uart, debug=False)
 
@@ -16,7 +18,7 @@ gps.send_command(b"PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
 gps.send_command(b"PMTK220,1000")
 
 last_print = time.monotonic()
-while True:
+while cont:
     gps.update()
     current = time.monotonic()
     if current - last_print >= 1.0:
@@ -51,3 +53,8 @@ while True:
             print("Horizontal dilution: {}".format(gps.horizontal_dilution))
         if gps.height_geoid is not None:
             print("Height geo ID: {} meters".format(gps.height_geoid))
+        ans = str(input("continue? (y or n): "))
+        if ans == "y":
+            cont = True
+        if ans == "n":
+            cont = False

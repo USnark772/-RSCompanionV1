@@ -70,6 +70,7 @@ class PortScanner(QThread):
     def __try_attach_devices(self, list_of_ports):
         for port in list_of_ports:
             if port not in self.known_ports:
+                print("unknown port: ", port)
                 for profile in dev_profs:
                     if self.__verify_port(port, dev_profs[profile]):
                         ret_val, new_connection = self.__try_open_port(port)
@@ -86,6 +87,8 @@ class PortScanner(QThread):
 
     @staticmethod
     def __verify_port(port: ListPortInfo, profile):
+        print("port.vid: ", port.vid)
+        print("port.pid: ", port.pid)
         return port.vid == profile['vid'] and port.pid == profile['pid']
 
     @staticmethod
