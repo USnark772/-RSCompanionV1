@@ -7,7 +7,17 @@ import adafruit_gps
 cont = True
 
 uart = Serial("COM3", baudrate=9600, timeout=10)
+
+print(uart.name)
+print(type(uart))
 print(uart)
+x = list_ports.comports()
+for port in x:
+    print(port)
+    print(port.name)
+    print(port.pid)
+    print(port.vid)
+
 
 gps = adafruit_gps.GPS(uart, debug=False)
 

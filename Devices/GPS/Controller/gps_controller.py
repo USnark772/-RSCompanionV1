@@ -22,3 +22,15 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 # Company: Red Scientific
 # https://redscientific.com/index.html
 
+from math import trunc, ceil
+import logging
+from typing import Tuple, Optional
+from datetime import datetime
+from PySide2.QtCore import QObject, Signal
+from Devices.abc_device_controller import ABCDeviceController
+
+
+class GPSController(ABCDeviceController):
+    def __init__(self, device: Tuple[str, str], thread: PortWorker,
+                 ch: logging.StreamHandler, save_callback) -> None:
+        """do some stuff here"""

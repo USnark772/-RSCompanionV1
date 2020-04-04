@@ -53,6 +53,7 @@ from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
 from Devices.Camera.Controller.camera_controller import CameraController
+from Devices.GPS.Controller.gps_controller import GPSController
 
 
 class CompanionController:
@@ -796,6 +797,29 @@ class CompanionController:
         self.logger.debug("Made controller for vog")
         self.__device_controllers[device] = device_controller
         self.__graphs[device[0]]['num_devices'] += 1
+        self.logger.debug("done")
+        return True
+
+    def __create_gps_controller(self, device: Tuple[str, str], thread: PortWorker) -> bool:
+        """
+        Creates a controller for a GPS device
+        :param device: Device to create a controller for, tuple of device type and name as strings
+        :param thread: Device communication thread
+        :return bool: Returns true if a GPS controller is created
+        """
+
+        self.logger.debug("running")
+        self.logger.debug("Got " + device[0] + " " + device[1])
+        self.logger.debug("Making controller for gps")
+        try:
+            device_controller = GPSController(device, thread, self.ch,
+                                              self.save_device_data)
+            device_controller.get_tab_obj().setParent(self.tab_box)
+        except Exception as e:
+            self.logger.exception("failed to make device_controller for gps" + str(device))
+            return False
+        self.logger.debug("Made controller for gps")
+        self.__device_controllers[device] = device_controller
         self.logger.debug("done")
         return True
 
