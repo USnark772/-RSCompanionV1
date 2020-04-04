@@ -28,6 +28,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
 from Controller.app_controller import CompanionController
 from Model.app_single_instance import SingleInstance
+import faulthandler
 
 
 def main():
@@ -35,7 +36,7 @@ def main():
     Handles running application
     :return None:
     """
-
+    faulthandler.enable(file=sys.stderr)
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
     controller = CompanionController()  # Need reference else garbage collector has too much fun

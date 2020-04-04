@@ -857,7 +857,6 @@ class CompanionController:
 
         self.logger.debug("running")
         try:
-            print("Trying to create cam controller")
             cam_controller = CameraController(index, self.ch)
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.cam_failed.connect(self.alert_camera_error)

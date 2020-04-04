@@ -27,7 +27,7 @@ import logging
 from multiprocessing import Pipe
 from threading import Thread
 from PySide2.QtGui import QImage, QPixmap
-from PySide2.QtCore import QObject, Signal, Qt, QTimer
+from PySide2.QtCore import QObject, Signal, Qt
 from Devices.abc_device_controller import ABCDeviceController
 from Devices.Camera.View.cam_tab import CameraTab
 from Devices.Camera.Model.cam_pipe_watcher import PipeWatcher
@@ -130,9 +130,9 @@ class CameraController(ABCDeviceController):
             if msg_type == CEnum.WORKER_DONE:
                 self.__complete_setup(msg[1])
             elif msg_type == CEnum.CAM_FAILED:
+                self.cleanup()
                 self.signals.cam_failed.emit(self.name + " failed. Possible disconnect.")
                 self.signals.cam_closed.emit(self.name, self.index)
-                self.cleanup()
             elif msg_type == CEnum.SET_RESOLUTION:
                 self.__set_tab_size_val(msg[1])
             elif msg_type == CEnum.SET_ROTATION:
@@ -220,6 +220,8 @@ class CameraController(ABCDeviceController):
             self.signals.save_failed.emit(self.name)
 
     def __emit_save_update(self, completed, total):
+        if total == 0:
+            return
         perc = round(completed / total * 100)
         self.signals.update_save_prog.emit(self.index, perc)
 
