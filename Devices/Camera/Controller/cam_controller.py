@@ -27,12 +27,14 @@ import logging
 from multiprocessing import Pipe
 from threading import Thread
 from PySide2.QtGui import QImage, QPixmap
-from PySide2.QtCore import QObject, Signal, Qt
+from PySide2.QtCore import QObject, Signal, Qt, QTimer
 from Devices.abc_device_controller import ABCDeviceController
-from Devices.Camera.View.camera_tab import CameraTab
-from Devices.Camera.Controller.pipe_watcher import PipeWatcher
-from Devices.Camera.Controller.cam_runner import run_camera, CEnum
-from Devices.Camera.Controller.edit_vid_playback_speed import FileFixer
+from Devices.Camera.View.cam_tab import CameraTab
+from Devices.Camera.Model.cam_pipe_watcher import PipeWatcher
+from Devices.Camera.Model.cam_runner import run_camera
+from Devices.Camera.Model.cam_defs import CEnum
+from Devices.Camera.Model.edit_vid_playback_speed import FileFixer
+from Devices.Camera.Model.cam_feed_updater import FeedUpdater
 from numpy import ndarray
 from cv2 import cvtColor, COLOR_BGR2RGB
 
@@ -43,6 +45,7 @@ class ControllerSig(QObject):
     cam_closed = Signal(str, int)
     send_msg_sig = Signal(tuple)
     update_save_prog = Signal(int, int)
+    save_failed = Signal(str)
 
 
 class CameraController(ABCDeviceController):
@@ -62,8 +65,11 @@ class CameraController(ABCDeviceController):
         # settings.beginGroup('Camera settings')
         # if not settings.contains("Experimental"):
         #     settings.setValue("Experimental", "False")
-        # proc_args = (proc_pipe, self.index, self.name, eval(settings.value('Experimental')))
-        proc_args = (proc_pipe, self.index, self.name, False, self.handle_new_frame, self.display_fps)
+        # proc_args = (args go here)
+        self.frame_pipe_rcv, frame_pipe_send = Pipe(False)
+        self.image_updater = FeedUpdater(self.frame_pipe_rcv)
+        self.image_updater.signal.new_frame_sig.connect(self.handle_new_frame)
+        proc_args = (proc_pipe, frame_pipe_send, self.index, False)
         self.cam_worker = Thread(target=run_camera, args=proc_args)
         self.cam_worker.start()
         self.file_fixer: FileFixer = FileFixer('', '', 0, False)
@@ -79,6 +85,8 @@ class CameraController(ABCDeviceController):
         self.current_size = 0
         self.frame_sizes = []
         self.worker_max_tries = 0
+        self.temp_save_filename = ''
+        self.save_filename = ''
         self.__add_loading_symbols_to_tab()
         self.logger.debug("Initialized")
 
@@ -97,6 +105,13 @@ class CameraController(ABCDeviceController):
             self.pipe.close()
         except:
             pass
+        try:
+            self.frame_pipe_rcv.close()
+        except:
+            pass
+        if self.image_updater.running:
+            self.image_updater.running = False
+            self.image_updater.wait()
         if self.cam_worker.is_alive():
             self.cam_worker.join()
         self.logger.debug("done")
@@ -126,19 +141,21 @@ class CameraController(ABCDeviceController):
                 self.worker_max_tries = msg[1]
             elif msg_type == CEnum.WORKER_STATUS_UPDATE:
                 self.tab.set_init_progress_bar_val((self.worker_max_tries - msg[1]) / self.worker_max_tries * 100)
+            elif msg_type == CEnum.FPS_UPDATE:
+                self.display_fps(msg[1])
             elif msg_type == CEnum.STOP_SAVING and self.__in_experiment:
                 if self.file_fixer_running:
                     self.file_fixer.wait()
-                self.file_fixer = FileFixer(msg[1], msg[2], msg[3], True)
+                self.file_fixer = FileFixer(self.temp_save_filename, self.save_filename, msg[1], True)
                 self.file_fixer.signal.update_sig.connect(self.__emit_save_update)
                 self.file_fixer.signal.done_sig.connect(self.__emit_save_complete)
                 self.file_fixer_running = True
                 self.file_fixer.start()
                 self.__in_experiment = False
 
-    def create_new_save_file(self, new_filename: str):
+    def create_new_save_file(self, new_dir: str):
         self.logger.debug("running")
-        self.save_dir = new_filename
+        self.save_dir = new_dir
         self.logger.debug("done")
 
     def set_start_time(self, timestamp: str):
@@ -146,10 +163,16 @@ class CameraController(ABCDeviceController):
         self.timestamp = timestamp
         self.logger.debug("done")
 
+    def make_save_filenames(self):
+        name = self.timestamp + '_' + self.name + '_output.avi'
+        self.temp_save_filename = self.save_dir + 'temp_' + name
+        self.save_filename = self.save_dir + name
+
     def start_exp(self):
         self.logger.debug("running")
+        self.make_save_filenames()
         if self.__cam_ready:
-            self.pipe.send((CEnum.START_SAVING, self.timestamp, self.save_dir))
+            self.pipe.send((CEnum.START_SAVING, self.temp_save_filename))
             self.tab.set_tab_active(False)
             if self.file_fixer_running:
                 self.file_fixer.wait()
@@ -172,6 +195,13 @@ class CameraController(ABCDeviceController):
             self.tab.set_tab_active(is_active, feed=True)
         self.logger.debug("done")
 
+    def update_frame(self):
+        try:
+            if self.frame_pipe.poll():
+                self.handle_new_frame(self.frame_pipe.recv())
+        except BrokenPipeError as bpe:
+            pass
+
     def handle_new_frame(self, frame: ndarray):
         rgb_image = cvtColor(frame, COLOR_BGR2RGB)
         h, w, ch = rgb_image.shape
@@ -187,7 +217,7 @@ class CameraController(ABCDeviceController):
         if success:
             self.signals.update_save_prog.emit(self.index, 100)
         else:
-            self.signals.cam_failed.emit(self.name + ' Failure to save video file.')
+            self.signals.save_failed.emit(self.name)
 
     def __emit_save_update(self, completed, total):
         perc = round(completed / total * 100)
@@ -220,15 +250,13 @@ class CameraController(ABCDeviceController):
         self.pipe.send((CEnum.ACTIVATE_CAM,))
         self.tab.set_tab_active(True, feed=True)
         self.tab.remove_init_prog_bar()
+        self.image_updater.running = True
+        self.image_updater.start()
         self.__cam_ready = True
         self.logger.debug("done")
 
     def __toggle_show_feed(self, is_active: bool):
         self.logger.debug("running")
-        if is_active:
-            self.pipe.send((CEnum.SHOW_FEED,))
-        else:
-            self.pipe.send((CEnum.HIDE_FEED,))
         self.tab.show_feed(is_active)
         self.logger.debug("done")
 

@@ -28,7 +28,7 @@ from threading import Lock
 from PySide2.QtCore import QObject, Signal
 from Unused.OldCode.camera.cam_obj_threading import CamObj
 from Devices.abc_device_controller import ABCDeviceController
-from Devices.Camera.View.camera_tab import CameraTab
+from Devices.Camera.View.cam_tab import CameraTab
 from Unused.OldCode.camera.cam_threads import CamUpdater, SizeGetter
 
 

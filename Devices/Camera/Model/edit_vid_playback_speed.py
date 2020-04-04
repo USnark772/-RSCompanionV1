@@ -26,7 +26,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 from PySide2.QtCore import Signal, QObject, QThread
 from os import remove
 from cv2 import VideoCapture, VideoWriter, CAP_PROP_FRAME_WIDTH, CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_COUNT
-from Model.general_defs import cap_codec
+from Devices.Camera.Model.cam_defs import cap_codec
 
 
 class FileFixerSig(QObject):

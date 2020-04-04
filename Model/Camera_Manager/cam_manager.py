@@ -25,8 +25,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import cv2
 from PySide2.QtCore import QThread, QObject, QMutex, Signal
-from CompanionLib.companion_helpers import take_a_moment
-from Model.general_defs import cap_backend
+from Model.app_helpers import take_a_moment
+from Devices.Camera.Model.cam_defs import cap_backend
 
 
 class CamCounter:

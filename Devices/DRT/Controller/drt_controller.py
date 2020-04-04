@@ -32,7 +32,7 @@ from Devices.DRT.Model.drt_defs import drtv1_0_intensity_max, drtv1_0_stim_dur_m
     drtv1_0_ISI_max, drtv1_0_ISI_min, drtv1_0_output_fields, drtv1_0_file_hdr, drtv1_0_config_fields, \
     drtv1_0_note_spacer, drtv1_0_save_fields
 from Devices.abc_device_controller import ABCDeviceController
-from Controller.RS_Device_Manager.rs_device_manager import PortWorker
+from Model.RS_Device_Manager.rs_device_manager import PortWorker
 
 
 class DRTSig(QObject):

@@ -37,7 +37,7 @@ import threading
 from PySide2.QtCore import QThread, QObject, Signal
 from serial import Serial, SerialException
 from serial.tools import list_ports
-from Model.general_defs import devices
+from Model.app_defs import devices
 
 
 class PortScanner(threading.Thread):

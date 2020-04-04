@@ -32,9 +32,9 @@ from imutils import rotate
 from time import time
 from datetime import datetime
 from numpy import ndarray
-from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
-from CompanionLib.companion_helpers import take_a_moment
-from Devices.Camera.Controller.edit_vid_playback_speed import set_file_playback_speed
+from Model.app_defs import cap_backend, cap_temp_codec, cap_codec
+from Model.app_helpers import take_a_moment
+from Devices.Camera.Model.edit_vid_playback_speed import set_file_playback_speed
 
 
 class CamObj:

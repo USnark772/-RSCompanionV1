@@ -28,7 +28,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QFont, QIcon, QCloseEvent
 from View.MainWindow.help_window import HelpWindow
 from View.MainWindow.central_widget import CentralWidget
-from Model.general_defs import image_file_path
+from Model.app_defs import image_file_path
 
 
 class CompanionWindow(QMainWindow):

@@ -27,8 +27,8 @@ from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLab
     QSpacerItem, QSizePolicy
 from PySide2.QtGui import QPixmap
 from PySide2.QtCore import QRect, Qt
-from CompanionLib.companion_helpers import EasyFrame, ClickAnimationButton
-from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
+from Model.app_helpers import EasyFrame
+from Model.app_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
 
 
 max_height = 500

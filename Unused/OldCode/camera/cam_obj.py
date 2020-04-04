@@ -32,7 +32,7 @@ from imutils import rotate
 from time import time
 from datetime import datetime
 from numpy import ndarray
-from Model.general_defs import cap_backend, cap_temp_codec, cap_codec
+from Model.app_defs import cap_backend, cap_temp_codec, cap_codec
 
 
 class CamObjSig(QObject):

@@ -25,7 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from multiprocessing.connection import Connection
 from PySide2.QtCore import QObject, QThread, Signal
-from CompanionLib.companion_helpers import take_a_moment
+from Model.app_helpers import take_a_moment
 
 
 class PipeWatcherSig(QObject):

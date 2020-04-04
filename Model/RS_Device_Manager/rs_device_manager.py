@@ -29,8 +29,8 @@ from PySide2.QtCore import QObject, QThread, Signal
 from serial import Serial, SerialException
 from serial.tools import list_ports
 from serial.tools.list_ports_common import ListPortInfo
-from CompanionLib.companion_helpers import take_a_moment
-from Model.general_defs import devices as dev_profs
+from Model.app_helpers import take_a_moment
+from Model.app_defs import devices as dev_profs
 
 
 class PortWorkerSig(QObject):

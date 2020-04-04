@@ -24,7 +24,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 from PySide2.QtWidgets import QGroupBox, QGridLayout, QTextEdit
-from CompanionLib.companion_helpers import ClickAnimationButton
+from Model.app_helpers import ClickAnimationButton
 
 
 class NoteBox(QGroupBox):

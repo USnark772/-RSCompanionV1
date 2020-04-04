@@ -29,7 +29,7 @@ from shutil import disk_usage
 from time import sleep
 from datetime import datetime, timedelta
 from PySide2.QtWidgets import QFrame, QPushButton
-from Model.general_defs import button_pressed_style, button_normal_style
+from Model.app_defs import button_pressed_style, button_normal_style
 
 logger = logging.getLogger(__name__)
 

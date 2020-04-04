@@ -26,8 +26,8 @@ import logging
 from PySide2.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLineEdit, QProgressBar, QLabel
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2.QtCore import QSize, Qt
-from Model.general_defs import image_file_path
-from CompanionLib.companion_helpers import ClickAnimationButton, EasyFrame
+from Model.app_defs import image_file_path
+from Model.app_helpers import ClickAnimationButton
 
 
 class ButtonBox(QGroupBox):

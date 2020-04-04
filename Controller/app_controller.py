@@ -31,9 +31,9 @@ from datetime import datetime
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import QDir, QSize, QSettings, QUrl, QTimer
 from PySide2.QtGui import QKeyEvent, QDesktopServices
-from CompanionLib.companion_helpers import get_current_time, check_device_tuple, write_line_to_file, \
+from Model.app_helpers import get_current_time, check_device_tuple, write_line_to_file, \
     get_remaining_disk_size
-from Model.general_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
+from Model.app_defs import program_output_hdr, about_RS_text, about_RS_app_text, up_to_date, update_available, \
     error_checking_for_update, device_connection_error, current_version_str
 from View.MainWindow.main_window import CompanionWindow
 from View.DockWidget.control_dock import ControlDock
@@ -47,14 +47,14 @@ from View.DisplayWidget.display_container import DisplayContainer
 from View.DisplayWidget.graph_frame import GraphFrame
 from View.TabWidget.device_tab_container import TabContainer
 from View.OutputLog.output_window import OutputWindow
-from Controller.version_checker import VersionChecker
-from Controller.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager, PortWorker
-from Controller.Camera_Manager.camera_manager import CameraConnectionManager
+from Model.app_version_checker import VersionChecker
+from Model.RS_Device_Manager.rs_device_manager import RSDeviceConnectionManager, PortWorker
+from Model.Camera_Manager.cam_manager import CameraConnectionManager
 from Devices.DRT.Controller.drt_controller import DRTController
 from Devices.DRT.View.drt_graph import DRTGraph
 from Devices.VOG.Controller.vog_controller import VOGController
 from Devices.VOG.View.vog_graph import VOGGraph
-from Devices.Camera.Controller.camera_controller import CameraController
+from Devices.Camera.Controller.cam_controller import CameraController
 
 
 class CompanionController:
@@ -610,8 +610,8 @@ class CompanionController:
 
         for device in self.__device_controllers:
             if "CAM" in device:
-                self.__device_controllers[device].create_new_save_file(self.__save_dir)
                 self.__device_controllers[device].set_start_time(timestamp)
+                self.__device_controllers[device].create_new_save_file(self.__save_dir)
 
     ########################################################################################
     # Data saving
@@ -857,6 +857,7 @@ class CompanionController:
 
         self.logger.debug("running")
         try:
+            print("Trying to create cam controller")
             cam_controller = CameraController(index, self.ch)
             cam_controller.tab.setParent(self.tab_box)
             cam_controller.signals.cam_failed.connect(self.alert_camera_error)

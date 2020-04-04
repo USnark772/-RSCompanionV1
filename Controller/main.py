@@ -26,8 +26,8 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication
-from Controller.controller import CompanionController
-from Controller.single_instance import SingleInstance
+from Controller.app_controller import CompanionController
+from Model.app_single_instance import SingleInstance
 
 
 def main():

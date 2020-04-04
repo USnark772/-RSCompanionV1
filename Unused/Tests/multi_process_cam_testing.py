@@ -1,7 +1,7 @@
 import cv2
 from multiprocessing import Process, Pipe
 import time
-from Model.general_defs import cap_codec, cap_temp_codec
+from Model.app_defs import cap_codec, cap_temp_codec
 
 small = (640, 480)
 big = (1920, 1080)

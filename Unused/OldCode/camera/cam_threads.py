@@ -27,7 +27,7 @@ import logging
 from threading import Lock
 from PySide2.QtCore import QObject, Signal, QThread
 from Unused.OldCode.camera.cam_obj_threading import CamObj
-from CompanionLib.companion_helpers import take_a_moment
+from Model.app_helpers import take_a_moment
 
 
 class CamUpdaterSig(QObject):

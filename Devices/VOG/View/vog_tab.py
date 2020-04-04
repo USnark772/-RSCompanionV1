@@ -25,9 +25,9 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 from PySide2.QtWidgets import QWidget, QLabel, QGridLayout, QComboBox, QHBoxLayout, QVBoxLayout, QCheckBox, QLineEdit
 from PySide2.QtCore import Qt, QRect
-from CompanionLib.companion_helpers import ClickAnimationButton, EasyFrame
+from Model.app_helpers import ClickAnimationButton, EasyFrame
 from Devices.VOG.Model.vog_defs import vog_max_open_close, vog_min_open_close, vog_debounce_max, vog_debounce_min
-from Model.general_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
+from Model.app_defs import tab_line_edit_error_style, tab_line_edit_compliant_style
 
 
 class VOGTab(QWidget):

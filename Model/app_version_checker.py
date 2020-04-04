@@ -25,7 +25,7 @@ along with RS Companion.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 from urllib3 import PoolManager
-from Model.general_defs import version_url, current_version
+from Model.app_defs import version_url, current_version
 
 
 class VersionChecker:
