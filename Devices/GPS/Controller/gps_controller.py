@@ -28,9 +28,50 @@ from typing import Tuple, Optional
 from datetime import datetime
 from PySide2.QtCore import QObject, Signal
 from Devices.abc_device_controller import ABCDeviceController
+from Controller.RS_Device_Manager.rs_device_manager import PortWorker
 
+class GPSSig(QObject):
+    send_device_msg_sig = Signal(str)
 
 class GPSController(ABCDeviceController):
     def __init__(self, device: Tuple[str, str], thread: PortWorker,
                  ch: logging.StreamHandler, save_callback) -> None:
-        """do some stuff here"""
+        """
+        GPS controller
+        :param device: Tuple[str, str] of device type and name
+        :param thread: Device communication thread
+        :param ch:
+        :param save_callback:
+        :return None:
+        """
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.addHandler(ch)
+        self.logger.debug("Initializing")
+        self.signals = GPSSig()
+        self.device_name = device[0].upper(), "_" + device[1][3:]
+        # add tab stuff here
+        self.__device_info = device
+        self.__save_callback = save_callback
+        self.exp = False
+        # info to send to gps
+        self.__connect_signals(thread)
+        self.save_file = str()
+        self.__set_handlers()
+        self.init_values()
+        self.logger.debug("Initialized")
+
+    def cleanup(self) -> None:
+        """
+
+        :return None:
+        """
+
+        self.logger.debug("running")
+        if self.exp:
+            self.end_block()
+        self.logger.debug("done")
+
+    def get_tab_obj(self):
+        return self.tab
+
